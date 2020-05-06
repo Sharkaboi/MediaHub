@@ -3,4 +3,9 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="watchlist">Watchlist</string>
+    <string name="series">Series</string>
+    <string name="movies">Movies</string>
+    <string name="manga">Manga</string>
+    <string name="stats">Stats</string>
 </resources>

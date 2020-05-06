@@ -1,13 +1,13 @@
-package com.cybershark.mediahub.ui.home
+package com.cybershark.mediahub.ui.stats
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class HomeViewModel : ViewModel() {
+class StatsViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
-        value = "This is home Fragment"
+        value = "This is stats Fragment"
     }
     val text: LiveData<String> = _text
 }
