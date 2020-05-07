@@ -4,17 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ui.watchlist.WatchListFragment">
+    tools:context=".ui.watchlist.view.WatchListFragment">
 
-    <TextView
-        android:id="@+id/text_watchlist"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvWatchlist"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
+        tools:listitem="@layout/watchlist_item"
+        android:paddingVertical="4dp"
+        tools:itemCount="400"
+        android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
