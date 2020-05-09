@@ -23,6 +23,7 @@ class WatchListAdapter : RecyclerView.Adapter<WatchListAdapter.WatchListViewHold
         val pbEpisodes=item.findViewById<ProgressBar>(R.id.pbEpisodes)!!
         val tvEpisodeWatchedCount=item.findViewById<TextView>(R.id.tvEpisodeWatchedCount)!!
         val tvEpisodesLeft=item.findViewById<TextView>(R.id.tvEpisodesLeft)!!
+        val tvNextEpisode=item.findViewById<TextView>(R.id.tvNextEpisode)!!
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WatchListViewHolder {
@@ -36,8 +37,19 @@ class WatchListAdapter : RecyclerView.Adapter<WatchListAdapter.WatchListViewHold
     override fun onBindViewHolder(holder: WatchListViewHolder, position: Int) {
         holder.apply {
             tvItemName.text=itemList[position].name
+            val nextEpisodeTitle=itemList[position].next_episode_title
+            if(nextEpisodeTitle!=null){
+                tvNextEpisode.visibility=View.VISIBLE
+                tvNextEpisode.text=nextEpisodeTitle
+            }else{
+                tvNextEpisode.visibility=View.GONE
+            }
             Glide.with(ivBanner.context).load(itemList[position].image_url).transform(RoundedCorners(8),CenterCrop()).error(R.drawable.error_placeholder).into(ivBanner)
-            tvEpisodesLeft.text=("${itemList[position].total_episodes-itemList[position].watched_count} Episodes left")
+            val episodesLeft=itemList[position].total_episodes-itemList[position].watched_count
+            tvEpisodesLeft.text=when(episodesLeft) {
+                0L -> ("Completed !")
+                else -> ("$episodesLeft Episodes left")
+            }
             tvEpisodeWatchedCount.text=("${itemList[position].watched_count}/${itemList[position].total_episodes}")
             pbEpisodes.progress=(itemList[position].watched_count.toFloat()/itemList[position].total_episodes*100).toInt()
         }

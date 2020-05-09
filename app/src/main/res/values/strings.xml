@@ -1,11 +1,14 @@
 <resources>
     <string name="app_name">MediaHub</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
     <string name="watchlist">Watchlist</string>
     <string name="series">Series</string>
     <string name="movies">Movies</string>
     <string name="manga">Manga</string>
     <string name="stats">Stats</string>
+    <string name="settings">Settings</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="planned">Planned</string>
+    <string name="finished">Finished</string>
+    <string name="trending">Trending</string>
+    <string name="trending_movies">Trending Movies</string>
 </resources>
