@@ -18,6 +18,9 @@ jobs:
       with:
         java-version: 1.8
           
+    - name: cd to app dir
+      run: cd app
+      
     - name: Create Google services json
       uses: finnp/create-file-action@1.0.0
       env:
@@ -26,6 +29,10 @@ jobs:
        
     - name: ls
       run:  ls 
+    
+    - name: cd to parent folder
+      run: cd ..
+      
     - name: Setup Gradle
       run: chmod +x gradlew
       
