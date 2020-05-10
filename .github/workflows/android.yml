@@ -20,7 +20,6 @@ jobs:
           
     - name: cd to app dir
       run: cd /home/runner/work/MediaHub/MediaHub/app
-           echo ${{ secrets.GOOGLE_SERVICES }} > google-services.json
       
     - name: Create Google services json
       uses: finnp/create-file-action@1.0.0
