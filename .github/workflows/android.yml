@@ -22,10 +22,8 @@ jobs:
       run: cd /home/runner/work/MediaHub/MediaHub/app
       
     - name: Create Google services json 
-      uses: finnp/create-file-action@1.0.0
+      run: echo $GOOGLE_SERVICES > google-services.json
       env:
-        FILE_NAME: "google-services.json"
-        FILE_DATA: $GOOGLE_SERVICES
         GOOGLE_SERVICES: ${{secrets.GOOGLE_SERVICES}}
        
     - name: move file
