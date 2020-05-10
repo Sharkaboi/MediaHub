@@ -32,7 +32,7 @@ jobs:
       run: ls
       
     - name: cd to project dir
-      run: cd..
+      run: cd ..
          
     - name: Setup Gradle
       run: chmod +x gradlew
