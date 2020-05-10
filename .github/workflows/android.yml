@@ -28,8 +28,8 @@ jobs:
         FILE_DATA: $GOOGLE_SERVICES
         GOOGLE_SERVICES: ${{secrets.GOOGLE_SERVICES}}
        
-    - name: ls
-      run: ls
+    - name: move file
+      run: mv /home/runner/work/MediaHub/MediaHub/google-services.json /home/runner/work/MediaHub/MediaHub/app
       
     - name: cd to project dir
       run: cd ..
