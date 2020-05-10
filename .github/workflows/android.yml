@@ -23,7 +23,7 @@ jobs:
       
     - name: Create Google services json 
       run: |
-           'echo "$GOOGLE_SERVICES" > key'
+           'echo "$GOOGLE_SERVICES" > google-services.json'
            'ls'
            'cd ..'  
       shell: bash
