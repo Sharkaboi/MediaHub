@@ -18,9 +18,6 @@ jobs:
       with:
         java-version: 1.8
                 
-    - name: cd to app dir
-      run: cd /home/runner/work/MediaHub/MediaHub/app
-      
     - name: Create Google services json 
       run: echo $GOOGLE_SERVICES > google-services.json
       env:
@@ -29,9 +26,6 @@ jobs:
     - name: move file
       run: mv /home/runner/work/MediaHub/MediaHub/google-services.json /home/runner/work/MediaHub/MediaHub/app
       
-    - name: cd to project dir
-      run: cd ..
-         
     - name: Setup Gradle
       run: chmod +x gradlew
       
