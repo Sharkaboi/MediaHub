@@ -22,14 +22,18 @@ jobs:
       run: cd /home/runner/work/MediaHub/MediaHub/app
       
     - name: Create Google services json 
-      run: |
-           'echo "$GOOGLE_SERVICES" > google-services.json'
-           'ls'
-           'cd ..'  
-      shell: bash
+      uses: finnp/create-file-action@1.0.0
       env:
+        FILE_NAME: "google-services.json"
+        FILE_DATA: $GOOGLE_SERVICES
         GOOGLE_SERVICES: ${{secrets.GOOGLE_SERVICES}}
-          
+       
+    - name: ls
+      run: ls
+      
+    - name: cd to project dir
+      run: cd..
+         
     - name: Setup Gradle
       run: chmod +x gradlew
       
