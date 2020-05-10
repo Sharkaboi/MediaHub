@@ -23,7 +23,9 @@ jobs:
       env:
         FILE_NAME: "google-services.json"
         FILE_DATA: ${{ secrets.GOOGLE_SERVICES }}
-        
+       
+    - name: ls
+      run:  ls 
     - name: Setup Gradle
       run: chmod +x gradlew
       
