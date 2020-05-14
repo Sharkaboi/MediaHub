@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".ui.watchlist.view.WatchListFragment">
+    tools:context=".ui.watchlist.views.WatchListFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvWatchlist"

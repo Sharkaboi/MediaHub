@@ -11,4 +11,7 @@
     <string name="finished">Finished</string>
     <string name="trending">Trending</string>
     <string name="trending_movies">Trending Movies</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

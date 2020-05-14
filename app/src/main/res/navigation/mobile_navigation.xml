@@ -7,29 +7,29 @@
 
     <fragment
         android:id="@+id/navigation_list"
-        android:name="com.cybershark.mediahub.ui.watchlist.view.WatchListFragment"
+        android:name="com.cybershark.mediahub.ui.watchlist.views.WatchListFragment"
         android:label="@string/watchlist"
         tools:layout="@layout/fragment_watchlist" />
 
     <fragment
         android:id="@+id/navigation_series"
-        android:name="com.cybershark.mediahub.ui.series.SeriesFragment"
+        android:name="com.cybershark.mediahub.ui.series.views.SeriesFragment"
         android:label="@string/series"
         tools:layout="@layout/fragment_series" />
 
     <fragment
         android:id="@+id/navigation_movies"
-        android:name="com.cybershark.mediahub.ui.movies.MoviesFragment"
+        android:name="com.cybershark.mediahub.ui.movies.views.MoviesFragment"
         android:label="@string/movies"
         tools:layout="@layout/fragment_movies" />
     <fragment
         android:id="@+id/navigation_manga"
-        android:name="com.cybershark.mediahub.ui.manga.MangaFragment"
+        android:name="com.cybershark.mediahub.ui.manga.views.MangaFragment"
         android:label="@string/manga"
         tools:layout="@layout/fragment_manga" />
     <fragment
         android:id="@+id/navigation_stats"
-        android:name="com.cybershark.mediahub.ui.stats.StatsFragment"
+        android:name="com.cybershark.mediahub.ui.stats.views.StatsFragment"
         android:label="@string/stats"
         tools:layout="@layout/fragment_stats" />
 </navigation>

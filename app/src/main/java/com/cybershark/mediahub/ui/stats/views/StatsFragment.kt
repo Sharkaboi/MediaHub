@@ -1,4 +1,4 @@
-package com.cybershark.mediahub.ui.stats
+package com.cybershark.mediahub.ui.stats.views
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.cybershark.mediahub.R
+import com.cybershark.mediahub.ui.stats.viewmodels.StatsViewModel
 
 class StatsFragment : Fragment() {
 

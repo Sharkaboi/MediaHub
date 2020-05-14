@@ -1,13 +1,13 @@
-package com.cybershark.mediahub.ui.movies
+package com.cybershark.mediahub.ui.series.viewmodels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class MoviesViewModel : ViewModel() {
+class SeriesViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
-        value = "This is movies Fragment"
+        value = "This is series Fragment"
     }
     val text: LiveData<String> = _text
 }

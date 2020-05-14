@@ -1,20 +1,16 @@
-package com.cybershark.mediahub.ui.series
+package com.cybershark.mediahub.ui.movies.views.finished
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
 import com.cybershark.mediahub.R
 
-class SeriesFragment : Fragment() {
-
-    private lateinit var seriesViewModel: SeriesViewModel
+class MoviesFinishedFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        seriesViewModel = ViewModelProviders.of(this).get(SeriesViewModel::class.java)
-        return inflater.inflate(R.layout.fragment_series, container, false)
+        return inflater.inflate(R.layout.fragment_movies_completed, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

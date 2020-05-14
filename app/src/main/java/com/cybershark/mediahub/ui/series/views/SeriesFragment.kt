@@ -1,4 +1,4 @@
-package com.cybershark.mediahub.ui.manga
+package com.cybershark.mediahub.ui.series.views
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,14 +7,15 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.cybershark.mediahub.R
+import com.cybershark.mediahub.ui.series.viewmodels.SeriesViewModel
 
-class MangaFragment : Fragment() {
+class SeriesFragment : Fragment() {
 
-    private lateinit var mangaViewModel: MangaViewModel
+    private lateinit var seriesViewModel: SeriesViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mangaViewModel =  ViewModelProviders.of(this).get(MangaViewModel::class.java)
-        return inflater.inflate(R.layout.fragment_manga, container, false)
+        seriesViewModel = ViewModelProviders.of(this).get(SeriesViewModel::class.java)
+        return inflater.inflate(R.layout.fragment_series, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

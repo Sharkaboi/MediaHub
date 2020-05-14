@@ -12,14 +12,15 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.*
-import com.cybershark.mediahub.ui.settings.SettingsActivity
+import com.cybershark.mediahub.data.repository.sharedprefs.SharedPrefConstants
+import com.cybershark.mediahub.ui.settings.views.SettingsActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var sharedPreferences: SharedPreferences
-    private val spFileName="spMediaHub"
+    private val spFileName by lazy { SharedPrefConstants.spFileName }
     private lateinit var navController : NavController
     private var lastClickTime=0L
 
@@ -51,7 +52,8 @@ class MainActivity : AppCompatActivity() {
             return super.onOptionsItemSelected(item)
         }
         lastClickTime = SystemClock.elapsedRealtime()
-        startActivity(Intent(this,SettingsActivity::class.java))
+        startActivity(Intent(this,
+            SettingsActivity::class.java))
         overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left)
         return super.onOptionsItemSelected(item)
     }

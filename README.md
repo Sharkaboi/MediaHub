@@ -4,3 +4,7 @@
 ![License](https://img.shields.io/badge/License-MIT-orange)
 
 An all in one manager for Movies,Series,Anime and manga.
+
+Uses these API's:
+[Trakt](https://github.com/trakt/api-help)
+[Jikan for MAL](https://github.com/jikan-me/jikan)

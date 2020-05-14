@@ -1,4 +1,4 @@
-package com.cybershark.mediahub.ui.stats
+package com.cybershark.mediahub.ui.stats.viewmodels
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

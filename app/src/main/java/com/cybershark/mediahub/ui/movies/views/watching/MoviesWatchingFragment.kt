@@ -1,4 +1,4 @@
-package com.cybershark.mediahub.ui.movies.watching
+package com.cybershark.mediahub.ui.movies.views.watching
 
 import android.os.Bundle
 import android.view.LayoutInflater

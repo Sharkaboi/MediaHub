@@ -1,4 +1,4 @@
-package com.cybershark.mediahub.ui.settings
+package com.cybershark.mediahub.ui.settings.views
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -6,12 +6,13 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import com.cybershark.mediahub.R
+import com.cybershark.mediahub.data.repository.sharedprefs.SharedPrefConstants
 import kotlinx.android.synthetic.main.activity_settings.*
 
 class SettingsActivity : AppCompatActivity() {
 
     private lateinit var sharedPreferences: SharedPreferences
-    private val spFileName = "spMediaHub"
+    private val spFileName by lazy { SharedPrefConstants.spFileName }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

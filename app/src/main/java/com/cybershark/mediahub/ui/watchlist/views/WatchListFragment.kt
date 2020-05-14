@@ -1,4 +1,4 @@
-package com.cybershark.mediahub.ui.watchlist.view
+package com.cybershark.mediahub.ui.watchlist.views
 
 import android.os.Bundle
 import android.view.LayoutInflater
