@@ -38,7 +38,7 @@ class MangaUpdatesAdapter:RecyclerView.Adapter<MangaUpdatesAdapter.MangaUpdatesV
             tvChapterName.text=itemsList[position].latest_chap_title
             tvMangaName.text=itemsList[position].name
             ibInfo.setOnClickListener {
-                TODO()
+                //todo:show dialog
             }
         }
     }

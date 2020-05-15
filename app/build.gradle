@@ -40,6 +40,10 @@ android {
 
 }
 
+configurations {
+    implementation.exclude group: "junit", module: "junit"
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     //core dependencies
@@ -51,6 +55,7 @@ dependencies {
     //api dependencies
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.squareup.retrofit2:retrofit:2.8.1'
+    implementation 'com.github.Doomsdayrs:Jikan4java:1.4.2'
     //firebase dependencies
     implementation 'com.google.firebase:firebase-firestore:21.4.3'
     implementation 'com.google.firebase:firebase-auth:19.3.1'

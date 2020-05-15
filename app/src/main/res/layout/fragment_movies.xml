@@ -7,6 +7,7 @@
     tools:context=".ui.movies.views.MoviesFragment">
 
     <androidx.viewpager.widget.ViewPager
+        android:id="@+id/vpMovies"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -15,29 +16,10 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayoutMovies"
             android:layout_width="match_parent"
             android:elevation="4dp"
             android:layout_height="wrap_content"
-            tools:ignore="UnusedAttribute">
-
-            <com.google.android.material.tabs.TabItem
-                android:id="@+id/planned_tab"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/planned" />
-
-            <com.google.android.material.tabs.TabItem
-                android:id="@+id/finished_tab"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/finished" />
-
-            <com.google.android.material.tabs.TabItem
-                android:id="@+id/trending_tab"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/trending" />
-
-        </com.google.android.material.tabs.TabLayout>
+            tools:ignore="UnusedAttribute" />
     </androidx.viewpager.widget.ViewPager>
 </androidx.constraintlayout.widget.ConstraintLayout>

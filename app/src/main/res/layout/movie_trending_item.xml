@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="2dp"
+    android:layout_margin="4dp"
     app:cardCornerRadius="8dp"
     app:cardElevation="1dp"
     app:cardPreventCornerOverlap="false">
@@ -15,10 +15,9 @@
 
         <ImageView
             android:id="@+id/ivMoviePoster"
-            android:layout_width="0dp"
-            tools:layout_width="wrap_content"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:scaleType="centerCrop"
+            android:scaleType="fitCenter"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -29,13 +28,11 @@
             android:id="@+id/tvMovieName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_margin="8dp"
             android:textAlignment="center"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/ivMoviePoster"
+            app:layout_constraintStart_toStartOf="@id/ivMoviePoster"
             app:layout_constraintTop_toBottomOf="@+id/ivMoviePoster"
             tools:text="IP Man 4 The final movie" />
 
