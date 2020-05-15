@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="2dp"
+    android:layout_margin="4dp"
     app:cardCornerRadius="8dp"
     app:cardElevation="1dp"
     app:cardPreventCornerOverlap="false">
@@ -14,30 +14,26 @@
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/ivMoviePoster"
-            android:layout_width="0dp"
-            tools:layout_width="wrap_content"
+            android:id="@+id/ivMangaLibCover"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:scaleType="centerCrop"
+            android:scaleType="fitCenter"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@tools:sample/avatars"
-            tools:ignore="ContentDescription" />
+            tools:ignore="ContentDescription"
+            tools:srcCompat="@tools:sample/avatars" />
 
         <TextView
-            android:id="@+id/tvMovieName"
+            android:id="@+id/tvMangaLibName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_margin="8dp"
             android:textAlignment="center"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ivMoviePoster"
-            tools:text="IP Man 4 The final movie" />
-
+            app:layout_constraintEnd_toEndOf="@id/ivMangaLibCover"
+            app:layout_constraintStart_toStartOf="@id/ivMangaLibCover"
+            app:layout_constraintTop_toBottomOf="@+id/ivMangaLibCover"
+            tools:text="Boruto: Naruto Next Generations" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

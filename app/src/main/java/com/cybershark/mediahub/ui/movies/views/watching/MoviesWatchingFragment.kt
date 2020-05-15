@@ -21,7 +21,7 @@ class MoviesWatchingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         rvMoviesPlanned.layoutManager = object : LinearLayoutManager(requireContext()) {
             override fun checkLayoutParams(lp: RecyclerView.LayoutParams): Boolean {
-                lp.height = height / 3
+                lp.width = width / 3
                 return true
             }
         }

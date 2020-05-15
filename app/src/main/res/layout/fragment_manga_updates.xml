@@ -4,22 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.manga.views.MangaFragment">
+    tools:context=".ui.manga.views.updates.MangaUpdatesFragment">
 
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/vpManga"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvMangaUpdates"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingVertical="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        tools:listitem="@layout/manga_updates_item" />
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabLayoutManga"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:elevation="4dp"
-            tools:ignore="UnusedAttribute" />
-    </androidx.viewpager.widget.ViewPager>
 </androidx.constraintlayout.widget.ConstraintLayout>

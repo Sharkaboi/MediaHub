@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cybershark.mediahub.R
 import com.cybershark.mediahub.ui.watchlist.adapters.WatchListAdapter
@@ -18,7 +18,7 @@ class WatchListFragment : Fragment() {
     private lateinit var watchListViewModel: WatchListViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        watchListViewModel = ViewModelProviders.of(this).get(WatchListViewModel::class.java)
+        watchListViewModel = ViewModelProvider(this).get(WatchListViewModel::class.java)
         return inflater.inflate(R.layout.fragment_watchlist, container, false)
     }
 

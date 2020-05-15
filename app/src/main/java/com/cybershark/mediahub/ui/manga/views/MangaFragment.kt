@@ -7,7 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.cybershark.mediahub.R
+import com.cybershark.mediahub.ui.manga.adapters.MangaPagerAdapter
 import com.cybershark.mediahub.ui.manga.viewmodels.MangaViewModel
+import kotlinx.android.synthetic.main.fragment_manga.*
 
 class MangaFragment : Fragment() {
 
@@ -20,6 +22,7 @@ class MangaFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        vpManga.adapter=MangaPagerAdapter(childFragmentManager,2)
+        tabLayoutManga.setupWithViewPager(vpManga)
     }
 }
