@@ -15,20 +15,21 @@ import kotlinx.android.synthetic.main.fragment_watchlist.*
 
 class WatchListFragment : Fragment() {
 
-    private lateinit var watchListViewModel: WatchListViewModel
+    private val watchListViewModel by lazy { ViewModelProvider(this).get(WatchListViewModel::class.java) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        watchListViewModel = ViewModelProvider(this).get(WatchListViewModel::class.java)
         return inflater.inflate(R.layout.fragment_watchlist, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        rvWatchlist.layoutManager=LinearLayoutManager(requireContext())
-        val adapter=WatchListAdapter()
+
+        rvWatchlist.layoutManager = LinearLayoutManager(context)
+        val adapter = WatchListAdapter()
+        rvWatchlist.adapter = adapter
+
         watchListViewModel.watchListDummy.observe(viewLifecycleOwner, Observer {
-            adapter.itemList=it
+            adapter.setItemsList(it)
         })
-        rvWatchlist.adapter=adapter
     }
 }

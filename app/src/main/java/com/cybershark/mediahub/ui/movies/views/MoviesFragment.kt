@@ -17,7 +17,11 @@ class MoviesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        vpMovies.adapter=MoviesPagerAdapter(childFragmentManager,3)
+        setupViewPager()
+    }
+
+    private fun setupViewPager() {
+        vpMovies.adapter = MoviesPagerAdapter(childFragmentManager, 3)
         tabLayoutMovies.setupWithViewPager(vpMovies)
     }
 }

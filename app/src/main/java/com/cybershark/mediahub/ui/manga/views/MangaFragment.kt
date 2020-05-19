@@ -17,6 +17,10 @@ class MangaFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupViewPager()
+    }
+
+    private fun setupViewPager() {
         vpManga.adapter=MangaPagerAdapter(childFragmentManager,2)
         tabLayoutManga.setupWithViewPager(vpManga)
     }

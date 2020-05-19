@@ -18,10 +18,25 @@ class MangaUpdatesAdapter:RecyclerView.Adapter<MangaUpdatesAdapter.MangaUpdatesV
     private var itemsList = listOf<MangaModel>()
 
     inner class MangaUpdatesViewHolder(itemView:View):RecyclerView.ViewHolder(itemView) {
-        val ivMangaCover=itemView.findViewById<ImageView>(R.id.ivMangaCover)!!
-        val tvMangaName=itemView.findViewById<TextView>(R.id.tvMangaName)!!
-        val tvChapterName=itemView.findViewById<TextView>(R.id.tvChapterName)!!
-        val ibInfo=itemView.findViewById<ImageButton>(R.id.ibInfo)!!
+        private val ivMangaCover=itemView.findViewById<ImageView>(R.id.ivMangaCover)!!
+        private val tvMangaName=itemView.findViewById<TextView>(R.id.tvMangaName)!!
+        private val tvChapterName=itemView.findViewById<TextView>(R.id.tvChapterName)!!
+        private val ibInfo=itemView.findViewById<ImageButton>(R.id.ibInfo)!!
+
+        fun bind(mangaModel: MangaModel){
+            Glide.with(ivMangaCover.context)
+                .asBitmap()
+                .load(mangaModel.image_url)
+                .error(R.drawable.error_placeholder)
+                .centerCrop()
+                .transform(RoundedCorners(8))
+                .into(ivMangaCover)
+            tvChapterName.text=mangaModel.latest_chap_title
+            tvMangaName.text=mangaModel.name
+            ibInfo.setOnClickListener {
+                //todo:show dialog
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MangaUpdatesViewHolder {
@@ -33,14 +48,7 @@ class MangaUpdatesAdapter:RecyclerView.Adapter<MangaUpdatesAdapter.MangaUpdatesV
     }
 
     override fun onBindViewHolder(holder: MangaUpdatesViewHolder, position: Int) {
-        holder.apply {
-            Glide.with(ivMangaCover.context).asBitmap().load(itemsList[position].image_url).error(R.drawable.error_placeholder).centerCrop().transform(RoundedCorners(8)).into(ivMangaCover)
-            tvChapterName.text=itemsList[position].latest_chap_title
-            tvMangaName.text=itemsList[position].name
-            ibInfo.setOnClickListener {
-                //todo:show dialog
-            }
-        }
+        holder.bind(itemsList[position])
     }
 
     fun setAdapterList(itemsList: List<MangaModel>) {

@@ -10,17 +10,27 @@ import com.bumptech.glide.Glide
 import com.cybershark.mediahub.R
 import com.cybershark.mediahub.data.models.MoviesModel
 
-class MoviesFinishedAdapter : RecyclerView.Adapter<MoviesFinishedAdapter.MoviesFinishedViewHolder>() {
+class MoviesFinishedAdapter :
+    RecyclerView.Adapter<MoviesFinishedAdapter.MoviesFinishedViewHolder>() {
 
-    private var itemsList= listOf<MoviesModel>()
+    private var itemsList = listOf<MoviesModel>()
 
-    inner class MoviesFinishedViewHolder(itemView:View):RecyclerView.ViewHolder(itemView) {
-        val ivMoviePoster=itemView.findViewById<ImageView>(R.id.ivMoviePoster)!!
-        val tvMovieName=itemView.findViewById<TextView>(R.id.tvMovieName)!!
+    inner class MoviesFinishedViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val ivMoviePoster = itemView.findViewById<ImageView>(R.id.ivMoviePoster)!!
+        private val tvMovieName = itemView.findViewById<TextView>(R.id.tvMovieName)!!
+
+        fun bind(moviesModel: MoviesModel) {
+            Glide.with(ivMoviePoster.context)
+                .asBitmap()
+                .load(moviesModel.image_url)
+                .error(R.drawable.error_placeholder)
+                .into(ivMoviePoster)
+            tvMovieName.text = moviesModel.name
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoviesFinishedViewHolder {
-        return MoviesFinishedViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.movie_trending_item,parent,false))
+        return MoviesFinishedViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.movie_trending_item, parent, false))
     }
 
     override fun getItemCount(): Int {
@@ -28,14 +38,11 @@ class MoviesFinishedAdapter : RecyclerView.Adapter<MoviesFinishedAdapter.MoviesF
     }
 
     override fun onBindViewHolder(holder: MoviesFinishedViewHolder, position: Int) {
-        holder.apply {
-            Glide.with(ivMoviePoster.context).asBitmap().load(itemsList[position].image_url).error(R.drawable.error_placeholder).into(ivMoviePoster)
-            tvMovieName.text=itemsList[position].name
-        }
+        holder.bind(itemsList[position])
     }
 
     fun setItemsList(it: List<MoviesModel>) {
-        itemsList=it
+        itemsList = it
     }
 
 }

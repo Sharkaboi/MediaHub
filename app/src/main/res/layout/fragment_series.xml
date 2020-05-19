@@ -7,19 +7,19 @@
     tools:context=".ui.series.views.SeriesFragment">
 
     <androidx.viewpager.widget.ViewPager
+        android:id="@+id/vpSeries"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/vpSeries"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.tabs.TabLayout
-            android:layout_width="match_parent"
-            android:elevation="4dp"
             android:id="@+id/tabLayoutSeries"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:elevation="4dp"
             tools:ignore="UnusedAttribute" />
     </androidx.viewpager.widget.ViewPager>
 </androidx.constraintlayout.widget.ConstraintLayout>

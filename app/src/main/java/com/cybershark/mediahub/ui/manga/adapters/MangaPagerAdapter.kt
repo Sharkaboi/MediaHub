@@ -6,11 +6,13 @@ import androidx.fragment.app.FragmentPagerAdapter
 import com.cybershark.mediahub.ui.manga.views.library.MangaLibraryFragment
 import com.cybershark.mediahub.ui.manga.views.updates.MangaUpdatesFragment
 
-class MangaPagerAdapter(fragmentManager: FragmentManager, behaviour: Int) : FragmentPagerAdapter(fragmentManager,behaviour) {
+class MangaPagerAdapter(fragmentManager: FragmentManager, behaviour: Int) :
+    FragmentPagerAdapter(fragmentManager, behaviour) {
+
     override fun getItem(position: Int): Fragment {
-        return when(position){
-            0-> MangaUpdatesFragment()
-            else-> MangaLibraryFragment()
+        return when (position) {
+            0 -> MangaUpdatesFragment()
+            else -> MangaLibraryFragment()
         }
     }
 
@@ -19,7 +21,7 @@ class MangaPagerAdapter(fragmentManager: FragmentManager, behaviour: Int) : Frag
     }
 
     override fun getPageTitle(position: Int): CharSequence? {
-        return when(position){
+        return when (position) {
             0 -> "Updates"
             else -> "Library"
         }

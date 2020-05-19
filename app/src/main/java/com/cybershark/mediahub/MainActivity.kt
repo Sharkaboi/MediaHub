@@ -2,7 +2,6 @@ package com.cybershark.mediahub
 
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.Menu
@@ -11,7 +10,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
-import androidx.navigation.ui.*
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.onNavDestinationSelected
+import androidx.navigation.ui.setupActionBarWithNavController
 import com.cybershark.mediahub.data.repository.sharedprefs.SharedPrefConstants
 import com.cybershark.mediahub.ui.settings.views.SettingsActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -19,27 +20,34 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var sharedPreferences: SharedPreferences
+    private val sharedPreferences by lazy { getSharedPreferences(spFileName, Context.MODE_PRIVATE) }
     private val spFileName by lazy { SharedPrefConstants.spFileName }
-    private lateinit var navController : NavController
-    private var lastClickTime=0L
+    private val navController by lazy { findNavController(R.id.nav_host_fragment) }
+    private var lastClickTime = 0L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setTheme(R.style.AppTheme)
-        sharedPreferences=getSharedPreferences(spFileName,Context.MODE_PRIVATE)
-        if(sharedPreferences.getBoolean("darkMode",false)) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-        }else{
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-        }
+
+        if (getThemeOption()) setDarkMode() else setLightMode()
+
         setContentView(R.layout.activity_main)
+
         setSupportActionBar(toolbar)
         val navView: BottomNavigationView = findViewById(R.id.nav_view)
 
-        navController = findNavController(R.id.nav_host_fragment)
-        val appBarConfiguration = AppBarConfiguration(setOf(R.id.navigation_list, R.id.navigation_series, R.id.navigation_movies, R.id.navigation_manga, R.id.navigation_stats))
+        val appBarConfiguration = AppBarConfiguration(
+            setOf(
+                R.id.navigation_list,
+                R.id.navigation_series,
+                R.id.navigation_movies,
+                R.id.navigation_manga,
+                R.id.navigation_stats
+            )
+        )
         setupActionBarWithNavController(navController, appBarConfiguration)
+
         navView.setOnNavigationItemSelectedListener {
             if (it.itemId != navView.selectedItemId)
                 it.onNavDestinationSelected(navController)
@@ -47,14 +55,25 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun getThemeOption() = sharedPreferences.getBoolean("darkMode", false)
+
+    private fun setDarkMode() =
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+
+    private fun setLightMode() =
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+
+    private fun openSettingsActivity() = startActivity(Intent(this, SettingsActivity::class.java))
+
+    private fun setActivityAnims() =
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (SystemClock.elapsedRealtime() - lastClickTime < 1000){
-            return super.onOptionsItemSelected(item)
+        if (SystemClock.elapsedRealtime() - lastClickTime > 1000) {
+            lastClickTime = SystemClock.elapsedRealtime()
+            openSettingsActivity()
+            setActivityAnims()
         }
-        lastClickTime = SystemClock.elapsedRealtime()
-        startActivity(Intent(this,
-            SettingsActivity::class.java))
-        overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left)
         return super.onOptionsItemSelected(item)
     }
 

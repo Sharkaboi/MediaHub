@@ -3,14 +3,13 @@ package com.cybershark.mediahub.ui.series.adapters
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import com.cybershark.mediahub.ui.movies.views.finished.MoviesFinishedFragment
-import com.cybershark.mediahub.ui.movies.views.trending.MoviesTrendingFragment
-import com.cybershark.mediahub.ui.movies.views.watching.MoviesWatchingFragment
 import com.cybershark.mediahub.ui.series.views.finished.SeriesFinishedFragment
 import com.cybershark.mediahub.ui.series.views.trending.SeriesTrendingFragment
 import com.cybershark.mediahub.ui.series.views.watching.SeriesWatchingFragment
 
-class SeriesPagerAdapter(fragmentManager: FragmentManager, behaviour: Int) : FragmentPagerAdapter(fragmentManager, behaviour) {
+class SeriesPagerAdapter(fragmentManager: FragmentManager, behaviour: Int) :
+    FragmentPagerAdapter(fragmentManager, behaviour) {
+
     override fun getItem(position: Int): Fragment {
         return when (position) {
             0 -> SeriesWatchingFragment()
@@ -24,10 +23,10 @@ class SeriesPagerAdapter(fragmentManager: FragmentManager, behaviour: Int) : Fra
     }
 
     override fun getPageTitle(position: Int): CharSequence? {
-        return when(position){
-            0->"Watching"
-            1->"Finished"
-            else->"Trending"
+        return when (position) {
+            0 -> "Watching"
+            1 -> "Finished"
+            else -> "Trending"
         }
     }
 }

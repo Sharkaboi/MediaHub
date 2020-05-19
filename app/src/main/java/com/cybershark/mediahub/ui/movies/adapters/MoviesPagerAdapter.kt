@@ -7,7 +7,9 @@ import com.cybershark.mediahub.ui.movies.views.finished.MoviesFinishedFragment
 import com.cybershark.mediahub.ui.movies.views.trending.MoviesTrendingFragment
 import com.cybershark.mediahub.ui.movies.views.watching.MoviesWatchingFragment
 
-class MoviesPagerAdapter(fragmentManager: FragmentManager, behaviour: Int) : FragmentPagerAdapter(fragmentManager, behaviour) {
+class MoviesPagerAdapter(fragmentManager: FragmentManager, behaviour: Int) :
+    FragmentPagerAdapter(fragmentManager, behaviour) {
+    
     override fun getItem(position: Int): Fragment {
         return when (position) {
             0 -> MoviesWatchingFragment()
@@ -21,10 +23,10 @@ class MoviesPagerAdapter(fragmentManager: FragmentManager, behaviour: Int) : Fra
     }
 
     override fun getPageTitle(position: Int): CharSequence? {
-        return when(position){
-            0->"Watching"
-            1->"Finished"
-            else->"Trending"
+        return when (position) {
+            0 -> "Watching"
+            1 -> "Finished"
+            else -> "Trending"
         }
     }
 }

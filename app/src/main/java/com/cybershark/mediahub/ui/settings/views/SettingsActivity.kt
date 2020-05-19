@@ -1,7 +1,6 @@
 package com.cybershark.mediahub.ui.settings.views
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -11,33 +10,56 @@ import kotlinx.android.synthetic.main.activity_settings.*
 
 class SettingsActivity : AppCompatActivity() {
 
-    private lateinit var sharedPreferences: SharedPreferences
+    private val sharedPreferences by lazy { getSharedPreferences(spFileName, Context.MODE_PRIVATE) }
     private val spFileName by lazy { SharedPrefConstants.spFileName }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
-        setSupportActionBar(toolbar)
-        toolbar.setNavigationOnClickListener { onBackPressed() }
-        sharedPreferences = getSharedPreferences(spFileName, Context.MODE_PRIVATE)
-        if (sharedPreferences.getBoolean("darkMode", false))
-            swDarkMode.isChecked = true
+
+        setupToolBar()
+
+        setCurrentThemeMode()
+
         swDarkMode.setOnCheckedChangeListener { _, isChecked ->
             when (isChecked) {
                 true -> {
-                    sharedPreferences.edit().putBoolean("darkMode", true).apply()
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                    setDarkThemeOption(true)
+                    setDarkMode()
                 }
                 false -> {
-                    sharedPreferences.edit().putBoolean("darkMode", false).apply()
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                    setDarkThemeOption(false)
+                    setLightMode()
                 }
             }
         }
     }
 
+    private fun setCurrentThemeMode() {
+        if (getThemeOption()) swDarkMode.isChecked = true
+    }
+
+    private fun setDarkThemeOption(option: Boolean) =
+        sharedPreferences.edit().putBoolean("darkMode", option).apply()
+
+    private fun setupToolBar() {
+        setSupportActionBar(toolbar)
+        toolbar.setNavigationOnClickListener { onBackPressed() }
+    }
+
     override fun finish() {
         super.finish()
-        overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right)
+        setActivityExitAnims()
     }
+
+    private fun getThemeOption() = sharedPreferences.getBoolean("darkMode", false)
+
+    private fun setDarkMode() =
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+
+    private fun setLightMode() =
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+
+    private fun setActivityExitAnims() =
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
 }

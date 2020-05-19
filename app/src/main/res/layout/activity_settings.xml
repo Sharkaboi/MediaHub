@@ -17,12 +17,12 @@
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
-            android:background="@color/colorPrimary"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/colorPrimary"
             app:navigationIcon="@drawable/ic_arrow_back"
-            app:titleTextColor="@android:color/white"
-            app:title="@string/settings" />
+            app:title="@string/settings"
+            app:titleTextColor="@android:color/white" />
 
     </com.google.android.material.appbar.AppBarLayout>
 

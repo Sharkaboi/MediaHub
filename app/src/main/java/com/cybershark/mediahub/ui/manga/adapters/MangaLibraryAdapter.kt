@@ -15,12 +15,23 @@ class MangaLibraryAdapter : RecyclerView.Adapter<MangaLibraryAdapter.MangaLibrar
     private var itemsList = listOf<MangaModel>()
 
     inner class MangaLibraryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val ivMangaLibCover = itemView.findViewById<ImageView>(R.id.ivMangaLibCover)!!
-        val tvMangaLibName = itemView.findViewById<TextView>(R.id.tvMangaLibName)!!
+        private val ivMangaLibCover = itemView.findViewById<ImageView>(R.id.ivMangaLibCover)!!
+        private val tvMangaLibName = itemView.findViewById<TextView>(R.id.tvMangaLibName)!!
+
+        fun bind(mangaModel: MangaModel) {
+            Glide.with(ivMangaLibCover.context)
+                .asBitmap()
+                .load(mangaModel.image_url)
+                .error(R.drawable.error_placeholder)
+                .into(ivMangaLibCover)
+            tvMangaLibName.text = mangaModel.name
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MangaLibraryViewHolder {
-        return MangaLibraryViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.manga_library_item, parent, false))
+        return MangaLibraryViewHolder(
+            LayoutInflater.from(parent.context).inflate(R.layout.manga_library_item, parent, false)
+        )
     }
 
     override fun getItemCount(): Int {
@@ -28,11 +39,7 @@ class MangaLibraryAdapter : RecyclerView.Adapter<MangaLibraryAdapter.MangaLibrar
     }
 
     override fun onBindViewHolder(holder: MangaLibraryViewHolder, position: Int) {
-        holder.apply {
-            val imageUrl=itemsList[position].image_url
-            Glide.with(ivMangaLibCover.context).asBitmap().load(imageUrl).error(R.drawable.error_placeholder).into(ivMangaLibCover)
-            tvMangaLibName.text=itemsList[position].name
-        }
+        holder.bind(itemsList[position])
     }
 
     fun setAdapterList(itemsList: List<MangaModel>) {

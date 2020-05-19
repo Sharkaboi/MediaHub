@@ -17,7 +17,11 @@ class SeriesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        vpSeries.adapter=SeriesPagerAdapter(childFragmentManager,3)
+        setupViewPager()
+    }
+
+    private fun setupViewPager() {
+        vpSeries.adapter = SeriesPagerAdapter(childFragmentManager, 3)
         tabLayoutSeries.setupWithViewPager(vpSeries)
     }
 }

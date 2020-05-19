@@ -18,8 +18,8 @@
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabLayoutMovies"
             android:layout_width="match_parent"
-            android:elevation="4dp"
             android:layout_height="wrap_content"
+            android:elevation="4dp"
             tools:ignore="UnusedAttribute" />
     </androidx.viewpager.widget.ViewPager>
 </androidx.constraintlayout.widget.ConstraintLayout>

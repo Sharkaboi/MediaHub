@@ -15,19 +15,22 @@ import kotlinx.android.synthetic.main.fragment_movies_finished.*
 
 class MoviesFinishedFragment : Fragment() {
 
-    private lateinit var moviesViewModel: MoviesViewModel
+    private val moviesViewModel by lazy { ViewModelProvider(this).get(MoviesViewModel::class.java) }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        moviesViewModel=ViewModelProvider(this).get(MoviesViewModel::class.java)
         return inflater.inflate(R.layout.fragment_movies_finished, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        rvMoviesFinished.layoutManager=GridLayoutManager(context,3,GridLayoutManager.VERTICAL,false)
-        val adapter= MoviesFinishedAdapter()
+
+        rvMoviesFinished.layoutManager =
+            GridLayoutManager(context, 3, GridLayoutManager.VERTICAL, false)
+
+        val adapter = MoviesFinishedAdapter()
+        rvMoviesFinished.adapter = adapter
+
         moviesViewModel.dummyMoviesData.observe(viewLifecycleOwner, Observer {
             adapter.setItemsList(it)
         })
-        rvMoviesFinished.adapter=adapter
     }
 }
