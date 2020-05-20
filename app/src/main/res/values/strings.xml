@@ -11,4 +11,5 @@
     <string name="finished">Finished</string>
     <string name="trending">Trending</string>
     <string name="trending_movies">Trending Movies</string>
+    <string name="no_manga_in_library_nadd_to_the_library_with_the_icon">No Manga in library\nAdd to the library with the + icon!</string>
 </resources>

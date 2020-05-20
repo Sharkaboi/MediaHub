@@ -33,6 +33,7 @@ class MangaUpdatesFragment : Fragment() {
 
         mangaViewModel.dummyData.observe(viewLifecycleOwner, Observer {
             adapter.setAdapterList(it)
+            adapter.notifyDataSetChanged()
         })
     }
 }
