@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.cybershark.mediahub.R
 import com.cybershark.mediahub.ui.manga.adapters.MangaPagerAdapter
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_manga.*
 
 class MangaFragment : Fragment() {
@@ -18,6 +19,12 @@ class MangaFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupViewPager()
+        fabAddManga.setOnClickListener { openMangaAddDialog() }
+    }
+
+    private fun openMangaAddDialog() {
+        Snackbar.make(fabAddManga,"Add Manga Dialog",Snackbar.LENGTH_SHORT).show()
+        //TODO("Not yet implemented")
     }
 
     private fun setupViewPager() {

@@ -23,4 +23,13 @@ class MoviesViewModel : ViewModel() {
         )
     }
     val dummyMoviesData: LiveData<List<MoviesModel>> = _dummyMoviesData
+
+
+    suspend fun updateMoviesWatchedFromRep() {
+        //todo
+    }
+
+    suspend fun updateMoviesWatchingFromRep() {
+        //TODO("Not yet implemented")
+    }
 }

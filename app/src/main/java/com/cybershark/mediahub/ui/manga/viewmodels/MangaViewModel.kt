@@ -33,4 +33,8 @@ class MangaViewModel : ViewModel() {
     suspend fun updateLibraryFromRep() {
         //TODO("Not yet implemented")
     }
+
+    suspend fun updateNewChaptersFromRep() {
+        //TODO("Not yet implemented")
+    }
 }

@@ -4,14 +4,19 @@ import android.content.Context
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.cybershark.mediahub.R
 import com.cybershark.mediahub.data.repository.sharedprefs.SharedPrefConstants
+import com.cybershark.mediahub.ui.settings.viewmodels.SettingsViewModel
 import kotlinx.android.synthetic.main.activity_settings.*
 
 class SettingsActivity : AppCompatActivity() {
 
     private val sharedPreferences by lazy { getSharedPreferences(spFileName, Context.MODE_PRIVATE) }
     private val spFileName by lazy { SharedPrefConstants.spFileName }
+    private val settingsViewModel by lazy { ViewModelProvider(this).get(SettingsViewModel::class.java) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,7 +25,10 @@ class SettingsActivity : AppCompatActivity() {
         setupToolBar()
 
         setCurrentThemeMode()
-
+        /*settingsViewModel.themeOptionLiveData.observe(this, Observer {
+            swDarkMode.isChecked = it
+        })
+*/
         swDarkMode.setOnCheckedChangeListener { _, isChecked ->
             when (isChecked) {
                 true -> {

@@ -12,4 +12,7 @@
     <string name="trending">Trending</string>
     <string name="trending_movies">Trending Movies</string>
     <string name="no_manga_in_library_nadd_to_the_library_with_the_icon">No Manga in library\nAdd to the library with the + icon!</string>
+    <string name="no_movies_watched_nadd_to_the_watchlist_with_the_icon">No Movies watched!\nMark watched by swiping right on watchlist</string>
+    <string name="no_movies_in_watchlist_nadd_to_the_library_with_the_icon">No Movies in WatchList!\nAdd to the library with the + icon!</string>
+    <string name="no_updates">No updates!</string>
 </resources>

@@ -32,10 +32,14 @@ class MangaLibraryFragment : Fragment() {
 
         val layoutManager = StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL)
         layoutManager.gapStrategy = StaggeredGridLayoutManager.GAP_HANDLING_NONE
-        rvMangaLibrary.layoutManager = layoutManager
 
         val adapter = MangaLibraryAdapter()
-        rvMangaLibrary.adapter = adapter
+
+        rvMangaLibrary.apply {
+            this.adapter = adapter
+            this.layoutManager = layoutManager
+            this.setHasFixedSize(true)
+        }
 
         mangaViewModel.dummyData.observe(viewLifecycleOwner, Observer {
             tvNoTitlesAdded.visibility = if (it.isEmpty()) View.VISIBLE else View.GONE
@@ -45,17 +49,9 @@ class MangaLibraryFragment : Fragment() {
 
         contentLoadingScreen.visibility = View.GONE
 
-        swipeRefresh.setOnRefreshListener{
+        swipeRefreshMangaLibrary.setOnRefreshListener{
             viewLifecycleOwner.lifecycle.coroutineScope.launch { mangaViewModel.updateLibraryFromRep() }
-            swipeRefresh.isRefreshing = false
+            swipeRefreshMangaLibrary.isRefreshing = false
         }
-
-        fabAddManga.setOnClickListener {
-            openAddMangaFragment()
-        }
-    }
-
-    private fun openAddMangaFragment() {
-        //TODO("Not yet implemented")
     }
 }

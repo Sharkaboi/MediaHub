@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.SystemClock
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
@@ -15,6 +16,7 @@ import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.cybershark.mediahub.data.repository.sharedprefs.SharedPrefConstants
 import com.cybershark.mediahub.ui.settings.views.SettingsActivity
+import com.cybershark.mediahub.util.InternetConnectionManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -27,6 +29,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        Log.e(this::class.toString(), "internet active : ${InternetConnectionManager.isInternetActive()}")
 
         setTheme(R.style.AppTheme)
 

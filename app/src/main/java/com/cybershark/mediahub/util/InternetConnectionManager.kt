@@ -1,16 +1,13 @@
 package com.cybershark.mediahub.util
 
-import java.net.InetSocketAddress
-import java.net.Socket
+import java.net.InetAddress
 
 class InternetConnectionManager {
     companion object {
         fun isInternetActive(): Boolean {
             return try {
-                val socket = Socket()
-                socket.connect(InetSocketAddress("8.8.8.8",53),1500)
-                socket.close()
-                true
+                val ping = InetAddress.getByName("google.com")
+                ping.isReachable(1000)
             } catch (e: Exception) {
                 false
             }

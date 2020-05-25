@@ -15,7 +15,7 @@ class MoviesFinishedAdapter :
 
     private var itemsList = listOf<MoviesModel>()
 
-    inner class MoviesFinishedViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class MoviesFinishedViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val ivMoviePoster = itemView.findViewById<ImageView>(R.id.ivMoviePoster)!!
         private val tvMovieName = itemView.findViewById<TextView>(R.id.tvMovieName)!!
 
@@ -30,7 +30,9 @@ class MoviesFinishedAdapter :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoviesFinishedViewHolder {
-        return MoviesFinishedViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.movie_trending_item, parent, false))
+        return MoviesFinishedViewHolder(
+            LayoutInflater.from(parent.context).inflate(R.layout.movie_finished_item, parent, false)
+        )
     }
 
     override fun getItemCount(): Int {

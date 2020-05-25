@@ -14,7 +14,7 @@ import com.cybershark.mediahub.data.models.MangaModel
 class MangaLibraryAdapter : RecyclerView.Adapter<MangaLibraryAdapter.MangaLibraryViewHolder>() {
     private var itemsList = listOf<MangaModel>()
 
-    inner class MangaLibraryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class MangaLibraryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val ivMangaLibCover = itemView.findViewById<ImageView>(R.id.ivMangaLibCover)!!
         private val tvMangaLibName = itemView.findViewById<TextView>(R.id.tvMangaLibName)!!
 

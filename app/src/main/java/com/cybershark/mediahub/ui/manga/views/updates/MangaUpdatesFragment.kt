@@ -7,12 +7,16 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.coroutineScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cybershark.mediahub.R
 import com.cybershark.mediahub.ui.manga.adapters.MangaUpdatesAdapter
 import com.cybershark.mediahub.ui.manga.viewmodels.MangaViewModel
+import kotlinx.android.synthetic.main.fragment_manga_library.*
 import kotlinx.android.synthetic.main.fragment_manga_updates.*
+import kotlinx.android.synthetic.main.fragment_manga_updates.contentLoadingScreen
+import kotlinx.coroutines.launch
 
 class MangaUpdatesFragment : Fragment() {
 
@@ -25,15 +29,28 @@ class MangaUpdatesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        rvMangaUpdates.layoutManager = LinearLayoutManager(context)
-        rvMangaUpdates.addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
+        contentLoadingScreen.visibility = View.VISIBLE
 
         val adapter = MangaUpdatesAdapter()
-        rvMangaUpdates.adapter = adapter
+
+        rvMangaUpdates.apply {
+            this.adapter = adapter
+            this.layoutManager = LinearLayoutManager(context)
+            this.addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
+            this.setHasFixedSize(true)
+        }
 
         mangaViewModel.dummyData.observe(viewLifecycleOwner, Observer {
+            tvNoChapters.visibility = if (it.isEmpty()) View.VISIBLE else View.GONE
             adapter.setAdapterList(it)
             adapter.notifyDataSetChanged()
         })
+
+        contentLoadingScreen.visibility = View.GONE
+
+        swipeRefreshMangaUpdates.setOnRefreshListener{
+            viewLifecycleOwner.lifecycle.coroutineScope.launch { mangaViewModel.updateNewChaptersFromRep() }
+            swipeRefreshMangaUpdates.isRefreshing = false
+        }
     }
 }

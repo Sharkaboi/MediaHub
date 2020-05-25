@@ -21,7 +21,7 @@ class MoviesWatchingAdapter :
 
     private var itemsList = listOf<MoviesModel>()
 
-    inner class MoviesWatchingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class MoviesWatchingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val tvMovieDescription = itemView.findViewById<TextView>(R.id.tvMovieDescription)!!
         private val tvMovieName = itemView.findViewById<TextView>(R.id.tvMovieName)!!
         private val tvMovieReleaseYear = itemView.findViewById<TextView>(R.id.tvMovieReleaseYear)!!
@@ -45,7 +45,7 @@ class MoviesWatchingAdapter :
             rbMovieRating.rating = moviesModel.rating ?: 0F
             val lengthInMin = moviesModel.length_in_min
             tvMovieLength.text = ("${lengthInMin / 60} H ${lengthInMin % 60} min")
-            
+
             ibDescription.setOnClickListener {
                 when (tvMovieDescription.visibility) {
                     View.GONE -> {

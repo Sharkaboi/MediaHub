@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.cybershark.mediahub.R
 import com.cybershark.mediahub.ui.movies.adapters.MoviesPagerAdapter
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_movies.*
 
 class MoviesFragment : Fragment() {
@@ -18,10 +19,16 @@ class MoviesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupViewPager()
+        fabAddMovies.setOnClickListener { openAddMoviesDialog() }
+    }
+
+    private fun openAddMoviesDialog() {
+        Snackbar.make(fabAddMovies,"Add movies dialog",Snackbar.LENGTH_SHORT).show()
+        //TODO("Not yet implemented")
     }
 
     private fun setupViewPager() {
-        vpMovies.adapter = MoviesPagerAdapter(childFragmentManager, 3)
+        vpMovies.adapter = MoviesPagerAdapter(childFragmentManager, 2)
         tabLayoutMovies.setupWithViewPager(vpMovies)
     }
 }
