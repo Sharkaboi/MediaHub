@@ -15,4 +15,9 @@
     <string name="no_movies_watched_nadd_to_the_watchlist_with_the_icon">No Movies watched!\nMark watched by swiping right on watchlist</string>
     <string name="no_movies_in_watchlist_nadd_to_the_library_with_the_icon">No Movies in WatchList!\nAdd to the library with the + icon!</string>
     <string name="no_updates">No updates!</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="search_for_the_manga_you_want_to_add">Search for the manga you want to add!</string>
+    <string name="search_for_manga">Search for Manga</string>
 </resources>

@@ -15,14 +15,14 @@ import com.cybershark.mediahub.R
 import com.cybershark.mediahub.data.models.MangaModel
 import com.cybershark.mediahub.ui.manga.util.MangaItemDiffUtilCallback
 
-class MangaUpdatesAdapter :
-    RecyclerView.Adapter<MangaUpdatesAdapter.MangaUpdatesViewHolder>() {
+class AddMangaAdapter :
+    RecyclerView.Adapter<AddMangaAdapter.AddMangaViewHolder>() {
 
-    class MangaUpdatesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class AddMangaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val ivMangaCover = itemView.findViewById<ImageView>(R.id.ivMangaCover)!!
         private val tvMangaName = itemView.findViewById<TextView>(R.id.tvMangaName)!!
-        private val tvChapterName = itemView.findViewById<TextView>(R.id.tvChapterName)!!
-        private val ibInfo = itemView.findViewById<ImageButton>(R.id.ibInfo)!!
+        private val tvMangaDetails = itemView.findViewById<TextView>(R.id.tvMangaDetails)!!
+        private val ibAdd = itemView.findViewById<ImageButton>(R.id.ibAdd)!!
 
         fun bind(mangaModel: MangaModel) {
             Glide.with(ivMangaCover.context)
@@ -32,22 +32,22 @@ class MangaUpdatesAdapter :
                 .centerCrop()
                 .transform(RoundedCorners(8))
                 .into(ivMangaCover)
-            tvChapterName.text = mangaModel.latest_chap_title
+            tvMangaDetails.text = ("${mangaModel.total_chapters} - Ongoing")
             tvMangaName.text = mangaModel.name
-            ibInfo.setOnClickListener {
+            ibAdd.setOnClickListener {
                 //todo:show dialog
-                Toast.makeText(ibInfo.context, mangaModel.toString(), Toast.LENGTH_SHORT).show()
+                Toast.makeText(ibAdd.context, mangaModel.toString(), Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MangaUpdatesViewHolder {
-        return MangaUpdatesViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.manga_updates_item, parent, false)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AddMangaViewHolder {
+        return AddMangaViewHolder(
+            LayoutInflater.from(parent.context).inflate(R.layout.manga_search_item, parent, false)
         )
     }
 
-    override fun onBindViewHolder(holder: MangaUpdatesViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: AddMangaViewHolder, position: Int) {
         holder.bind(listDiffer.currentList[position])
     }
 

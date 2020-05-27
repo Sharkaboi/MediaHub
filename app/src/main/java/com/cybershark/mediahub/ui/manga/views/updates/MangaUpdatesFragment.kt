@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.coroutineScope
+import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cybershark.mediahub.R
@@ -38,18 +39,20 @@ class MangaUpdatesFragment : Fragment() {
             this.layoutManager = LinearLayoutManager(context)
             this.addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
             this.setHasFixedSize(true)
+            itemAnimator = DefaultItemAnimator()
         }
 
         mangaViewModel.dummyData.observe(viewLifecycleOwner, Observer {
             tvNoChapters.visibility = if (it.isEmpty()) View.VISIBLE else View.GONE
             adapter.setAdapterList(it)
-            adapter.notifyDataSetChanged()
+            //adapter.notifyDataSetChanged()
         })
 
         contentLoadingScreen.visibility = View.GONE
 
         swipeRefreshMangaUpdates.setOnRefreshListener{
             viewLifecycleOwner.lifecycle.coroutineScope.launch { mangaViewModel.updateNewChaptersFromRep() }
+            mangaViewModel.testUpdate()
             swipeRefreshMangaUpdates.isRefreshing = false
         }
     }

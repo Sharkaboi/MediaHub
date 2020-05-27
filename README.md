@@ -13,5 +13,4 @@
 An all in one manager for Movies,Series,Anime and manga.
 
 Uses these API's:  
-[Trakt](https://github.com/trakt/api-help)  
-[Jikan for MAL](https://github.com/jikan-me/jikan)
+[Trakt](https://github.com/trakt/api-help)

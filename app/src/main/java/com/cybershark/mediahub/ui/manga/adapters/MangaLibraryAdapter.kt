@@ -5,14 +5,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.cybershark.mediahub.R
 import com.cybershark.mediahub.data.models.MangaModel
+import com.cybershark.mediahub.ui.manga.util.MangaItemDiffUtilCallback
 
 
 class MangaLibraryAdapter : RecyclerView.Adapter<MangaLibraryAdapter.MangaLibraryViewHolder>() {
-    private var itemsList = listOf<MangaModel>()
 
     class MangaLibraryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val ivMangaLibCover = itemView.findViewById<ImageView>(R.id.ivMangaLibCover)!!
@@ -35,14 +36,16 @@ class MangaLibraryAdapter : RecyclerView.Adapter<MangaLibraryAdapter.MangaLibrar
     }
 
     override fun getItemCount(): Int {
-        return itemsList.size
+        return listDiffer.currentList.size
     }
 
     override fun onBindViewHolder(holder: MangaLibraryViewHolder, position: Int) {
-        holder.bind(itemsList[position])
+        holder.bind(listDiffer.currentList[position])
     }
 
     fun setAdapterList(itemsList: List<MangaModel>) {
-        this.itemsList = itemsList
+        listDiffer.submitList(itemsList)
     }
+
+    private val listDiffer = AsyncListDiffer(this, MangaItemDiffUtilCallback)
 }

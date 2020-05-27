@@ -5,13 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
+import androidx.navigation.fragment.findNavController
 import com.cybershark.mediahub.R
 import com.cybershark.mediahub.ui.manga.adapters.MangaPagerAdapter
+import com.cybershark.mediahub.ui.manga.views.addmanga.AddMangaDialog
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_manga.*
 
 class MangaFragment : Fragment() {
 
+    private val navController by lazy { findNavController() }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_manga, container, false)
     }
@@ -23,8 +27,9 @@ class MangaFragment : Fragment() {
     }
 
     private fun openMangaAddDialog() {
-        Snackbar.make(fabAddManga,"Add Manga Dialog",Snackbar.LENGTH_SHORT).show()
+        //Snackbar.make(fabAddManga,"Add Manga Dialog",Snackbar.LENGTH_SHORT).show()
         //TODO("Not yet implemented")
+        AddMangaDialog().show(childFragmentManager,"mangaSearchDialog")
     }
 
     private fun setupViewPager() {
