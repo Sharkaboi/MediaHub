@@ -44,6 +44,7 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         private fun setupMALOption() {
+            //kdsfkjsdhlfksd
             //TODO("Not yet implemented")
         }
 
