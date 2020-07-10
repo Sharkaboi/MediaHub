@@ -1,0 +1,69 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <PreferenceCategory app:title="@string/sync_header">
+
+        <Preference
+            android:icon="@drawable/ic_trakt_settings"
+            app:key="syncTrakt"
+            app:title="Trakt Account"
+            tools:summary="Logged In" />
+
+        <ListPreference
+            android:icon="@drawable/ic_sync"
+            app:key="syncTo"
+            android:defaultValue="Everyday"
+            android:entries="@array/sync_options"
+            android:entryValues="@array/sync_options"
+            app:title="Sync from Trakt to MediaHub"
+            app:useSimpleSummaryProvider="true" />
+
+        <Preference
+            android:icon="@drawable/ic_mal"
+            app:key="syncMal"
+            app:title="MyAnimeList Account"
+            tools:summary="Logged In" />
+
+        <Preference
+            android:icon="@drawable/googleg_standard_color_18"
+            app:key="syncGoogle"
+            app:title="Set to sync App data through Google" />
+
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/appearance">
+
+        <SwitchPreferenceCompat
+            android:icon="@drawable/ic_bulb"
+            app:key="darkTheme"
+            app:summaryOff="Dark mode disabled"
+            app:summaryOn="Dark mode enabled"
+            app:title="Dark Theme" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="About">
+        <Preference
+            android:icon="@drawable/ic_info"
+            app:key="versionCode"
+            app:title="@string/app_name"
+            tools:summary="1.0">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="https://github.com/Sharkaboi/MediaHub" />
+        </Preference>
+
+        <Preference
+            android:icon="@drawable/ic_download"
+            app:key="releases"
+            app:summary="Check for new releases!"
+            app:title="Releases">
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:data="https://github.com/Sharkaboi/MediaHub/releases" />
+        </Preference>
+    </PreferenceCategory>
+
+</PreferenceScreen>

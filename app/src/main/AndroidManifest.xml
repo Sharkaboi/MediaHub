@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.cybershark.mediahub">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -14,16 +15,35 @@
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,UnusedAttribute">
         <activity
-            android:name=".MainActivity"
-            android:theme="@style/splashStyle"
-            android:label="@string/app_name">
+            android:name=".ui.modules.settings.views.SettingsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.getstarted.GetStartedActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="callback"
+                    android:scheme="cybershark" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.modules.MainActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.SplashActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/splashStyle">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.settings.views.SettingsActivity" />
     </application>
 
 </manifest>

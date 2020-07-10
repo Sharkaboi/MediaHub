@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.series.views.SeriesFragment">
+    tools:context=".ui.modules.series.views.SeriesFragment">
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/vpSeries"

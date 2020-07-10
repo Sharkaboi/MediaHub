@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="8dp"
-    tools:context="ui.manga.views.addmanga.AddMangaDialog">
+    tools:context=".ui.modules.manga.views.addmanga.AddMangaDialog">
 
     <EditText
         android:id="@+id/etMangaSearch"
