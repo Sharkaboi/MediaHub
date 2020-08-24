@@ -1,7 +1,7 @@
 package com.cybershark.mediahub.ui.modules.manga.util
 
 import androidx.recyclerview.widget.DiffUtil
-import com.cybershark.mediahub.data.models.MangaModel
+import com.cybershark.mediahub.data.models.entities.MangaModel
 
 object MangaItemDiffUtilCallback : DiffUtil.ItemCallback<MangaModel>() {
 

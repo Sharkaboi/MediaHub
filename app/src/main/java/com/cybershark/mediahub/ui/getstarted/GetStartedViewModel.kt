@@ -8,12 +8,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.preference.PreferenceManager
+import androidx.work.*
 import com.cybershark.mediahub.R
-import com.cybershark.mediahub.data.models.TraktTokenResultModel
+import com.cybershark.mediahub.data.models.retrofit.TraktTokenResultModel
 import com.cybershark.mediahub.data.repository.GetStartedRepository
-import com.cybershark.mediahub.util.Status
+import com.cybershark.mediahub.util.STATUS
+import com.cybershark.mediahub.workmanager.TraktTokenRefresher
 import kotlinx.coroutines.launch
 import retrofit2.awaitResponse
+import java.util.concurrent.TimeUnit
 
 class GetStartedViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -22,25 +25,42 @@ class GetStartedViewModel(application: Application) : AndroidViewModel(applicati
     }
 
     private val getStartedRepository by lazy { GetStartedRepository() }
-    private val _authStatus = MutableLiveData<Int>().apply { value = Status.IDLE }
-    val authStatus: LiveData<Int> = _authStatus
+    private val _authStatus = MutableLiveData<STATUS>().apply { value = STATUS.IDLE }
+    val authStatus: LiveData<STATUS> = _authStatus
 
     fun getTokensFromAuthCode(code: String?) {
         if (code != null) {
-            _authStatus.value = Status.LOADING
+            _authStatus.value = STATUS.LOADING
             viewModelScope.launch {
                 val response = getStartedRepository.getTokenFromAuthCode(code, getClientID(), getClientSecret()).awaitResponse()
                 if (response.isSuccessful) {
                     response.body()?.let { setTokenInSharedPrefs(it) }
-                    _authStatus.value = Status.COMPLETED
+                    invokeTokenRefreshWorkManager()
+                    _authStatus.value = STATUS.COMPLETED("Token recieved from auth code")
                 } else {
                     Log.e(TAG, "getTokensFromAuthCode: ${response.raw()}")
-                    _authStatus.value = Status.ERROR
+                    _authStatus.value = STATUS.ERROR("Token retrieval failed!")
                 }
             }
         } else {
             Toast.makeText(getApplication(), "Error : Invalid auth code received!", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun invokeTokenRefreshWorkManager() {
+        val uniqueWorkName = "com.cybershark.mediahub:refresh-token-work"
+
+        val workConstraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+
+        val periodicRefreshTokenWork =
+            PeriodicWorkRequest.Builder(TraktTokenRefresher::class.java, 720, TimeUnit.HOURS)
+                .setConstraints(workConstraints)
+                .build()
+
+        WorkManager.getInstance(getApplication())
+            .enqueueUniquePeriodicWork(uniqueWorkName, ExistingPeriodicWorkPolicy.REPLACE, periodicRefreshTokenWork)
     }
 
     private fun getClientSecret() = getApplication<Application>().getString(R.string.TRAKT_API_CLIENT_SECRET)

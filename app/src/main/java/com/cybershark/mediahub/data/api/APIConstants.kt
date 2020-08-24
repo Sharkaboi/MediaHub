@@ -15,14 +15,14 @@ class APIConstants {
         const val GRANT_TYPE = "authorization_code"
         const val TRAKT_API_VERSION = 2
 
-        //API status codes
-        const val GET_SUCCESS_CODE = 200
-        const val POTS_SUCCESS_CODE = 201
-        const val PUT_SUCCESS_CODE = 200
-        const val NO_AUTH_REQUEST = 401
-        val BAD_REQUEST_CODES by lazy { listOf(403,400,404) }
-        const val CONFLICT_REQUEST = 409
-        const val RATE_LIMIT_EXCEEDED = 429
-        val SERVER_ERROR_CODES by lazy { listOf(500, 503, 504, 520, 521, 522) }
+//        API status codes
+//        const val GET_SUCCESS_CODE = 200
+//        const val POTS_SUCCESS_CODE = 201
+//        const val PUT_SUCCESS_CODE = 200
+//        const val NO_AUTH_REQUEST = 401
+//        val BAD_REQUEST_CODES by lazy { listOf(403,400,404) }
+//        const val CONFLICT_REQUEST = 409
+//        const val RATE_LIMIT_EXCEEDED = 429
+//        val SERVER_ERROR_CODES by lazy { listOf(500, 503, 504, 520, 521, 522) }
     }
 }

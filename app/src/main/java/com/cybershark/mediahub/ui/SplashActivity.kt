@@ -26,6 +26,7 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun checkLoggedInToTrakt() {
+        TODO("Check refresh time in shared pref with current time and if past, go to another screen to get token again from user.")
         val loggedIn = PreferenceManager.getDefaultSharedPreferences(this).getBoolean("traktTokenSet", false)
         if (loggedIn) startMainActivity() else startGetStartedActivity()
     }

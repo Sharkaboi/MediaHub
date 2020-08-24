@@ -1,6 +1,9 @@
 package com.cybershark.mediahub.util
 
+import android.content.Context
+import android.net.NetworkCapabilities
 import java.net.InetAddress
+
 
 class InternetConnectionManager {
     companion object {
@@ -13,4 +16,8 @@ class InternetConnectionManager {
             }
         }
     }
+}
+
+internal fun Context.isInternetActive() {
+    NetworkCapabilities.NET_CAPABILITY_INTERNET
 }

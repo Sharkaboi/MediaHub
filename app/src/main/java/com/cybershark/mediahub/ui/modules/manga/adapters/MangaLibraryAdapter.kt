@@ -1,38 +1,32 @@
 package com.cybershark.mediahub.ui.modules.manga.adapters
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import coil.load
 import com.cybershark.mediahub.R
-import com.cybershark.mediahub.data.models.MangaModel
+import com.cybershark.mediahub.data.models.entities.MangaModel
+import com.cybershark.mediahub.databinding.MangaLibraryItemBinding
 import com.cybershark.mediahub.ui.modules.manga.util.MangaItemDiffUtilCallback
-
 
 class MangaLibraryAdapter : RecyclerView.Adapter<MangaLibraryAdapter.MangaLibraryViewHolder>() {
 
-    class MangaLibraryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val ivMangaLibCover = itemView.findViewById<ImageView>(R.id.ivMangaLibCover)!!
-        private val tvMangaLibName = itemView.findViewById<TextView>(R.id.tvMangaLibName)!!
+    private lateinit var binding: MangaLibraryItemBinding
+
+    class MangaLibraryViewHolder(private val binding: MangaLibraryItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(mangaModel: MangaModel) {
-            Glide.with(ivMangaLibCover.context)
-                .asBitmap()
-                .load(mangaModel.image_url)
-                .error(R.drawable.error_placeholder)
-                .into(ivMangaLibCover)
-            tvMangaLibName.text = mangaModel.name
+            binding.ivMangaLibCover.load(mangaModel.image_url){
+                error(R.drawable.error_placeholder)
+            }
+            binding.tvMangaLibName.text = mangaModel.name
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MangaLibraryViewHolder {
-        return MangaLibraryViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.manga_library_item, parent, false)
-        )
+        binding = MangaLibraryItemBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        return MangaLibraryViewHolder(binding)
     }
 
     override fun getItemCount(): Int {

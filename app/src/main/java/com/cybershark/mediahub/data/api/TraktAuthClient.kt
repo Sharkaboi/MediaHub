@@ -1,7 +1,7 @@
 package com.cybershark.mediahub.data.api
 
-import com.cybershark.mediahub.data.models.TraktTokenRequestModel
-import com.cybershark.mediahub.data.models.TraktTokenResultModel
+import com.cybershark.mediahub.data.models.retrofit.TraktTokenRequestModel
+import com.cybershark.mediahub.data.models.retrofit.TraktTokenResultModel
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.Headers

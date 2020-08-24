@@ -44,6 +44,7 @@
             android:id="@+id/ivBanner"
             android:layout_width="75dp"
             android:layout_height="100dp"
+            android:scaleType="centerCrop"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="ContentDescription"

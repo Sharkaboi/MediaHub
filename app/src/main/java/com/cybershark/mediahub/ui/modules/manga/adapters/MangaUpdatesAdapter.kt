@@ -1,50 +1,40 @@
 package com.cybershark.mediahub.ui.modules.manga.adapters
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import coil.load
+import coil.transform.RoundedCornersTransformation
 import com.cybershark.mediahub.R
-import com.cybershark.mediahub.data.models.MangaModel
+import com.cybershark.mediahub.data.models.entities.MangaModel
+import com.cybershark.mediahub.databinding.MangaUpdatesItemBinding
 import com.cybershark.mediahub.ui.modules.manga.util.MangaItemDiffUtilCallback
 
-class MangaUpdatesAdapter :
-    RecyclerView.Adapter<MangaUpdatesAdapter.MangaUpdatesViewHolder>() {
+class MangaUpdatesAdapter : RecyclerView.Adapter<MangaUpdatesAdapter.MangaUpdatesViewHolder>() {
 
-    class MangaUpdatesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val ivMangaCover = itemView.findViewById<ImageView>(R.id.ivMangaCover)!!
-        private val tvMangaName = itemView.findViewById<TextView>(R.id.tvMangaName)!!
-        private val tvChapterName = itemView.findViewById<TextView>(R.id.tvChapterName)!!
-        private val ibInfo = itemView.findViewById<ImageButton>(R.id.ibInfo)!!
+    private lateinit var binding: MangaUpdatesItemBinding
+
+    class MangaUpdatesViewHolder(private val binding: MangaUpdatesItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(mangaModel: MangaModel) {
-            Glide.with(ivMangaCover.context)
-                .asBitmap()
-                .load(mangaModel.image_url)
-                .error(R.drawable.error_placeholder)
-                .centerCrop()
-                .transform(RoundedCorners(8))
-                .into(ivMangaCover)
-            tvChapterName.text = mangaModel.latest_chap_title
-            tvMangaName.text = mangaModel.name
-            ibInfo.setOnClickListener {
+            binding.ivMangaCover.load(mangaModel.image_url) {
+                error(R.drawable.error_placeholder)
+                transformations(RoundedCornersTransformation(8f))
+            }
+            binding.tvChapterName.text = mangaModel.latest_chap_title
+            binding.tvMangaName.text = mangaModel.name
+            binding.ibInfo.setOnClickListener {
                 //todo:show dialog
-                Toast.makeText(ibInfo.context, mangaModel.toString(), Toast.LENGTH_SHORT).show()
+                Toast.makeText(binding.ibInfo.context, mangaModel.toString(), Toast.LENGTH_SHORT).show()
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MangaUpdatesViewHolder {
-        return MangaUpdatesViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.manga_updates_item, parent, false)
-        )
+        binding = MangaUpdatesItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return MangaUpdatesViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: MangaUpdatesViewHolder, position: Int) {

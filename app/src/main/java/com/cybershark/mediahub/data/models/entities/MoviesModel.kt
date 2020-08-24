@@ -1,4 +1,4 @@
-package com.cybershark.mediahub.data.models
+package com.cybershark.mediahub.data.models.entities
 
 data class MoviesModel(
     val id:String,

@@ -1,50 +1,45 @@
 package com.cybershark.mediahub.ui.modules.movies.adapters
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
+import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import coil.load
 import com.cybershark.mediahub.R
-import com.cybershark.mediahub.data.models.MoviesModel
+import com.cybershark.mediahub.data.models.entities.MoviesModel
+import com.cybershark.mediahub.databinding.MovieFinishedItemBinding
+import com.cybershark.mediahub.ui.modules.movies.util.MovieItemDiffUtilCallback
 
-class MoviesFinishedAdapter :
-    RecyclerView.Adapter<MoviesFinishedAdapter.MoviesFinishedViewHolder>() {
+class MoviesFinishedAdapter : RecyclerView.Adapter<MoviesFinishedAdapter.MoviesFinishedViewHolder>() {
 
-    private var itemsList = listOf<MoviesModel>()
+    private lateinit var binding: MovieFinishedItemBinding
 
-    class MoviesFinishedViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val ivMoviePoster = itemView.findViewById<ImageView>(R.id.ivMoviePoster)!!
-        private val tvMovieName = itemView.findViewById<TextView>(R.id.tvMovieName)!!
+    class MoviesFinishedViewHolder(private val binding: MovieFinishedItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(moviesModel: MoviesModel) {
-            Glide.with(ivMoviePoster.context)
-                .asBitmap()
-                .load(moviesModel.image_url)
-                .error(R.drawable.error_placeholder)
-                .into(ivMoviePoster)
-            tvMovieName.text = moviesModel.name
+            binding.ivMoviePoster.load(moviesModel.image_url){
+                error(R.drawable.error_placeholder)
+            }
+            binding.tvMovieName.text = moviesModel.name
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoviesFinishedViewHolder {
-        return MoviesFinishedViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.movie_finished_item, parent, false)
-        )
+        binding = MovieFinishedItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return MoviesFinishedViewHolder(binding)
     }
 
     override fun getItemCount(): Int {
-        return itemsList.size
+        return listDiffer.currentList.size
     }
 
     override fun onBindViewHolder(holder: MoviesFinishedViewHolder, position: Int) {
-        holder.bind(itemsList[position])
+        holder.bind(listDiffer.currentList[position])
     }
 
-    fun setItemsList(it: List<MoviesModel>) {
-        itemsList = it
+    fun setItemsList(list: List<MoviesModel>) {
+        listDiffer.submitList(list)
     }
 
+    private val listDiffer = AsyncListDiffer(this, MovieItemDiffUtilCallback)
 }

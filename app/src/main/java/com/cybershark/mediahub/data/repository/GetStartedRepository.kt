@@ -2,7 +2,7 @@ package com.cybershark.mediahub.data.repository
 
 import com.cybershark.mediahub.data.api.APIConstants
 import com.cybershark.mediahub.data.api.TraktAuthClient
-import com.cybershark.mediahub.data.models.TraktTokenRequestModel
+import com.cybershark.mediahub.data.models.retrofit.TraktTokenRequestModel
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 

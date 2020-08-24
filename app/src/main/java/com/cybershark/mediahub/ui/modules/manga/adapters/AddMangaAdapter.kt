@@ -1,50 +1,41 @@
 package com.cybershark.mediahub.ui.modules.manga.adapters
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import coil.load
+import coil.transform.RoundedCornersTransformation
 import com.cybershark.mediahub.R
-import com.cybershark.mediahub.data.models.MangaModel
+import com.cybershark.mediahub.data.models.entities.MangaModel
+import com.cybershark.mediahub.databinding.MangaSearchItemBinding
 import com.cybershark.mediahub.ui.modules.manga.util.MangaItemDiffUtilCallback
 
 class AddMangaAdapter :
     RecyclerView.Adapter<AddMangaAdapter.AddMangaViewHolder>() {
 
-    class AddMangaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val ivMangaCover = itemView.findViewById<ImageView>(R.id.ivMangaCover)!!
-        private val tvMangaName = itemView.findViewById<TextView>(R.id.tvMangaName)!!
-        private val tvMangaDetails = itemView.findViewById<TextView>(R.id.tvMangaDetails)!!
-        private val ibAdd = itemView.findViewById<ImageButton>(R.id.ibAdd)!!
+    private lateinit var binding: MangaSearchItemBinding
+
+    class AddMangaViewHolder(private val binding: MangaSearchItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(mangaModel: MangaModel) {
-            Glide.with(ivMangaCover.context)
-                .asBitmap()
-                .load(mangaModel.image_url)
-                .error(R.drawable.error_placeholder)
-                .centerCrop()
-                .transform(RoundedCorners(8))
-                .into(ivMangaCover)
-            tvMangaDetails.text = ("${mangaModel.total_chapters} - Ongoing")
-            tvMangaName.text = mangaModel.name
-            ibAdd.setOnClickListener {
+            binding.ivMangaCover.load(mangaModel.image_url){
+                error(R.drawable.error_placeholder)
+                transformations(RoundedCornersTransformation(8f))
+            }
+            binding.tvMangaDetails.text = ("${mangaModel.total_chapters} - Ongoing")
+            binding.tvMangaName.text = mangaModel.name
+            binding.ibAdd.setOnClickListener {
                 //todo:show dialog
-                Toast.makeText(ibAdd.context, mangaModel.toString(), Toast.LENGTH_SHORT).show()
+                Toast.makeText(binding.ibAdd.context, mangaModel.toString(), Toast.LENGTH_SHORT).show()
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AddMangaViewHolder {
-        return AddMangaViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.manga_search_item, parent, false)
-        )
+        binding = MangaSearchItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return AddMangaViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: AddMangaViewHolder, position: Int) {
