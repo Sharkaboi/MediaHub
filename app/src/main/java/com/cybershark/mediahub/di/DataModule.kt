@@ -2,6 +2,9 @@ package com.cybershark.mediahub.di
 
 import android.content.Context
 import com.cybershark.mediahub.data.api.APIConstants
+import com.cybershark.mediahub.data.api.TraktAuthClient
+import com.cybershark.mediahub.data.api.TraktGeneralMediaClient
+import com.cybershark.mediahub.data.api.TraktUserMediaClient
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,10 +20,33 @@ object DataModule {
 
     @Provides
     @Singleton
-    fun getTraktRetrofitService(@ApplicationContext context: Context): Retrofit {
+    fun getTraktRetrofitBuilder(@ApplicationContext context: Context): Retrofit.Builder {
         return Retrofit.Builder()
             .baseUrl(APIConstants.TRAKT_STAGING_API_URL)
             .addConverterFactory(GsonConverterFactory.create())
+    }
+
+    @Provides
+    @Singleton
+    fun getTraktAuthService(retrofit: Retrofit.Builder) : TraktAuthClient{
+        return retrofit
             .build()
+            .create(TraktAuthClient::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun getTraktUserMediaService(retrofit: Retrofit.Builder) : TraktUserMediaClient {
+        return retrofit
+            .build()
+            .create(TraktUserMediaClient::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun getTraktGeneralMediaService(retrofit: Retrofit.Builder) : TraktGeneralMediaClient {
+        return retrofit
+            .build()
+            .create(TraktGeneralMediaClient::class.java)
     }
 }

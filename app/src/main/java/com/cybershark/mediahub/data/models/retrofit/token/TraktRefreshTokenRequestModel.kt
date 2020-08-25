@@ -1,4 +1,4 @@
-package com.cybershark.mediahub.data.models.retrofit
+package com.cybershark.mediahub.data.models.retrofit.token
 
 data class TraktRefreshTokenRequestModel(
     val refresh_token: String,

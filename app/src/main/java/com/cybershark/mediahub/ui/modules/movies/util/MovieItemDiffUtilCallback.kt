@@ -1,7 +1,7 @@
 package com.cybershark.mediahub.ui.modules.movies.util
 
 import androidx.recyclerview.widget.DiffUtil
-import com.cybershark.mediahub.data.models.entities.MoviesModel
+import com.cybershark.mediahub.data.room.entities.MoviesModel
 
 object MovieItemDiffUtilCallback : DiffUtil.ItemCallback<MoviesModel>() {
 

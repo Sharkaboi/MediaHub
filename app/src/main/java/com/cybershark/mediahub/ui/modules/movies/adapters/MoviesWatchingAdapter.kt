@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.RoundedCornersTransformation
 import com.cybershark.mediahub.R
-import com.cybershark.mediahub.data.models.entities.MoviesModel
+import com.cybershark.mediahub.data.room.entities.MoviesModel
 import com.cybershark.mediahub.databinding.MoviesWatchingItemBinding
 import com.cybershark.mediahub.ui.modules.movies.util.MovieItemDiffUtilCallback
 

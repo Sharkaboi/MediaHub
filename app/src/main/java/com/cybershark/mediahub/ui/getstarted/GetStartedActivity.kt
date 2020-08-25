@@ -13,7 +13,7 @@ import com.cybershark.mediahub.R
 import com.cybershark.mediahub.data.api.APIConstants
 import com.cybershark.mediahub.databinding.ActivityGetStartedBinding
 import com.cybershark.mediahub.ui.modules.MainActivity
-import com.cybershark.mediahub.util.STATUS
+import com.cybershark.mediahub.util.UIState
 import com.cybershark.mediahub.util.getStagingAuthURI
 
 class GetStartedActivity : AppCompatActivity() {
@@ -51,8 +51,8 @@ class GetStartedActivity : AppCompatActivity() {
     private fun setAuthSuccessListener() {
         getStartedViewModel.authStatus.observe(this, Observer {
             when (it) {
-                is STATUS.COMPLETED -> startMainActivity(it.message)
-                is STATUS.ERROR -> {
+                is UIState.COMPLETED -> startMainActivity(it.message)
+                is UIState.ERROR -> {
                     binding.contentLoading.isGone = true
                     Toast.makeText(this, "Error : ${it.message}", Toast.LENGTH_SHORT).show()
                 }

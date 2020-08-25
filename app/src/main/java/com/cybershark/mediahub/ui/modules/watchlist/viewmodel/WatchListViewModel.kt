@@ -3,7 +3,7 @@ package com.cybershark.mediahub.ui.modules.watchlist.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.cybershark.mediahub.data.models.entities.WatchListModel
+import com.cybershark.mediahub.data.room.entities.WatchListModel
 
 class WatchListViewModel : ViewModel() {
 

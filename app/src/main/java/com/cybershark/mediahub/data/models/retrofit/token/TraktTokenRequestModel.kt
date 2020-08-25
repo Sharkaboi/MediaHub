@@ -1,4 +1,4 @@
-package com.cybershark.mediahub.data.models.retrofit
+package com.cybershark.mediahub.data.models.retrofit.token
 
 data class TraktTokenRequestModel(
     val code: String,

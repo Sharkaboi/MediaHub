@@ -1,4 +1,4 @@
-package com.cybershark.mediahub.data.models.entities
+package com.cybershark.mediahub.data.room.entities
 
 data class MangaModel(
     val id:String,

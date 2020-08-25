@@ -1,7 +1,7 @@
 package com.cybershark.mediahub.ui.modules.watchlist.util
 
 import androidx.recyclerview.widget.DiffUtil
-import com.cybershark.mediahub.data.models.entities.WatchListModel
+import com.cybershark.mediahub.data.room.entities.WatchListModel
 
 object WatchListDiffUtilItemCallback : DiffUtil.ItemCallback<WatchListModel>() {
     override fun areItemsTheSame(oldItem: WatchListModel, newItem: WatchListModel): Boolean {

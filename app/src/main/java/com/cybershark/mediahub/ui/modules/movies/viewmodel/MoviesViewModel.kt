@@ -3,7 +3,7 @@ package com.cybershark.mediahub.ui.modules.movies.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.cybershark.mediahub.data.models.entities.MoviesModel
+import com.cybershark.mediahub.data.room.entities.MoviesModel
 
 class MoviesViewModel : ViewModel() {
 

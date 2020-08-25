@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.cybershark.mediahub.R
-import com.cybershark.mediahub.data.models.entities.MangaModel
+import com.cybershark.mediahub.data.room.entities.MangaModel
 import com.cybershark.mediahub.databinding.MangaLibraryItemBinding
 import com.cybershark.mediahub.ui.modules.manga.util.MangaItemDiffUtilCallback
 

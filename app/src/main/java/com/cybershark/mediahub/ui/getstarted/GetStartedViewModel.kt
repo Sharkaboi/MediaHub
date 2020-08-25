@@ -10,9 +10,9 @@ import androidx.lifecycle.viewModelScope
 import androidx.preference.PreferenceManager
 import androidx.work.*
 import com.cybershark.mediahub.R
-import com.cybershark.mediahub.data.models.retrofit.TraktTokenResultModel
+import com.cybershark.mediahub.data.models.retrofit.token.TraktTokenResultModel
 import com.cybershark.mediahub.data.repository.GetStartedRepository
-import com.cybershark.mediahub.util.STATUS
+import com.cybershark.mediahub.util.UIState
 import com.cybershark.mediahub.workmanager.TraktTokenRefresher
 import kotlinx.coroutines.launch
 import retrofit2.awaitResponse
@@ -25,21 +25,21 @@ class GetStartedViewModel(application: Application) : AndroidViewModel(applicati
     }
 
     private val getStartedRepository by lazy { GetStartedRepository() }
-    private val _authStatus = MutableLiveData<STATUS>().apply { value = STATUS.IDLE }
-    val authStatus: LiveData<STATUS> = _authStatus
+    private val _authStatus = MutableLiveData<UIState>().apply { value = UIState.IDLE }
+    val authStatus: LiveData<UIState> = _authStatus
 
     fun getTokensFromAuthCode(code: String?) {
         if (code != null) {
-            _authStatus.value = STATUS.LOADING
+            _authStatus.value = UIState.LOADING
             viewModelScope.launch {
                 val response = getStartedRepository.getTokenFromAuthCode(code, getClientID(), getClientSecret()).awaitResponse()
                 if (response.isSuccessful) {
                     response.body()?.let { setTokenInSharedPrefs(it) }
                     invokeTokenRefreshWorkManager()
-                    _authStatus.value = STATUS.COMPLETED("Token recieved from auth code")
+                    _authStatus.value = UIState.COMPLETED("Token recieved from auth code")
                 } else {
                     Log.e(TAG, "getTokensFromAuthCode: ${response.raw()}")
-                    _authStatus.value = STATUS.ERROR("Token retrieval failed!")
+                    _authStatus.value = UIState.ERROR("Token retrieval failed!")
                 }
             }
         } else {
