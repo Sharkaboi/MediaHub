@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/anime_item"
+        android:icon="@drawable/ic_onigiri"
+        android:title="Anime" />
+    <item
+        android:id="@+id/manga_item"
+        android:icon="@drawable/ic_book"
+        android:title="Manga" />
+    <item
+        android:id="@+id/discover_item"
+        android:icon="@drawable/ic_discover"
+        android:title="Discover" />
+    <item
+        android:id="@+id/profile_item"
+        android:icon="@drawable/ic_profile"
+        android:title="Profile" />
+</menu>
