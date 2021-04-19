@@ -54,6 +54,6 @@ class SplashRepository(
     }
 
     companion object {
-        const val TAG = "SplashRepository"
+        private const val TAG = "SplashRepository"
     }
 }

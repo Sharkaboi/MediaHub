@@ -6,7 +6,7 @@ import androidx.preference.PreferenceManager
 import com.haroldadmin.cnradapter.NetworkResponseAdapterFactory
 import com.sharkaboi.mediahub.common.data.datastore.DataStoreRepository
 import com.sharkaboi.mediahub.common.data.datastore.dataStore
-import com.sharkaboi.mediahub.common.data.retrofit.AuthService
+import com.sharkaboi.mediahub.common.data.retrofit.*
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -51,5 +51,30 @@ object DataModule {
     @Singleton
     fun getAuthService(retrofit: Retrofit): AuthService =
         retrofit.create(AuthService::class.java)
+
+    @Provides
+    @Singleton
+    fun getAnimeService(retrofit: Retrofit): AnimeService =
+        retrofit.create(AnimeService::class.java)
+
+    @Provides
+    @Singleton
+    fun getMangaService(retrofit: Retrofit): MangaService =
+        retrofit.create(MangaService::class.java)
+
+    @Provides
+    @Singleton
+    fun getUserAnimeService(retrofit: Retrofit): UserAnimeService =
+        retrofit.create(UserAnimeService::class.java)
+
+    @Provides
+    @Singleton
+    fun getUserMangaService(retrofit: Retrofit): UserMangaService =
+        retrofit.create(UserMangaService::class.java)
+
+    @Provides
+    @Singleton
+    fun getUserService(retrofit: Retrofit): UserService =
+        retrofit.create(UserService::class.java)
 
 }

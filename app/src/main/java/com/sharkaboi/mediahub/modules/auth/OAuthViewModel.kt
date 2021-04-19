@@ -64,8 +64,8 @@ class OAuthViewModel
     }
 
     companion object {
-        const val CODE_CHALLENGE = "codeChallenge"
-        const val STATE = "state"
-        const val TAG = "OAuthViewModel"
+        private const val CODE_CHALLENGE = "codeChallenge"
+        private const val STATE = "state"
+        private const val TAG = "OAuthViewModel"
     }
 }

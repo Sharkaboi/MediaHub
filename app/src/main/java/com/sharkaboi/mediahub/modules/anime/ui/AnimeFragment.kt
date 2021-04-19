@@ -22,6 +22,7 @@ class AnimeFragment : Fragment() {
     }
 
     override fun onDestroyView() {
+        binding.vpAnime.adapter = null
         _binding = null
         super.onDestroyView()
     }

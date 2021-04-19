@@ -46,6 +46,6 @@ class OAuthRepository(
         }
 
     companion object {
-        const val TAG = "OAuthRepository"
+        private const val TAG = "OAuthRepository"
     }
 }

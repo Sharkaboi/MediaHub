@@ -52,7 +52,7 @@ dependencies {
     //hilt
     implementation "com.google.dagger:hilt-android:$hilt_version"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'androidx.preference:preference:1.1.1'
+    implementation 'androidx.preference:preference-ktx:1.1.1'
     kapt "com.google.dagger:hilt-compiler:$hilt_version"
     //networking
     implementation "com.squareup.retrofit2:retrofit:2.9.0"

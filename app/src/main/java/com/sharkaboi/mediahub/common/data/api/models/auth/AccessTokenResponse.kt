@@ -1,4 +1,4 @@
-package com.sharkaboi.mediahub.common.data.api.models
+package com.sharkaboi.mediahub.common.data.api.models.auth
 
 
 import com.squareup.moshi.Json

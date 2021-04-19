@@ -49,12 +49,12 @@ class SplashActivity : AppCompatActivity() {
     private fun redirectToMainAppFlow() {
         startActivity(Intent(this, MainActivity::class.java))
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
-        finishAffinity()
+        finish()
     }
 
     private fun redirectToOAuthFlow() {
         startActivity(Intent(this, OAuthActivity::class.java))
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
-        finishAffinity()
+        finish()
     }
 }

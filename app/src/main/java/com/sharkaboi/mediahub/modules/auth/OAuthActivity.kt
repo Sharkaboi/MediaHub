@@ -115,7 +115,7 @@ class OAuthActivity : AppCompatActivity() {
 //    }
 
     companion object {
-        const val TAG = "OAuthActivity"
-        const val INTENT_DATA = "intentData"
+        private const val TAG = "OAuthActivity"
+        private const val INTENT_DATA = "intentData"
     }
 }

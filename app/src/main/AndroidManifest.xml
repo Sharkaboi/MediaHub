@@ -31,6 +31,7 @@
         <activity
             android:name=".modules.auth.OAuthActivity"
             android:screenOrientation="sensorPortrait"
+            android:theme="@style/Theme.MediaHub"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -44,6 +45,7 @@
         <activity
             android:name=".modules.MainActivity"
             android:launchMode="singleInstance"
+            android:theme="@style/Theme.MediaHub"
             android:screenOrientation="sensorPortrait" />
     </application>
 

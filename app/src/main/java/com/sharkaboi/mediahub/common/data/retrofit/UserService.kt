@@ -2,7 +2,7 @@ package com.sharkaboi.mediahub.common.data.retrofit
 
 import com.haroldadmin.cnradapter.NetworkResponse
 import com.sharkaboi.mediahub.common.data.api.models.ApiError
-import com.sharkaboi.mediahub.common.data.api.models.UserDetailsResponse
+import com.sharkaboi.mediahub.common.data.api.models.user.UserDetailsResponse
 import kotlinx.coroutines.Deferred
 import retrofit2.http.GET
 import retrofit2.http.Header

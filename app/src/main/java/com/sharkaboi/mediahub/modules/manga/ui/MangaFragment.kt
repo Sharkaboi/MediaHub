@@ -22,6 +22,7 @@ class MangaFragment : Fragment() {
     }
 
     override fun onDestroyView() {
+        binding.vpManga.adapter = null
         _binding = null
         super.onDestroyView()
     }

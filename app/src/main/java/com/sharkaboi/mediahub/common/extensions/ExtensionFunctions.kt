@@ -16,21 +16,34 @@ internal fun Fragment.showToast(message: String, length: Int = Toast.LENGTH_SHOR
 internal fun Context.showToast(message: String, length: Int = Toast.LENGTH_SHORT) =
     Toast.makeText(this, message, length).show()
 
-internal fun View.shortSnackBar(message: String, action: (Snackbar.() -> Unit)? = null) {
+internal fun View.shortSnackBar(
+    message: String, action: (Snackbar.() -> Unit)? = null,
+    anchorView: View? = null
+) {
     val snackbar = Snackbar.make(this, message, Snackbar.LENGTH_SHORT)
     action?.let { snackbar.it() }
+    snackbar.anchorView = anchorView ?: this
     snackbar.show()
 }
 
-internal fun View.longSnackBar(message: String, action: (Snackbar.() -> Unit)? = null) {
+internal fun View.longSnackBar(
+    message: String, action: (Snackbar.() -> Unit)? = null,
+    anchorView: View? = null
+) {
     val snackbar = Snackbar.make(this, message, Snackbar.LENGTH_LONG)
     action?.let { snackbar.it() }
+    snackbar.anchorView = anchorView ?: this
     snackbar.show()
 }
 
-internal fun View.indefiniteSnackBar(message: String, action: (Snackbar.() -> Unit)? = null) {
+internal fun View.indefiniteSnackBar(
+    message: String,
+    action: (Snackbar.() -> Unit)? = null,
+    anchorView: View? = null
+) {
     val snackbar = Snackbar.make(this, message, Snackbar.LENGTH_INDEFINITE)
     action?.let { snackbar.it() }
+    snackbar.anchorView = anchorView ?: this
     snackbar.show()
 }
 

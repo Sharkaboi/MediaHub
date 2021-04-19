@@ -1,9 +1,9 @@
-package com.sharkaboi.mediahub.common.data.api.models
+package com.sharkaboi.mediahub.common.data.api.models.user
 
 
+import androidx.annotation.Keep
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import androidx.annotation.Keep
 
 @Keep
 @JsonClass(generateAdapter = true)
@@ -15,9 +15,19 @@ data class UserDetailsResponse(
     @Json(name = "joined_at")
     val joinedAt: String,
     @Json(name = "location")
-    val location: String,
+    val location: String?,
     @Json(name = "name")
-    val name: String
+    val name: String,
+    @Json(name = "gender")
+    val gender: String?,
+    @Json(name = "birthday")
+    val birthday: String?,
+    @Json(name = "time_zone")
+    val timeZone: String?,
+    @Json(name = "is_supporter")
+    val isSupporter: Boolean?,
+    @Json(name = "picture")
+    val profilePicUrl: String
 ) {
     @Keep
     @JsonClass(generateAdapter = true)
@@ -29,28 +39,28 @@ data class UserDetailsResponse(
         @Json(name = "num_days_completed")
         val numDaysCompleted: Double,
         @Json(name = "num_days_dropped")
-        val numDaysDropped: Int,
+        val numDaysDropped: Double,
         @Json(name = "num_days_on_hold")
-        val numDaysOnHold: Int,
+        val numDaysOnHold: Double,
         @Json(name = "num_days_watched")
         val numDaysWatched: Double,
         @Json(name = "num_days_watching")
         val numDaysWatching: Double,
         @Json(name = "num_episodes")
-        val numEpisodes: Int,
+        val numEpisodes: Double,
         @Json(name = "num_items")
-        val numItems: Int,
+        val numItems: Double,
         @Json(name = "num_items_completed")
-        val numItemsCompleted: Int,
+        val numItemsCompleted: Double,
         @Json(name = "num_items_dropped")
-        val numItemsDropped: Int,
+        val numItemsDropped: Double,
         @Json(name = "num_items_on_hold")
-        val numItemsOnHold: Int,
+        val numItemsOnHold: Double,
         @Json(name = "num_items_plan_to_watch")
-        val numItemsPlanToWatch: Int,
+        val numItemsPlanToWatch: Double,
         @Json(name = "num_items_watching")
-        val numItemsWatching: Int,
+        val numItemsWatching: Double,
         @Json(name = "num_times_rewatched")
-        val numTimesRewatched: Int
+        val numTimesReWatched: Double
     )
 }

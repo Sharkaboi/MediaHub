@@ -11,7 +11,6 @@
         <item name="colorOnSecondary">@color/white</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">@color/colorPrimaryDark</item>
-        <!-- Customize your theme here. -->
     </style>
 
     <style name="splashStyle" parent="Theme.MaterialComponents.Light.NoActionBar">

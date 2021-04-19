@@ -1,13 +1,12 @@
 package com.sharkaboi.mediahub.common.data.retrofit
 
 import com.haroldadmin.cnradapter.NetworkResponse
-import com.sharkaboi.mediahub.common.data.api.models.AccessTokenResponse
+import com.sharkaboi.mediahub.common.data.api.models.auth.AccessTokenResponse
 import com.sharkaboi.mediahub.common.data.api.models.ApiError
 import kotlinx.coroutines.Deferred
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
-import retrofit2.http.Query
 
 interface AuthService {
     companion object {
