@@ -1,5 +1,6 @@
 package com.sharkaboi.mediahub.common.data.api.enums
 
+@Suppress("EnumEntryName")
 enum class MangaRankingType {
     all, //All
     manga, //Top Manga

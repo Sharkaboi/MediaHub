@@ -4,6 +4,7 @@ plugins {
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
     id 'com.google.secrets_gradle_plugin' version '0.6'
+    id 'com.google.android.gms.oss-licenses-plugin'
 }
 
 android {
@@ -17,6 +18,7 @@ android {
         versionCode 1
         versionName "1.0"
 
+        multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -27,6 +29,7 @@ android {
         }
     }
     compileOptions {
+        coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
@@ -73,7 +76,10 @@ dependencies {
     implementation "androidx.paging:paging-runtime-ktx:$paging_version"
     //design
     implementation 'com.github.razir.progressbutton:progressbutton:2.1.0'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     //util
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.0.9'
+    implementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
     //testing
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.5'
     testImplementation 'junit:junit:4.13.2'

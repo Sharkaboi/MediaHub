@@ -24,5 +24,17 @@
         android:id="@+id/profile_item"
         android:name="com.sharkaboi.mediahub.modules.profile.ui.ProfileFragment"
         android:label="Profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profile_item_to_settingsFragment"
+            app:destination="@id/settingsFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.sharkaboi.mediahub.modules.settings.ui.SettingsFragment"
+        android:label="SettingsFragment" />
 </navigation>

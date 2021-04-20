@@ -5,10 +5,4 @@
     android:layout_height="match_parent"
     tools:context=".modules.manga.ui.MangaListByStatusFragment">
 
-    <TextView
-        android:id="@+id/tvStatus"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

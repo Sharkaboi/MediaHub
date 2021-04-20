@@ -17,6 +17,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:navGraph="@navigation/bottom_nav_graph"
+        tools:ignore="FragmentTagUsage"
         tools:layout="@layout/fragment_anime" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
@@ -24,7 +25,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        app:itemIconTint="?attr/colorOnSurface"
         app:itemTextColor="?colorOnSurface"
         app:labelVisibilityMode="selected"
         app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"

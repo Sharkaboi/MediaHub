@@ -12,7 +12,7 @@ import kotlin.random.Random
 class OAuthViewModel
 @Inject constructor(
     private val oAuthRepository: OAuthRepository,
-    private val savedStateHandle: SavedStateHandle,
+    savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
     private val _oAuthState = MutableLiveData<OAuthState>().getDefault()
     val oAuthState: LiveData<OAuthState> = _oAuthState

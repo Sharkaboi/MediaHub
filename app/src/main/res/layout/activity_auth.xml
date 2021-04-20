@@ -9,7 +9,7 @@
     <ImageView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:contentDescription="background"
+        android:contentDescription="@string/background"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -59,7 +59,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="32dp"
-        android:contentDescription="logo"
+        android:contentDescription="@string/logo"
         android:scaleType="fitCenter"
         app:layout_constraintBottom_toTopOf="@+id/tvAuthHint"
         app:layout_constraintDimensionRatio="1:1"

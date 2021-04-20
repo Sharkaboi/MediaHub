@@ -6,6 +6,19 @@
     android:layout_height="match_parent"
     tools:context=".modules.profile.ui.ProfileFragment">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <include
+            android:id="@+id/profileContent"
+            layout="@layout/content_profile" />
+    </ScrollView>
+
     <androidx.core.widget.ContentLoadingProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyle"
@@ -20,16 +33,6 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:visibility="invisible" />
 
-    <TextView
-        android:id="@+id/tvTemp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabMenu"
         android:layout_width="wrap_content"
@@ -37,14 +40,15 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:clickable="true"
-        android:contentDescription="Menu"
+        android:contentDescription="@string/menu"
         android:focusable="true"
         android:src="@drawable/ic_menu_closed"
-        app:tint="@color/white"
-        android:tooltipText="Menu"
+        android:tooltipText="@string/menu"
         app:backgroundTint="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:tint="@color/white"
+        tools:targetApi="o" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabLogOut"
@@ -52,17 +56,18 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:clickable="true"
-        android:contentDescription="Log out"
+        android:contentDescription="@string/log_out"
         android:focusable="true"
         android:src="@drawable/ic_logout"
-        app:tint="@color/white"
-        android:tooltipText="Log out"
+        android:tooltipText="@string/log_out"
         android:visibility="invisible"
         app:backgroundTint="@color/colorAccent"
         app:fabSize="mini"
         app:layout_constraintBottom_toTopOf="@id/fabMenu"
         app:layout_constraintEnd_toEndOf="@+id/fabMenu"
-        app:layout_constraintStart_toStartOf="@+id/fabMenu" />
+        app:layout_constraintStart_toStartOf="@+id/fabMenu"
+        app:tint="@color/white"
+        tools:targetApi="o" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabSettings"
@@ -70,17 +75,18 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:clickable="true"
-        android:contentDescription="Settings"
+        android:contentDescription="@string/settings"
         android:focusable="true"
         android:src="@drawable/ic_settings"
-        app:tint="@color/white"
-        android:tooltipText="Settings"
+        android:tooltipText="@string/settings"
         android:visibility="invisible"
         app:backgroundTint="@color/colorAccent"
         app:fabSize="mini"
         app:layout_constraintBottom_toTopOf="@id/fabLogOut"
         app:layout_constraintEnd_toEndOf="@+id/fabLogOut"
-        app:layout_constraintStart_toStartOf="@+id/fabLogOut" />
+        app:layout_constraintStart_toStartOf="@+id/fabLogOut"
+        app:tint="@color/white"
+        tools:targetApi="o" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAbout"
@@ -88,15 +94,16 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:clickable="true"
-        android:contentDescription="About"
+        android:contentDescription="@string/about"
         android:focusable="true"
         android:src="@drawable/ic_logo_with_dot"
-        android:tooltipText="About"
+        android:tooltipText="@string/about"
         android:visibility="invisible"
-        app:tint="@color/white"
         app:backgroundTint="@color/colorAccent"
         app:fabSize="mini"
         app:layout_constraintBottom_toTopOf="@id/fabSettings"
         app:layout_constraintEnd_toEndOf="@+id/fabSettings"
-        app:layout_constraintStart_toStartOf="@+id/fabSettings" />
+        app:layout_constraintStart_toStartOf="@+id/fabSettings"
+        app:tint="@color/white"
+        tools:targetApi="o" />
 </androidx.constraintlayout.widget.ConstraintLayout>

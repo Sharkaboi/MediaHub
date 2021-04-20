@@ -3,7 +3,6 @@ package com.sharkaboi.mediahub.common.data.retrofit
 import com.haroldadmin.cnradapter.NetworkResponse
 import com.sharkaboi.mediahub.common.data.api.enums.MangaRankingType
 import com.sharkaboi.mediahub.common.data.api.models.ApiError
-import com.sharkaboi.mediahub.common.data.api.models.anime.AnimeRankingResponse
 import com.sharkaboi.mediahub.common.data.api.models.manga.MangaByIDResponse
 import com.sharkaboi.mediahub.common.data.api.models.manga.MangaRankingResponse
 import com.sharkaboi.mediahub.common.data.api.models.manga.MangaSearchResponse

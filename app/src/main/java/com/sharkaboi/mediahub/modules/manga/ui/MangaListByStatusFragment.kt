@@ -18,7 +18,7 @@ class MangaListByStatusFragment : Fragment() {
         super.onCreate(savedInstanceState)
         arguments?.let {
             status = MangaStatus.valueOf(
-                it.getString(MangaListByStatusFragment.MANGA_STATUS_KEY) ?: MangaStatus.all.name
+                it.getString(MANGA_STATUS_KEY) ?: MangaStatus.all.name
             )
         }
     }
@@ -38,7 +38,6 @@ class MangaListByStatusFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.tvStatus.text = status.name
     }
 
     companion object {

@@ -3,18 +3,18 @@
 
     <item
         android:id="@+id/anime_item"
-        android:icon="@drawable/ic_onigiri"
-        android:title="Anime" />
+        android:icon="@drawable/ic_anime"
+        android:title="@string/anime" />
     <item
         android:id="@+id/manga_item"
         android:icon="@drawable/ic_book"
-        android:title="Manga" />
+        android:title="@string/manga" />
     <item
         android:id="@+id/discover_item"
         android:icon="@drawable/ic_discover"
-        android:title="Discover" />
+        android:title="@string/discover" />
     <item
         android:id="@+id/profile_item"
         android:icon="@drawable/ic_profile"
-        android:title="Profile" />
+        android:title="@string/profile" />
 </menu>

@@ -15,6 +15,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MediaHub"
+        android:configChanges="uiMode"
         tools:ignore="AllowBackup"
         tools:targetApi="n">
         <activity
@@ -30,13 +31,15 @@
         </activity>
         <activity
             android:name=".modules.auth.OAuthActivity"
+            android:launchMode="singleTop"
             android:screenOrientation="sensorPortrait"
-            android:theme="@style/Theme.MediaHub"
-            android:launchMode="singleTop">
+            android:theme="@style/Theme.MediaHub">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data
                     android:host="callback"
                     android:scheme="mediahub" />
@@ -45,8 +48,15 @@
         <activity
             android:name=".modules.MainActivity"
             android:launchMode="singleInstance"
-            android:theme="@style/Theme.MediaHub"
-            android:screenOrientation="sensorPortrait" />
+            android:screenOrientation="sensorPortrait"
+            android:theme="@style/Theme.MediaHub" />
+        <activity
+            android:name="com.google.android.gms.oss.licenses.OssLicensesMenuActivity"
+            android:theme="@style/Theme.MediaHub" />
+        <activity
+            android:name="com.google.android.gms.oss.licenses.OssLicensesActivity"
+            android:theme="@style/Theme.MediaHub" />
+
     </application>
 
 </manifest>
