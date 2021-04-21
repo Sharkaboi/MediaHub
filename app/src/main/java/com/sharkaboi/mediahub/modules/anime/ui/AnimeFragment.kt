@@ -1,13 +1,18 @@
 package com.sharkaboi.mediahub.modules.anime.ui
 
+import android.R
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import com.google.android.material.tabs.TabLayoutMediator
 import com.sharkaboi.mediahub.databinding.FragmentAnimeBinding
 import com.sharkaboi.mediahub.modules.anime.adapters.AnimePagerAdapter
+
 
 class AnimeFragment : Fragment() {
 
@@ -41,5 +46,9 @@ class AnimeFragment : Fragment() {
                 5 -> tab.text = "All"
             }
         }.attach()
+    }
+
+    companion object {
+        private const val TAG = "AnimeFragment"
     }
 }

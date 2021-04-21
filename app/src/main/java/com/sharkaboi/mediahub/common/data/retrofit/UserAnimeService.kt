@@ -1,6 +1,7 @@
 package com.sharkaboi.mediahub.common.data.retrofit
 
 import com.haroldadmin.cnradapter.NetworkResponse
+import com.sharkaboi.mediahub.common.data.api.ApiConstants
 import com.sharkaboi.mediahub.common.data.api.enums.UserAnimeSortType
 import com.sharkaboi.mediahub.common.data.api.models.ApiError
 import com.sharkaboi.mediahub.common.data.api.models.useranime.UserAnimeListResponse
@@ -46,7 +47,8 @@ interface UserAnimeService {
         @Path("username") username: String = "@me",
         @Query("status") status: String? = null,
         @Query("sort") sort: String = UserAnimeSortType.list_updated_at.name,
-        @Query("limit") limit: Int = 10,
-        @Query("offset") offset: Int = 0,
+        @Query("limit") limit: Int = ApiConstants.API_PAGE_LIMIT,
+        @Query("offset") offset: Int = ApiConstants.API_START_OFFSET,
+        @Query("fields") fields: String = "list_status,num_episodes"
     ): Deferred<NetworkResponse<UserAnimeListResponse, ApiError>>
 }

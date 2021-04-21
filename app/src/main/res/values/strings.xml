@@ -36,4 +36,6 @@
     <string name="episodes_watched">Episodes watched</string>
     <string name="re_watch_count">Re-watch count</string>
     <string name="item_count">Item count</string>
+    <string name="episode_count_default">\??/??</string>
+    <string name="no_anime_added_under_this_filter">No anime added under this filter</string>
 </resources>

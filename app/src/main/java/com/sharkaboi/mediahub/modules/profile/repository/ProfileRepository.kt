@@ -2,7 +2,7 @@ package com.sharkaboi.mediahub.modules.profile.repository
 
 import android.util.Log
 import com.haroldadmin.cnradapter.NetworkResponse
-import com.sharkaboi.mediahub.common.data.api.BEARER_SEPARATOR
+import com.sharkaboi.mediahub.common.data.api.ApiConstants
 import com.sharkaboi.mediahub.common.data.api.models.user.UserDetailsResponse
 import com.sharkaboi.mediahub.common.data.datastore.DataStoreRepository
 import com.sharkaboi.mediahub.common.data.retrofit.UserService
@@ -28,7 +28,7 @@ class ProfileRepository(
                 )
             } else {
                 val result = userService.getUserDetailsAsync(
-                    authHeader = BEARER_SEPARATOR + accessToken
+                    authHeader = ApiConstants.BEARER_SEPARATOR + accessToken
                 ).await()
                 when (result) {
                     is NetworkResponse.Success -> {

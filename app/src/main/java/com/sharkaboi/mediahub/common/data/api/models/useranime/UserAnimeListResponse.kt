@@ -1,17 +1,16 @@
 package com.sharkaboi.mediahub.common.data.api.models.useranime
 
 
+import android.util.Log
+import androidx.annotation.Keep
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import androidx.annotation.Keep
 
 @Keep
 @JsonClass(generateAdapter = true)
 data class UserAnimeListResponse(
     @Json(name = "data")
-    val `data`: List<Data>,
-    @Json(name = "paging")
-    val paging: Paging
+    val `data`: List<Data>
 ) {
     @Keep
     @JsonClass(generateAdapter = true)
@@ -25,10 +24,10 @@ data class UserAnimeListResponse(
         @JsonClass(generateAdapter = true)
         data class ListStatus(
             @Json(name = "is_rewatching")
-            val isRewatching: Boolean,
+            val isReWatching: Boolean,
+//            @Json(name = "num_times_rewatched")
+//            val numReWatchedEpisodes: Int,
             @Json(name = "num_episodes_watched")
-            val numEpisodesWatched: Int,
-            @Json(name = "num_watched_episodes")
             val numWatchedEpisodes: Int,
             @Json(name = "score")
             val score: Int,
@@ -43,6 +42,8 @@ data class UserAnimeListResponse(
         data class Node(
             @Json(name = "id")
             val id: Int,
+            @Json(name = "num_episodes")
+            val numTotalEpisodes: Int,
             @Json(name = "main_picture")
             val mainPicture: MainPicture,
             @Json(name = "title")
@@ -58,11 +59,4 @@ data class UserAnimeListResponse(
             )
         }
     }
-
-    @Keep
-    @JsonClass(generateAdapter = true)
-    data class Paging(
-        @Json(name = "next")
-        val next: String
-    )
 }
