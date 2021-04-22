@@ -3,7 +3,7 @@ package com.sharkaboi.mediahub.common.data.retrofit
 import com.haroldadmin.cnradapter.NetworkResponse
 import com.sharkaboi.mediahub.common.data.api.enums.AnimeRankingType
 import com.sharkaboi.mediahub.common.data.api.enums.AnimeSortType
-import com.sharkaboi.mediahub.common.data.api.models.*
+import com.sharkaboi.mediahub.common.data.api.models.ApiError
 import com.sharkaboi.mediahub.common.data.api.models.anime.*
 import kotlinx.coroutines.Deferred
 import retrofit2.http.GET
@@ -26,7 +26,7 @@ interface AnimeService {
     fun getAnimeByIdAsync(
         @Header("Authorization") authHeader: String,
         @Path("id") animeId: Int,
-        @Query("fields") fields: String = "id,title,main_picture,alternative_titles,start_date,end_date,synopsis,mean,rank,popularity,num_list_users,num_scoring_users,nsfw,created_at,updated_at,media_type,status,genres,my_list_status,num_episodes,start_season,broadcast,source,average_episode_duration,rating,pictures,background,related_anime,related_manga,recommendations,studios,statistics"
+        @Query("fields") fields: String = "id,title,main_picture,alternative_titles,start_date,end_date,synopsis,mean,rank,popularity,num_list_users,num_scoring_users,nsfw,created_at,updated_at,media_type,status,genres,my_list_status,num_episodes,start_season,broadcast,source,average_episode_duration,rating,studios,pictures,background,related_anime,related_manga,recommendations,statistics"
     ): Deferred<NetworkResponse<AnimeByIDResponse, ApiError>>
 
     @GET("anime/ranking")

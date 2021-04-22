@@ -18,5 +18,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         val navController = findNavController(R.id.bottomNavContainer)
         binding.bottomNav.setupWithNavController(navController)
+        binding.bottomNav.setOnNavigationItemReselectedListener { /*Do nothing*/ }
     }
 }

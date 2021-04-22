@@ -25,14 +25,12 @@ data class UserAnimeListResponse(
         data class ListStatus(
             @Json(name = "is_rewatching")
             val isReWatching: Boolean,
-//            @Json(name = "num_times_rewatched")
-//            val numReWatchedEpisodes: Int,
             @Json(name = "num_episodes_watched")
             val numWatchedEpisodes: Int,
             @Json(name = "score")
             val score: Int,
             @Json(name = "status")
-            val status: String,
+            val status: String?,
             @Json(name = "updated_at")
             val updatedAt: String
         )
@@ -45,7 +43,7 @@ data class UserAnimeListResponse(
             @Json(name = "num_episodes")
             val numTotalEpisodes: Int,
             @Json(name = "main_picture")
-            val mainPicture: MainPicture,
+            val mainPicture: MainPicture?,
             @Json(name = "title")
             val title: String
         ) {
@@ -53,7 +51,7 @@ data class UserAnimeListResponse(
             @JsonClass(generateAdapter = true)
             data class MainPicture(
                 @Json(name = "large")
-                val large: String,
+                val large: String?,
                 @Json(name = "medium")
                 val medium: String
             )

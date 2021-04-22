@@ -8,13 +8,13 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class AnimeByIDResponse(
     @Json(name = "alternative_titles")
-    val alternativeTitles: AlternativeTitles,
+    val alternativeTitles: AlternativeTitles?,
     @Json(name = "average_episode_duration")
-    val averageEpisodeDuration: Int,
+    val averageEpisodeDuration: Int?,
     @Json(name = "background")
-    val background: String,
+    val background: String?,
     @Json(name = "broadcast")
-    val broadcast: Broadcast,
+    val broadcast: Broadcast?,
     @Json(name = "created_at")
     val createdAt: String,
     @Json(name = "end_date")
@@ -24,15 +24,15 @@ data class AnimeByIDResponse(
     @Json(name = "id")
     val id: Int,
     @Json(name = "main_picture")
-    val mainPicture: MainPicture,
+    val mainPicture: MainPicture?,
     @Json(name = "mean")
-    val mean: Double,
+    val mean: Double?,
     @Json(name = "media_type")
     val mediaType: String,
     @Json(name = "my_list_status")
-    val myListStatus: MyListStatus,
+    val myListStatus: MyListStatus?,
     @Json(name = "nsfw")
-    val nsfw: String,
+    val nsfw: String?,
     @Json(name = "num_episodes")
     val numEpisodes: Int,
     @Json(name = "num_list_users")
@@ -44,9 +44,9 @@ data class AnimeByIDResponse(
     @Json(name = "popularity")
     val popularity: Int,
     @Json(name = "rank")
-    val rank: Int,
+    val rank: Int?,
     @Json(name = "rating")
-    val rating: String,
+    val rating: String?,
     @Json(name = "recommendations")
     val recommendations: List<Recommendation>,
     @Json(name = "related_anime")
@@ -54,19 +54,19 @@ data class AnimeByIDResponse(
     @Json(name = "related_manga")
     val relatedManga: List<Any>,
     @Json(name = "source")
-    val source: String,
+    val source: String?,
     @Json(name = "start_date")
-    val startDate: String,
+    val startDate: String?,
     @Json(name = "start_season")
-    val startSeason: StartSeason,
+    val startSeason: StartSeason?,
     @Json(name = "statistics")
-    val statistics: Statistics,
+    val statistics: Statistics?,
     @Json(name = "status")
     val status: String,
     @Json(name = "studios")
     val studios: List<Studio>,
     @Json(name = "synopsis")
-    val synopsis: String,
+    val synopsis: String?,
     @Json(name = "title")
     val title: String,
     @Json(name = "updated_at")
@@ -76,11 +76,11 @@ data class AnimeByIDResponse(
     @JsonClass(generateAdapter = true)
     data class AlternativeTitles(
         @Json(name = "en")
-        val en: String,
+        val en: String?,
         @Json(name = "ja")
-        val ja: String,
+        val ja: String?,
         @Json(name = "synonyms")
-        val synonyms: List<String>
+        val synonyms: List<String>?
     )
 
     @Keep
@@ -89,7 +89,7 @@ data class AnimeByIDResponse(
         @Json(name = "day_of_the_week")
         val dayOfTheWeek: String,
         @Json(name = "start_time")
-        val startTime: String
+        val startTime: String?
     )
 
     @Keep
@@ -105,7 +105,7 @@ data class AnimeByIDResponse(
     @JsonClass(generateAdapter = true)
     data class MainPicture(
         @Json(name = "large")
-        val large: String,
+        val large: String?,
         @Json(name = "medium")
         val medium: String
     )
@@ -114,22 +114,34 @@ data class AnimeByIDResponse(
     @JsonClass(generateAdapter = true)
     data class MyListStatus(
         @Json(name = "is_rewatching")
-        val isRewatching: Boolean,
+        val isReWatching: Boolean,
         @Json(name = "num_episodes_watched")
         val numEpisodesWatched: Int,
         @Json(name = "score")
         val score: Int,
+        @Json(name = "priority")
+        val priority: Int,
+        @Json(name = "rewatch_value")
+        val reWatchValue: Int,
         @Json(name = "status")
-        val status: String,
+        val status: String?,
         @Json(name = "updated_at")
-        val updatedAt: String
+        val updatedAt: String,
+        @Json(name = "comments")
+        val comments: String,
+        @Json(name = "tags")
+        val tags: List<String>,
+        @Json(name = "start_date")
+        val startDate: String?,
+        @Json(name = "finish_date")
+        val finishDate: String?
     )
 
     @Keep
     @JsonClass(generateAdapter = true)
     data class Picture(
         @Json(name = "large")
-        val large: String,
+        val large: String?,
         @Json(name = "medium")
         val medium: String
     )
@@ -148,7 +160,7 @@ data class AnimeByIDResponse(
             @Json(name = "id")
             val id: Int,
             @Json(name = "main_picture")
-            val mainPicture: MainPicture,
+            val mainPicture: MainPicture?,
             @Json(name = "title")
             val title: String
         ) {
@@ -156,7 +168,7 @@ data class AnimeByIDResponse(
             @JsonClass(generateAdapter = true)
             data class MainPicture(
                 @Json(name = "large")
-                val large: String,
+                val large: String?,
                 @Json(name = "medium")
                 val medium: String
             )
@@ -179,7 +191,7 @@ data class AnimeByIDResponse(
             @Json(name = "id")
             val id: Int,
             @Json(name = "main_picture")
-            val mainPicture: MainPicture,
+            val mainPicture: MainPicture?,
             @Json(name = "title")
             val title: String
         ) {
@@ -187,7 +199,7 @@ data class AnimeByIDResponse(
             @JsonClass(generateAdapter = true)
             data class MainPicture(
                 @Json(name = "large")
-                val large: String,
+                val large: String?,
                 @Json(name = "medium")
                 val medium: String
             )

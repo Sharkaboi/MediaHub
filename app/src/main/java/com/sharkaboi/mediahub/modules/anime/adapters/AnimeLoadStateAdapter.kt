@@ -7,7 +7,7 @@ import androidx.paging.LoadState
 import androidx.paging.LoadStateAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.sharkaboi.mediahub.common.extensions.emptyString
-import com.sharkaboi.mediahub.common.extensions.shortSnackBar
+import com.sharkaboi.mediahub.common.extensions.showToast
 import com.sharkaboi.mediahub.databinding.LoadStateItemBinding
 
 class AnimeLoadStateAdapter : LoadStateAdapter<AnimeLoadStateAdapter.LoadStateViewHolder>() {
@@ -33,7 +33,7 @@ class AnimeLoadStateAdapter : LoadStateAdapter<AnimeLoadStateAdapter.LoadStateVi
         fun bind(loadState: LoadState) {
             binding.progressBar.isVisible = loadState is LoadState.Loading
             if (loadState is LoadState.Error) {
-                binding.root.shortSnackBar(loadState.error.message ?: String.emptyString)
+                binding.root.context.showToast(loadState.error.message ?: String.emptyString)
             }
         }
     }

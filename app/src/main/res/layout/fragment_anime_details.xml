@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".modules.anime_details.ui.AnimeDetailsFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorPrimary"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme"
+            app:contentInsetStartWithNavigation="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="@drawable/ic_back"
+            app:title="Anime details"
+            app:titleTextColor="@color/white" />
+
+        <TextView
+            android:id="@+id/tvAnimeName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/ivAnimeMainPicture"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"
+            tools:text="Ano Hi Mita Hana no Namae wo Bokutachi wa Mada Shiranai." />
+
+        <ImageView
+            android:id="@+id/ivAnimeMainPicture"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="16dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="@id/animeDetailsBarrier"
+            app:layout_constraintDimensionRatio="3:4"
+            app:layout_constraintEnd_toStartOf="@+id/tvAnimeName"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar"
+            app:layout_constraintVertical_bias="0"
+            tools:src="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/tvAlternateTitles"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="Other Titles"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/ivAnimeMainPicture"
+            app:layout_constraintTop_toBottomOf="@id/tvAnimeName" />
+
+        <androidx.constraintlayout.helper.widget.Flow
+            android:id="@+id/flowStartDate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            app:constraint_referenced_ids="tvStartDateHint,tvStartDate"
+            app:flow_firstVerticalStyle="packed"
+            app:flow_horizontalBias="0"
+            app:flow_horizontalStyle="packed"
+            app:flow_wrapMode="aligned"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/ivAnimeMainPicture"
+            app:layout_constraintTop_toBottomOf="@+id/tvAlternateTitles" />
+
+        <TextView
+            android:id="@+id/tvStartDateHint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Start date :"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvStartDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:ignore="RtlSymmetry"
+            tools:text="1st Jun 2019" />
+
+        <androidx.constraintlayout.helper.widget.Flow
+            android:id="@+id/flowEndDate"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            app:constraint_referenced_ids="tvEndDateHint,tvEndDate"
+            app:flow_firstVerticalStyle="packed"
+            app:flow_horizontalBias="0"
+            app:flow_horizontalStyle="packed"
+            app:flow_wrapMode="aligned"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/ivAnimeMainPicture"
+            app:layout_constraintTop_toBottomOf="@+id/flowStartDate" />
+
+        <TextView
+            android:id="@+id/tvEndDateHint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="End date :"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvEndDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="8dp"
+            tools:ignore="RtlSymmetry"
+            tools:text="1st Jun 2019" />
+
+        <androidx.constraintlayout.helper.widget.Flow
+            android:id="@+id/flowMeanScore"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            app:constraint_referenced_ids="tvMeanScoreHint,tvMeanScore"
+            app:flow_firstVerticalStyle="packed"
+            app:flow_horizontalBias="0"
+            app:flow_horizontalStyle="packed"
+            app:flow_wrapMode="aligned"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/ivAnimeMainPicture"
+            app:layout_constraintTop_toBottomOf="@+id/flowEndDate" />
+
+        <TextView
+            android:id="@+id/tvMeanScoreHint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mean score :"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvMeanScore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="8dp"
+            tools:ignore="RtlSymmetry"
+            tools:text="8.5" />
+
+        <androidx.constraintlayout.helper.widget.Flow
+            android:id="@+id/flowRank"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            app:constraint_referenced_ids="tvRankHint,tvRank"
+            app:flow_firstVerticalStyle="packed"
+            app:flow_horizontalBias="0"
+            app:flow_horizontalStyle="packed"
+            app:flow_wrapMode="aligned"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/ivAnimeMainPicture"
+            app:layout_constraintTop_toBottomOf="@+id/flowMeanScore" />
+
+        <TextView
+            android:id="@+id/tvRankHint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="MAL rank :"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvRank"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="8dp"
+            tools:ignore="RtlSymmetry"
+            tools:text="17000" />
+
+        <androidx.constraintlayout.helper.widget.Flow
+            android:id="@+id/flowPopularityRank"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            app:constraint_referenced_ids="tvPopularityRankHint,tvPopularityRank"
+            app:flow_firstVerticalStyle="packed"
+            app:flow_horizontalBias="0"
+            app:flow_horizontalStyle="packed"
+            app:flow_wrapMode="aligned"
+            app:layout_constraintBottom_toTopOf="@id/animeDetailsBarrier"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/ivAnimeMainPicture"
+            app:layout_constraintTop_toBottomOf="@+id/flowRank" />
+
+        <TextView
+            android:id="@+id/tvPopularityRankHint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Popularity rank:"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvPopularityRank"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="8dp"
+            tools:ignore="RtlSymmetry"
+            tools:text="17000" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/animeDetailsBarrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="flowPopularityRank,ivAnimeMainPicture" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <include
+                android:id="@+id/animeDetailsUserListCard"
+                layout="@layout/anime_details_userlist_item" />
+        </androidx.cardview.widget.CardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

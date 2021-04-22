@@ -23,16 +23,18 @@ class AnimeListAdapter(
         fun bind(item: UserAnimeListResponse.Data?) {
             item?.let {
                 animeListItemBinding.apply {
-                    ivAnimeBanner.load(it.node.mainPicture.large) {
+                    ivAnimeBanner.load(it.node.mainPicture?.large ?: it.node.mainPicture?.medium) {
                         crossfade(true)
                         placeholder(R.drawable.ic_anime_placeholder)
                         error(R.drawable.ic_anime_placeholder)
                         transformations(RoundedCornersTransformation(topLeft = 8f, topRight = 8f))
                     }
                     tvAnimeName.text = it.node.title
-                    val numEpisodes = if(it.node.numTotalEpisodes==0) "??" else it.node.numTotalEpisodes
+                    val numEpisodes =
+                        if (it.node.numTotalEpisodes == 0) "??" else it.node.numTotalEpisodes
                     tvEpisodesWatched.text =
                         ("${it.listStatus.numWatchedEpisodes}/${numEpisodes}")
+                    tvScore.text = ("★ ${it.listStatus.score}")
                     root.setOnClickListener {
                         onItemClick(item.node.id)
                     }

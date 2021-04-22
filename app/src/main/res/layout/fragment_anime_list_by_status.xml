@@ -8,7 +8,7 @@
     tools:context=".modules.anime.ui.AnimeListByStatusFragment">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+        android:id="@+id/rvAnimeByStatus"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -19,7 +19,6 @@
         tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         tools:listitem="@layout/anime_list_item"
         tools:spanCount="3" />
-
 
     <androidx.core.widget.ContentLoadingProgressBar
         android:id="@+id/progressBar"

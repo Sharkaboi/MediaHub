@@ -8,13 +8,13 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import com.sharkaboi.mediahub.common.data.api.enums.AnimeStatus
 import com.sharkaboi.mediahub.common.data.api.enums.UserAnimeSortType
 import com.sharkaboi.mediahub.common.extensions.isShowing
-import com.sharkaboi.mediahub.common.extensions.shortSnackBar
 import com.sharkaboi.mediahub.databinding.FragmentAnimeListByStatusBinding
 import com.sharkaboi.mediahub.modules.anime.adapters.AnimeListAdapter
 import com.sharkaboi.mediahub.modules.anime.adapters.AnimeLoadStateAdapter
@@ -30,6 +30,7 @@ class AnimeListByStatusFragment : Fragment() {
     private val binding get() = _binding!!
     private val animeViewModel by viewModels<AnimeViewModel>()
     private lateinit var animeListAdapter: AnimeListAdapter
+    private val navController by lazy { findNavController() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +48,7 @@ class AnimeListByStatusFragment : Fragment() {
     }
 
     override fun onDestroyView() {
+        binding.rvAnimeByStatus.adapter = null
         _binding = null
         super.onDestroyView()
     }
@@ -58,14 +60,14 @@ class AnimeListByStatusFragment : Fragment() {
     }
 
     private fun setUpRecyclerView() {
-        binding.recyclerView.apply {
+        binding.rvAnimeByStatus.apply {
             animeListAdapter = AnimeListAdapter { animeId ->
-                binding.root.shortSnackBar("$animeId clicked!")
+                val action = AnimeFragmentDirections.openAnimeDetailsWithId(animeId)
+                navController.navigate(action)
             }
             layoutManager = GridLayoutManager(context, 3)
             itemAnimator = DefaultItemAnimator()
-            adapter = animeListAdapter
-            animeListAdapter.withLoadStateFooter(
+            adapter = animeListAdapter.withLoadStateFooter(
                 footer = AnimeLoadStateAdapter()
             )
         }
