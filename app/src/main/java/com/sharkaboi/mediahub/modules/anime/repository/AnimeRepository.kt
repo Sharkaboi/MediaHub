@@ -11,11 +11,8 @@ import com.sharkaboi.mediahub.common.data.api.models.useranime.UserAnimeListResp
 import com.sharkaboi.mediahub.common.data.datastore.DataStoreRepository
 import com.sharkaboi.mediahub.common.data.retrofit.UserAnimeService
 import com.sharkaboi.mediahub.common.paging.UserAnimeListDataSource
-import com.sharkaboi.mediahub.modules.anime.ui.AnimeFragment
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.withContext
 
 class AnimeRepository(
     private val userAnimeService: UserAnimeService,

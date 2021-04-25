@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".modules.anime.ui.AnimeFragment">
+    android:layout_height="match_parent">
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/animeTabLayout"
@@ -21,8 +20,8 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:layout="@layout/fragment_anime_list_by_status"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/animeTabLayout" />
+        app:layout_constraintTop_toBottomOf="@id/animeTabLayout"
+        tools:layout="@layout/fragment_anime_list_by_status" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

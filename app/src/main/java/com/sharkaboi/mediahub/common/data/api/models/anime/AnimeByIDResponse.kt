@@ -18,7 +18,7 @@ data class AnimeByIDResponse(
     @Json(name = "created_at")
     val createdAt: String,
     @Json(name = "end_date")
-    val endDate: String,
+    val endDate: String?,
     @Json(name = "genres")
     val genres: List<Genre>,
     @Json(name = "id")
@@ -119,22 +119,22 @@ data class AnimeByIDResponse(
         val numEpisodesWatched: Int,
         @Json(name = "score")
         val score: Int,
-        @Json(name = "priority")
-        val priority: Int,
-        @Json(name = "rewatch_value")
-        val reWatchValue: Int,
+//        @Json(name = "priority")
+//        val priority: Int,
+//        @Json(name = "rewatch_value")
+//        val reWatchValue: Int,
         @Json(name = "status")
         val status: String?,
         @Json(name = "updated_at")
         val updatedAt: String,
-        @Json(name = "comments")
-        val comments: String,
-        @Json(name = "tags")
-        val tags: List<String>,
-        @Json(name = "start_date")
-        val startDate: String?,
-        @Json(name = "finish_date")
-        val finishDate: String?
+//        @Json(name = "comments")
+//        val comments: String,
+//        @Json(name = "tags")
+//        val tags: List<String>,
+//        @Json(name = "start_date")
+//        val startDate: String?,
+//        @Json(name = "finish_date")
+//        val finishDate: String?
     )
 
     @Keep

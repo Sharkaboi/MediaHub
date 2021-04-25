@@ -17,7 +17,12 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val navController = findNavController(R.id.bottomNavContainer)
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.bottomNavContainer)
         binding.bottomNav.setupWithNavController(navController)
-        binding.bottomNav.setOnNavigationItemReselectedListener { /*Do nothing*/ }
+        binding.bottomNav.setOnNavigationItemReselectedListener {
+            if (navHostFragment != null && navHostFragment.childFragmentManager.backStackEntryCount >= 1) {
+                navController.navigateUp()
+            }
+        }
     }
 }

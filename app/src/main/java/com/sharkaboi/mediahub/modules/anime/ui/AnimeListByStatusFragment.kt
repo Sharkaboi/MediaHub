@@ -90,6 +90,8 @@ class AnimeListByStatusFragment : Fragment() {
 
     }
 
+    fun scrollRecyclerView() = binding.rvAnimeByStatus.smoothScrollToPosition(0)
+
     companion object {
         private const val ANIME_STATUS_KEY = "status"
         private const val TAG = "AnimeListByStatusFrgmnt"
