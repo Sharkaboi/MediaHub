@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
         binding.bottomNav.setupWithNavController(navController)
         binding.bottomNav.setOnNavigationItemReselectedListener {
             if (navHostFragment != null && navHostFragment.childFragmentManager.backStackEntryCount >= 1) {
-                navController.navigateUp()
+                navController.popBackStack(it.itemId, false)
             }
         }
     }

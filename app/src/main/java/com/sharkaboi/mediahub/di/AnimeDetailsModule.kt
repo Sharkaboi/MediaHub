@@ -2,6 +2,7 @@ package com.sharkaboi.mediahub.di
 
 import com.sharkaboi.mediahub.common.data.datastore.DataStoreRepository
 import com.sharkaboi.mediahub.common.data.retrofit.AnimeService
+import com.sharkaboi.mediahub.common.data.retrofit.UserAnimeService
 import com.sharkaboi.mediahub.modules.anime_details.repository.AnimeDetailsRepository
 import dagger.Module
 import dagger.Provides
@@ -17,7 +18,8 @@ object AnimeDetailsModule {
     @ActivityRetainedScoped
     fun getAnimeDetailsRepository(
         animeService: AnimeService,
+        userAnimeService: UserAnimeService,
         dataStoreRepository: DataStoreRepository
     ): AnimeDetailsRepository =
-        AnimeDetailsRepository(animeService, dataStoreRepository)
+        AnimeDetailsRepository(animeService, userAnimeService, dataStoreRepository)
 }

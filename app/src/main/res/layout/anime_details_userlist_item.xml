@@ -1,13 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardCornerRadius="8dp">
+    app:cardCornerRadius="8dp"
+    app:contentPadding="8dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:background="@color/colorPrimary" />
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.helper.widget.Flow
+            android:id="@+id/flowQuickActions"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="btnStatus,btnCount,btnScore"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/btnScore"
+            style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@android:color/transparent"
+            android:textAllCaps="false"
+            android:textColor="?colorOnSurface"
+            app:icon="@drawable/ic_score"
+            app:iconGravity="top"
+            app:iconTint="?colorOnSurface"
+            tools:text="6/10" />
+
+        <Button
+            android:id="@+id/btnStatus"
+            style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@android:color/transparent"
+            android:textAllCaps="false"
+            android:textColor="?colorOnSurface"
+            app:icon="@drawable/ic_bookmark"
+            app:iconGravity="top"
+            app:iconTint="?colorOnSurface"
+            tools:text="@string/watching" />
+
+        <Button
+            android:id="@+id/btnCount"
+            style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@android:color/transparent"
+            android:textAllCaps="false"
+            android:textColor="?colorOnSurface"
+            app:icon="@drawable/ic_watch_count"
+            app:iconGravity="top"
+            app:iconTint="?colorOnSurface"
+            tools:text="2334/2344" />
+
+
+        <androidx.constraintlayout.helper.widget.Flow
+            android:id="@+id/flowQuickCountActions"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="btnPlus1,btnPlus5,btnPlus10"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/flowQuickActions" />
+
+        <Button
+            android:id="@+id/btnPlus1"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@android:color/transparent"
+            android:text="@string/plus_1"
+            android:textColor="?colorOnSurface"
+            app:strokeColor="?colorOnSurface" />
+
+        <Button
+            android:id="@+id/btnPlus5"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@android:color/transparent"
+            android:text="@string/plus_5"
+            android:textColor="?colorOnSurface"
+            app:strokeColor="?colorOnSurface" />
+
+        <Button
+            android:id="@+id/btnPlus10"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@android:color/transparent"
+            android:text="@string/plus_10"
+            android:textColor="?colorOnSurface"
+            app:strokeColor="?colorOnSurface" />
+
+        <Button
+            android:id="@+id/btnConfirm"
+            style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="?colorOnSurface"
+            android:text="@string/confirm"
+            android:textColor="?colorOnPrimary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/flowQuickCountActions" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>

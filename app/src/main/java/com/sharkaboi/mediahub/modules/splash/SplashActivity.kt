@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.app.AppCompatDelegate.*
 import com.sharkaboi.mediahub.R
 import com.sharkaboi.mediahub.modules.MainActivity
 import com.sharkaboi.mediahub.modules.auth.OAuthActivity
@@ -28,11 +28,13 @@ class SplashActivity : AppCompatActivity() {
                 }
                 is SplashState.FetchComplete -> {
                     Log.d("SplashActivity", state.toString())
-                    if (state.isDarkMode) {
-                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                    } else {
-                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                    }
+                    setDefaultNightMode(
+                        if (state.isDarkMode) {
+                            MODE_NIGHT_YES
+                        } else {
+                            MODE_NIGHT_NO
+                        }
+                    )
                     if (!state.isAccessTokenValid) {
                         redirectToOAuthFlow()
                     } else if (state.hasExpired) {

@@ -25,30 +25,15 @@ class AnimeViewModel
         animeStatus: AnimeStatus,
         userAnimeSortType: UserAnimeSortType
     ): Flow<PagingData<UserAnimeListResponse.Data>> {
-        // if not same request or if list is null
-        return if (userAnimeSortType == currentChosenSortType && animeStatus == currentChosenAnimeStatus) {
-            _pagedAnimeList ?: run {
-                currentChosenAnimeStatus = animeStatus
-                currentChosenSortType = userAnimeSortType
-                val newResult: Flow<PagingData<UserAnimeListResponse.Data>> =
-                    animeRepository.getAnimeListFlow(
-                        animeStatus = currentChosenAnimeStatus,
-                        animeSortType = currentChosenSortType
-                    ).cachedIn(viewModelScope)
-                _pagedAnimeList = newResult
-                newResult
-            }
-        } else {
-            currentChosenAnimeStatus = animeStatus
-            currentChosenSortType = userAnimeSortType
-            val newResult: Flow<PagingData<UserAnimeListResponse.Data>> =
-                animeRepository.getAnimeListFlow(
-                    animeStatus = currentChosenAnimeStatus,
-                    animeSortType = currentChosenSortType
-                ).cachedIn(viewModelScope)
-            _pagedAnimeList = newResult
-            newResult
-        }
+        currentChosenAnimeStatus = animeStatus
+        currentChosenSortType = userAnimeSortType
+        val newResult: Flow<PagingData<UserAnimeListResponse.Data>> =
+            animeRepository.getAnimeListFlow(
+                animeStatus = currentChosenAnimeStatus,
+                animeSortType = currentChosenSortType
+            ).cachedIn(viewModelScope)
+        _pagedAnimeList = newResult
+        return newResult
     }
 
     companion object {

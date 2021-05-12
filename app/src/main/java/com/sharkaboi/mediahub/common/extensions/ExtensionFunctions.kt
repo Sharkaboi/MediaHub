@@ -2,6 +2,8 @@ package com.sharkaboi.mediahub.common.extensions
 
 import android.content.Context
 import android.graphics.Color
+import android.text.Html
+import android.text.Spanned
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -9,10 +11,10 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 import com.sharkaboi.mediahub.common.data.api.models.anime.AnimeByIDResponse
 import java.text.DecimalFormat
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.ZonedDateTime
+import java.time.*
 import java.time.format.DateTimeFormatter
+import java.time.temporal.WeekFields
+import java.util.*
 
 internal fun AppCompatActivity.showToast(message: String, length: Int = Toast.LENGTH_SHORT) =
     Toast.makeText(this, message, length).show()
@@ -156,11 +158,162 @@ fun String.getStatus(): String {
 }
 
 fun AnimeByIDResponse.Broadcast.getBroadcastTime(): String {
-    if (this.startTime == null) {
-        return "On ${this.dayOfTheWeek}"
+    try {
+        if (this.startTime == null) {
+            return "On ${this.dayOfTheWeek}"
+        }
+        val dayOfWeek = DayOfWeek.valueOf(this.dayOfTheWeek.toUpperCase(Locale.ROOT))
+        val fieldIso = WeekFields.of(Locale.FRANCE).dayOfWeek()
+        val now = OffsetDateTime.now().with(fieldIso, dayOfWeek.value.toLong())
+        val (hour, mins) = this.startTime.split(":").map { it.toInt() }
+        val japanTime = ZonedDateTime.of(
+            now.year,
+            now.month.value,
+            now.dayOfMonth,
+            hour,
+            mins,
+            0,
+            0,
+            ZoneOffset.ofHoursMinutes(9, 0)
+        )
+        val localTimeZone = ZoneId.systemDefault()
+        val localTime = japanTime.withZoneSameInstant(localTimeZone)
+        return localTime.format(DateTimeFormatter.ofPattern("EEEE h:mm a"))
+    } catch (e: Exception) {
+        e.printStackTrace()
+        return "N/A"
     }
-    val string = "${this.dayOfTheWeek} ${this.startTime} +01:00"
-    val format = DateTimeFormatter.ofPattern("E H:mm X")
-    val japanTime = ZonedDateTime.parse(string, format)
-    return ""
+}
+
+fun Int.getLengthFromSeconds(): String {
+    try {
+        if (this <= 0) {
+            return "N/A"
+        }
+        val duration = Duration.ofSeconds(this.toLong())
+        val hours = duration.seconds / (60 * 60)
+        val minutes = (duration.seconds % (60 * 60) / 60).toInt()
+        return if (hours <= 0) "${minutes}m" else "${hours.toInt()}h ${minutes}m"
+    } catch (e: Exception) {
+        e.printStackTrace()
+        return "N/A"
+    }
+}
+
+fun AnimeByIDResponse.AlternativeTitles.getFormattedString(): Spanned {
+    return if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+        Html.fromHtml(
+            """
+            <b>English title</b> : ${
+                this.en?.let {
+                    if (it.isBlank()) {
+                        "N/A"
+                    } else {
+                        it
+                    }
+                } ?: "N/A"
+            }<br>
+            <b>Japanese title</b> : ${
+                this.ja?.let {
+                    if (it.isBlank()) {
+                        "N/A"
+                    } else {
+                        it
+                    }
+                } ?: "N/A"
+            }<br>
+            <b>Synonyms</b> : ${
+                this.synonyms?.let {
+                    if (it.isEmpty()) {
+                        "N/A"
+                    } else {
+                        it.joinToString()
+                    }
+                } ?: "N/A"
+            }
+        """.trimIndent(), Html.FROM_HTML_MODE_COMPACT
+        )
+    } else {
+        Html.fromHtml(
+            """
+            <b>English title</b> : ${
+                this.en?.let {
+                    if (it.isBlank()) {
+                        "N/A"
+                    } else {
+                        it
+                    }
+                } ?: "N/A"
+            }<br>
+            <b>Japanese title</b> : ${
+                this.ja?.let {
+                    if (it.isBlank()) {
+                        "N/A"
+                    } else {
+                        it
+                    }
+                } ?: "N/A"
+            }<br>
+            <b>Synonyms</b> : ${
+                this.synonyms?.let {
+                    if (it.isEmpty()) {
+                        "N/A"
+                    } else {
+                        it.joinToString()
+                    }
+                } ?: "N/A"
+            }
+        """.trimIndent()
+        )
+    }
+}
+
+fun AnimeByIDResponse.Statistics.getStats(): Spanned {
+    return if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+        Html.fromHtml(
+            """
+            <b>Number of users with this anime in list</b> : ${
+                this.numListUsers
+            }<br>
+            <b>Watching count</b> : ${
+                this.status.watching
+            }<br>
+            <b>Planned count</b> : ${
+                this.status.planToWatch
+            }<br>
+            <b>Completed count</b> : ${
+                this.status.completed
+            }<br>
+            <b>Dropped count</b> : ${
+                this.status.dropped
+            }<br>
+            <b>On hold count</b> : ${
+                this.status.onHold
+            }
+        """.trimIndent(), Html.FROM_HTML_MODE_COMPACT
+        )
+    } else {
+        Html.fromHtml(
+            """
+            <b>Number of users with this anime in list</b> : ${
+                this.numListUsers
+            }<br>
+            <b>Watching count</b> : ${
+                this.status.watching
+            }<br>
+            <b>Planned count</b> : ${
+                this.status.planToWatch
+            }<br>
+            <b>Completed count</b> : ${
+                this.status.completed
+            }<br>
+            <b>Dropped count</b> : ${
+                this.status.dropped
+            }<br>
+            <b>On hold count</b> : ${
+                this.status.onHold
+            }
+        """.trimIndent()
+        )
+    }
 }

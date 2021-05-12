@@ -6,6 +6,7 @@ import com.sharkaboi.mediahub.common.data.api.ApiConstants
 import com.sharkaboi.mediahub.common.data.api.models.anime.AnimeByIDResponse
 import com.sharkaboi.mediahub.common.data.datastore.DataStoreRepository
 import com.sharkaboi.mediahub.common.data.retrofit.AnimeService
+import com.sharkaboi.mediahub.common.data.retrofit.UserAnimeService
 import com.sharkaboi.mediahub.common.data.wrappers.MHError
 import com.sharkaboi.mediahub.common.data.wrappers.MHTaskState
 import com.sharkaboi.mediahub.common.extensions.emptyString
@@ -15,6 +16,7 @@ import kotlinx.coroutines.withContext
 
 class AnimeDetailsRepository(
     private val animeService: AnimeService,
+    private val userAnimeService: UserAnimeService,
     private val dataStoreRepository: DataStoreRepository
 ) {
     suspend fun getAnimeById(animeId: Int): MHTaskState<AnimeByIDResponse> =
@@ -38,6 +40,144 @@ class AnimeDetailsRepository(
                             return@withContext MHTaskState(
                                 isSuccess = true,
                                 data = result.body,
+                                error = MHError.nullError
+                            )
+                        }
+                        is NetworkResponse.NetworkError -> {
+                            Log.d(TAG, result.error.message ?: String.emptyString)
+                            return@withContext MHTaskState(
+                                isSuccess = false,
+                                data = null,
+                                error = MHError(result.error.message ?: "Error with network", null)
+                            )
+                        }
+                        is NetworkResponse.ServerError -> {
+                            Log.d(TAG, result.body.toString())
+                            return@withContext MHTaskState(
+                                isSuccess = false,
+                                data = null,
+                                error = MHError(
+                                    result.body?.message
+                                        ?: "Error with status code : ${result.code}", null
+                                )
+                            )
+                        }
+                        is NetworkResponse.UnknownError -> {
+                            Log.d(TAG, result.error.message ?: String.emptyString)
+                            return@withContext MHTaskState(
+                                isSuccess = false,
+                                data = null,
+                                error = MHError(result.error.message ?: "Error with parsing", null)
+                            )
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Log.d(TAG, e.message ?: String.emptyString)
+                return@withContext MHTaskState(
+                    isSuccess = false,
+                    data = null,
+                    error = MHError(e.message ?: String.emptyString, e)
+                )
+            }
+        }
+
+    suspend fun updateAnimeStatus(
+        animeId: Int,
+        animeStatus: String?,
+        score: Int?,
+        numWatchedEps: Int?
+    ): MHTaskState<Unit> =
+        withContext(Dispatchers.IO) {
+            try {
+                val accessToken: String? = dataStoreRepository.accessTokenFlow.firstOrNull()
+                if (accessToken == null) {
+                    return@withContext MHTaskState(
+                        isSuccess = false,
+                        data = null,
+                        error = MHError("Log in has expired, Log in again.", null)
+                    )
+                } else {
+                    val result = userAnimeService.updateAnimeStatusAsync(
+                        authHeader = ApiConstants.BEARER_SEPARATOR + accessToken,
+                        animeId = animeId,
+                        animeStatus = animeStatus,
+                        score = score,
+                        numWatchedEps = numWatchedEps
+                    ).await()
+                    when (result) {
+                        is NetworkResponse.Success -> {
+                            Log.d(TAG, result.body.toString())
+                            return@withContext MHTaskState(
+                                isSuccess = true,
+                                data = Unit,
+                                error = MHError.nullError
+                            )
+                        }
+                        is NetworkResponse.NetworkError -> {
+                            Log.d(TAG, result.error.message ?: String.emptyString)
+                            return@withContext MHTaskState(
+                                isSuccess = false,
+                                data = null,
+                                error = MHError(result.error.message ?: "Error with network", null)
+                            )
+                        }
+                        is NetworkResponse.ServerError -> {
+                            Log.d(TAG, result.body.toString())
+                            return@withContext MHTaskState(
+                                isSuccess = false,
+                                data = null,
+                                error = MHError(
+                                    result.body?.message
+                                        ?: "Error with status code : ${result.code}", null
+                                )
+                            )
+                        }
+                        is NetworkResponse.UnknownError -> {
+                            Log.d(TAG, result.error.message ?: String.emptyString)
+                            return@withContext MHTaskState(
+                                isSuccess = false,
+                                data = null,
+                                error = MHError(result.error.message ?: "Error with parsing", null)
+                            )
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Log.d(TAG, e.message ?: String.emptyString)
+                return@withContext MHTaskState(
+                    isSuccess = false,
+                    data = null,
+                    error = MHError(e.message ?: String.emptyString, e)
+                )
+            }
+        }
+
+    suspend fun removeAnimeFromList(
+        animeId: Int
+    ): MHTaskState<Unit> =
+        withContext(Dispatchers.IO) {
+            try {
+                val accessToken: String? = dataStoreRepository.accessTokenFlow.firstOrNull()
+                if (accessToken == null) {
+                    return@withContext MHTaskState(
+                        isSuccess = false,
+                        data = null,
+                        error = MHError("Log in has expired, Log in again.", null)
+                    )
+                } else {
+                    val result = userAnimeService.deleteAnimeFromListAsync(
+                        authHeader = ApiConstants.BEARER_SEPARATOR + accessToken,
+                        animeId = animeId
+                    ).await()
+                    when (result) {
+                        is NetworkResponse.Success -> {
+                            Log.d(TAG, result.body.toString())
+                            return@withContext MHTaskState(
+                                isSuccess = true,
+                                data = Unit,
                                 error = MHError.nullError
                             )
                         }

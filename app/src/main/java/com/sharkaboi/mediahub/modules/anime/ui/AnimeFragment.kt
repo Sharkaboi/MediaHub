@@ -11,9 +11,9 @@ import com.google.android.material.behavior.HideBottomViewOnScrollBehavior
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
 import com.sharkaboi.mediahub.R
+import com.sharkaboi.mediahub.common.data.api.enums.AnimeStatus
 import com.sharkaboi.mediahub.databinding.FragmentAnimeBinding
 import com.sharkaboi.mediahub.modules.anime.adapters.AnimePagerAdapter
-
 
 class AnimeFragment : Fragment() {
 
@@ -45,12 +45,9 @@ class AnimeFragment : Fragment() {
         vpAnimeAdapter = AnimePagerAdapter(childFragmentManager, viewLifecycleOwner.lifecycle)
         binding.vpAnime.adapter = vpAnimeAdapter
         binding.animeTabLayout.apply {
-            addTab(newTab().apply { text = "Watching" })
-            addTab(newTab().apply { text = "Planned" })
-            addTab(newTab().apply { text = "Completed" })
-            addTab(newTab().apply { text = "On Hold" })
-            addTab(newTab().apply { text = "Dropped" })
-            addTab(newTab().apply { text = "All" })
+            AnimeStatus.values().forEach {
+                addTab(newTab().apply { text = it.getFormattedString() })
+            }
         }
         onTabChanged = object : TabLayout.OnTabSelectedListener {
 

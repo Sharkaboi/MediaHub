@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import com.sharkaboi.mediahub.common.data.api.enums.AnimeStatus
 import com.sharkaboi.mediahub.common.data.api.enums.UserAnimeSortType
-import com.sharkaboi.mediahub.common.extensions.isShowing
 import com.sharkaboi.mediahub.databinding.FragmentAnimeListByStatusBinding
 import com.sharkaboi.mediahub.modules.anime.adapters.AnimeListAdapter
 import com.sharkaboi.mediahub.modules.anime.adapters.AnimeLoadStateAdapter
@@ -59,6 +58,16 @@ class AnimeListByStatusFragment : Fragment() {
         setObservers()
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewLifecycleOwner.lifecycleScope.launch {
+            animeViewModel.getAnimeList(status, UserAnimeSortType.list_updated_at)
+                .collectLatest { pagingData ->
+                    animeListAdapter.submitData(pagingData)
+                }
+        }
+    }
+
     private fun setUpRecyclerView() {
         binding.rvAnimeByStatus.apply {
             animeListAdapter = AnimeListAdapter { animeId ->
@@ -87,7 +96,15 @@ class AnimeListByStatusFragment : Fragment() {
                     loadStates.refresh is LoadState.NotLoading && animeListAdapter.itemCount == 0
             }
         }
-
+        binding.swipeRefresh.setOnRefreshListener {
+            viewLifecycleOwner.lifecycleScope.launch {
+                animeViewModel.getAnimeList(status, UserAnimeSortType.list_updated_at)
+                    .collectLatest { pagingData ->
+                        binding.swipeRefresh.isRefreshing = false
+                        animeListAdapter.submitData(pagingData)
+                    }
+            }
+        }
     }
 
     fun scrollRecyclerView() = binding.rvAnimeByStatus.smoothScrollToPosition(0)
@@ -95,6 +112,8 @@ class AnimeListByStatusFragment : Fragment() {
     companion object {
         private const val ANIME_STATUS_KEY = "status"
         private const val TAG = "AnimeListByStatusFrgmnt"
+        const val requestKey = "wasStatusUpdated"
+        const val bundleKey = "statusUpdateBoolean"
 
         @JvmStatic
         fun newInstance(status: AnimeStatus) =

@@ -14,7 +14,7 @@ data class UserAnimeUpdateResponse(
     val isReWatching: Boolean,
     @Json(name = "num_times_rewatched")
     val numTimesReWatched: Int,
-    @Json(name = "num_watched_episodes")
+    @Json(name = "num_episodes_watched")
     val numWatchedEpisodes: Int,
     @Json(name = "priority")
     val priority: Int,
@@ -25,7 +25,7 @@ data class UserAnimeUpdateResponse(
     @Json(name = "status")
     val status: String,
     @Json(name = "tags")
-    val tags: List<Any>,
+    val tags: List<String>,
     @Json(name = "updated_at")
     val updatedAt: String
 )

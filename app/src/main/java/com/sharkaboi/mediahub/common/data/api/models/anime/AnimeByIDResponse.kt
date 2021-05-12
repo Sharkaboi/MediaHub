@@ -52,7 +52,7 @@ data class AnimeByIDResponse(
     @Json(name = "related_anime")
     val relatedAnime: List<RelatedAnime>,
     @Json(name = "related_manga")
-    val relatedManga: List<Any>,
+    val relatedManga: List<RelatedManga>,
     @Json(name = "source")
     val source: String?,
     @Json(name = "start_date")
@@ -178,6 +178,37 @@ data class AnimeByIDResponse(
     @Keep
     @JsonClass(generateAdapter = true)
     data class RelatedAnime(
+        @Json(name = "node")
+        val node: Node,
+        @Json(name = "relation_type")
+        val relationType: String,
+        @Json(name = "relation_type_formatted")
+        val relationTypeFormatted: String
+    ) {
+        @Keep
+        @JsonClass(generateAdapter = true)
+        data class Node(
+            @Json(name = "id")
+            val id: Int,
+            @Json(name = "main_picture")
+            val mainPicture: MainPicture?,
+            @Json(name = "title")
+            val title: String
+        ) {
+            @Keep
+            @JsonClass(generateAdapter = true)
+            data class MainPicture(
+                @Json(name = "large")
+                val large: String?,
+                @Json(name = "medium")
+                val medium: String
+            )
+        }
+    }
+
+    @Keep
+    @JsonClass(generateAdapter = true)
+    data class RelatedManga(
         @Json(name = "node")
         val node: Node,
         @Json(name = "relation_type")

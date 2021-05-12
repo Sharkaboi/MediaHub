@@ -49,6 +49,7 @@
             android:name=".modules.MainActivity"
             android:launchMode="singleInstance"
             android:screenOrientation="sensorPortrait"
+            android:windowSoftInputMode="adjustPan"
             android:theme="@style/Theme.MediaHub" />
         <activity
             android:name="com.google.android.gms.oss.licenses.OssLicensesMenuActivity"

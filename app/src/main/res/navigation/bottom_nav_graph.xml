@@ -54,5 +54,12 @@
             android:name="animeId"
             android:defaultValue="0"
             app:argType="integer" />
+        <action
+            android:id="@+id/animeDetailsWithId"
+            app:destination="@id/animeDetailsFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
     </fragment>
 </navigation>
