@@ -61,5 +61,17 @@
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/fade_out" />
+        <action
+            android:id="@+id/openImages"
+            app:destination="@id/imageSliderFragment" />
     </fragment>
+
+    <dialog
+        android:id="@+id/imageSliderFragment"
+        android:name="com.sharkaboi.mediahub.common.views.image_slider.ImageSliderFragment"
+        android:label="ImageSlider">
+        <argument
+            android:name="imagesList"
+            app:argType="string[]" />
+    </dialog>
 </navigation>

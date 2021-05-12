@@ -35,6 +35,7 @@ import java.util.*
 class AnimeDetailsFragment : Fragment() {
     private var _binding: FragmentAnimeDetailsBinding? = null
     private val binding get() = _binding!!
+    private val navController by lazy { findNavController() }
     private val args: AnimeDetailsFragmentArgs by navArgs()
     private val animeDetailsViewModel by viewModels<AnimeDetailsViewModel>()
 
@@ -115,6 +116,9 @@ class AnimeDetailsFragment : Fragment() {
                 placeholder(R.drawable.ic_anime_placeholder)
                 error(R.drawable.ic_anime_placeholder)
                 transformations(RoundedCornersTransformation(8f))
+            }
+            ivAnimeMainPicture.setOnClickListener {
+                openImagesViewPager(animeByIDResponse.pictures)
             }
             otherDetails.tvSynopsis.text = animeByIDResponse.synopsis ?: getString(R.string.n_a)
             otherDetails.tvSynopsis.setOnClickListener {
@@ -245,6 +249,12 @@ class AnimeDetailsFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun openImagesViewPager(pictures: List<AnimeByIDResponse.Picture>) {
+        val images: List<String> = pictures.map { it.large ?: it.medium }
+        val action = AnimeDetailsFragmentDirections.openImages(images.toTypedArray())
+        navController.navigate(action)
     }
 
     private fun showFullSynopsisDialog(synopsis: String) {

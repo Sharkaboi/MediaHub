@@ -95,6 +95,7 @@ class ProfileFragment : Fragment() {
     private fun setData(userDetailsResponse: UserDetailsResponse) {
         binding.apply {
             profileContent.ibCollapseDetails.setOnClickListener(toggleDetailsCard)
+            toggleDetailsCard.onClick(null)
             profileContent.apply {
                 ivProfileImage.load(userDetailsResponse.profilePicUrl) {
                     crossfade(300)
