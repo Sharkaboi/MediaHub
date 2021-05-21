@@ -10,23 +10,54 @@
         android:id="@+id/ivBanner"
         android:layout_width="0dp"
         android:layout_height="150dp"
+        android:contentDescription="@string/banner"
         android:src="@color/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:contentDescription="@string/banner" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/ivProfileImage"
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_margin="16dp"
+        android:contentDescription="@string/profile_image"
         android:scaleType="centerCrop"
         android:src="@drawable/ic_profile_placeholder"
         app:layout_constraintBottom_toBottomOf="@+id/tvName"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tvName"
-        android:contentDescription="@string/profile_image" />
+        app:layout_constraintTop_toTopOf="@+id/tvName" />
+
+    <ImageButton
+        android:id="@+id/ibSettings"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginVertical="8dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/settings"
+        app:layout_constraintBottom_toBottomOf="@+id/ivProfileImage"
+        app:layout_constraintStart_toEndOf="@id/ivProfileImage"
+        app:layout_constraintTop_toBottomOf="@+id/ivBanner"
+        app:srcCompat="@drawable/ic_settings"
+        app:tint="?colorOnSurface" />
+
+    <ImageButton
+        android:id="@+id/ibShare"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginVertical="8dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/share"
+        app:layout_constraintBottom_toBottomOf="@+id/ivProfileImage"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toEndOf="@id/ibSettings"
+        app:layout_constraintTop_toBottomOf="@+id/ivBanner"
+        app:srcCompat="@drawable/ic_share"
+        app:tint="?colorOnSurface" />
 
     <TextView
         android:id="@+id/tvName"
@@ -79,10 +110,10 @@
                 android:layout_width="24dp"
                 android:layout_height="40dp"
                 android:background="@android:color/transparent"
+                android:contentDescription="@string/collapse_button"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_arrow_down"
-                android:contentDescription="@string/collapse_button" />
+                app:srcCompat="@drawable/ic_arrow_down" />
 
             <include
                 android:id="@+id/profileDetailsCardContent"

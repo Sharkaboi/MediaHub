@@ -16,6 +16,7 @@ import coil.load
 import coil.transform.RoundedCornersTransformation
 import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.shape.ShapeAppearanceModel
 import com.sharkaboi.mediahub.R
 import com.sharkaboi.mediahub.common.data.api.enums.AnimeStatus
 import com.sharkaboi.mediahub.common.data.api.models.anime.AnimeByIDResponse
@@ -64,7 +65,7 @@ class AnimeDetailsFragment : Fragment() {
             when (uiState) {
                 is AnimeDetailsState.Idle -> animeDetailsViewModel.getAnimeDetails(args.animeId)
                 is AnimeDetailsState.FetchSuccess -> setData(uiState.animeByIDResponse)
-                is AnimeDetailsState.ProfileFailure -> showToast(uiState.message)
+                is AnimeDetailsState.AnimeDetailsFailure -> showToast(uiState.message)
                 else -> Unit
             }
         }
@@ -103,12 +104,15 @@ class AnimeDetailsFragment : Fragment() {
                 showAlternateTitlesDialog(animeByIDResponse.alternativeTitles)
             }
             tvStartDate.text =
-                animeByIDResponse.startDate?.tryParseDate()?.formatDate() ?: getString(R.string.n_a)
+                animeByIDResponse.startDate?.tryParseDate()?.formatDateDMY()
+                    ?: getString(R.string.n_a)
             tvEndDate.text =
-                animeByIDResponse.endDate?.tryParseDate()?.formatDate() ?: getString(R.string.n_a)
+                animeByIDResponse.endDate?.tryParseDate()?.formatDateDMY()
+                    ?: getString(R.string.n_a)
             tvMeanScore.text = animeByIDResponse.mean?.toString() ?: getString(R.string.n_a)
             tvRank.text = animeByIDResponse.rank?.toString() ?: getString(R.string.n_a)
             tvPopularityRank.text = animeByIDResponse.popularity.toString()
+            tvStudios.text = animeByIDResponse.studios.joinToString { it.name }
             ivAnimeMainPicture.load(
                 animeByIDResponse.mainPicture?.large ?: animeByIDResponse.mainPicture?.medium
             ) {
@@ -124,24 +128,38 @@ class AnimeDetailsFragment : Fragment() {
             otherDetails.tvSynopsis.setOnClickListener {
                 showFullSynopsisDialog(animeByIDResponse.synopsis ?: getString(R.string.n_a))
             }
-            otherDetails.tvNsfwRating.text =
-                animeByIDResponse.nsfw?.getNsfwRating() ?: getString(R.string.n_a)
-            otherDetails.tvPgRating.text =
-                animeByIDResponse.rating?.getRating() ?: getString(R.string.n_a)
+            otherDetails.ratingsChipGroup.apply {
+                removeAllViews()
+                addView(Chip(context).apply {
+                    setEnsureMinTouchTargetSize(false)
+                    shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(8f)
+                    text = animeByIDResponse.nsfw?.getNsfwRating() ?: getString(R.string.n_a)
+                })
+                addView(Chip(context).apply {
+                    setEnsureMinTouchTargetSize(false)
+                    shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(8f)
+                    text = animeByIDResponse.rating?.getRating() ?: getString(R.string.n_a)
+                })
+            }
             animeByIDResponse.genres.let {
+                otherDetails.genresChipGroup.removeAllViews()
                 if (it.isEmpty()) {
                     otherDetails.genresChipGroup.addView(Chip(context).apply {
+                        setEnsureMinTouchTargetSize(false)
+                        shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(8f)
                         text = getString(R.string.n_a)
                     })
                 } else {
                     it.forEach { genre ->
                         otherDetails.genresChipGroup.addView(Chip(context).apply {
+                            setEnsureMinTouchTargetSize(false)
+                            shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(8f)
                             text = genre.name
                         })
                     }
                 }
             }
-            otherDetails.tvMediaType.text = animeByIDResponse.mediaType.toUpperCase(Locale.ROOT)
+            otherDetails.tvMediaType.text = animeByIDResponse.mediaType.uppercase(Locale.ROOT)
             otherDetails.tvAnimeCurrentStatus.text = animeByIDResponse.status.getStatus()
             otherDetails.tvTotalEps.text =
                 animeByIDResponse.numEpisodes.let {
@@ -151,28 +169,16 @@ class AnimeDetailsFragment : Fragment() {
                         it.toString()
                 }
             otherDetails.tvSeason.text = animeByIDResponse.startSeason?.let {
-                "${it.season.capitalize(Locale.ROOT)} ${it.year}"
+                "${it.season.capitalizeFirst()} ${it.year}"
             } ?: getString(R.string.n_a)
             otherDetails.tvSchedule.text =
                 animeByIDResponse.broadcast?.getBroadcastTime() ?: getString(R.string.n_a)
             otherDetails.tvSource.text =
-                animeByIDResponse.source?.capitalize(Locale.ROOT) ?: getString(R.string.n_a)
-            otherDetails.tvAverageLength.text =
-                animeByIDResponse.averageEpisodeDuration?.getLengthFromSeconds()
+                animeByIDResponse.source?.replace('_', ' ')?.capitalizeFirst()
                     ?: getString(R.string.n_a)
-            animeByIDResponse.studios.let {
-                if (it.isEmpty()) {
-                    otherDetails.studiosChipGroup.addView(Chip(context).apply {
-                        text = getString(R.string.n_a)
-                    })
-                } else {
-                    it.forEach { genre ->
-                        otherDetails.studiosChipGroup.addView(Chip(context).apply {
-                            text = genre.name
-                        })
-                    }
-                }
-            }
+            otherDetails.tvAverageLength.text =
+                animeByIDResponse.averageEpisodeDuration?.getEpisodeLengthFromSeconds()
+                    ?: getString(R.string.n_a)
             otherDetails.tvBackground.setOnClickListener {
                 openBackgroundDialog(animeByIDResponse.background)
             }
@@ -269,16 +275,16 @@ class AnimeDetailsFragment : Fragment() {
 
     private fun openStatusDialog(status: String?, animeId: Int) {
         val singleItems =
-            arrayOf("Not added") + AnimeStatus.values().map { it.getFormattedString() }
+            arrayOf("Not added") + AnimeStatus.malStatuses.map { it.getFormattedString() }
         val checkedItem =
-            status?.let { AnimeStatus.values().indexOfFirst { it.name == status } + 1 } ?: 0
+            status?.let { AnimeStatus.malStatuses.indexOfFirst { it.name == status } + 1 } ?: 0
         MaterialAlertDialogBuilder(requireContext())
             .setTitle("Set status as")
             .setSingleChoiceItems(singleItems, checkedItem) { dialog, which ->
                 when (which) {
                     checkedItem -> Unit
                     0 -> animeDetailsViewModel.removeFromList(animeId)
-                    else -> animeDetailsViewModel.setStatus(AnimeStatus.values()[which - 1])
+                    else -> animeDetailsViewModel.setStatus(AnimeStatus.malStatuses[which - 1])
                 }
                 dialog.dismiss()
             }

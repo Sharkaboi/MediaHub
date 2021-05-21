@@ -19,7 +19,7 @@ interface AnimeService {
         @Query("q") searchQuery: String,
         @Query("limit") limit: Int = 10,
         @Query("offset") offset: Int = 0,
-        @Query("fields") fields: String? = null
+        @Query("fields") fields: String? = "id,title,main_picture,mean"
     ): Deferred<NetworkResponse<AnimeSearchResponse, ApiError>>
 
     @GET("anime/{id}")

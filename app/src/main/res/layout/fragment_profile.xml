@@ -13,7 +13,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible">
 
         <include
             android:id="@+id/profileContent"
@@ -29,80 +30,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabMenu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="64dp"
-        android:clickable="true"
-        android:contentDescription="@string/menu"
-        android:focusable="true"
-        android:src="@drawable/ic_menu_closed"
-        android:tooltipText="@string/menu"
-        app:backgroundTint="@color/colorPrimary"
-        app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:tint="@color/white"
-        tools:targetApi="o" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabLogOut"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:clickable="true"
-        android:contentDescription="@string/log_out"
-        android:focusable="true"
-        android:src="@drawable/ic_logout"
-        android:tooltipText="@string/log_out"
-        android:visibility="invisible"
-        app:backgroundTint="@color/colorAccent"
-        app:fabSize="mini"
-        app:layout_constraintBottom_toTopOf="@id/fabMenu"
-        app:layout_constraintEnd_toEndOf="@+id/fabMenu"
-        app:layout_constraintStart_toStartOf="@+id/fabMenu"
-        app:tint="@color/white"
-        tools:targetApi="o" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabSettings"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:clickable="true"
-        android:contentDescription="@string/settings"
-        android:focusable="true"
-        android:src="@drawable/ic_settings"
-        android:tooltipText="@string/settings"
-        android:visibility="invisible"
-        app:backgroundTint="@color/colorAccent"
-        app:fabSize="mini"
-        app:layout_constraintBottom_toTopOf="@id/fabLogOut"
-        app:layout_constraintEnd_toEndOf="@+id/fabLogOut"
-        app:layout_constraintStart_toStartOf="@+id/fabLogOut"
-        app:tint="@color/white"
-        tools:targetApi="o" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabAbout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:clickable="true"
-        android:contentDescription="@string/about"
-        android:focusable="true"
-        android:src="@drawable/ic_logo_with_dot"
-        android:tooltipText="@string/about"
-        android:visibility="invisible"
-        app:backgroundTint="@color/colorAccent"
-        app:fabSize="mini"
-        app:layout_constraintBottom_toTopOf="@id/fabSettings"
-        app:layout_constraintEnd_toEndOf="@+id/fabSettings"
-        app:layout_constraintStart_toStartOf="@+id/fabSettings"
-        app:tint="@color/white"
-        tools:targetApi="o" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="gone" />
 </androidx.constraintlayout.widget.ConstraintLayout>

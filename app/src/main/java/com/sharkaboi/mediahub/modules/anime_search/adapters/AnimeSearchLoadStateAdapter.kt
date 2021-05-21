@@ -1,4 +1,4 @@
-package com.sharkaboi.mediahub.modules.anime.adapters
+package com.sharkaboi.mediahub.modules.anime_search.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,7 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.sharkaboi.mediahub.common.extensions.showToast
 import com.sharkaboi.mediahub.databinding.LoadStateItemBinding
 
-class AnimeLoadStateAdapter : LoadStateAdapter<AnimeLoadStateAdapter.LoadStateViewHolder>() {
+class AnimeSearchLoadStateAdapter :
+    LoadStateAdapter<AnimeSearchLoadStateAdapter.LoadStateViewHolder>() {
 
     override fun onCreateViewHolder(
         parent: ViewGroup,

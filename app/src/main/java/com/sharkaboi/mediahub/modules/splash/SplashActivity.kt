@@ -17,17 +17,18 @@ class SplashActivity : AppCompatActivity() {
     private val splashViewModel by viewModels<SplashViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d(TAG, "onCreate")
         setUpObservers()
     }
 
     private fun setUpObservers() {
         splashViewModel.splashState.observe(this) { state ->
+            Log.d("SplashActivity", state.toString())
             when (state) {
                 is SplashState.LoginExpired -> {
                     redirectToOAuthFlow()
                 }
                 is SplashState.FetchComplete -> {
-                    Log.d("SplashActivity", state.toString())
                     setDefaultNightMode(
                         if (state.isDarkMode) {
                             MODE_NIGHT_YES
@@ -52,11 +53,17 @@ class SplashActivity : AppCompatActivity() {
         startActivity(Intent(this, MainActivity::class.java))
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
         finish()
+        Log.d(TAG, "redirectToMainAppFlow")
     }
 
     private fun redirectToOAuthFlow() {
         startActivity(Intent(this, OAuthActivity::class.java))
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
         finish()
+        Log.d(TAG, "redirectToOAuthFlow")
+    }
+
+    companion object {
+        private const val TAG = "SplashActivity"
     }
 }

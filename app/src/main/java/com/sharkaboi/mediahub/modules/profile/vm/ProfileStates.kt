@@ -6,17 +6,12 @@ import com.sharkaboi.mediahub.common.data.api.models.user.UserDetailsResponse
 sealed class ProfileStates {
     object Idle : ProfileStates()
     object Loading : ProfileStates()
-    object LogOutSuccess : ProfileStates()
     data class FetchSuccess(val userDetailsResponse: UserDetailsResponse) : ProfileStates()
     data class ProfileFailure(val message: String) : ProfileStates()
 }
 
 fun MutableLiveData<ProfileStates>.setLoading() = this.apply {
     value = ProfileStates.Loading
-}
-
-fun MutableLiveData<ProfileStates>.setLogOutSuccess() = this.apply {
-    value = ProfileStates.LogOutSuccess
 }
 
 fun MutableLiveData<ProfileStates>.getDefault() = this.apply {

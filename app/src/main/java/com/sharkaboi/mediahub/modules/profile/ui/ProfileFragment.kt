@@ -2,7 +2,6 @@ package com.sharkaboi.mediahub.modules.profile.ui
 
 import android.content.Intent
 import android.graphics.Color
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,27 +16,24 @@ import coil.transform.RoundedCornersTransformation
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
-import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.google.android.material.color.MaterialColors
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.sharkaboi.mediahub.R
-import com.sharkaboi.mediahub.common.constants.AppConstants
 import com.sharkaboi.mediahub.common.data.api.models.user.UserDetailsResponse
 import com.sharkaboi.mediahub.common.extensions.*
 import com.sharkaboi.mediahub.common.util.MPAndroidChartValueFormatter
 import com.sharkaboi.mediahub.databinding.FragmentProfileBinding
-import com.sharkaboi.mediahub.modules.auth.OAuthActivity
+import com.sharkaboi.mediahub.modules.anime_details.ui.AnimeDetailsFragmentDirections
 import com.sharkaboi.mediahub.modules.profile.vm.ProfileStates
 import com.sharkaboi.mediahub.modules.profile.vm.ProfileViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.*
-
 
 @AndroidEntryPoint
 class ProfileFragment : Fragment() {
     private val profileViewModel: ProfileViewModel by viewModels()
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
+    private val navController by lazy { findNavController() }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -64,10 +60,7 @@ class ProfileFragment : Fragment() {
                 crossfade(true)
                 transformations(RoundedCornersTransformation(10f))
             }
-            fabMenu.setOnClickListener(toggleMenuListener)
-            fabAbout.setOnClickListener(showAboutDialog)
-            fabSettings.setOnClickListener(showSettings)
-            fabLogOut.setOnClickListener(showLogOutDialog)
+            profileContent.ibSettings.setOnClickListener(showSettings)
         }
     }
 
@@ -83,9 +76,6 @@ class ProfileFragment : Fragment() {
                 }
                 is ProfileStates.ProfileFailure -> {
                     binding.root.shortSnackBar(uiState.message)
-                }
-                is ProfileStates.LogOutSuccess -> {
-                    moveToOAuthScreen()
                 }
                 else -> Unit
             }
@@ -103,14 +93,23 @@ class ProfileFragment : Fragment() {
                     placeholder(R.drawable.ic_profile_placeholder)
                     error(R.drawable.ic_profile_placeholder)
                 }
+                ivProfileImage.setOnClickListener {
+                    val action =
+                        AnimeDetailsFragmentDirections.openImages(arrayOf(userDetailsResponse.profilePicUrl))
+                    navController.navigate(action)
+                }
                 tvName.text = userDetailsResponse.name
+                ibShare.setOnClickListener {
+                    showShareDialog(userDetailsResponse.name)
+                }
                 profileDetailsCardContent.apply {
                     tvBirthDay.text =
-                        userDetailsResponse.birthday?.tryParseDateTime()?.formatDate() ?: "N/A"
+                        userDetailsResponse.birthday?.tryParseDateTime()?.formatDateDMY() ?: "N/A"
                     tvGender.text =
-                        userDetailsResponse.gender?.capitalize(Locale.getDefault()) ?: "N/A"
+                        userDetailsResponse.gender?.capitalizeFirst()
+                            ?: "N/A"
                     tvJoinedAt.text =
-                        userDetailsResponse.joinedAt.tryParseDateTime()?.formatDate() ?: "N/A"
+                        userDetailsResponse.joinedAt.tryParseDateTime()?.formatDateDMY() ?: "N/A"
                     tvLocation.text = userDetailsResponse.location ?: "N/A"
                     tvTimeZone.text = userDetailsResponse.timeZone ?: "N/A"
                     tvSupporter.text =
@@ -190,91 +189,34 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    private val showAboutDialog = View.OnClickListener {
-        toggleMenu()
+    private fun showShareDialog(name: String) {
+        val items = arrayOf("MAL profile", "Anime list", "Manga list")
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("About")
-            .setMessage(AppConstants.description)
-            .setPositiveButton(android.R.string.ok) { dialog, _ ->
+            .setTitle("Share your")
+            .setItems(items) { dialog, which ->
+                openShareChooser(name, which)
                 dialog.dismiss()
             }
-            .setNegativeButton("Github") { _, _ ->
-                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(AppConstants.githubLink)))
-                activity?.overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
-            }
-            .setNeutralButton("View licenses") { _, _ ->
-                startActivity(Intent(context, OssLicensesMenuActivity::class.java))
-                activity?.overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
-            }.show()
+            .show()
+    }
+
+    private fun openShareChooser(name: String, which: Int) {
+        val url = when (which) {
+            0 -> "https://myanimelist.net/profile/$name"
+            1 -> "https://myanimelist.net/animelist/$name"
+            else -> "https://myanimelist.net/mangalist/$name"
+        }
+        val sendIntent: Intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, url)
+            type = "text/plain"
+        }
+        val shareIntent = Intent.createChooser(sendIntent, "Share your MAL link to")
+        startActivity(shareIntent)
     }
 
     private val showSettings = View.OnClickListener {
-        toggleMenu()
         findNavController().navigate(R.id.action_profile_item_to_settingsFragment)
-    }
-
-    private val showLogOutDialog = View.OnClickListener {
-        toggleMenu()
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Log out?")
-            .setMessage("This is permanent and you have to log in again after to use MediaHub.")
-            .setPositiveButton("Yes, Log me out") { _, _ ->
-                profileViewModel.logOutUser()
-            }
-            .setNegativeButton("No, take me back") { dialog, _ ->
-                dialog.dismiss()
-            }.show()
-    }
-
-    private fun moveToOAuthScreen() {
-        startActivity(Intent(context, OAuthActivity::class.java))
-        activity?.overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
-        activity?.finishAffinity()
-    }
-
-    private var isMenuOpen = false
-    private val toggleMenuListener = View.OnClickListener {
-        toggleMenu()
-    }
-    private val toggleMenu = {
-        binding.apply {
-            if (isMenuOpen) {
-                fabAbout.apply {
-                    isVisible = isMenuOpen
-                    this.startAnimation(translateDown)
-                }
-                fabLogOut.apply {
-                    isVisible = isMenuOpen
-                    this.startAnimation(translateDown)
-                }
-                fabSettings.apply {
-                    isVisible = isMenuOpen
-                    this.startAnimation(translateDown)
-                }
-                fabMenu.apply {
-                    this.startAnimation(rotateClose)
-                    setImageResource(R.drawable.ic_menu_closed)
-                }
-            } else {
-                fabAbout.apply {
-                    isVisible = isMenuOpen
-                    this.startAnimation(translateUp)
-                }
-                fabLogOut.apply {
-                    isVisible = isMenuOpen
-                    this.startAnimation(translateUp)
-                }
-                fabSettings.apply {
-                    isVisible = isMenuOpen
-                    this.startAnimation(translateUp)
-                }
-                fabMenu.apply {
-                    this.startAnimation(rotateOpen)
-                    setImageResource(R.drawable.ic_menu_open)
-                }
-            }
-        }
-        isMenuOpen = !isMenuOpen
     }
 
     private var isDetailsCardOpen = false
@@ -291,18 +233,6 @@ class ProfileFragment : Fragment() {
         isDetailsCardOpen = !isDetailsCardOpen
     }
 
-    private val rotateOpen by lazy {
-        AnimationUtils.loadAnimation(
-            context,
-            R.anim.rotate_open_anim
-        )
-    }
-    private val rotateClose by lazy {
-        AnimationUtils.loadAnimation(
-            context,
-            R.anim.rotate_close_anim
-        )
-    }
     private val rotateCloseArrow by lazy {
         AnimationUtils.loadAnimation(
             context,
@@ -313,18 +243,6 @@ class ProfileFragment : Fragment() {
         AnimationUtils.loadAnimation(
             context,
             R.anim.rotate_close_anim
-        )
-    }
-    private val translateUp by lazy {
-        AnimationUtils.loadAnimation(
-            context,
-            R.anim.translate_up
-        )
-    }
-    private val translateDown by lazy {
-        AnimationUtils.loadAnimation(
-            context,
-            R.anim.translate_down
         )
     }
 

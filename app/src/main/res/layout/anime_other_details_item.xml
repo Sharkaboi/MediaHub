@@ -19,85 +19,63 @@
         android:id="@+id/tvSynopsis"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:maxLines="5"
+        android:layout_marginTop="4dp"
         android:ellipsize="end"
+        android:maxLines="5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvSynopsisHint"
         tools:text="Part of Little Mermaid Series along with Telepathist IQ Saiko, Shining May and Suashi no Houkago." />
 
     <TextView
-        android:id="@+id/tvNsfwRatingHint"
+        android:id="@+id/tvRatingsHint"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/nsfw_rating"
+        android:layout_marginTop="16dp"
+        android:text="@string/rating"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvSynopsis" />
 
-    <TextView
-        android:id="@+id/tvNsfwRating"
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/ratingsChipGroup"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
+        app:chipSpacing="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvNsfwRatingHint"
-        tools:text="This anime is safe for work (SFW)" />
-
-    <TextView
-        android:id="@+id/tvPgRatingHint"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/pg_rating"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvNsfwRating" />
-
-    <TextView
-        android:id="@+id/tvPgRating"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvPgRatingHint"
-        tools:text="R - 17+ (violence &amp; profanity)" />
+        app:layout_constraintTop_toBottomOf="@id/tvRatingsHint" />
 
     <TextView
         android:id="@+id/tvGenresHint"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="12dp"
         android:text="@string/genres"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvPgRating" />
+        app:layout_constraintTop_toBottomOf="@id/ratingsChipGroup" />
 
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/genresChipGroup"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        app:chipSpacingHorizontal="10dp"
+        android:layout_marginTop="4dp"
+        app:chipSpacing="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvGenresHint" />
 
     <TextView
         android:id="@+id/tvMediaTypeHint"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:text="@string/media_type"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/genresChipGroup" />
 
@@ -105,10 +83,11 @@
         android:id="@+id/tvMediaType"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_margin="8dp"
+        app:layout_constraintBaseline_toBaselineOf="@id/tvMediaTypeHint"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvMediaTypeHint"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toEndOf="@id/tvMediaTypeHint"
         tools:text="Movie" />
 
     <TextView
@@ -126,7 +105,7 @@
         android:id="@+id/tvAnimeCurrentStatus"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvAnimeCurrentStatusHint"
@@ -147,7 +126,7 @@
         android:id="@+id/tvTotalEps"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvTotalEpsHint"
@@ -168,7 +147,7 @@
         android:id="@+id/tvSeason"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvSeasonHint"
@@ -189,7 +168,7 @@
         android:id="@+id/tvSchedule"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvScheduleHint"
@@ -210,7 +189,7 @@
         android:id="@+id/tvSource"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvSourceHint"
@@ -231,44 +210,23 @@
         android:id="@+id/tvAverageLength"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvAverageLengthHint"
         tools:text="45m 3s" />
 
     <TextView
-        android:id="@+id/tvStudiosHint"
+        android:id="@+id/tvBackground"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/studios"
+        android:layout_marginTop="16dp"
+        android:text="@string/background"
+        android:textColor="@color/colorPrimary"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvAverageLength" />
-
-    <com.google.android.material.chip.ChipGroup
-        android:id="@+id/studiosChipGroup"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        app:chipSpacing="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvStudiosHint" />
-
-    <TextView
-        android:id="@+id/tvBackground"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/background"
-        android:textStyle="bold"
-        android:textColor="@color/colorPrimary"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/studiosChipGroup" />
 
     <TextView
         android:id="@+id/tvStatistics"
@@ -282,16 +240,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvBackground" />
 
+    <View
+        android:id="@+id/dividerRecommendations"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="8dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvStatistics" />
+
     <TextView
         android:id="@+id/tvRecommendations"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:text="@string/recommendations"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvStatistics" />
+        app:layout_constraintTop_toBottomOf="@id/dividerRecommendations" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvRecommendations"

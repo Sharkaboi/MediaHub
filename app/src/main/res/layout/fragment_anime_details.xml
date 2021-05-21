@@ -18,7 +18,6 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?attr/colorPrimary"
                 android:minHeight="?attr/actionBarSize"
                 android:theme="?attr/actionBarTheme"
                 app:contentInsetStartWithNavigation="0dp"
@@ -26,8 +25,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:navigationIcon="@drawable/ic_back"
-                app:title="Anime details"
-                app:titleTextColor="@color/white" />
+                app:title="Anime details" />
 
             <TextView
                 android:id="@+id/tvAnimeName"
@@ -208,7 +206,6 @@
                 app:flow_horizontalBias="0"
                 app:flow_horizontalStyle="packed"
                 app:flow_wrapMode="aligned"
-                app:layout_constraintBottom_toTopOf="@id/animeDetailsBarrier"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/ivAnimeMainPicture"
                 app:layout_constraintTop_toBottomOf="@+id/flowRank"
@@ -228,6 +225,39 @@
                 android:paddingStart="8dp"
                 tools:ignore="RtlSymmetry"
                 tools:text="17000" />
+
+            <androidx.constraintlayout.helper.widget.Flow
+                android:id="@+id/flowStudio"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                app:constraint_referenced_ids="tvStudiosHint,tvStudios"
+                app:flow_firstVerticalStyle="packed"
+                app:flow_horizontalBias="0"
+                app:flow_horizontalStyle="packed"
+                app:flow_wrapMode="aligned"
+                app:layout_constraintBottom_toTopOf="@id/animeDetailsBarrier"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/ivAnimeMainPicture"
+                app:layout_constraintTop_toBottomOf="@+id/flowPopularityRank"
+                app:layout_constraintVertical_bias="0" />
+
+            <TextView
+                android:id="@+id/tvStudiosHint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/studios"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvStudios"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="8dp"
+                tools:ignore="RtlSymmetry"
+                tools:text="Bones" />
 
             <androidx.constraintlayout.widget.Barrier
                 android:id="@+id/animeDetailsBarrier"
@@ -253,7 +283,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

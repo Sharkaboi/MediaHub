@@ -19,6 +19,11 @@ enum class AnimeStatus {
             all -> "All"
         }
     }
+
+    companion object {
+        val malStatuses = values().filter { it != all }
+    }
+
 }
 
 fun String.statusFromString(): AnimeStatus? {

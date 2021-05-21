@@ -32,16 +32,4 @@ class ProfileViewModel
             }
         }
     }
-
-    fun logOutUser() {
-        viewModelScope.launch {
-            _uiState.setLoading()
-            val result: MHTaskState<Unit> = profileRepository.logOutUser()
-            if (result.isSuccess) {
-                _uiState.setLogOutSuccess()
-            } else {
-                _uiState.setProfileFailure(result.error.errorMessage)
-            }
-        }
-    }
 }

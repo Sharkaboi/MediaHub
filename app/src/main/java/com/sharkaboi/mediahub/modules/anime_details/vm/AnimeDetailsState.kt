@@ -7,7 +7,7 @@ sealed class AnimeDetailsState {
     object Idle : AnimeDetailsState()
     object Loading : AnimeDetailsState()
     data class FetchSuccess(val animeByIDResponse: AnimeByIDResponse) : AnimeDetailsState()
-    data class ProfileFailure(val message: String) : AnimeDetailsState()
+    data class AnimeDetailsFailure(val message: String) : AnimeDetailsState()
 }
 
 fun MutableLiveData<AnimeDetailsState>.setLoading() = this.apply {
@@ -24,5 +24,5 @@ fun MutableLiveData<AnimeDetailsState>.setFetchSuccess(animeByIDResponse: AnimeB
     }
 
 fun MutableLiveData<AnimeDetailsState>.setFailure(message: String) = this.apply {
-    value = AnimeDetailsState.ProfileFailure(message)
+    value = AnimeDetailsState.AnimeDetailsFailure(message)
 }

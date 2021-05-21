@@ -106,10 +106,11 @@
             android:layout_height="wrap_content"
             android:backgroundTint="?colorOnSurface"
             android:text="@string/confirm"
+            android:paddingHorizontal="54dp"
             android:textColor="?colorOnPrimary"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/btnPlus10"
+            app:layout_constraintStart_toStartOf="@id/btnPlus1"
             app:layout_constraintTop_toBottomOf="@id/flowQuickCountActions" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 

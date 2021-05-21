@@ -17,12 +17,27 @@
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/fade_out" />
+        <action
+            android:id="@+id/openAnimeSearch"
+            app:destination="@id/animeSearchFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
     </fragment>
     <fragment
         android:id="@+id/manga_item"
         android:name="com.sharkaboi.mediahub.modules.manga.ui.MangaFragment"
         android:label="Manga"
-        tools:layout="@layout/fragment_manga" />
+        tools:layout="@layout/fragment_manga">
+        <action
+            android:id="@+id/openMangaSearch"
+            app:destination="@id/mangaSearchFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
+    </fragment>
     <fragment
         android:id="@+id/discover_item"
         android:name="com.sharkaboi.mediahub.modules.discover.ui.DiscoverFragment"
@@ -36,6 +51,13 @@
         <action
             android:id="@+id/action_profile_item_to_settingsFragment"
             app:destination="@id/settingsFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
+        <action
+            android:id="@+id/openImages"
+            app:destination="@id/imageSliderFragment"
             app:enterAnim="@anim/fade_in"
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
@@ -63,7 +85,11 @@
             app:popExitAnim="@anim/fade_out" />
         <action
             android:id="@+id/openImages"
-            app:destination="@id/imageSliderFragment" />
+            app:destination="@id/imageSliderFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"/>
     </fragment>
 
     <dialog
@@ -74,4 +100,22 @@
             android:name="imagesList"
             app:argType="string[]" />
     </dialog>
+    <fragment
+        android:id="@+id/animeSearchFragment"
+        android:name="com.sharkaboi.mediahub.modules.anime_search.ui.AnimeSearchFragment"
+        android:label="fragment_anime_search"
+        tools:layout="@layout/fragment_anime_search" >
+        <action
+            android:id="@+id/openAnimeDetailsWithId"
+            app:destination="@id/animeDetailsFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out"/>
+    </fragment>
+    <fragment
+        android:id="@+id/mangaSearchFragment"
+        android:name="com.sharkaboi.mediahub.modules.manga_search.ui.MangaSearchFragment"
+        android:label="fragment_manga_search"
+        tools:layout="@layout/fragment_manga_search" />
 </navigation>

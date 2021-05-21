@@ -45,8 +45,7 @@
     <string name="plus_10">+10</string>
     <string name="confirm">Confirm</string>
     <string name="synopsis">Synopsis</string>
-    <string name="nsfw_rating">NSFW rating</string>
-    <string name="pg_rating">PG rating</string>
+    <string name="rating">Rating</string>
     <string name="genres">Genres</string>
     <string name="media_type">Media type</string>
     <string name="airing_status">Airing status</string>
@@ -66,4 +65,6 @@
     <string name="start_date">Start date</string>
     <string name="other_titles">Other Titles</string>
     <string name="no_manga_added_under_this_filter">No manga added under this filter</string>
+    <string name="share">Share</string>
+    <string name="search">Search</string>
 </resources>

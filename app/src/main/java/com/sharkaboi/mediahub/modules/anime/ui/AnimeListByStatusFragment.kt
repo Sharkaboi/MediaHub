@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import com.sharkaboi.mediahub.common.data.api.enums.AnimeStatus
 import com.sharkaboi.mediahub.common.data.api.enums.UserAnimeSortType
+import com.sharkaboi.mediahub.common.extensions.showToast
 import com.sharkaboi.mediahub.databinding.FragmentAnimeListByStatusBinding
 import com.sharkaboi.mediahub.modules.anime.adapters.AnimeListAdapter
 import com.sharkaboi.mediahub.modules.anime.adapters.AnimeLoadStateAdapter
@@ -91,6 +92,9 @@ class AnimeListByStatusFragment : Fragment() {
         }
         viewLifecycleOwner.lifecycleScope.launch {
             animeListAdapter.addLoadStateListener { loadStates ->
+                if (loadStates.source.refresh is LoadState.Error) {
+                    showToast((loadStates.source.refresh as LoadState.Error).error.message)
+                }
                 binding.progressBar.isShowing = loadStates.refresh is LoadState.Loading
                 binding.tvEmptyHint.isVisible =
                     loadStates.refresh is LoadState.NotLoading && animeListAdapter.itemCount == 0
@@ -112,8 +116,6 @@ class AnimeListByStatusFragment : Fragment() {
     companion object {
         private const val ANIME_STATUS_KEY = "status"
         private const val TAG = "AnimeListByStatusFrgmnt"
-        const val requestKey = "wasStatusUpdated"
-        const val bundleKey = "statusUpdateBoolean"
 
         @JvmStatic
         fun newInstance(status: AnimeStatus) =
