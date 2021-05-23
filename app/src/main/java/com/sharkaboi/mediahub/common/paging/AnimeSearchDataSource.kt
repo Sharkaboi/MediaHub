@@ -83,6 +83,6 @@ class AnimeSearchDataSource(
     }
 
     companion object {
-        private const val TAG = "UserAnimeListDataSource"
+        private const val TAG = "AnimeSearchDataSource"
     }
 }

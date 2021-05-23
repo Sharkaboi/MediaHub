@@ -191,6 +191,15 @@ class AnimeDetailsRepository(
                         }
                         is NetworkResponse.ServerError -> {
                             Log.d(TAG, result.body.toString())
+                            if (result.code == 404) {
+                                return@withContext MHTaskState(
+                                    isSuccess = false,
+                                    data = null,
+                                    error = MHError(
+                                        "Anime isn't in your list", null
+                                    )
+                                )
+                            }
                             return@withContext MHTaskState(
                                 isSuccess = false,
                                 data = null,

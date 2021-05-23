@@ -264,11 +264,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:barrierDirection="bottom"
-                app:constraint_referenced_ids="flowPopularityRank,ivAnimeMainPicture" />
+                app:constraint_referenced_ids="flowStudio,ivAnimeMainPicture" />
 
             <include
                 android:id="@+id/animeDetailsUserListCard"
-                layout="@layout/anime_details_userlist_item"
+                layout="@layout/anime_details_user_list_item"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"

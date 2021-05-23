@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sharkaboi.mediahub.common.data.api.enums.AnimeStatus
-import com.sharkaboi.mediahub.common.data.api.enums.statusFromString
+import com.sharkaboi.mediahub.common.data.api.enums.animeStatusFromString
 import com.sharkaboi.mediahub.modules.anime_details.repository.AnimeDetailsRepository
 import com.sharkaboi.mediahub.modules.anime_details.util.AnimeDetailsUpdateClass
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -32,7 +32,7 @@ class AnimeDetailsViewModel
             if (result.isSuccess) {
                 result.data?.let {
                     _animeDetailsUpdate.value = AnimeDetailsUpdateClass(
-                        animeStatus = it.myListStatus?.status?.statusFromString(),
+                        animeStatus = it.myListStatus?.status?.animeStatusFromString(),
                         animeId = it.id,
                         score = it.myListStatus?.score,
                         numWatchedEpisode = it.myListStatus?.numEpisodesWatched,
@@ -50,13 +50,16 @@ class AnimeDetailsViewModel
         _animeDetailsUpdate.apply {
             value?.let {
                 value = it.copy(animeStatus = animeStatus)
+                if (animeStatus == AnimeStatus.completed) {
+                    value = it.copy(numWatchedEpisode = it.totalEps)
+                }
             }
         }
     }
 
     fun setEpisodeCount(numWatchedEps: Int) {
         _animeDetailsUpdate.apply {
-            if (this.value?.animeStatus == null || this.value?.animeStatus != AnimeStatus.watching) {
+            if (this.value?.animeStatus == null || this.value?.animeStatus != AnimeStatus.watching || this.value?.animeStatus != AnimeStatus.completed) {
                 value = this.value?.copy(animeStatus = AnimeStatus.watching)
             }
             value?.let {
@@ -68,7 +71,7 @@ class AnimeDetailsViewModel
     fun add1ToWatchedEps() {
         Log.d(TAG, _animeDetailsUpdate.value.toString())
         _animeDetailsUpdate.apply {
-            if (this.value?.animeStatus == null || this.value?.animeStatus != AnimeStatus.watching) {
+            if (this.value?.animeStatus == null || this.value?.animeStatus != AnimeStatus.watching || this.value?.animeStatus != AnimeStatus.completed) {
                 value = this.value?.copy(animeStatus = AnimeStatus.watching)
             }
             value?.let {
@@ -86,7 +89,7 @@ class AnimeDetailsViewModel
 
     fun add5ToWatchedEps() {
         _animeDetailsUpdate.apply {
-            if (this.value?.animeStatus == null || this.value?.animeStatus != AnimeStatus.watching) {
+            if (this.value?.animeStatus == null || this.value?.animeStatus != AnimeStatus.watching || this.value?.animeStatus != AnimeStatus.completed) {
                 value = this.value?.copy(animeStatus = AnimeStatus.watching)
             }
             value?.let {
@@ -104,7 +107,7 @@ class AnimeDetailsViewModel
 
     fun add10ToWatchedEps() {
         _animeDetailsUpdate.apply {
-            if (this.value?.animeStatus == null || this.value?.animeStatus != AnimeStatus.watching) {
+            if (this.value?.animeStatus == null || this.value?.animeStatus != AnimeStatus.watching || this.value?.animeStatus != AnimeStatus.completed) {
                 value = this.value?.copy(animeStatus = AnimeStatus.watching)
             }
             value?.let {

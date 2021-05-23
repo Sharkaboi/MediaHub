@@ -28,6 +28,7 @@ import com.sharkaboi.mediahub.modules.anime_details.adapters.RelatedAnimeAdapter
 import com.sharkaboi.mediahub.modules.anime_details.adapters.RelatedMangaAdapter
 import com.sharkaboi.mediahub.modules.anime_details.vm.AnimeDetailsState
 import com.sharkaboi.mediahub.modules.anime_details.vm.AnimeDetailsViewModel
+import com.sharkaboi.mediahub.modules.manga_details.ui.MangaDetailsFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
@@ -55,7 +56,7 @@ class AnimeDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
+        binding.toolbar.setNavigationOnClickListener { navController.navigateUp() }
         setUpObservers()
     }
 
@@ -160,7 +161,7 @@ class AnimeDetailsFragment : Fragment() {
                 }
             }
             otherDetails.tvMediaType.text = animeByIDResponse.mediaType.uppercase(Locale.ROOT)
-            otherDetails.tvAnimeCurrentStatus.text = animeByIDResponse.status.getStatus()
+            otherDetails.tvAnimeCurrentStatus.text = animeByIDResponse.status.getAnimeAiringStatus()
             otherDetails.tvTotalEps.text =
                 animeByIDResponse.numEpisodes.let {
                     if (it == 0)
@@ -189,7 +190,7 @@ class AnimeDetailsFragment : Fragment() {
             otherDetails.rvRecommendations.apply {
                 adapter = RecommendedAnimeAdapter { animeId ->
                     val action = AnimeDetailsFragmentDirections.animeDetailsWithId(animeId)
-                    findNavController().navigate(action)
+                    navController.navigate(action)
                 }.apply {
                     submitList(animeByIDResponse.recommendations)
                 }
@@ -203,7 +204,7 @@ class AnimeDetailsFragment : Fragment() {
             otherDetails.rvRelatedAnime.apply {
                 adapter = RelatedAnimeAdapter { animeId ->
                     val action = AnimeDetailsFragmentDirections.animeDetailsWithId(animeId)
-                    findNavController().navigate(action)
+                    navController.navigate(action)
                 }.apply {
                     submitList(animeByIDResponse.relatedAnime)
                 }
@@ -216,8 +217,8 @@ class AnimeDetailsFragment : Fragment() {
             }
             otherDetails.rvRelatedManga.apply {
                 adapter = RelatedMangaAdapter { mangaId ->
-                    // FIXME: 26-04-2021 Add call when finished with manga details
-                    showToast("$mangaId clicked")
+                    val action = AnimeDetailsFragmentDirections.openMangaDetailsWithId(mangaId)
+                    navController.navigate(action)
                 }.apply {
                     submitList(animeByIDResponse.relatedManga)
                 }

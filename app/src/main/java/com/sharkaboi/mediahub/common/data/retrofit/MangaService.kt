@@ -20,7 +20,7 @@ interface MangaService {
         @Query("q") searchQuery: String,
         @Query("limit") limit: Int = 10,
         @Query("offset") offset: Int = 0,
-        @Query("fields") fields: String? = null
+        @Query("fields") fields: String = "id,title,main_picture,mean"
     ): Deferred<NetworkResponse<MangaSearchResponse, ApiError>>
 
     @GET("manga/{id}")
@@ -36,7 +36,7 @@ interface MangaService {
         @Query("ranking_type") rankingType: String = MangaRankingType.all.name,
         @Query("limit") limit: Int = 10,
         @Query("offset") offset: Int = 0,
-        @Query("fields") fields: String? = null
+        @Query("fields") fields: String = "id,title,main_picture,mean"
     ): Deferred<NetworkResponse<MangaRankingResponse, ApiError>>
 
 }

@@ -25,8 +25,8 @@ class AnimeListAdapter(
                 animeListItemBinding.apply {
                     ivAnimeBanner.load(it.node.mainPicture?.large ?: it.node.mainPicture?.medium) {
                         crossfade(true)
-                        placeholder(R.drawable.ic_anime_placeholder)
-                        error(R.drawable.ic_anime_placeholder)
+                        placeholder(R.drawable.ic_manga_placeholder)
+                        error(R.drawable.ic_manga_placeholder)
                         transformations(RoundedCornersTransformation(topLeft = 8f, topRight = 8f))
                     }
                     tvAnimeName.text = it.node.title
@@ -45,7 +45,6 @@ class AnimeListAdapter(
 
     override fun onBindViewHolder(holder: AnimeListViewHolder, position: Int) {
         holder.bind(getItem(position))
-        Log.d(TAG, getItem(position).toString())
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AnimeListViewHolder {

@@ -14,7 +14,7 @@ interface UserMangaService {
     @FormUrlEncoded
     fun updateMangaStatusAsync(
         @Header("Authorization") authHeader: String,
-        @Path("id") animeId: Int,
+        @Path("id") mangaId: Int,
         @Field("status") mangaStatus: String? = null,
         @Field("is_rereading") isReReading: Boolean? = null,
         @Field("score") score: Int? = null,
@@ -34,7 +34,7 @@ interface UserMangaService {
     @DELETE("manga/{id}/my_list_status")
     fun deleteMangaFromListAsync(
         @Header("Authorization") authHeader: String,
-        @Path("id") animeId: Int
+        @Path("id") mangaId: Int
     ): Deferred<NetworkResponse<Unit, ApiError>>
 
     /**
@@ -49,5 +49,6 @@ interface UserMangaService {
         @Query("sort") sort: String = UserMangaSortType.list_updated_at.name,
         @Query("limit") limit: Int = 10,
         @Query("offset") offset: Int = 0,
+        @Query("fields") fields: String = "id,title,main_picture,num_volumes,num_chapters,list_status"
     ): Deferred<NetworkResponse<UserMangaListResponse, ApiError>>
 }

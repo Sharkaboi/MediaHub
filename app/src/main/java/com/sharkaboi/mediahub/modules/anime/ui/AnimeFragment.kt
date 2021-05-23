@@ -84,7 +84,6 @@ class AnimeFragment : Fragment() {
         binding.vpAnime.registerOnPageChangeCallback(onPageChanged)
     }
 
-
     companion object {
         private const val TAG = "AnimeFragment"
     }

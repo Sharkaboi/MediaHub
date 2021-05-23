@@ -26,7 +26,7 @@ enum class AnimeStatus {
 
 }
 
-fun String.statusFromString(): AnimeStatus? {
+fun String.animeStatusFromString(): AnimeStatus? {
     return when (this) {
         "watching" -> AnimeStatus.watching
         "plan_to_watch" -> AnimeStatus.plan_to_watch

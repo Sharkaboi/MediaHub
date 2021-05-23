@@ -34,7 +34,8 @@ interface AnimeService {
         @Header("Authorization") authHeader: String,
         @Query("limit") limit: Int = 10,
         @Query("offset") offset: Int = 0,
-        @Query("ranking_type") rankingType: String = AnimeRankingType.all.name
+        @Query("ranking_type") rankingType: String = AnimeRankingType.all.name,
+        @Query("fields") fields: String? = "id,title,main_picture,mean"
     ): Deferred<NetworkResponse<AnimeRankingResponse, ApiError>>
 
     @GET("anime/season/{year}/{season}")
@@ -44,7 +45,8 @@ interface AnimeService {
         @Path("season") season: String,
         @Query("limit") limit: Int = 10,
         @Query("offset") offset: Int = 0,
-        @Query("sort") sortType: String = AnimeSortType.anime_score.name
+        @Query("sort") sortType: String = AnimeSortType.anime_score.name,
+        @Query("fields") fields: String? = "id,title,main_picture,mean"
     ): Deferred<NetworkResponse<AnimeSeasonalResponse, ApiError>>
 
     //empty list if new user
@@ -52,6 +54,7 @@ interface AnimeService {
     fun getAnimeSuggestionsAsync(
         @Header("Authorization") authHeader: String,
         @Query("limit") limit: Int = 10,
-        @Query("offset") offset: Int = 0
+        @Query("offset") offset: Int = 0,
+        @Query("fields") fields: String? = "id,title,main_picture,mean"
     ): Deferred<NetworkResponse<AnimeSuggestionsResponse, ApiError>>
 }

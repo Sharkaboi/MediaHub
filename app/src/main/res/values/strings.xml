@@ -67,4 +67,15 @@
     <string name="no_manga_added_under_this_filter">No manga added under this filter</string>
     <string name="share">Share</string>
     <string name="search">Search</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="authors">Authors</string>
+    <string name="reading">Reading</string>
+    <string name="nsfw_rating">NSFW rating</string>
+    <string name="publishing_status">Publishing status</string>
+    <string name="total_volume_count">Total volumes</string>
+    <string name="total_chapter_count">Total chapters</string>
+    <string name="serialization">Serialization</string>
+    <string name="enter_read_count">Enter read count</string>
+    <string name="search_for_any_manga">Search for any manga</string>
 </resources>

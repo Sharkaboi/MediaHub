@@ -1,17 +1,15 @@
 package com.sharkaboi.mediahub.common.data.api.models.usermanga
 
 
+import androidx.annotation.Keep
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import androidx.annotation.Keep
 
 @Keep
 @JsonClass(generateAdapter = true)
 data class UserMangaListResponse(
     @Json(name = "data")
-    val `data`: List<Data>,
-    @Json(name = "paging")
-    val paging: Paging
+    val `data`: List<Data>
 ) {
     @Keep
     @JsonClass(generateAdapter = true)
@@ -44,23 +42,22 @@ data class UserMangaListResponse(
             @Json(name = "id")
             val id: Int,
             @Json(name = "main_picture")
-            val mainPicture: MainPicture,
+            val mainPicture: MainPicture?,
             @Json(name = "title")
-            val title: String
+            val title: String,
+            @Json(name = "num_chapters")
+            val numChapters: Int?,
+            @Json(name = "num_volumes")
+            val numVolumes: Int?,
         ) {
             @Keep
             @JsonClass(generateAdapter = true)
             data class MainPicture(
                 @Json(name = "large")
-                val large: String,
+                val large: String?,
                 @Json(name = "medium")
                 val medium: String
             )
         }
     }
-
-    @Keep
-    @JsonClass(generateAdapter = true)
-    class Paging(
-    )
 }

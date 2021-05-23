@@ -43,5 +43,4 @@ class AnimeRepository(
     companion object {
         private const val TAG = "AnimeRepository"
     }
-
 }

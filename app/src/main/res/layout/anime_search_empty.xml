@@ -15,7 +15,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
-        app:lottie_rawRes="@raw/chika" />
+        app:lottie_rawRes="@raw/rikka" />
 
     <TextView
         android:id="@+id/tvHint"

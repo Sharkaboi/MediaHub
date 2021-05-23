@@ -26,7 +26,7 @@ data class AnimeSearchResponse(
             @Json(name = "title")
             val title: String,
             @Json(name = "mean")
-            val meanScore: Double?,
+            val meanScore: Double?
         ) {
             @Keep
             @JsonClass(generateAdapter = true)

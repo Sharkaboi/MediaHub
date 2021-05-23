@@ -3,6 +3,7 @@ package com.sharkaboi.mediahub.common.extensions
 import android.text.Html
 import android.text.Spanned
 import com.sharkaboi.mediahub.common.data.api.models.anime.AnimeByIDResponse
+import com.sharkaboi.mediahub.common.data.api.models.manga.MangaByIDResponse
 import java.text.DecimalFormat
 import java.time.*
 import java.time.format.DateTimeFormatter
@@ -10,6 +11,9 @@ import java.time.temporal.WeekFields
 import java.util.*
 
 internal fun Double.roundOfString(): String {
+    if (this == 0.0) {
+        return "0"
+    }
     val format = DecimalFormat("#.##")
     return format.format(this)
 }
@@ -34,7 +38,7 @@ internal fun String.getNsfwRating(): String {
 internal fun String.getRating(): String {
     return when {
         this.trim() == "g" -> {
-            "G"
+            "G - All ages"
         }
         this.trim() == "pg" -> {
             "PG"
@@ -57,7 +61,7 @@ internal fun String.getRating(): String {
     }
 }
 
-internal fun String.getStatus(): String {
+internal fun String.getAnimeAiringStatus(): String {
     return when {
         this.trim() == "finished_airing" -> {
             "Finished airing"
@@ -67,6 +71,23 @@ internal fun String.getStatus(): String {
         }
         this.trim() == "not_yet_aired" -> {
             "Yet to be aired"
+        }
+        else -> {
+            "N/A"
+        }
+    }
+}
+
+internal fun String.getMangaPublishStatus(): String {
+    return when {
+        this.trim() == "finished" -> {
+            "Finished publishing"
+        }
+        this.trim() == "currently_publishing" -> {
+            "Currently publishing"
+        }
+        this.trim() == "not_yet_published" -> {
+            "Yet to be published"
         }
         else -> {
             "N/A"
@@ -103,6 +124,74 @@ internal fun AnimeByIDResponse.Broadcast.getBroadcastTime(): String {
 }
 
 internal fun AnimeByIDResponse.AlternativeTitles.getFormattedString(): Spanned {
+    return if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+        Html.fromHtml(
+            """
+            <b>English title</b> : ${
+                this.en?.let {
+                    if (it.isBlank()) {
+                        "N/A"
+                    } else {
+                        it
+                    }
+                } ?: "N/A"
+            }<br>
+            <b>Japanese title</b> : ${
+                this.ja?.let {
+                    if (it.isBlank()) {
+                        "N/A"
+                    } else {
+                        it
+                    }
+                } ?: "N/A"
+            }<br>
+            <b>Synonyms</b> : ${
+                this.synonyms?.let {
+                    if (it.isEmpty()) {
+                        "N/A"
+                    } else {
+                        it.joinToString()
+                    }
+                } ?: "N/A"
+            }
+        """.trimIndent(), Html.FROM_HTML_MODE_COMPACT
+        )
+    } else {
+        Html.fromHtml(
+            """
+            <b>English title</b> : ${
+                this.en?.let {
+                    if (it.isBlank()) {
+                        "N/A"
+                    } else {
+                        it
+                    }
+                } ?: "N/A"
+            }<br>
+            <b>Japanese title</b> : ${
+                this.ja?.let {
+                    if (it.isBlank()) {
+                        "N/A"
+                    } else {
+                        it
+                    }
+                } ?: "N/A"
+            }<br>
+            <b>Synonyms</b> : ${
+                this.synonyms?.let {
+                    if (it.isEmpty()) {
+                        "N/A"
+                    } else {
+                        it.joinToString()
+                    }
+                } ?: "N/A"
+            }
+        """.trimIndent()
+        )
+    }
+}
+
+internal fun MangaByIDResponse.AlternativeTitles.getFormattedString(): Spanned {
     return if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
         Html.fromHtml(
             """

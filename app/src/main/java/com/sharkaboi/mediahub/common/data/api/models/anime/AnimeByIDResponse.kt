@@ -80,7 +80,7 @@ data class AnimeByIDResponse(
         @Json(name = "ja")
         val ja: String?,
         @Json(name = "synonyms")
-        val synonyms: List<String>?
+        val synonyms: List<String?>?
     )
 
     @Keep

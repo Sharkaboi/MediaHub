@@ -25,7 +25,7 @@ data class UserMangaUpdateResponse(
     @Json(name = "score")
     val score: Int,
     @Json(name = "status")
-    val status: String,
+    val status: String?,
     @Json(name = "tags")
     val tags: List<Any>,
     @Json(name = "updated_at")

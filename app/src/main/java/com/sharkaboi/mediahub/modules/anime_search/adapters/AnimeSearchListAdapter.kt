@@ -33,7 +33,7 @@ class AnimeSearchListAdapter(
                     }
                     tvAnimeName.text = it.node.title
                     tvEpisodesWatched.isVisible = false
-                    tvScore.text = ("★ ${it.node.meanScore?.roundOfString() ?: "N/A"}")
+                    tvScore.text = ("★ ${it.node.meanScore?.roundOfString() ?: "0"}")
                     root.setOnClickListener {
                         onItemClick(item.node.id)
                     }

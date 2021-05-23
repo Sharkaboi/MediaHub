@@ -1,17 +1,15 @@
 package com.sharkaboi.mediahub.common.data.api.models.anime
 
 
+import androidx.annotation.Keep
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import androidx.annotation.Keep
 
 @Keep
 @JsonClass(generateAdapter = true)
 data class AnimeSeasonalResponse(
     @Json(name = "data")
     val `data`: List<Data>,
-    @Json(name = "paging")
-    val paging: Paging,
     @Json(name = "season")
     val season: Season
 ) {
@@ -27,27 +25,22 @@ data class AnimeSeasonalResponse(
             @Json(name = "id")
             val id: Int,
             @Json(name = "main_picture")
-            val mainPicture: MainPicture,
+            val mainPicture: MainPicture?,
             @Json(name = "title")
-            val title: String
+            val title: String,
+            @Json(name = "mean")
+            val meanScore: Double?
         ) {
             @Keep
             @JsonClass(generateAdapter = true)
             data class MainPicture(
                 @Json(name = "large")
-                val large: String,
+                val large: String?,
                 @Json(name = "medium")
                 val medium: String
             )
         }
     }
-
-    @Keep
-    @JsonClass(generateAdapter = true)
-    data class Paging(
-        @Json(name = "next")
-        val next: String
-    )
 
     @Keep
     @JsonClass(generateAdapter = true)

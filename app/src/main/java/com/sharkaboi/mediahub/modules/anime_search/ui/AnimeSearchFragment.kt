@@ -95,7 +95,7 @@ class AnimeSearchFragment : Fragment() {
                     animeSearchListAdapter.submitData(PagingData.empty())
                     return@launch
                 }
-                animeSearchViewModel.getAnime(it)
+                animeSearchViewModel.getAnime(it.trim())
                     .collectLatest { pagingData ->
                         animeSearchListAdapter.submitData(pagingData)
                     }

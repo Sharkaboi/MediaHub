@@ -216,7 +216,7 @@ class ProfileFragment : Fragment() {
     }
 
     private val showSettings = View.OnClickListener {
-        findNavController().navigate(R.id.action_profile_item_to_settingsFragment)
+        navController.navigate(R.id.action_profile_item_to_settingsFragment)
     }
 
     private var isDetailsCardOpen = false
