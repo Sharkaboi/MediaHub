@@ -33,6 +33,7 @@ class MangaSearchListAdapter(
                     }
                     tvMangaName.text = it.node.title
                     tvChapsRead.isVisible = false
+                    tvVolumesRead.isVisible = false
                     tvScore.text = ("★ ${it.node.meanScore?.roundOfString() ?: "0"}")
                     root.setOnClickListener {
                         onItemClick(item.node.id)

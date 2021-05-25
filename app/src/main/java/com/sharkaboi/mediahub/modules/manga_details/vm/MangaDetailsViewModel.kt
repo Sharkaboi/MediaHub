@@ -1,5 +1,6 @@
 package com.sharkaboi.mediahub.modules.manga_details.vm
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -48,15 +49,15 @@ class MangaDetailsViewModel
     }
 
     fun setStatus(mangaStatus: MangaStatus) {
-        _mangaDetailsUpdate.apply {
-            value?.let {
-                value = it.copy(mangaStatus = mangaStatus)
-                if (mangaStatus == MangaStatus.completed) {
-                    value = it.copy(
-                        numReadVolumes = it.totalVolumes,
-                        numReadChapters = it.totalChapters
-                    )
-                }
+        _mangaDetailsUpdate.value?.let {
+            if (mangaStatus == MangaStatus.completed) {
+                _mangaDetailsUpdate.value = it.copy(
+                    mangaStatus = mangaStatus,
+                    numReadVolumes = it.totalVolumes,
+                    numReadChapters = it.totalChapters
+                )
+            } else {
+                _mangaDetailsUpdate.value = it.copy(mangaStatus = mangaStatus)
             }
         }
     }

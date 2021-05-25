@@ -3,6 +3,7 @@ package com.sharkaboi.mediahub.modules.manga_details.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -64,6 +65,7 @@ class RelatedMangaAdapter(private val onClick: (Int) -> Unit) :
             binding.tvMangaName.text = item.node.title
             binding.tvChapsRead.text = item.relationTypeFormatted
             binding.cardRating.isGone = true
+            binding.tvVolumesRead.isVisible = false
             binding.ivMangaBanner.load(
                 item.node.mainPicture?.large ?: item.node.mainPicture?.medium
             ) {

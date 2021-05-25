@@ -49,7 +49,22 @@
         android:id="@+id/discover_item"
         android:name="com.sharkaboi.mediahub.modules.discover.ui.DiscoverFragment"
         android:label="Discover"
-        tools:layout="@layout/fragment_discover" />
+        tools:layout="@layout/fragment_discover">
+        <action
+            android:id="@+id/openAnimeRankings"
+            app:destination="@id/animeRankingFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
+        <action
+            android:id="@+id/openAnimeById"
+            app:destination="@id/animeDetailsFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
+    </fragment>
     <fragment
         android:id="@+id/profile_item"
         android:name="com.sharkaboi.mediahub.modules.profile.ui.ProfileFragment"
@@ -162,6 +177,19 @@
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/fade_out" />
+        <action
+            android:id="@+id/openAnimeDetailsWithId"
+            app:destination="@id/animeDetailsFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
+    </fragment>
+    <fragment
+        android:id="@+id/animeRankingFragment"
+        android:name="com.sharkaboi.mediahub.modules.anime_ranking.ui.AnimeRankingFragment"
+        android:label="fragment_anime_ranking"
+        tools:layout="@layout/fragment_anime_ranking">
         <action
             android:id="@+id/openAnimeDetailsWithId"
             app:destination="@id/animeDetailsFragment"

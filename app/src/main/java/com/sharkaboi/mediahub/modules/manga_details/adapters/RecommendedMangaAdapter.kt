@@ -3,6 +3,7 @@ package com.sharkaboi.mediahub.modules.manga_details.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -62,6 +63,7 @@ class RecommendedMangaAdapter(private val onClick: (Int) -> Unit) :
                 onClick(item.node.id)
             }
             binding.tvMangaName.text = item.node.title
+            binding.tvVolumesRead.isVisible = false
             binding.tvChapsRead.text =
                 ("Recommended ${item.numRecommendations} ${if (item.numRecommendations == 1) "time" else "times"}")
             binding.cardRating.isGone = true

@@ -31,6 +31,7 @@ class AnimeDetailsViewModel
             val result = animeDetailsRepository.getAnimeById(animeId)
             if (result.isSuccess) {
                 result.data?.let {
+                    Log.d(TAG, "getAnimeDetails: ${result.data}")
                     _animeDetailsUpdate.value = AnimeDetailsUpdateClass(
                         animeStatus = it.myListStatus?.status?.animeStatusFromString(),
                         animeId = it.id,
@@ -135,6 +136,7 @@ class AnimeDetailsViewModel
         viewModelScope.launch {
             _uiState.setLoading()
             animeDetailsUpdate.value?.let {
+                Log.d(TAG, "submitStatusUpdate: $it")
                 val result = animeDetailsRepository.updateAnimeStatus(
                     animeId = animeId,
                     animeStatus = it.animeStatus?.name,

@@ -1,13 +1,158 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".modules.discover.ui.DiscoverFragment">
 
-    <TextView
+    <com.sharkaboi.mediahub.common.views.CustomProgressScreen
+        android:id="@+id/progress"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/discover" />
+        android:elevation="7dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="8dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnAnimeRanking"
+                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:text="Anime\nRanking"
+                android:textAlignment="textStart"
+                android:textColor="@color/white"
+                app:icon="@drawable/ic_rank"
+                app:iconTint="@color/white"
+                app:layout_constraintEnd_toStartOf="@id/btnMangaRanking"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnMangaRanking"
+                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:text="Manga\nRanking"
+                android:textAlignment="textStart"
+                android:textColor="@color/white"
+                app:icon="@drawable/ic_rank"
+                app:iconTint="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/btnAnimeRanking"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnAnimeSeasonal"
+                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:text="Seasonal\nAnime"
+                android:textAlignment="textStart"
+                android:textColor="@color/white"
+                app:icon="@drawable/ic_season"
+                app:iconTint="@color/white"
+                app:layout_constraintEnd_toStartOf="@id/btnAnimeSuggestion"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btnAnimeRanking" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnAnimeSuggestion"
+                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:text="Anime\nSuggestions"
+                android:textAlignment="textStart"
+                android:textColor="@color/white"
+                app:icon="@drawable/ic_suggest"
+                app:iconTint="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toEndOf="@+id/btnAnimeSeasonal"
+                app:layout_constraintTop_toBottomOf="@+id/btnMangaRanking" />
+
+            <TextView
+                android:id="@+id/tvAnimeRecommendationsHint"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:text="Anime recommendations"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@id/tvAnimeRecommendationsMore"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btnAnimeSuggestion" />
+
+            <TextView
+                android:id="@+id/tvAnimeRecommendationsMore"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:text="More"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btnAnimeSuggestion" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvAnimeRecommendations"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="8dp"
+                android:layout_marginStart="16dp"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvAnimeRecommendationsHint"
+                tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/anime_list_item" />
+
+            <TextView
+                android:id="@+id/tvAnimeRecommendationsEmpty"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:text="Add Anime to get reccomendations"
+                android:textAlignment="center"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvAnimeRecommendationsHint" />
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/animeRecommendationBarrier"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:barrierDirection="bottom"
+                app:constraint_referenced_ids="rvAnimeRecommendations,tvAnimeRecommendationsEmpty" />
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_margin="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="1:1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/animeRecommendationBarrier"
+                app:lottie_autoPlay="true"
+                app:lottie_rawRes="@raw/kakashi" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 </FrameLayout>
