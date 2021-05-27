@@ -14,6 +14,15 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory app:title="Anime">
+
+        <Preference
+            app:icon="@drawable/ic_notifications"
+            app:key="anime_notifs"
+            app:title="Anime notifications" />
+
+    </PreferenceCategory>
+
     <PreferenceCategory app:title="Mediahub">
 
         <Preference
