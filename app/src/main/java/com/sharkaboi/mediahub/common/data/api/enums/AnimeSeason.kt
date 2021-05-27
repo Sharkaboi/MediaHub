@@ -15,7 +15,26 @@ enum class AnimeSeason {
     summer,
 
     // October, November, December
-    fall,
+    fall
+
+}
+
+internal fun AnimeSeason.next(): AnimeSeason {
+    return when (this) {
+        AnimeSeason.winter -> AnimeSeason.spring
+        AnimeSeason.spring -> AnimeSeason.summer
+        AnimeSeason.summer -> AnimeSeason.fall
+        AnimeSeason.fall -> AnimeSeason.winter
+    }
+}
+
+internal fun AnimeSeason.previous(): AnimeSeason {
+    return when (this) {
+        AnimeSeason.winter -> AnimeSeason.fall
+        AnimeSeason.spring -> AnimeSeason.winter
+        AnimeSeason.summer -> AnimeSeason.spring
+        AnimeSeason.fall -> AnimeSeason.summer
+    }
 }
 
 internal fun LocalDate.getAnimeSeason(): AnimeSeason {

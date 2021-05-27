@@ -67,8 +67,6 @@
     <string name="no_manga_added_under_this_filter">No manga added under this filter</string>
     <string name="share">Share</string>
     <string name="search">Search</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="authors">Authors</string>
     <string name="reading">Reading</string>
     <string name="nsfw_rating">NSFW rating</string>
@@ -79,5 +77,8 @@
     <string name="enter_read_count">Enter read count</string>
     <string name="search_for_any_manga">Search for any manga</string>
     <string name="no_anime_rankings_found_under_this_category">No anime rankings found under this category</string>
+    <string name="no_anime_seasonals_found_under_this_category">No anime seasonals found under this category</string>
     <string name="no_manga_rankings_found_under_this_category">No manga rankings found under this category</string>
+    <string name="previous_season">Previous season</string>
+    <string name="next_season">Next season</string>
 </resources>
