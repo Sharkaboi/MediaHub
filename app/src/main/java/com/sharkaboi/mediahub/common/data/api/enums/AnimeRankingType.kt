@@ -12,3 +12,17 @@ enum class AnimeRankingType {
     bypopularity, //Top Anime by Popularity
     favorite //Top Favorited Anime
 }
+
+internal fun AnimeRankingType.getAnimeRanking(): String {
+    return when (this) {
+        AnimeRankingType.all -> "All"
+        AnimeRankingType.airing -> "Airing"
+        AnimeRankingType.upcoming -> "Upcoming"
+        AnimeRankingType.tv -> "TV"
+        AnimeRankingType.ova -> "OVA"
+        AnimeRankingType.movie -> "Movie"
+        AnimeRankingType.special -> "Specials"
+        AnimeRankingType.bypopularity -> "By popularity"
+        AnimeRankingType.favorite -> "In your list"
+    }
+}

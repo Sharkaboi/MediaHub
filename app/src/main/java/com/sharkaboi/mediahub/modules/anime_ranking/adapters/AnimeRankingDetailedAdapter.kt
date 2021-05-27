@@ -14,11 +14,11 @@ import com.sharkaboi.mediahub.databinding.AnimeListItemBinding
 
 class AnimeRankingDetailedAdapter(
     private val onItemClick: (id: Int) -> Unit
-) : PagingDataAdapter<AnimeRankingResponse.Data, AnimeRankingDetailedAdapter.AnimeSearchListViewHolder>(
+) : PagingDataAdapter<AnimeRankingResponse.Data, AnimeRankingDetailedAdapter.AnimeRankingListViewHolder>(
     AnimeRankingListItemComparator
 ) {
 
-    inner class AnimeSearchListViewHolder(private val animeListItemBinding: AnimeListItemBinding) :
+    inner class AnimeRankingListViewHolder(private val animeListItemBinding: AnimeListItemBinding) :
         RecyclerView.ViewHolder(animeListItemBinding.root) {
         fun bind(item: AnimeRankingResponse.Data?) {
             item?.let {
@@ -40,12 +40,12 @@ class AnimeRankingDetailedAdapter(
         }
     }
 
-    override fun onBindViewHolder(holder: AnimeSearchListViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: AnimeRankingListViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AnimeSearchListViewHolder {
-        return AnimeSearchListViewHolder(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AnimeRankingListViewHolder {
+        return AnimeRankingListViewHolder(
             AnimeListItemBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
             )

@@ -324,17 +324,3 @@ internal fun Int.getEpisodeLengthFromSeconds(): String {
         return "N/A"
     }
 }
-
-internal fun AnimeRankingType.getAnimeRanking(): String {
-    return when (this) {
-        AnimeRankingType.all -> "All"
-        AnimeRankingType.airing -> "Airing"
-        AnimeRankingType.upcoming -> "Upcoming"
-        AnimeRankingType.tv -> "TV"
-        AnimeRankingType.ova -> "OVA"
-        AnimeRankingType.movie -> "Movie"
-        AnimeRankingType.special -> "Specials"
-        AnimeRankingType.bypopularity -> "By popularity"
-        AnimeRankingType.favorite -> "In your list"
-    }
-}

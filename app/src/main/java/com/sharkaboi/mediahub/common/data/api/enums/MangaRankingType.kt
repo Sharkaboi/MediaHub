@@ -13,3 +13,18 @@ enum class MangaRankingType {
     bypopularity, //Most Popular
     favorite, //Most Favorited
 }
+
+internal fun MangaRankingType.getMangaRanking(): String {
+    return when (this) {
+        MangaRankingType.all -> "All"
+        MangaRankingType.manga -> "Manga"
+        MangaRankingType.oneshots -> "One-shots"
+        MangaRankingType.doujin -> "Doujins"
+        MangaRankingType.lightnovels -> "Light novels"
+        MangaRankingType.novels -> "Novels"
+        MangaRankingType.manhwa -> "Manhwa"
+        MangaRankingType.manhua -> "Manhua"
+        MangaRankingType.bypopularity -> "By popularity"
+        MangaRankingType.favorite -> "In your list"
+    }
+}

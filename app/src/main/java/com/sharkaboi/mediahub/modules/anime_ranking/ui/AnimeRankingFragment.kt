@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.chip.Chip
 import com.google.android.material.shape.ShapeAppearanceModel
 import com.sharkaboi.mediahub.common.data.api.enums.AnimeRankingType
-import com.sharkaboi.mediahub.common.extensions.getAnimeRanking
+import com.sharkaboi.mediahub.common.data.api.enums.getAnimeRanking
 import com.sharkaboi.mediahub.common.extensions.showToast
 import com.sharkaboi.mediahub.databinding.FragmentAnimeRankingBinding
 import com.sharkaboi.mediahub.modules.anime_ranking.adapters.AnimeRankingDetailedAdapter
