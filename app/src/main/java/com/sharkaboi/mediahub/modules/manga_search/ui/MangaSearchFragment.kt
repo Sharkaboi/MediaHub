@@ -59,6 +59,7 @@ class MangaSearchFragment : Fragment() {
                 navController.navigate(action)
             }
             layoutManager = GridLayoutManager(context, 3)
+            setHasFixedSize(true)
             itemAnimator = DefaultItemAnimator()
             adapter = mangaSearchListAdapter.withLoadStateFooter(
                 footer = MangaSearchLoadStateAdapter()

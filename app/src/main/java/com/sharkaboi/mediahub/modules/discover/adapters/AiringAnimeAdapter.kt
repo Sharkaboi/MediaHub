@@ -9,25 +9,25 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.RoundedCornersTransformation
 import com.sharkaboi.mediahub.R
-import com.sharkaboi.mediahub.common.data.api.models.anime.AnimeSuggestionsResponse
+import com.sharkaboi.mediahub.common.data.api.models.anime.AnimeSeasonalResponse
 import com.sharkaboi.mediahub.common.extensions.roundOfString
 import com.sharkaboi.mediahub.databinding.AnimeListItemBinding
 
-class AnimeSuggestionsAdapter(private val onClick: (Int) -> Unit) :
-    RecyclerView.Adapter<AnimeSuggestionsAdapter.AnimeSuggestionsViewHolder>() {
+class AiringAnimeAdapter(private val onClick: (Int) -> Unit) :
+    RecyclerView.Adapter<AiringAnimeAdapter.AiringAnimeViewHolder>() {
 
     private val diffUtilItemCallback =
-        object : DiffUtil.ItemCallback<AnimeSuggestionsResponse.Data>() {
+        object : DiffUtil.ItemCallback<AnimeSeasonalResponse.Data>() {
             override fun areItemsTheSame(
-                oldItem: AnimeSuggestionsResponse.Data,
-                newItem: AnimeSuggestionsResponse.Data
+                oldItem: AnimeSeasonalResponse.Data,
+                newItem: AnimeSeasonalResponse.Data
             ): Boolean {
                 return oldItem.node.id == newItem.node.id
             }
 
             override fun areContentsTheSame(
-                oldItem: AnimeSuggestionsResponse.Data,
-                newItem: AnimeSuggestionsResponse.Data
+                oldItem: AnimeSeasonalResponse.Data,
+                newItem: AnimeSeasonalResponse.Data
             ): Boolean {
                 return oldItem == newItem
             }
@@ -37,27 +37,27 @@ class AnimeSuggestionsAdapter(private val onClick: (Int) -> Unit) :
 
     private lateinit var binding: AnimeListItemBinding
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AnimeSuggestionsViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AiringAnimeViewHolder {
         binding = AnimeListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return AnimeSuggestionsViewHolder(binding, onClick)
+        return AiringAnimeViewHolder(binding, onClick)
     }
 
-    override fun onBindViewHolder(holder: AnimeSuggestionsViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: AiringAnimeViewHolder, position: Int) {
         holder.bind(listDiffer.currentList[position])
     }
 
     override fun getItemCount() = listDiffer.currentList.size
 
-    fun submitList(list: List<AnimeSuggestionsResponse.Data>) {
+    fun submitList(list: List<AnimeSeasonalResponse.Data>) {
         listDiffer.submitList(list)
     }
 
-    class AnimeSuggestionsViewHolder(
+    class AiringAnimeViewHolder(
         private val binding: AnimeListItemBinding,
         private val onClick: (Int) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: AnimeSuggestionsResponse.Data) {
+        fun bind(item: AnimeSeasonalResponse.Data) {
             binding.root.setOnClickListener {
                 onClick(item.node.id)
             }

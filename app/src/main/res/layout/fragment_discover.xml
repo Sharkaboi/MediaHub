@@ -94,19 +94,8 @@
                 android:layout_margin="16dp"
                 android:text="Anime recommendations"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toStartOf="@id/tvAnimeRecommendationsMore"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/btnAnimeSuggestion" />
-
-            <TextView
-                android:id="@+id/tvAnimeRecommendationsMore"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:text="More"
-                android:textColor="@color/colorPrimary"
-                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/btnAnimeSuggestion" />
 
             <androidx.recyclerview.widget.RecyclerView
@@ -127,7 +116,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
-                android:text="Add Anime to get reccomendations"
+                android:text="Add Anime to get recommendations"
                 android:textAlignment="center"
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -141,18 +130,91 @@
                 app:barrierDirection="bottom"
                 app:constraint_referenced_ids="rvAnimeRecommendations,tvAnimeRecommendationsEmpty" />
 
-            <com.airbnb.lottie.LottieAnimationView
+            <TextView
+                android:id="@+id/tvAnimeOfSeasonHint"
                 android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_margin="16dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintDimensionRatio="1:1"
+                android:text="Anime airing now"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/animeRecommendationBarrier"
-                app:lottie_autoPlay="true"
-                app:lottie_rawRes="@raw/kakashi" />
+                app:layout_constraintTop_toBottomOf="@id/animeRecommendationBarrier" />
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvAnimeAiring"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="8dp"
+                android:layout_marginStart="16dp"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvAnimeOfSeasonHint"
+                tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/anime_list_item" />
+
+            <TextView
+                android:id="@+id/tvAnimeAiringEmpty"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:text="No data found"
+                android:textAlignment="center"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/animeRecommendationBarrier" />
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/animeAiringBarrier"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:barrierDirection="bottom"
+                app:constraint_referenced_ids="rvAnimeAiring,tvAnimeAiringEmpty" />
+
+            <TextView
+                android:id="@+id/tvAnimeRankingHint"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:text="Top anime rankings"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/animeAiringBarrier" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvAnimeRanking"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="8dp"
+                android:layout_marginStart="16dp"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tvAnimeRankingHint"
+                tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/anime_list_item" />
+
+            <TextView
+                android:id="@+id/tvAnimeRankingEmpty"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:text="No data found"
+                android:textAlignment="center"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/animeAiringBarrier" />
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/animeRankingBarrier"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:barrierDirection="bottom"
+                app:constraint_referenced_ids="rvAnimeRanking,tvAnimeRankingEmpty" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </FrameLayout>

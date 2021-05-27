@@ -78,4 +78,5 @@
     <string name="serialization">Serialization</string>
     <string name="enter_read_count">Enter read count</string>
     <string name="search_for_any_manga">Search for any manga</string>
+    <string name="no_anime_rankings_found_under_this_category">No anime rankings found under this category</string>
 </resources>

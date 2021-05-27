@@ -64,6 +64,27 @@
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/fade_out" />
+        <action
+            android:id="@+id/openAnimeSeasonals"
+            app:destination="@id/animeSeasonalFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
+        <action
+            android:id="@+id/openAnimeSuggestions"
+            app:destination="@id/animeSuggestionsFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
+        <action
+            android:id="@+id/openMangaRankings"
+            app:destination="@id/mangaRankingFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
     </fragment>
     <fragment
         android:id="@+id/profile_item"
@@ -193,6 +214,45 @@
         <action
             android:id="@+id/openAnimeDetailsWithId"
             app:destination="@id/animeDetailsFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
+    </fragment>
+    <fragment
+        android:id="@+id/animeSeasonalFragment"
+        android:name="com.sharkaboi.mediahub.modules.anime_seasonal.ui.AnimeSeasonalFragment"
+        android:label="fragment_anime_seasonal"
+        tools:layout="@layout/fragment_anime_seasonal">
+        <action
+            android:id="@+id/openAnimeDetailsWithId"
+            app:destination="@id/animeDetailsFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
+    </fragment>
+    <fragment
+        android:id="@+id/animeSuggestionsFragment"
+        android:name="com.sharkaboi.mediahub.modules.anime_suggestions.ui.AnimeSuggestionsFragment"
+        android:label="fragment_anime_suggestions"
+        tools:layout="@layout/fragment_anime_suggestions">
+        <action
+            android:id="@+id/openAnimeById"
+            app:destination="@id/animeDetailsFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
+    </fragment>
+    <fragment
+        android:id="@+id/mangaRankingFragment"
+        android:name="com.sharkaboi.mediahub.modules.manga_ranking.ui.MangaRankingFragment"
+        android:label="fragment_manga_ranking"
+        tools:layout="@layout/fragment_manga_ranking">
+        <action
+            android:id="@+id/openMangaDetailsWithId"
+            app:destination="@id/mangaDetailsFragment"
             app:enterAnim="@anim/fade_in"
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"

@@ -2,6 +2,7 @@ package com.sharkaboi.mediahub.common.extensions
 
 import android.text.Html
 import android.text.Spanned
+import com.sharkaboi.mediahub.common.data.api.enums.AnimeRankingType
 import com.sharkaboi.mediahub.common.data.api.models.anime.AnimeByIDResponse
 import com.sharkaboi.mediahub.common.data.api.models.manga.MangaByIDResponse
 import java.text.DecimalFormat
@@ -47,13 +48,13 @@ internal fun String.getRating(): String {
             "PG 13"
         }
         this.trim() == "r" -> {
-            "R - 17+."
+            "R - 17+"
         }
         this.trim() == "r+" -> {
             "R+"
         }
         this.trim() == "rx" -> {
-            "Rx - Hentai."
+            "Rx - Hentai"
         }
         else -> {
             "N/A"
@@ -321,5 +322,19 @@ internal fun Int.getEpisodeLengthFromSeconds(): String {
     } catch (e: Exception) {
         e.printStackTrace()
         return "N/A"
+    }
+}
+
+internal fun AnimeRankingType.getAnimeRanking(): String {
+    return when (this) {
+        AnimeRankingType.all -> "All"
+        AnimeRankingType.airing -> "Airing"
+        AnimeRankingType.upcoming -> "Upcoming"
+        AnimeRankingType.tv -> "TV"
+        AnimeRankingType.ova -> "OVA"
+        AnimeRankingType.movie -> "Movie"
+        AnimeRankingType.special -> "Specials"
+        AnimeRankingType.bypopularity -> "By popularity"
+        AnimeRankingType.favorite -> "In your list"
     }
 }
