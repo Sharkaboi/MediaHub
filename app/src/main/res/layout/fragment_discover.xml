@@ -87,6 +87,37 @@
                 app:layout_constraintStart_toEndOf="@+id/btnAnimeSeasonal"
                 app:layout_constraintTop_toBottomOf="@+id/btnMangaRanking" />
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnAnimeSearch"
+                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:text="Search\nAnime"
+                android:textAlignment="textStart"
+                android:textColor="@color/white"
+                app:icon="@drawable/ic_search"
+                app:iconTint="@color/white"
+                app:layout_constraintEnd_toStartOf="@id/btnMangaSearch"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btnAnimeSeasonal" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnMangaSearch"
+                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:text="Manga\nSearch"
+                android:textAlignment="textStart"
+                android:textColor="@color/white"
+                app:icon="@drawable/ic_search"
+                app:iconTint="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toEndOf="@+id/btnAnimeSearch"
+                app:layout_constraintTop_toBottomOf="@+id/btnAnimeSuggestion" />
+
             <TextView
                 android:id="@+id/tvAnimeRecommendationsHint"
                 android:layout_width="0dp"
@@ -96,7 +127,7 @@
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/btnAnimeSuggestion" />
+                app:layout_constraintTop_toBottomOf="@id/btnMangaSearch" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvAnimeRecommendations"

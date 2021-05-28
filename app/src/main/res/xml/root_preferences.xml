@@ -1,9 +1,10 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <Preference
+    <com.sharkaboi.mediahub.common.views.MaterialToolBarPreference
+        app:icon="@drawable/ic_back"
         app:key="toolbar"
-        app:layout="@layout/settings_toolbar" />
+        app:title="@string/settings" />
 
     <PreferenceCategory app:title="Theme">
 

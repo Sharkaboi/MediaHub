@@ -37,6 +37,7 @@
         android:layout_marginVertical="8dp"
         android:background="@android:color/transparent"
         android:contentDescription="@string/settings"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
         app:layout_constraintBottom_toBottomOf="@+id/ivProfileImage"
         app:layout_constraintStart_toEndOf="@id/ivProfileImage"
         app:layout_constraintTop_toBottomOf="@+id/ivBanner"
@@ -51,6 +52,7 @@
         android:layout_marginVertical="8dp"
         android:background="@android:color/transparent"
         android:contentDescription="@string/share"
+        android:foreground="?attr/selectableItemBackgroundBorderless"
         app:layout_constraintBottom_toBottomOf="@+id/ivProfileImage"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0"
@@ -111,6 +113,7 @@
                 android:layout_height="40dp"
                 android:background="@android:color/transparent"
                 android:contentDescription="@string/collapse_button"
+                android:foreground="?attr/selectableItemBackgroundBorderless"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_arrow_down" />

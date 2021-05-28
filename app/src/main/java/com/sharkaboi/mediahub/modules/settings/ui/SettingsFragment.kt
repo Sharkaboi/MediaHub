@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatDelegate.*
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
@@ -16,6 +17,7 @@ import com.sharkaboi.mediahub.R
 import com.sharkaboi.mediahub.common.constants.AppConstants
 import com.sharkaboi.mediahub.common.data.sharedpref.SharedPreferencesKeys
 import com.sharkaboi.mediahub.common.extensions.showToast
+import com.sharkaboi.mediahub.common.views.MaterialToolBarPreference
 import com.sharkaboi.mediahub.modules.auth.OAuthActivity
 import com.sharkaboi.mediahub.modules.settings.vm.SettingsStates
 import com.sharkaboi.mediahub.modules.settings.vm.SettingsViewModel
@@ -25,6 +27,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class SettingsFragment : PreferenceFragmentCompat() {
 
     private val settingsViewModel by viewModels<SettingsViewModel>()
+    private val navController by lazy { findNavController() }
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.root_preferences, rootKey)
@@ -40,6 +43,9 @@ class SettingsFragment : PreferenceFragmentCompat() {
     private fun setData() {
         findPreference<Preference>(SharedPreferencesKeys.ABOUT)?.summary =
             "v${BuildConfig.VERSION_NAME}"
+        findPreference<MaterialToolBarPreference>(SharedPreferencesKeys.TOOLBAR)?.setNavigationIconListener {
+            navController.navigateUp()
+        }
     }
 
     private fun setListeners() {
@@ -102,16 +108,14 @@ class SettingsFragment : PreferenceFragmentCompat() {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle("About")
             .setMessage(AppConstants.description)
-            .setPositiveButton(android.R.string.ok) { dialog, _ ->
-                dialog.dismiss()
-            }
-            .setNegativeButton("Github") { _, _ ->
-                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(AppConstants.githubLink)))
-                activity?.overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
-            }
             .setNeutralButton("View licenses") { _, _ ->
                 startActivity(Intent(context, OssLicensesMenuActivity::class.java))
                 activity?.overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+            }.setNegativeButton("Github") { _, _ ->
+                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(AppConstants.githubLink)))
+                activity?.overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+            }.setPositiveButton(android.R.string.ok) { dialog, _ ->
+                dialog.dismiss()
             }.show()
     }
 

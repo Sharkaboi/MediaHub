@@ -10,7 +10,6 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.sharkaboi.mediahub.common.extensions.addFooter
 import com.sharkaboi.mediahub.common.extensions.showToast
 import com.sharkaboi.mediahub.databinding.FragmentDiscoverBinding
@@ -63,6 +62,12 @@ class DiscoverFragment : Fragment() {
             }
             btnMangaRanking.setOnClickListener {
                 navController.navigate(DiscoverFragmentDirections.openMangaRankings())
+            }
+            btnAnimeSearch.setOnClickListener {
+                navController.navigate(DiscoverFragmentDirections.openAnimeSearch())
+            }
+            btnMangaSearch.setOnClickListener {
+                navController.navigate(DiscoverFragmentDirections.openMangaSearch())
             }
         }
     }
