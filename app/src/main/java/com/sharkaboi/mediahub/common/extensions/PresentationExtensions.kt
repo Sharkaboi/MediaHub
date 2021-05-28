@@ -2,7 +2,7 @@ package com.sharkaboi.mediahub.common.extensions
 
 import android.text.Html
 import android.text.Spanned
-import com.sharkaboi.mediahub.common.data.api.enums.AnimeRankingType
+import com.sharkaboi.mediahub.R
 import com.sharkaboi.mediahub.common.data.api.models.anime.AnimeByIDResponse
 import com.sharkaboi.mediahub.common.data.api.models.manga.MangaByIDResponse
 import java.text.DecimalFormat
@@ -151,7 +151,7 @@ internal fun AnimeByIDResponse.AlternativeTitles.getFormattedString(): Spanned {
                     if (it.isEmpty()) {
                         "N/A"
                     } else {
-                        it.joinToString()
+                        it.joinToString().ifBlank { "N/A" }
                     }
                 } ?: "N/A"
             }
@@ -183,7 +183,7 @@ internal fun AnimeByIDResponse.AlternativeTitles.getFormattedString(): Spanned {
                     if (it.isEmpty()) {
                         "N/A"
                     } else {
-                        it.joinToString()
+                        it.joinToString().ifBlank { "N/A" }
                     }
                 } ?: "N/A"
             }
@@ -219,7 +219,7 @@ internal fun MangaByIDResponse.AlternativeTitles.getFormattedString(): Spanned {
                     if (it.isEmpty()) {
                         "N/A"
                     } else {
-                        it.joinToString()
+                        it.joinToString().ifBlank { "N/A" }
                     }
                 } ?: "N/A"
             }
@@ -251,7 +251,7 @@ internal fun MangaByIDResponse.AlternativeTitles.getFormattedString(): Spanned {
                     if (it.isEmpty()) {
                         "N/A"
                     } else {
-                        it.joinToString()
+                        it.joinToString().ifBlank { "N/A" }
                     }
                 } ?: "N/A"
             }

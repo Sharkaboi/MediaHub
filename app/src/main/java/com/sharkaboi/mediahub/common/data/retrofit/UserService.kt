@@ -1,6 +1,7 @@
 package com.sharkaboi.mediahub.common.data.retrofit
 
 import com.haroldadmin.cnradapter.NetworkResponse
+import com.sharkaboi.mediahub.common.data.api.ApiConstants
 import com.sharkaboi.mediahub.common.data.api.models.ApiError
 import com.sharkaboi.mediahub.common.data.api.models.user.UserDetailsResponse
 import kotlinx.coroutines.Deferred
@@ -13,8 +14,8 @@ interface UserService {
 
     @GET("users/{username}")
     fun getUserDetailsAsync(
-            @Header("Authorization") authHeader: String,
-            @Path("username") username: String = "@me",
-            @Query("fields") fields: String = "anime_statistics"
+        @Header("Authorization") authHeader: String,
+        @Path("username") username: String = ApiConstants.ME_IDENTIFIER,
+        @Query("fields") fields: String = ApiConstants.PROFILE_FIELDS
     ): Deferred<NetworkResponse<UserDetailsResponse, ApiError>>
 }

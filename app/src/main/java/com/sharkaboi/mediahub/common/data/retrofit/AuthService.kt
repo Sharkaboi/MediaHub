@@ -1,8 +1,9 @@
 package com.sharkaboi.mediahub.common.data.retrofit
 
 import com.haroldadmin.cnradapter.NetworkResponse
-import com.sharkaboi.mediahub.common.data.api.models.auth.AccessTokenResponse
+import com.sharkaboi.mediahub.common.data.api.enums.OAuthGrantType
 import com.sharkaboi.mediahub.common.data.api.models.ApiError
+import com.sharkaboi.mediahub.common.data.api.models.auth.AccessTokenResponse
 import kotlinx.coroutines.Deferred
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
@@ -25,7 +26,7 @@ interface AuthService {
     fun refreshTokenAsync(
         @Field("client_id") clientId: String,
         @Field("refresh_token") refreshToken: String,
-        @Field("grant_type") grantType: String = "refresh_token"
+        @Field("grant_type") grantType: String = OAuthGrantType.refresh_token.name
     ): Deferred<NetworkResponse<AccessTokenResponse, ApiError>>
 
     @POST("$AUTH_BASE_URL/oauth2/token")
@@ -34,7 +35,7 @@ interface AuthService {
         @Field("client_id") clientId: String,
         @Field("code") code: String,
         @Field("code_verifier") codeVerifier: String,
-        @Field("grant_type") grantType: String = "authorization_code"
+        @Field("grant_type") grantType: String = OAuthGrantType.authorization_code.name
     ): Deferred<NetworkResponse<AccessTokenResponse, ApiError>>
 
 }

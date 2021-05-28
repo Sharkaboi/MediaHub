@@ -8,6 +8,8 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.github.razir.progressbutton.DrawableButton
+import com.github.razir.progressbutton.bindProgressButton
+import com.github.razir.progressbutton.cleanUpDrawable
 import com.github.razir.progressbutton.showProgress
 import com.sharkaboi.mediahub.BuildConfig
 import com.sharkaboi.mediahub.R
@@ -29,19 +31,19 @@ class OAuthActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         _binding = ActivityAuthBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        bindProgressButton(binding.btnRedirect)
         setObservers()
         setListeners()
     }
 
-    private fun setListeners() {
-        binding.btnRedirect.setOnClickListener {
-            oAuthViewModel.redirectToAuth()
-        }
+    override fun onDestroy() {
+        binding.btnRedirect.cleanUpDrawable()
+        super.onDestroy()
     }
 
     private fun setObservers() {
         oAuthViewModel.oAuthState.observe(this) { state ->
-            Log.d(TAG, "state : ${state.toString()}")
+            Log.d(TAG, "state : $state")
             if (state is OAuthState.Idle || state is OAuthState.OAuthFailure) {
                 binding.btnRedirect.isEnabled = true
             } else {
@@ -74,6 +76,12 @@ class OAuthActivity : AppCompatActivity() {
                 }
                 else -> Unit
             }
+        }
+    }
+
+    private fun setListeners() {
+        binding.btnRedirect.setOnClickListener {
+            oAuthViewModel.redirectToAuth()
         }
     }
 

@@ -39,16 +39,16 @@ interface UserAnimeService {
 
     /**
      *  status == null -> all status
-     *  todo: request additional fields (total eps, media_type etc)
      */
     @GET("users/{username}/animelist")
     fun getAnimeListOfUserAsync(
         @Header("Authorization") authHeader: String,
-        @Path("username") username: String = "@me",
+        @Path("username") username: String = ApiConstants.ME_IDENTIFIER,
         @Query("status") status: String? = null,
         @Query("sort") sort: String = UserAnimeSortType.list_updated_at.name,
         @Query("limit") limit: Int = ApiConstants.API_PAGE_LIMIT,
         @Query("offset") offset: Int = ApiConstants.API_START_OFFSET,
-        @Query("fields") fields: String = "list_status,num_episodes"
+        @Query("nsfw") nsfw: Int = ApiConstants.NSFW_ALSO,
+        @Query("fields") fields: String = ApiConstants.USER_ANIME_EXTRA_FIELDS
     ): Deferred<NetworkResponse<UserAnimeListResponse, ApiError>>
 }

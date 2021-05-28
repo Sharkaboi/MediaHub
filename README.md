@@ -1,6 +1,6 @@
 ![](./assets/mediahub-banner.png)
-# MediaHub
-<p align="left">
+<p align="center">
+    <b>MediaHub</b><br>
     <a href="https://github.com/JetBrains/kotlin/releases/tag/v1.5.0" alt="Kotlin">
         <img src="https://img.shields.io/badge/Kotlin-1.5.0-blue" /></a>
     <a href="https://github.com/Sharkaboi/MediaHub/blob/master/LICENSE" alt="License">
@@ -9,9 +9,7 @@
         <img src="https://img.shields.io/github/contributors/sharkaboi/mediahub" /></a>
 </p>
 
-A simple MAL client.
-
-Uses the [MAL Api](https://myanimelist.net/apiconfig/references/api/v2)
+A simple MAL client. Uses the [MAL Api](https://myanimelist.net/apiconfig/references/api/v2)
 
 ## Uses
 * [Kotlin](https://kotlinlang.org/)
@@ -34,3 +32,48 @@ Uses the [MAL Api](https://myanimelist.net/apiconfig/references/api/v2)
 * [LeakCanary](https://square.github.io/leakcanary/)
 * [Google secrets gradle plugin](https://github.com/google/secrets-gradle-plugin)
 * [OSS licenses plugin](https://developers.google.com/android/guides/opensource)
+
+## Releases
+* Check out the latest releases [here](https://github.com/Sharkaboi/MediaHub/releases)
+
+## Build instructions
+* Install Gradle and Kotlin.
+* Clone project.
+* Register your app with MyAnimeList as show [here](https://myanimelist.net/blog.php?eid=835707)
+* In the project root, add `clientId=<CLIENT ID>` to the `local.properties` file. Create if not found.
+* Open in Android studio or Intellij and build and sync project.
+* Run on any device and perform OAuth login to give access to your account.
+
+## Credits
+* [Photo by Audrey Mari from Pexels](https://www.pexels.com/photo/photo-of-japanese-lanterns-3421920/)
+* [Tabler icons by Paweł Kuna](https://tablericons.com/)
+* [Bubbles icons by Umar Irshad](https://www.iconfinder.com/iconsets/48-bubbles)
+
+## Contributing
+PR's are welcome. Please try to follow the template.
+
+## Licence
+```
+MIT License
+
+Copyright (c) 2021 Sarath S
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+```

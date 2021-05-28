@@ -1,7 +1,6 @@
 package com.sharkaboi.mediahub.modules
 
 import android.os.Bundle
-import android.util.Log
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AnimationUtils
 import androidx.annotation.IdRes
@@ -10,6 +9,7 @@ import androidx.core.view.isVisible
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.sharkaboi.mediahub.R
 import com.sharkaboi.mediahub.common.extensions.startAnim
 import com.sharkaboi.mediahub.databinding.ActivityMainBinding
@@ -47,16 +47,36 @@ class MainActivity : AppCompatActivity() {
             id == R.id.anime_item && navController.currentDestination?.id == R.id.anime_item
         val isMangaItem =
             id == R.id.manga_item && navController.currentDestination?.id == R.id.manga_item
-        binding.fabSearch.isVisible = isAnimeItem || isMangaItem
+        val isDiscoverItem =
+            id == R.id.discover_item && navController.currentDestination?.id == R.id.discover_item
+        binding.fabSearch.isVisible = isAnimeItem || isMangaItem || isDiscoverItem
         binding.fabSearch.setOnClickListener {
             binding.fabSearch.isVisible = false
             binding.circleAnimeView.isVisible = true
             binding.circleAnimeView.startAnim(anim) {
-                binding.fabSearch.isVisible = isAnimeItem || isMangaItem
+                binding.fabSearch.isVisible = isAnimeItem || isMangaItem || isDiscoverItem
                 binding.circleAnimeView.isVisible = false
-                navController.navigate(if (isAnimeItem) R.id.openAnimeSearch else R.id.openMangaSearch)
+                when {
+                    isAnimeItem -> navController.navigate(R.id.openAnimeSearch)
+                    isMangaItem -> navController.navigate(R.id.openMangaSearch)
+                    isDiscoverItem -> showSearchOptionDialog()
+                }
             }
         }
+    }
+
+    private fun showSearchOptionDialog() {
+        val items = arrayOf("Anime", "Manga")
+        MaterialAlertDialogBuilder(this)
+            .setTitle("Search for")
+            .setItems(items) { dialog, which ->
+                when (which) {
+                    0 -> navController.navigate(R.id.openAnimeSearch)
+                    1 -> navController.navigate(R.id.openMangaSearch)
+                }
+                dialog.dismiss()
+            }
+            .show()
     }
 
     companion object {

@@ -1,6 +1,7 @@
 package com.sharkaboi.mediahub.common.data.retrofit
 
 import com.haroldadmin.cnradapter.NetworkResponse
+import com.sharkaboi.mediahub.common.data.api.ApiConstants
 import com.sharkaboi.mediahub.common.data.api.enums.MangaRankingType
 import com.sharkaboi.mediahub.common.data.api.models.ApiError
 import com.sharkaboi.mediahub.common.data.api.models.manga.MangaByIDResponse
@@ -18,25 +19,27 @@ interface MangaService {
     fun getMangaAsync(
         @Header("Authorization") authHeader: String,
         @Query("q") searchQuery: String,
-        @Query("limit") limit: Int = 10,
-        @Query("offset") offset: Int = 0,
-        @Query("fields") fields: String = "id,title,main_picture,mean"
+        @Query("limit") limit: Int = ApiConstants.API_PAGE_LIMIT,
+        @Query("offset") offset: Int = ApiConstants.API_START_OFFSET,
+        @Query("nsfw") nsfw: Int = ApiConstants.NSFW_ALSO,
+        @Query("fields") fields: String = ApiConstants.MANGA_LESS_FIELDS
     ): Deferred<NetworkResponse<MangaSearchResponse, ApiError>>
 
     @GET("manga/{id}")
     fun getMangaByIdAsync(
         @Header("Authorization") authHeader: String,
         @Path("id") mangaId: Int,
-        @Query("fields") fields: String = "id,title,main_picture,alternative_titles,start_date,end_date,synopsis,mean,rank,popularity,num_list_users,num_scoring_users,nsfw,created_at,updated_at,media_type,status,genres,my_list_status,num_volumes,num_chapters,authors{first_name,last_name},pictures,background,related_anime,related_manga,recommendations,serialization{name}"
+        @Query("fields") fields: String = ApiConstants.MANGA_ALL_FIELDS
     ): Deferred<NetworkResponse<MangaByIDResponse, ApiError>>
 
     @GET("manga/ranking")
     fun getMangaRankingAsync(
         @Header("Authorization") authHeader: String,
         @Query("ranking_type") rankingType: String = MangaRankingType.all.name,
-        @Query("limit") limit: Int = 10,
-        @Query("offset") offset: Int = 0,
-        @Query("fields") fields: String = "id,title,main_picture,mean"
+        @Query("limit") limit: Int = ApiConstants.API_PAGE_LIMIT,
+        @Query("offset") offset: Int = ApiConstants.API_START_OFFSET,
+        @Query("nsfw") nsfw: Int = ApiConstants.NSFW_ALSO,
+        @Query("fields") fields: String = ApiConstants.MANGA_LESS_FIELDS
     ): Deferred<NetworkResponse<MangaRankingResponse, ApiError>>
 
 }

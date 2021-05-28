@@ -125,6 +125,7 @@ class MangaDetailsFragment : Fragment() {
             tvPopularityRank.text = mangaByIDResponse.popularity.toString()
             tvAuthors.text =
                 mangaByIDResponse.authors.joinToString { "${it.node.firstName} ${it.node.lastName}" }
+                    .ifBlank { getString(R.string.n_a) }
             ivMangaMainPicture.load(
                 mangaByIDResponse.mainPicture?.large ?: mangaByIDResponse.mainPicture?.medium
             ) {
@@ -179,6 +180,7 @@ class MangaDetailsFragment : Fragment() {
                 }
             otherDetails.tvSerialization.text =
                 mangaByIDResponse.serialization.joinToString { it.node.name }
+                    .ifBlank { getString(R.string.n_a) }
             otherDetails.tvBackground.setOnClickListener {
                 openBackgroundDialog(mangaByIDResponse.background)
             }

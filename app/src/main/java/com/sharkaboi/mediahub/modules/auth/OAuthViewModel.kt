@@ -44,6 +44,7 @@ class OAuthViewModel
     }
 
     fun receivedAuthToken(code: String) {
+        _oAuthState.setLoading()
         viewModelScope.launch {
             Log.d(TAG, "challenge retrieved: $codeChallenge")
             Log.d(TAG, "code received: $code")

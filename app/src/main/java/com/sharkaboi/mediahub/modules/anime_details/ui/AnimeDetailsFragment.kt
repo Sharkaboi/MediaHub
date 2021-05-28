@@ -28,7 +28,6 @@ import com.sharkaboi.mediahub.modules.anime_details.adapters.RelatedAnimeAdapter
 import com.sharkaboi.mediahub.modules.anime_details.adapters.RelatedMangaAdapter
 import com.sharkaboi.mediahub.modules.anime_details.vm.AnimeDetailsState
 import com.sharkaboi.mediahub.modules.anime_details.vm.AnimeDetailsViewModel
-import com.sharkaboi.mediahub.modules.manga_details.ui.MangaDetailsFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
@@ -114,6 +113,7 @@ class AnimeDetailsFragment : Fragment() {
             tvRank.text = animeByIDResponse.rank?.toString() ?: getString(R.string.n_a)
             tvPopularityRank.text = animeByIDResponse.popularity.toString()
             tvStudios.text = animeByIDResponse.studios.joinToString { it.name }
+                .ifBlank { getString(R.string.n_a) }
             ivAnimeMainPicture.load(
                 animeByIDResponse.mainPicture?.large ?: animeByIDResponse.mainPicture?.medium
             ) {
