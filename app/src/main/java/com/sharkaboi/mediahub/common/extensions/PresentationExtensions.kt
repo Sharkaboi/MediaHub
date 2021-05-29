@@ -2,7 +2,6 @@ package com.sharkaboi.mediahub.common.extensions
 
 import android.text.Html
 import android.text.Spanned
-import com.sharkaboi.mediahub.R
 import com.sharkaboi.mediahub.common.data.api.models.anime.AnimeByIDResponse
 import com.sharkaboi.mediahub.common.data.api.models.manga.MangaByIDResponse
 import java.text.DecimalFormat
@@ -101,7 +100,7 @@ internal fun AnimeByIDResponse.Broadcast.getBroadcastTime(): String {
         if (this.startTime == null) {
             return "On ${this.dayOfTheWeek}"
         }
-        val dayOfWeek = DayOfWeek.valueOf(this.dayOfTheWeek.toUpperCase(Locale.ROOT))
+        val dayOfWeek = DayOfWeek.valueOf(this.dayOfTheWeek.uppercase(Locale.ROOT))
         val fieldIso = WeekFields.of(Locale.FRANCE).dayOfWeek()
         val now = OffsetDateTime.now().with(fieldIso, dayOfWeek.value.toLong())
         val (hour, mins) = this.startTime.split(":").map { it.toInt() }

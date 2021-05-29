@@ -3,9 +3,11 @@ package com.sharkaboi.mediahub.common.views.image_slider
 import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.os.Build
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.Window
 import androidx.core.view.setPadding
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.navArgs

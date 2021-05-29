@@ -1,7 +1,5 @@
 package com.sharkaboi.mediahub.modules.anime_ranking.vm
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData

@@ -3,7 +3,6 @@ package com.sharkaboi.mediahub.modules.discover.repository
 import android.util.Log
 import com.haroldadmin.cnradapter.NetworkResponse
 import com.sharkaboi.mediahub.common.data.api.ApiConstants
-import com.sharkaboi.mediahub.common.data.api.enums.AnimeRankingType
 import com.sharkaboi.mediahub.common.data.api.enums.getAnimeSeason
 import com.sharkaboi.mediahub.common.data.api.models.anime.AnimeRankingResponse
 import com.sharkaboi.mediahub.common.data.api.models.anime.AnimeSeasonalResponse

@@ -7,7 +7,7 @@
         <img src="https://img.shields.io/badge/License-MIT-orange" /></a>
     <a href="https://github.com/sharkaboi/mediahub/graphs/contributors" alt="Contributors">
         <img src="https://img.shields.io/github/contributors/sharkaboi/mediahub" /></a><br>
-    A simple MAL client. Uses the [MAL Api](https://myanimelist.net/apiconfig/references/api/v2)
+    A simple MAL client. Uses the <a href="https://myanimelist.net/apiconfig/references/api/v2">MAL Api</a>
 </p>
 
 ## Uses
@@ -48,7 +48,7 @@ Anime search            |  Manga search
 Discover           |  Profile
 ![](assets/screenshots/discover.png)  |  ![](assets/screenshots/profile.png)
 Anime suggestions           |  Anime seasonals
-![](assets/screenshots/anime_suggestions.png)  |  ![](assets/screenshots/anime_seasonals.png)
+![](assets/screenshots/anime_suggestions.png)  |  ![](assets/screenshots/anime_seasonal.png)
 Settings           |  Share
 ![](assets/screenshots/settings.png)  |  ![](assets/screenshots/share.png)
 

@@ -1,7 +1,5 @@
 package com.sharkaboi.mediahub.common.data.api.models.useranime
 
-
-import android.util.Log
 import androidx.annotation.Keep
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass

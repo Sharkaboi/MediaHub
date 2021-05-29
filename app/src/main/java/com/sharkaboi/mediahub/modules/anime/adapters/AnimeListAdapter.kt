@@ -1,6 +1,5 @@
 package com.sharkaboi.mediahub.modules.anime.adapters
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter

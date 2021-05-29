@@ -4,18 +4,10 @@
     <string name="auth_hint">Click on the redirect button below\nThis will lead you to the MyAnimeList website where you can log in and allow access to your account.</string>
     <string name="redirect">Redirect</string>
     <string name="watching">Watching</string>
-    <string name="planned">Planned</string>
-    <string name="completed">Completed</string>
-    <string name="on_hold">On hold</string>
-    <string name="dropped">Dropped</string>
-    <string name="all">All</string>
     <string name="banner">Banner</string>
     <string name="profile_image">Profile image</string>
     <string name="collapse_button">Collapse button</string>
-    <string name="log_out">Log out</string>
     <string name="settings">Settings</string>
-    <string name="menu">Menu</string>
-    <string name="about">About</string>
     <string name="background">Background</string>
     <string name="logo">Logo</string>
     <string name="anime">Anime</string>
@@ -82,4 +74,17 @@
     <string name="no_anime_added_yet_for_suggestions">No Anime added yet for suggestions</string>
     <string name="previous_season">Previous season</string>
     <string name="next_season">Next season</string>
+    <string name="search_for_any_anime">Search for any anime</string>
+    <string name="anime_ranking">Anime\nRanking</string>
+    <string name="manga_ranking">Manga\nRanking</string>
+    <string name="seasonal_anime">Seasonal\nAnime</string>
+    <string name="anime_suggestions">Anime\nSuggestions</string>
+    <string name="search_anime">Search\nAnime</string>
+    <string name="manga_search">Manga\nSearch</string>
+    <string name="anime_recommendations">Anime recommendations</string>
+    <string name="add_anime_to_get_recommendations">Add Anime to get recommendations</string>
+    <string name="anime_airing_now">Anime airing now</string>
+    <string name="no_data_found">No data found</string>
+    <string name="top_anime_rankings">Top anime rankings</string>
+    <string name="more">more</string>
 </resources>
