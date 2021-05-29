@@ -1,13 +1,15 @@
-![](./assets/mediahub-banner.png)
 <p align="center">
-    <b>MediaHub</b><br>
+    <img align="center" src="./assets/mediahub-banner.png" /><br>
+    <b><h1 align="center">MediaHub</h1></b>
+</p>
+<p align="center">
     <a href="https://github.com/JetBrains/kotlin/releases/tag/v1.5.10" alt="Kotlin">
         <img src="https://img.shields.io/badge/Kotlin-1.5.10-blue" /></a>
     <a href="https://github.com/Sharkaboi/MediaHub/blob/master/LICENSE" alt="License">
         <img src="https://img.shields.io/badge/License-MIT-orange" /></a>
     <a href="https://github.com/sharkaboi/mediahub/graphs/contributors" alt="Contributors">
         <img src="https://img.shields.io/github/contributors/sharkaboi/mediahub" /></a><br>
-    A simple MAL client. Uses the <a href="https://myanimelist.net/apiconfig/references/api/v2">MAL Api</a>
+    A simple MAL client. Uses the <a href="https://myanimelist.net/apiconfig/references/api/v2">MAL Api.</a>
 </p>
 
 ## Uses
