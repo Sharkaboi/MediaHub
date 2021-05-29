@@ -1,4 +1,4 @@
-package com.sharkaboi.mediahub.modules.auth
+package com.sharkaboi.mediahub.modules.auth.vm
 
 import androidx.lifecycle.MutableLiveData
 

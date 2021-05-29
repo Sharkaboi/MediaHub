@@ -1,4 +1,4 @@
-package com.sharkaboi.mediahub.modules.splash
+package com.sharkaboi.mediahub.modules.splash.ui
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,7 +8,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate.*
 import com.sharkaboi.mediahub.R
 import com.sharkaboi.mediahub.modules.MainActivity
-import com.sharkaboi.mediahub.modules.auth.OAuthActivity
+import com.sharkaboi.mediahub.modules.auth.ui.OAuthActivity
+import com.sharkaboi.mediahub.modules.splash.vm.SplashState
+import com.sharkaboi.mediahub.modules.splash.vm.SplashViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -17,7 +19,6 @@ class SplashActivity : AppCompatActivity() {
     private val splashViewModel by viewModels<SplashViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d(TAG, "onCreate")
         setUpObservers()
     }
 

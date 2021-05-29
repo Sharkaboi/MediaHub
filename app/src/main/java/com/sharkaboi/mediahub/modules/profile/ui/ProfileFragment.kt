@@ -88,7 +88,7 @@ class ProfileFragment : Fragment() {
             toggleDetailsCard.onClick(null)
             profileContent.apply {
                 ivProfileImage.load(userDetailsResponse.profilePicUrl) {
-                    crossfade(300)
+                    crossfade(true)
                     transformations(RoundedCornersTransformation(10f))
                     placeholder(R.drawable.ic_profile_placeholder)
                     error(R.drawable.ic_profile_placeholder)

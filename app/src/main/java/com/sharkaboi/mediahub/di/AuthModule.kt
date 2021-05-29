@@ -2,7 +2,7 @@ package com.sharkaboi.mediahub.di
 
 import com.sharkaboi.mediahub.common.data.datastore.DataStoreRepository
 import com.sharkaboi.mediahub.common.data.retrofit.AuthService
-import com.sharkaboi.mediahub.modules.auth.OAuthRepository
+import com.sharkaboi.mediahub.modules.auth.repository.OAuthRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

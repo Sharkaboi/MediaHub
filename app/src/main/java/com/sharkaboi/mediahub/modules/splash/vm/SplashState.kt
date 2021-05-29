@@ -1,4 +1,4 @@
-package com.sharkaboi.mediahub.modules.splash
+package com.sharkaboi.mediahub.modules.splash.vm
 
 import androidx.lifecycle.MutableLiveData
 

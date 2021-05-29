@@ -29,7 +29,6 @@ import com.sharkaboi.mediahub.modules.manga_details.adapters.RelatedMangaAdapter
 import com.sharkaboi.mediahub.modules.manga_details.vm.MangaDetailsState
 import com.sharkaboi.mediahub.modules.manga_details.vm.MangaDetailsViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.*
 
 @AndroidEntryPoint
 class MangaDetailsFragment : Fragment() {
@@ -161,7 +160,7 @@ class MangaDetailsFragment : Fragment() {
                     }
                 }
             }
-            otherDetails.tvMediaType.text = mangaByIDResponse.mediaType.uppercase(Locale.ROOT)
+            otherDetails.tvMediaType.text = mangaByIDResponse.mediaType.capitalizeFirst()
             otherDetails.tvMangaCurrentStatus.text =
                 mangaByIDResponse.status.getMangaPublishStatus()
             otherDetails.tvTotalVolumes.text =

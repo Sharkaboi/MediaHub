@@ -8,6 +8,7 @@
     <application
         android:name=".MediaHub"
         android:allowBackup="true"
+        android:configChanges="uiMode"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:largeHeap="true"
@@ -15,14 +16,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MediaHub"
-        android:configChanges="uiMode"
         tools:ignore="AllowBackup"
         tools:targetApi="n">
         <activity
-            android:name=".modules.splash.SplashActivity"
+            android:name=".modules.splash.ui.SplashActivity"
             android:launchMode="singleInstance"
             android:screenOrientation="sensorPortrait"
-            android:theme="@style/splashStyle">
+            android:theme="@style/splashStyle"
+            tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -30,13 +31,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".modules.auth.OAuthActivity"
+            android:name=".modules.auth.ui.OAuthActivity"
             android:launchMode="singleTop"
             android:screenOrientation="sensorPortrait"
-            android:theme="@style/Theme.MediaHub">
+            android:theme="@style/Theme.MediaHub"
+            tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
@@ -49,15 +50,14 @@
             android:name=".modules.MainActivity"
             android:launchMode="singleInstance"
             android:screenOrientation="sensorPortrait"
+            android:theme="@style/Theme.MediaHub"
             android:windowSoftInputMode="adjustPan"
-            android:theme="@style/Theme.MediaHub" />
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name="com.google.android.gms.oss.licenses.OssLicensesMenuActivity"
             android:theme="@style/Theme.MediaHub.ActionBar" />
         <activity
             android:name="com.google.android.gms.oss.licenses.OssLicensesActivity"
             android:theme="@style/Theme.MediaHub.ActionBar" />
-
     </application>
-
 </manifest>

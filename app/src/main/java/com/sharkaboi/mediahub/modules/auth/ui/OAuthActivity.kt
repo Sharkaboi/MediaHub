@@ -1,4 +1,4 @@
-package com.sharkaboi.mediahub.modules.auth
+package com.sharkaboi.mediahub.modules.auth.ui
 
 import android.content.Intent
 import android.net.Uri
@@ -18,6 +18,8 @@ import com.sharkaboi.mediahub.common.data.retrofit.AuthService
 import com.sharkaboi.mediahub.common.extensions.showToast
 import com.sharkaboi.mediahub.databinding.ActivityAuthBinding
 import com.sharkaboi.mediahub.modules.MainActivity
+import com.sharkaboi.mediahub.modules.auth.vm.OAuthState
+import com.sharkaboi.mediahub.modules.auth.vm.OAuthViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -87,6 +89,7 @@ class OAuthActivity : AppCompatActivity() {
 
     private fun redirectToMainAppFlow() {
         startActivity(Intent(this, MainActivity::class.java))
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
         finishAffinity()
     }
 

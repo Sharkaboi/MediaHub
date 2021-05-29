@@ -18,7 +18,7 @@ import com.sharkaboi.mediahub.common.constants.AppConstants
 import com.sharkaboi.mediahub.common.data.sharedpref.SharedPreferencesKeys
 import com.sharkaboi.mediahub.common.extensions.showToast
 import com.sharkaboi.mediahub.common.views.MaterialToolBarPreference
-import com.sharkaboi.mediahub.modules.auth.OAuthActivity
+import com.sharkaboi.mediahub.modules.auth.ui.OAuthActivity
 import com.sharkaboi.mediahub.modules.settings.vm.SettingsStates
 import com.sharkaboi.mediahub.modules.settings.vm.SettingsViewModel
 import dagger.hilt.android.AndroidEntryPoint

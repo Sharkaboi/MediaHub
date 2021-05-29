@@ -1,15 +1,14 @@
 ![](./assets/mediahub-banner.png)
 <p align="center">
     <b>MediaHub</b><br>
-    <a href="https://github.com/JetBrains/kotlin/releases/tag/v1.5.0" alt="Kotlin">
-        <img src="https://img.shields.io/badge/Kotlin-1.5.0-blue" /></a>
+    <a href="https://github.com/JetBrains/kotlin/releases/tag/v1.5.10" alt="Kotlin">
+        <img src="https://img.shields.io/badge/Kotlin-1.5.10-blue" /></a>
     <a href="https://github.com/Sharkaboi/MediaHub/blob/master/LICENSE" alt="License">
         <img src="https://img.shields.io/badge/License-MIT-orange" /></a>
     <a href="https://github.com/sharkaboi/mediahub/graphs/contributors" alt="Contributors">
-        <img src="https://img.shields.io/github/contributors/sharkaboi/mediahub" /></a>
+        <img src="https://img.shields.io/github/contributors/sharkaboi/mediahub" /></a><br>
+    A simple MAL client. Uses the [MAL Api](https://myanimelist.net/apiconfig/references/api/v2)
 </p>
-
-A simple MAL client. Uses the [MAL Api](https://myanimelist.net/apiconfig/references/api/v2)
 
 ## Uses
 * [Kotlin](https://kotlinlang.org/)
@@ -35,6 +34,23 @@ A simple MAL client. Uses the [MAL Api](https://myanimelist.net/apiconfig/refere
 
 ## Releases
 * Check out the latest releases [here](https://github.com/Sharkaboi/MediaHub/releases)
+
+## Screenshots
+Anime            |  Manga
+:-------------------------:|:-------------------------:
+![](assets/screenshots/anime.png)  |  ![](assets/screenshots/manga.png)
+Anime details            |   Manga details
+![](assets/screenshots/anime_details.png)  |  ![](assets/screenshots/manga_details.png)
+Anime ranking           |  Manga ranking
+![](assets/screenshots/anime_ranking.png)  |  ![](assets/screenshots/manga_ranking.png)
+Anime search            |  Manga search
+![](assets/screenshots/anime_search.png)  |  ![](assets/screenshots/manga_search.png)
+Discover           |  Profile
+![](assets/screenshots/discover.png)  |  ![](assets/screenshots/profile.png)
+Anime suggestions           |  Anime seasonals
+![](assets/screenshots/anime_suggestions.png)  |  ![](assets/screenshots/anime_seasonals.png)
+Settings           |  Share
+![](assets/screenshots/settings.png)  |  ![](assets/screenshots/share.png)
 
 ## Build instructions
 * Install Gradle and Kotlin.

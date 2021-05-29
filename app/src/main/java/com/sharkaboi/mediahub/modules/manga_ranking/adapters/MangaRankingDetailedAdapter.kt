@@ -26,8 +26,8 @@ class MangaRankingDetailedAdapter(
                 mangaListItemBinding.apply {
                     ivMangaBanner.load(it.node.mainPicture?.large ?: it.node.mainPicture?.medium) {
                         crossfade(true)
-                        placeholder(R.drawable.ic_anime_placeholder)
-                        error(R.drawable.ic_anime_placeholder)
+                        placeholder(R.drawable.ic_manga_placeholder)
+                        error(R.drawable.ic_manga_placeholder)
                         transformations(RoundedCornersTransformation(topLeft = 8f, topRight = 8f))
                     }
                     tvMangaName.text = it.node.title

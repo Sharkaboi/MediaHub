@@ -1,7 +1,8 @@
-package com.sharkaboi.mediahub.modules.auth
+package com.sharkaboi.mediahub.modules.auth.vm
 
 import android.util.Log
 import androidx.lifecycle.*
+import com.sharkaboi.mediahub.modules.auth.repository.OAuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.util.*

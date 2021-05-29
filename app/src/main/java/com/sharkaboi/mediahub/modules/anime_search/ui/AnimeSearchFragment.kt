@@ -1,9 +1,11 @@
 package com.sharkaboi.mediahub.modules.anime_search.ui
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
@@ -23,6 +25,7 @@ import com.sharkaboi.mediahub.modules.anime_search.vm.AnimeSearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+
 
 @AndroidEntryPoint
 class AnimeSearchFragment : Fragment() {
@@ -95,12 +98,19 @@ class AnimeSearchFragment : Fragment() {
                     animeSearchListAdapter.submitData(PagingData.empty())
                     return@launch
                 }
+                hideKeyboard()
                 animeSearchViewModel.getAnime(it.trim())
                     .collectLatest { pagingData ->
                         animeSearchListAdapter.submitData(pagingData)
                     }
             }
         }
+    }
+
+    private fun hideKeyboard() {
+        val imm: InputMethodManager? =
+            context?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager?
+        imm?.hideSoftInputFromWindow(binding.svSearch.windowToken, 0)
     }
 
     companion object {
