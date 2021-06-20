@@ -1,7 +1,6 @@
 package com.sharkaboi.mediahub.modules.auth.ui
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -16,6 +15,7 @@ import com.sharkaboi.mediahub.R
 import com.sharkaboi.mediahub.common.constants.AppConstants
 import com.sharkaboi.mediahub.common.data.retrofit.AuthService
 import com.sharkaboi.mediahub.common.extensions.showToast
+import com.sharkaboi.mediahub.common.util.openUrl
 import com.sharkaboi.mediahub.databinding.ActivityAuthBinding
 import com.sharkaboi.mediahub.modules.MainActivity
 import com.sharkaboi.mediahub.modules.auth.vm.OAuthState
@@ -58,17 +58,13 @@ class OAuthActivity : AppCompatActivity() {
             }
             when (state) {
                 is OAuthState.RedirectToAuth -> {
-                    val intent = Intent(
-                        Intent.ACTION_VIEW,
-                        Uri.parse(
-                            AuthService.getAuthTokenLink(
-                                BuildConfig.clientId,
-                                state.state,
-                                state.codeChallenge
-                            )
+                    openUrl(
+                        AuthService.getAuthTokenLink(
+                            BuildConfig.clientId,
+                            state.state,
+                            state.codeChallenge
                         )
                     )
-                    startActivity(intent)
                 }
                 is OAuthState.OAuthSuccess -> {
                     redirectToMainAppFlow()

@@ -100,8 +100,8 @@ internal fun AnimeByIDResponse.Broadcast.getBroadcastTime(): String {
         if (this.startTime == null) {
             return "On ${this.dayOfTheWeek}"
         }
-        val dayOfWeek = DayOfWeek.valueOf(this.dayOfTheWeek.uppercase(Locale.ROOT))
-        val fieldIso = WeekFields.of(Locale.FRANCE).dayOfWeek()
+        val dayOfWeek = DayOfWeek.valueOf(this.dayOfTheWeek.uppercase())
+        val fieldIso = WeekFields.ISO.dayOfWeek()
         val now = OffsetDateTime.now().with(fieldIso, dayOfWeek.value.toLong())
         val (hour, mins) = this.startTime.split(":").map { it.toInt() }
         val japanTime = ZonedDateTime.of(
@@ -116,7 +116,7 @@ internal fun AnimeByIDResponse.Broadcast.getBroadcastTime(): String {
         )
         val localTimeZone = ZoneId.systemDefault()
         val localTime = japanTime.withZoneSameInstant(localTimeZone)
-        return localTime.format(DateTimeFormatter.ofPattern("EEEE h:mm a"))
+        return localTime.format(DateTimeFormatter.ofPattern("EEEE h:mm a zzzz"))
     } catch (e: Exception) {
         e.printStackTrace()
         return "N/A"

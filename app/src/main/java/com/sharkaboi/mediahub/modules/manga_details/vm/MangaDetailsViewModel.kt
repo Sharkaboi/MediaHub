@@ -48,46 +48,42 @@ class MangaDetailsViewModel
     }
 
     fun setStatus(mangaStatus: MangaStatus) {
-        _mangaDetailsUpdate.value?.let {
+        _mangaDetailsUpdate.apply {
+            value = value?.copy(mangaStatus = mangaStatus)
             if (mangaStatus == MangaStatus.completed) {
-                _mangaDetailsUpdate.value = it.copy(
-                    mangaStatus = mangaStatus,
-                    numReadVolumes = it.totalVolumes,
-                    numReadChapters = it.totalChapters
+                value = value?.copy(
+                    numReadVolumes = value?.totalVolumes,
+                    numReadChapters = value?.totalChapters
                 )
-            } else {
-                _mangaDetailsUpdate.value = it.copy(mangaStatus = mangaStatus)
             }
         }
     }
 
     fun setReadChapterCount(numReadChapter: Int) {
         _mangaDetailsUpdate.apply {
-            if (this.value?.mangaStatus == null || this.value?.mangaStatus != MangaStatus.reading || this.value?.mangaStatus != MangaStatus.completed) {
+            if (this.value?.mangaStatus == null ||
+                this.value?.mangaStatus != MangaStatus.reading ||
+                this.value?.mangaStatus != MangaStatus.completed) {
                 value = this.value?.copy(mangaStatus = MangaStatus.reading)
             }
-            value?.let {
-                value = it.copy(numReadChapters = numReadChapter)
-            }
+            value = value?.copy(numReadChapters = numReadChapter)
         }
     }
 
     fun setReadVolumeCount(numReadVolume: Int) {
         _mangaDetailsUpdate.apply {
-            if (this.value?.mangaStatus == null || this.value?.mangaStatus != MangaStatus.reading || this.value?.mangaStatus != MangaStatus.completed) {
+            if (this.value?.mangaStatus == null ||
+                this.value?.mangaStatus != MangaStatus.reading ||
+                this.value?.mangaStatus != MangaStatus.completed) {
                 value = this.value?.copy(mangaStatus = MangaStatus.reading)
             }
-            value?.let {
-                value = it.copy(numReadVolumes = numReadVolume)
-            }
+            value = value?.copy(numReadVolumes = numReadVolume)
         }
     }
 
     fun setScore(score: Int) {
         _mangaDetailsUpdate.apply {
-            value?.let {
-                value = it.copy(score = score)
-            }
+            value = value?.copy(score = score)
         }
     }
 

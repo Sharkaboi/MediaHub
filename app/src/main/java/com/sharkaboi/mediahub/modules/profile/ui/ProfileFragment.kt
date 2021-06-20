@@ -1,6 +1,5 @@
 package com.sharkaboi.mediahub.modules.profile.ui
 
-import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -22,6 +21,7 @@ import com.sharkaboi.mediahub.R
 import com.sharkaboi.mediahub.common.data.api.models.user.UserDetailsResponse
 import com.sharkaboi.mediahub.common.extensions.*
 import com.sharkaboi.mediahub.common.util.MPAndroidChartValueFormatter
+import com.sharkaboi.mediahub.common.util.openShareChooser
 import com.sharkaboi.mediahub.databinding.FragmentProfileBinding
 import com.sharkaboi.mediahub.modules.anime_details.ui.AnimeDetailsFragmentDirections
 import com.sharkaboi.mediahub.modules.profile.vm.ProfileStates
@@ -104,14 +104,18 @@ class ProfileFragment : Fragment() {
                 }
                 profileDetailsCardContent.apply {
                     tvBirthDay.text =
-                        userDetailsResponse.birthday?.tryParseDateTime()?.formatDateDMY() ?: "N/A"
+                        userDetailsResponse.birthday?.tryParseDateTime()?.formatDateDMY()
+                            ?: getString(R.string.n_a)
                     tvGender.text =
                         userDetailsResponse.gender?.capitalizeFirst()
-                            ?: "N/A"
+                            ?: getString(R.string.n_a)
                     tvJoinedAt.text =
-                        userDetailsResponse.joinedAt.tryParseDateTime()?.formatDateDMY() ?: "N/A"
-                    tvLocation.text = userDetailsResponse.location ?: "N/A"
-                    tvTimeZone.text = userDetailsResponse.timeZone ?: "N/A"
+                        userDetailsResponse.joinedAt.tryParseDateTime()?.formatDateDMY()
+                            ?: getString(R.string.n_a)
+                    tvLocation.text =
+                        userDetailsResponse.location?.ifBlank { getString(R.string.n_a) }
+                            ?: getString(R.string.n_a)
+                    tvTimeZone.text = userDetailsResponse.timeZone ?: getString(R.string.n_a)
                     tvSupporter.text =
                         if (userDetailsResponse.isSupporter == null || !userDetailsResponse.isSupporter) {
                             "No"
@@ -194,25 +198,19 @@ class ProfileFragment : Fragment() {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle("Share your")
             .setItems(items) { dialog, which ->
-                openShareChooser(name, which)
+                onShareClick(name, which)
                 dialog.dismiss()
             }
             .show()
     }
 
-    private fun openShareChooser(name: String, which: Int) {
+    private fun onShareClick(name: String, which: Int) {
         val url = when (which) {
             0 -> "https://myanimelist.net/profile/$name"
             1 -> "https://myanimelist.net/animelist/$name"
             else -> "https://myanimelist.net/mangalist/$name"
         }
-        val sendIntent: Intent = Intent().apply {
-            action = Intent.ACTION_SEND
-            putExtra(Intent.EXTRA_TEXT, url)
-            type = "text/plain"
-        }
-        val shareIntent = Intent.createChooser(sendIntent, "Share your MAL link to")
-        startActivity(shareIntent)
+        openShareChooser(url, "Share your MAL link to")
     }
 
     private val showSettings = View.OnClickListener {

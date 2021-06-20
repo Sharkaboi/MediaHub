@@ -87,4 +87,9 @@
     <string name="no_data_found">No data found</string>
     <string name="top_anime_rankings">Top anime rankings</string>
     <string name="more">more</string>
+    <string name="characters">Characters</string>
+    <string name="staff">Staff</string>
+    <string name="reviews">Reviews</string>
+    <string name="news">News</string>
+    <string name="videos">Videos</string>
 </resources>

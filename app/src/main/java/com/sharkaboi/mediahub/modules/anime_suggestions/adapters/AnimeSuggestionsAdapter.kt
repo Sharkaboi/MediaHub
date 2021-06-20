@@ -31,7 +31,7 @@ class AnimeSuggestionsAdapter(
                         transformations(RoundedCornersTransformation(topLeft = 8f, topRight = 8f))
                     }
                     tvAnimeName.text = it.node.title
-                    tvEpisodesWatched.isVisible = true
+                    tvEpisodesWatched.isVisible = false
                     tvScore.text = ("★ ${it.node.meanScore?.roundOfString() ?: "0"}")
                     root.setOnClickListener {
                         onItemClick(item.node.id)

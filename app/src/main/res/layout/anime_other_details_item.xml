@@ -217,29 +217,59 @@
         app:layout_constraintTop_toBottomOf="@id/tvAverageLengthHint"
         tools:text="45m 3s" />
 
-    <TextView
-        android:id="@+id/tvBackground"
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/chipGroupOptions"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="@string/background"
-        android:textColor="@color/colorPrimary"
-        android:textStyle="bold"
+        app:chipSpacing="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvAverageLength" />
+        app:layout_constraintTop_toBottomOf="@id/tvAverageLength">
 
-    <TextView
-        android:id="@+id/tvStatistics"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/statistics"
-        android:textColor="@color/colorPrimary"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvBackground" />
+        <com.google.android.material.chip.Chip
+            android:id="@+id/btnCharacters"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/characters" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/btnStaff"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/staff" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/btnReviews"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/reviews" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/btnNews"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/news" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/btnVideos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/videos" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/btnBackground"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/background" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/btnStatistics"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/statistics" />
+
+    </com.google.android.material.chip.ChipGroup>
 
     <View
         android:id="@+id/dividerRecommendations"
@@ -249,7 +279,7 @@
         android:background="?android:attr/listDivider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvStatistics" />
+        app:layout_constraintTop_toBottomOf="@id/chipGroupOptions" />
 
     <TextView
         android:id="@+id/tvRecommendations"

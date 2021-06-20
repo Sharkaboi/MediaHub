@@ -49,86 +49,91 @@ class AnimeDetailsViewModel
 
     fun setStatus(animeStatus: AnimeStatus) {
         _animeDetailsUpdate.apply {
-            value?.let {
-                value = it.copy(animeStatus = animeStatus)
-                if (animeStatus == AnimeStatus.completed) {
-                    value = it.copy(numWatchedEpisode = it.totalEps)
-                }
+            value = value?.copy(animeStatus = animeStatus)
+            if (animeStatus == AnimeStatus.completed) {
+                value = value?.copy(numWatchedEpisode = value?.totalEps)
             }
         }
     }
 
     fun setEpisodeCount(numWatchedEps: Int) {
         _animeDetailsUpdate.apply {
-            if (this.value?.animeStatus == null || this.value?.animeStatus != AnimeStatus.watching || this.value?.animeStatus != AnimeStatus.completed) {
+            if (this.value?.animeStatus == null ||
+                this.value?.animeStatus != AnimeStatus.watching ||
+                this.value?.animeStatus != AnimeStatus.completed
+            ) {
                 value = this.value?.copy(animeStatus = AnimeStatus.watching)
             }
-            value?.let {
-                value = it.copy(numWatchedEpisode = numWatchedEps)
-            }
+            value = value?.copy(numWatchedEpisode = numWatchedEps)
         }
     }
 
     fun add1ToWatchedEps() {
         Log.d(TAG, _animeDetailsUpdate.value.toString())
         _animeDetailsUpdate.apply {
-            if (this.value?.animeStatus == null || this.value?.animeStatus != AnimeStatus.watching || this.value?.animeStatus != AnimeStatus.completed) {
+            if (this.value?.animeStatus == null ||
+                this.value?.animeStatus != AnimeStatus.watching ||
+                this.value?.animeStatus != AnimeStatus.completed
+            ) {
                 value = this.value?.copy(animeStatus = AnimeStatus.watching)
             }
-            value?.let {
-                val res = it.numWatchedEpisode?.plus(1)
-                if (res != null) {
-                    value = if (it.totalEps != 0 && res > it.totalEps) {
-                        it.copy(numWatchedEpisode = it.totalEps)
-                    } else {
-                        it.copy(numWatchedEpisode = res)
-                    }
-                }
+            val res = value?.numWatchedEpisode?.plus(1) ?: 0
+            value = if (value?.totalEps != 0 && res >= value?.totalEps ?: 0) {
+                value?.copy(
+                    numWatchedEpisode = value?.totalEps,
+                    animeStatus = AnimeStatus.completed
+                )
+            } else {
+                value?.copy(numWatchedEpisode = res)
             }
         }
     }
 
     fun add5ToWatchedEps() {
+        Log.d(TAG, _animeDetailsUpdate.value.toString())
         _animeDetailsUpdate.apply {
-            if (this.value?.animeStatus == null || this.value?.animeStatus != AnimeStatus.watching || this.value?.animeStatus != AnimeStatus.completed) {
+            if (this.value?.animeStatus == null ||
+                this.value?.animeStatus != AnimeStatus.watching ||
+                this.value?.animeStatus != AnimeStatus.completed
+            ) {
                 value = this.value?.copy(animeStatus = AnimeStatus.watching)
             }
-            value?.let {
-                val res = it.numWatchedEpisode?.plus(5)
-                if (res != null) {
-                    value = if (it.totalEps != 0 && res > it.totalEps) {
-                        it.copy(numWatchedEpisode = it.totalEps)
-                    } else {
-                        it.copy(numWatchedEpisode = res)
-                    }
-                }
+            val res = value?.numWatchedEpisode?.plus(5) ?: 0
+            value = if (value?.totalEps != 0 && res >= value?.totalEps ?: 0) {
+                value?.copy(
+                    numWatchedEpisode = value?.totalEps,
+                    animeStatus = AnimeStatus.completed
+                )
+            } else {
+                value?.copy(numWatchedEpisode = res)
             }
         }
     }
 
     fun add10ToWatchedEps() {
+        Log.d(TAG, _animeDetailsUpdate.value.toString())
         _animeDetailsUpdate.apply {
-            if (this.value?.animeStatus == null || this.value?.animeStatus != AnimeStatus.watching || this.value?.animeStatus != AnimeStatus.completed) {
+            if (this.value?.animeStatus == null ||
+                this.value?.animeStatus != AnimeStatus.watching ||
+                this.value?.animeStatus != AnimeStatus.completed
+            ) {
                 value = this.value?.copy(animeStatus = AnimeStatus.watching)
             }
-            value?.let {
-                val res = it.numWatchedEpisode?.plus(10)
-                if (res != null) {
-                    value = if (it.totalEps != 0 && res > it.totalEps) {
-                        it.copy(numWatchedEpisode = it.totalEps)
-                    } else {
-                        it.copy(numWatchedEpisode = res)
-                    }
-                }
+            val res = value?.numWatchedEpisode?.plus(10) ?: 0
+            value = if (value?.totalEps != 0 && res >= value?.totalEps ?: 0) {
+                value?.copy(
+                    numWatchedEpisode = value?.totalEps,
+                    animeStatus = AnimeStatus.completed
+                )
+            } else {
+                value?.copy(numWatchedEpisode = res)
             }
         }
     }
 
     fun setScore(score: Int) {
         _animeDetailsUpdate.apply {
-            value?.let {
-                value = it.copy(score = score)
-            }
+            value = value?.copy(score = score)
         }
     }
 

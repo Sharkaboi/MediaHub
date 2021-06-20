@@ -1,10 +1,14 @@
 package com.sharkaboi.mediahub.modules.anime_details.ui
 
 import android.annotation.SuppressLint
+import android.graphics.Typeface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.core.view.forEach
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -18,9 +22,11 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.shape.ShapeAppearanceModel
 import com.sharkaboi.mediahub.R
+import com.sharkaboi.mediahub.common.constants.MALExternalLinks
 import com.sharkaboi.mediahub.common.data.api.enums.AnimeStatus
 import com.sharkaboi.mediahub.common.data.api.models.anime.AnimeByIDResponse
 import com.sharkaboi.mediahub.common.extensions.*
+import com.sharkaboi.mediahub.common.util.openUrl
 import com.sharkaboi.mediahub.databinding.CustomEpisodeCountDialogBinding
 import com.sharkaboi.mediahub.databinding.FragmentAnimeDetailsBinding
 import com.sharkaboi.mediahub.modules.anime_details.adapters.RecommendedAnimeAdapter
@@ -112,8 +118,27 @@ class AnimeDetailsFragment : Fragment() {
             tvMeanScore.text = animeByIDResponse.mean?.toString() ?: getString(R.string.n_a)
             tvRank.text = animeByIDResponse.rank?.toString() ?: getString(R.string.n_a)
             tvPopularityRank.text = animeByIDResponse.popularity.toString()
-            tvStudios.text = animeByIDResponse.studios.joinToString { it.name }
-                .ifBlank { getString(R.string.n_a) }
+            studiosChipGroup.apply {
+                removeAllViews()
+                if (animeByIDResponse.studios.isEmpty()) {
+                    addView(TextView(context).apply {
+                        text = getString(R.string.n_a)
+                    })
+                } else {
+                    animeByIDResponse.studios.forEach { studio ->
+                        addView(TextView(context).apply {
+                            setTextColor(ContextCompat.getColor(context, R.color.colorPrimary))
+                            setTypeface(null, Typeface.BOLD)
+                            text = ("${studio.name} ")
+                            setOnClickListener {
+                                openUrl(
+                                    MALExternalLinks.getAnimeProducerPageLink(studio)
+                                )
+                            }
+                        })
+                    }
+                }
+            }
             ivAnimeMainPicture.load(
                 animeByIDResponse.mainPicture?.large ?: animeByIDResponse.mainPicture?.medium
             ) {
@@ -154,6 +179,7 @@ class AnimeDetailsFragment : Fragment() {
                     it.forEach { genre ->
                         otherDetails.genresChipGroup.addView(Chip(context).apply {
                             setEnsureMinTouchTargetSize(false)
+                            setOnClickListener { openUrl(MALExternalLinks.getAnimeGenresLink(genre)) }
                             shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(8f)
                             text = genre.name
                         })
@@ -180,11 +206,56 @@ class AnimeDetailsFragment : Fragment() {
             otherDetails.tvAverageLength.text =
                 animeByIDResponse.averageEpisodeDuration?.getEpisodeLengthFromSeconds()
                     ?: getString(R.string.n_a)
-            otherDetails.tvBackground.setOnClickListener {
+            otherDetails.chipGroupOptions.forEach {
+                if (it is Chip) {
+                    it.setEnsureMinTouchTargetSize(false)
+                    it.shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(8f)
+                }
+            }
+            otherDetails.btnBackground.setOnClickListener {
                 openBackgroundDialog(animeByIDResponse.background)
             }
-
-            otherDetails.tvStatistics.setOnClickListener {
+            otherDetails.btnCharacters.setOnClickListener {
+                openUrl(
+                    MALExternalLinks.getAnimeCharactersLink(
+                        animeByIDResponse.id,
+                        animeByIDResponse.title
+                    )
+                )
+            }
+            otherDetails.btnStaff.setOnClickListener {
+                openUrl(
+                    MALExternalLinks.getAnimeStaffLink(
+                        animeByIDResponse.id,
+                        animeByIDResponse.title
+                    )
+                )
+            }
+            otherDetails.btnReviews.setOnClickListener {
+                openUrl(
+                    MALExternalLinks.getAnimeReviewsLink(
+                        animeByIDResponse.id,
+                        animeByIDResponse.title
+                    )
+                )
+            }
+            otherDetails.btnNews.setOnClickListener {
+                openUrl(
+                    MALExternalLinks.getAnimeNewsLink(
+                        animeByIDResponse.id,
+                        animeByIDResponse.title
+                    )
+                )
+            }
+            otherDetails.btnVideos.setOnClickListener {
+                openUrl(
+                    MALExternalLinks.getAnimeVideosLink(
+                        animeByIDResponse.id,
+                        animeByIDResponse.title
+                    )
+                )
+            }
+            otherDetails.btnStatistics.setOnClickListener {
                 openStatsDialog(animeByIDResponse.statistics)
             }
             otherDetails.rvRecommendations.apply {

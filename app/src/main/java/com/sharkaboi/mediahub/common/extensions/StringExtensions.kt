@@ -6,7 +6,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-inline var String.Companion.emptyString: String
+internal inline var String.Companion.emptyString: String
     get() = ""
     private set(_) {}
 
@@ -18,6 +18,10 @@ internal fun String.tryParseDateTime(): LocalDateTime? {
         e.printStackTrace()
         null
     }
+}
+
+internal fun String.replaceWhiteSpaceWithUnderScore(): String {
+    return this.replace(' ', '_')
 }
 
 internal fun String.capitalizeFirst(): String {

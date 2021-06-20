@@ -17,6 +17,7 @@ import com.sharkaboi.mediahub.R
 import com.sharkaboi.mediahub.common.constants.AppConstants
 import com.sharkaboi.mediahub.common.data.sharedpref.SharedPreferencesKeys
 import com.sharkaboi.mediahub.common.extensions.showToast
+import com.sharkaboi.mediahub.common.util.openUrl
 import com.sharkaboi.mediahub.common.views.MaterialToolBarPreference
 import com.sharkaboi.mediahub.modules.auth.ui.OAuthActivity
 import com.sharkaboi.mediahub.modules.settings.vm.SettingsStates
@@ -112,7 +113,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
                 startActivity(Intent(context, OssLicensesMenuActivity::class.java))
                 activity?.overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
             }.setNegativeButton("Github") { _, _ ->
-                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(AppConstants.githubLink)))
+                openUrl(AppConstants.githubLink)
                 activity?.overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
             }.setPositiveButton(android.R.string.ok) { dialog, _ ->
                 dialog.dismiss()

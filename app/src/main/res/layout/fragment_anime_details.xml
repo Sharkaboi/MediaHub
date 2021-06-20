@@ -226,45 +226,36 @@
                 tools:ignore="RtlSymmetry"
                 tools:text="17000" />
 
-            <androidx.constraintlayout.helper.widget.Flow
-                android:id="@+id/flowStudio"
+            <TextView
+                android:id="@+id/tvStudiosHint"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
-                app:constraint_referenced_ids="tvStudiosHint,tvStudios"
-                app:flow_firstVerticalStyle="packed"
-                app:flow_horizontalBias="0"
-                app:flow_horizontalStyle="packed"
-                app:flow_wrapMode="aligned"
-                app:layout_constraintBottom_toTopOf="@id/animeDetailsBarrier"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/ivAnimeMainPicture"
-                app:layout_constraintTop_toBottomOf="@+id/flowPopularityRank"
-                app:layout_constraintVertical_bias="0" />
-
-            <TextView
-                android:id="@+id/tvStudiosHint"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:text="@string/studios"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/ivAnimeMainPicture"
+                app:layout_constraintTop_toBottomOf="@id/flowPopularityRank" />
 
-            <TextView
-                android:id="@+id/tvStudios"
-                android:layout_width="wrap_content"
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/studiosChipGroup"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="8dp"
-                tools:ignore="RtlSymmetry"
-                tools:text="Bones" />
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="8dp"
+                app:chipSpacing="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/ivAnimeMainPicture"
+                app:layout_constraintTop_toBottomOf="@id/tvStudiosHint" />
 
             <androidx.constraintlayout.widget.Barrier
                 android:id="@+id/animeDetailsBarrier"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:barrierDirection="bottom"
-                app:constraint_referenced_ids="flowStudio,ivAnimeMainPicture" />
+                app:constraint_referenced_ids="studiosChipGroup,ivAnimeMainPicture" />
 
             <include
                 android:id="@+id/animeDetailsUserListCard"
