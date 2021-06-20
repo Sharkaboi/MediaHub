@@ -1,6 +1,8 @@
 package com.sharkaboi.mediahub.common.extensions
 
 import android.graphics.Color
+import com.sharkaboi.mediahub.data.api.enums.AnimeSeason
+import com.sharkaboi.mediahub.data.api.enums.getAnimeSeason
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -22,6 +24,16 @@ internal fun String.tryParseDateTime(): LocalDateTime? {
 
 internal fun String.replaceWhiteSpaceWithUnderScore(): String {
     return this.replace(' ', '_')
+}
+
+internal fun String?.getAnimeSeason(): AnimeSeason {
+    return this?.let {
+        AnimeSeason.valueOf(it.split('_').first().lowercase())
+    } ?: LocalDate.now().getAnimeSeason()
+}
+
+internal fun String?.getAnimeSeasonYear(): Int {
+    return this?.split('_')?.last()?.toInt() ?: LocalDate.now().year
 }
 
 internal fun String.capitalizeFirst(): String {

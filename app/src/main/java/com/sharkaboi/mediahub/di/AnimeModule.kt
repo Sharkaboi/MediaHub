@@ -1,7 +1,7 @@
 package com.sharkaboi.mediahub.di
 
-import com.sharkaboi.mediahub.common.data.datastore.DataStoreRepository
-import com.sharkaboi.mediahub.common.data.retrofit.UserAnimeService
+import com.sharkaboi.mediahub.data.datastore.DataStoreRepository
+import com.sharkaboi.mediahub.data.api.retrofit.UserAnimeService
 import com.sharkaboi.mediahub.modules.anime.repository.AnimeRepository
 import dagger.Module
 import dagger.Provides

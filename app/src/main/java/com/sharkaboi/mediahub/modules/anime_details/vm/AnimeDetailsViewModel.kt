@@ -5,8 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sharkaboi.mediahub.common.data.api.enums.AnimeStatus
-import com.sharkaboi.mediahub.common.data.api.enums.animeStatusFromString
+import com.sharkaboi.mediahub.data.api.enums.AnimeStatus
+import com.sharkaboi.mediahub.data.api.enums.animeStatusFromString
 import com.sharkaboi.mediahub.modules.anime_details.repository.AnimeDetailsRepository
 import com.sharkaboi.mediahub.modules.anime_details.util.AnimeDetailsUpdateClass
 import dagger.hilt.android.lifecycle.HiltViewModel

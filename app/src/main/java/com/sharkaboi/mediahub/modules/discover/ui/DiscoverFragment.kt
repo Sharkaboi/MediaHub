@@ -52,10 +52,10 @@ class DiscoverFragment : Fragment() {
     private fun setupListeners() {
         binding.apply {
             btnAnimeRanking.setOnClickListener {
-                navController.navigate(DiscoverFragmentDirections.openAnimeRankings())
+                navController.navigate(DiscoverFragmentDirections.openAnimeRankings(null))
             }
             btnAnimeSeasonal.setOnClickListener {
-                navController.navigate(DiscoverFragmentDirections.openAnimeSeasonals())
+                navController.navigate(DiscoverFragmentDirections.openAnimeSeasonals(null))
             }
             btnAnimeSuggestion.setOnClickListener {
                 navController.navigate(DiscoverFragmentDirections.openAnimeSuggestions())
@@ -112,7 +112,7 @@ class DiscoverFragment : Fragment() {
                 submitList(discoverAnimeListWrapper.animeOfCurrentSeason)
             }.addFooter {
                 LoadMoreAdapter {
-                    navController.navigate(DiscoverFragmentDirections.openAnimeSeasonals())
+                    navController.navigate(DiscoverFragmentDirections.openAnimeSeasonals(null))
                 }
             }
             layoutManager =
@@ -130,7 +130,7 @@ class DiscoverFragment : Fragment() {
                 submitList(discoverAnimeListWrapper.animeRankings)
             }.addFooter {
                 LoadMoreAdapter {
-                    navController.navigate(DiscoverFragmentDirections.openAnimeRankings())
+                    navController.navigate(DiscoverFragmentDirections.openAnimeRankings(null))
                 }
             }
             layoutManager =

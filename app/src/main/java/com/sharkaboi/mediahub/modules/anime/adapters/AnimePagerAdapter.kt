@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.sharkaboi.mediahub.common.data.api.enums.AnimeStatus
+import com.sharkaboi.mediahub.data.api.enums.AnimeStatus
 import com.sharkaboi.mediahub.modules.anime.ui.AnimeListByStatusFragment
 
 class AnimePagerAdapter(fm: FragmentManager, lifecycle: Lifecycle) :

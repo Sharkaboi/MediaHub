@@ -4,9 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.sharkaboi.mediahub.common.data.api.enums.AnimeStatus
-import com.sharkaboi.mediahub.common.data.api.enums.UserAnimeSortType
-import com.sharkaboi.mediahub.common.data.api.models.useranime.UserAnimeListResponse
+import com.sharkaboi.mediahub.data.api.enums.AnimeStatus
+import com.sharkaboi.mediahub.data.api.enums.UserAnimeSortType
+import com.sharkaboi.mediahub.data.api.models.useranime.UserAnimeListResponse
 import com.sharkaboi.mediahub.modules.anime.repository.AnimeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow

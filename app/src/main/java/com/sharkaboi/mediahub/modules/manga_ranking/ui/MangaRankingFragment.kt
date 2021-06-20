@@ -14,8 +14,8 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.chip.Chip
 import com.google.android.material.shape.ShapeAppearanceModel
-import com.sharkaboi.mediahub.common.data.api.enums.MangaRankingType
-import com.sharkaboi.mediahub.common.data.api.enums.getMangaRanking
+import com.sharkaboi.mediahub.data.api.enums.MangaRankingType
+import com.sharkaboi.mediahub.data.api.enums.getMangaRanking
 import com.sharkaboi.mediahub.common.extensions.showToast
 import com.sharkaboi.mediahub.databinding.FragmentMangaRankingBinding
 import com.sharkaboi.mediahub.modules.manga_ranking.adapters.MangaRankingDetailedAdapter

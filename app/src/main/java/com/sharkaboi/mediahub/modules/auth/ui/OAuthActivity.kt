@@ -13,7 +13,7 @@ import com.github.razir.progressbutton.showProgress
 import com.sharkaboi.mediahub.BuildConfig
 import com.sharkaboi.mediahub.R
 import com.sharkaboi.mediahub.common.constants.AppConstants
-import com.sharkaboi.mediahub.common.data.retrofit.AuthService
+import com.sharkaboi.mediahub.data.api.retrofit.AuthService
 import com.sharkaboi.mediahub.common.extensions.showToast
 import com.sharkaboi.mediahub.common.util.openUrl
 import com.sharkaboi.mediahub.databinding.ActivityAuthBinding

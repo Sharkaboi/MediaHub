@@ -4,8 +4,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sharkaboi.mediahub.common.data.api.models.user.UserDetailsResponse
-import com.sharkaboi.mediahub.common.data.wrappers.MHTaskState
+import com.sharkaboi.mediahub.data.api.models.user.UserDetailsResponse
+import com.sharkaboi.mediahub.data.wrappers.MHTaskState
 import com.sharkaboi.mediahub.modules.profile.repository.ProfileRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch

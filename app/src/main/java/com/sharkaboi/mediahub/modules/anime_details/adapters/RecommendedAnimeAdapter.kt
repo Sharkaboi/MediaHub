@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.RoundedCornersTransformation
 import com.sharkaboi.mediahub.R
-import com.sharkaboi.mediahub.common.data.api.models.anime.AnimeByIDResponse
+import com.sharkaboi.mediahub.data.api.models.anime.AnimeByIDResponse
 import com.sharkaboi.mediahub.databinding.AnimeListItemBinding
 
 class RecommendedAnimeAdapter(private val onClick: (Int) -> Unit) :

@@ -9,15 +9,18 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
-import com.sharkaboi.mediahub.common.data.api.enums.AnimeSeason
-import com.sharkaboi.mediahub.common.data.api.enums.getAnimeSeason
-import com.sharkaboi.mediahub.common.data.api.enums.next
-import com.sharkaboi.mediahub.common.data.api.enums.previous
 import com.sharkaboi.mediahub.common.extensions.capitalizeFirst
+import com.sharkaboi.mediahub.common.extensions.getAnimeSeason
+import com.sharkaboi.mediahub.common.extensions.getAnimeSeasonYear
 import com.sharkaboi.mediahub.common.extensions.showToast
+import com.sharkaboi.mediahub.data.api.enums.AnimeSeason
+import com.sharkaboi.mediahub.data.api.enums.getAnimeSeason
+import com.sharkaboi.mediahub.data.api.enums.next
+import com.sharkaboi.mediahub.data.api.enums.previous
 import com.sharkaboi.mediahub.databinding.FragmentAnimeSeasonalBinding
 import com.sharkaboi.mediahub.modules.anime_seasonal.adapters.AnimeSeasonalAdapter
 import com.sharkaboi.mediahub.modules.anime_seasonal.adapters.AnimeSeasonalLoadStateAdapter
@@ -34,6 +37,7 @@ class AnimeSeasonalFragment : Fragment() {
     private val navController by lazy { findNavController() }
     private lateinit var animeSeasonalAdapter: AnimeSeasonalAdapter
     private val animeSeasonalViewModel by viewModels<AnimeSeasonalViewModel>()
+    private val args: AnimeSeasonalFragmentArgs by navArgs()
     private var selectedSeason: AnimeSeason = LocalDate.now().getAnimeSeason()
     private var selectedYear: Int = LocalDate.now().year
 
@@ -54,9 +58,23 @@ class AnimeSeasonalFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.toolbar.setNavigationOnClickListener { navController.navigateUp() }
+        initSeason()
         setupSeasonButtons()
         setUpRecyclerView()
         setObservers()
+    }
+
+    private fun initSeason() {
+        selectedSeason = if (args.season == null) {
+            LocalDate.now().getAnimeSeason()
+        } else {
+            args.season.getAnimeSeason()
+        }
+        selectedYear = if (args.season == null) {
+            LocalDate.now().year
+        } else {
+            args.season.getAnimeSeasonYear()
+        }
     }
 
     override fun onResume() {

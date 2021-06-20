@@ -2,12 +2,12 @@ package com.sharkaboi.mediahub.modules.profile.repository
 
 import android.util.Log
 import com.haroldadmin.cnradapter.NetworkResponse
-import com.sharkaboi.mediahub.common.data.api.ApiConstants
-import com.sharkaboi.mediahub.common.data.api.models.user.UserDetailsResponse
-import com.sharkaboi.mediahub.common.data.datastore.DataStoreRepository
-import com.sharkaboi.mediahub.common.data.retrofit.UserService
-import com.sharkaboi.mediahub.common.data.wrappers.MHError
-import com.sharkaboi.mediahub.common.data.wrappers.MHTaskState
+import com.sharkaboi.mediahub.data.api.ApiConstants
+import com.sharkaboi.mediahub.data.api.models.user.UserDetailsResponse
+import com.sharkaboi.mediahub.data.datastore.DataStoreRepository
+import com.sharkaboi.mediahub.data.api.retrofit.UserService
+import com.sharkaboi.mediahub.data.wrappers.MHError
+import com.sharkaboi.mediahub.data.wrappers.MHTaskState
 import com.sharkaboi.mediahub.common.extensions.emptyString
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.firstOrNull

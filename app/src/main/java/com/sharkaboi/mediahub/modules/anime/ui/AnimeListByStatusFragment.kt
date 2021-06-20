@@ -12,8 +12,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
-import com.sharkaboi.mediahub.common.data.api.enums.AnimeStatus
-import com.sharkaboi.mediahub.common.data.api.enums.UserAnimeSortType
+import com.sharkaboi.mediahub.data.api.enums.AnimeStatus
+import com.sharkaboi.mediahub.data.api.enums.UserAnimeSortType
 import com.sharkaboi.mediahub.common.extensions.showToast
 import com.sharkaboi.mediahub.databinding.FragmentAnimeListByStatusBinding
 import com.sharkaboi.mediahub.modules.anime.adapters.AnimeListAdapter

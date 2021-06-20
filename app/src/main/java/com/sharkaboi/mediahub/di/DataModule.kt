@@ -4,9 +4,9 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
 import com.haroldadmin.cnradapter.NetworkResponseAdapterFactory
-import com.sharkaboi.mediahub.common.data.datastore.DataStoreRepository
-import com.sharkaboi.mediahub.common.data.datastore.dataStore
-import com.sharkaboi.mediahub.common.data.retrofit.*
+import com.sharkaboi.mediahub.data.datastore.DataStoreRepository
+import com.sharkaboi.mediahub.data.datastore.dataStore
+import com.sharkaboi.mediahub.data.api.retrofit.*
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module

@@ -45,7 +45,6 @@
     <string name="airing_season">Airing season</string>
     <string name="schedule">Schedule</string>
     <string name="source">Source</string>
-    <string name="average_episode_length">Average episode length</string>
     <string name="studios">Studios</string>
     <string name="recommendations">Recommendations</string>
     <string name="related_anime">Related anime</string>
@@ -92,4 +91,6 @@
     <string name="reviews">Reviews</string>
     <string name="news">News</string>
     <string name="videos">Videos</string>
+    <string name="other_details">Other details</string>
+    <string name="notify">Notify</string>
 </resources>

@@ -2,13 +2,13 @@ package com.sharkaboi.mediahub.modules.manga_details.repository
 
 import android.util.Log
 import com.haroldadmin.cnradapter.NetworkResponse
-import com.sharkaboi.mediahub.common.data.api.ApiConstants
-import com.sharkaboi.mediahub.common.data.api.models.manga.MangaByIDResponse
-import com.sharkaboi.mediahub.common.data.datastore.DataStoreRepository
-import com.sharkaboi.mediahub.common.data.retrofit.MangaService
-import com.sharkaboi.mediahub.common.data.retrofit.UserMangaService
-import com.sharkaboi.mediahub.common.data.wrappers.MHError
-import com.sharkaboi.mediahub.common.data.wrappers.MHTaskState
+import com.sharkaboi.mediahub.data.api.ApiConstants
+import com.sharkaboi.mediahub.data.api.models.manga.MangaByIDResponse
+import com.sharkaboi.mediahub.data.datastore.DataStoreRepository
+import com.sharkaboi.mediahub.data.api.retrofit.MangaService
+import com.sharkaboi.mediahub.data.api.retrofit.UserMangaService
+import com.sharkaboi.mediahub.data.wrappers.MHError
+import com.sharkaboi.mediahub.data.wrappers.MHTaskState
 import com.sharkaboi.mediahub.common.extensions.emptyString
 import com.sharkaboi.mediahub.modules.manga_details.util.MangaDetailsUpdateClass
 import kotlinx.coroutines.Dispatchers

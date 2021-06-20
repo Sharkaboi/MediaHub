@@ -1,7 +1,7 @@
 package com.sharkaboi.mediahub.di
 
-import com.sharkaboi.mediahub.common.data.datastore.DataStoreRepository
-import com.sharkaboi.mediahub.common.data.retrofit.MangaService
+import com.sharkaboi.mediahub.data.datastore.DataStoreRepository
+import com.sharkaboi.mediahub.data.api.retrofit.MangaService
 import com.sharkaboi.mediahub.modules.manga_ranking.repository.MangaRankingRepository
 import dagger.Module
 import dagger.Provides

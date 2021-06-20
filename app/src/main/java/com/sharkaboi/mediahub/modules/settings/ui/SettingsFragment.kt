@@ -1,7 +1,6 @@
 package com.sharkaboi.mediahub.modules.settings.ui
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatDelegate.*
@@ -15,7 +14,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.sharkaboi.mediahub.BuildConfig
 import com.sharkaboi.mediahub.R
 import com.sharkaboi.mediahub.common.constants.AppConstants
-import com.sharkaboi.mediahub.common.data.sharedpref.SharedPreferencesKeys
+import com.sharkaboi.mediahub.data.sharedpref.SharedPreferencesKeys
 import com.sharkaboi.mediahub.common.extensions.showToast
 import com.sharkaboi.mediahub.common.util.openUrl
 import com.sharkaboi.mediahub.common.views.MaterialToolBarPreference

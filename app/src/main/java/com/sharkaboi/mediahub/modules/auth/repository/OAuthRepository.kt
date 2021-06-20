@@ -3,8 +3,8 @@ package com.sharkaboi.mediahub.modules.auth.repository
 import android.util.Log
 import com.haroldadmin.cnradapter.NetworkResponse
 import com.sharkaboi.mediahub.BuildConfig
-import com.sharkaboi.mediahub.common.data.datastore.DataStoreRepository
-import com.sharkaboi.mediahub.common.data.retrofit.AuthService
+import com.sharkaboi.mediahub.data.datastore.DataStoreRepository
+import com.sharkaboi.mediahub.data.api.retrofit.AuthService
 import com.sharkaboi.mediahub.common.extensions.emptyString
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

@@ -1,6 +1,6 @@
 package com.sharkaboi.mediahub.common.constants
 
-import com.sharkaboi.mediahub.common.data.api.models.anime.AnimeByIDResponse
+import com.sharkaboi.mediahub.data.api.models.anime.AnimeByIDResponse
 import com.sharkaboi.mediahub.common.extensions.replaceWhiteSpaceWithUnderScore
 
 class MALExternalLinks {

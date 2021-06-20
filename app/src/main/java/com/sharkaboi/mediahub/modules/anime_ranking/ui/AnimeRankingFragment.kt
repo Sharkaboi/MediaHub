@@ -9,14 +9,15 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.chip.Chip
 import com.google.android.material.shape.ShapeAppearanceModel
-import com.sharkaboi.mediahub.common.data.api.enums.AnimeRankingType
-import com.sharkaboi.mediahub.common.data.api.enums.getAnimeRanking
 import com.sharkaboi.mediahub.common.extensions.showToast
+import com.sharkaboi.mediahub.data.api.enums.AnimeRankingType
+import com.sharkaboi.mediahub.data.api.enums.getAnimeRanking
 import com.sharkaboi.mediahub.databinding.FragmentAnimeRankingBinding
 import com.sharkaboi.mediahub.modules.anime_ranking.adapters.AnimeRankingDetailedAdapter
 import com.sharkaboi.mediahub.modules.anime_ranking.adapters.AnimeRankingLoadStateAdapter
@@ -32,6 +33,7 @@ class AnimeRankingFragment : Fragment() {
     private val navController by lazy { findNavController() }
     private lateinit var animeRankingDetailedAdapter: AnimeRankingDetailedAdapter
     private val animeRankingViewModel by viewModels<AnimeRankingViewModel>()
+    private val args: AnimeRankingFragmentArgs by navArgs()
     private var selectedRankingType: AnimeRankingType = AnimeRankingType.all
 
     override fun onCreateView(
@@ -51,9 +53,22 @@ class AnimeRankingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.toolbar.setNavigationOnClickListener { navController.navigateUp() }
+        initRanking()
         setupFilterChips()
         setUpRecyclerView()
         setObservers()
+    }
+
+    private fun initRanking() {
+        selectedRankingType = if (args.animeRankingType == null) {
+            AnimeRankingType.all
+        } else {
+            runCatching {
+                AnimeRankingType.valueOf(
+                    args.animeRankingType?.lowercase() ?: AnimeRankingType.all.name
+                )
+            }.getOrElse { AnimeRankingType.all }
+        }
     }
 
     override fun onResume() {

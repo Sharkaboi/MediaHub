@@ -1,7 +1,7 @@
 package com.sharkaboi.mediahub.modules.manga_details.vm
 
 import androidx.lifecycle.MutableLiveData
-import com.sharkaboi.mediahub.common.data.api.models.manga.MangaByIDResponse
+import com.sharkaboi.mediahub.data.api.models.manga.MangaByIDResponse
 
 sealed class MangaDetailsState {
     object Idle : MangaDetailsState()

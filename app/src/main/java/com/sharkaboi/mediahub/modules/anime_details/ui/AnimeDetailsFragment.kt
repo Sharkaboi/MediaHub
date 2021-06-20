@@ -23,10 +23,10 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.shape.ShapeAppearanceModel
 import com.sharkaboi.mediahub.R
 import com.sharkaboi.mediahub.common.constants.MALExternalLinks
-import com.sharkaboi.mediahub.common.data.api.enums.AnimeStatus
-import com.sharkaboi.mediahub.common.data.api.models.anime.AnimeByIDResponse
 import com.sharkaboi.mediahub.common.extensions.*
 import com.sharkaboi.mediahub.common.util.openUrl
+import com.sharkaboi.mediahub.data.api.enums.AnimeStatus
+import com.sharkaboi.mediahub.data.api.models.anime.AnimeByIDResponse
 import com.sharkaboi.mediahub.databinding.CustomEpisodeCountDialogBinding
 import com.sharkaboi.mediahub.databinding.FragmentAnimeDetailsBinding
 import com.sharkaboi.mediahub.modules.anime_details.adapters.RecommendedAnimeAdapter
@@ -35,8 +35,6 @@ import com.sharkaboi.mediahub.modules.anime_details.adapters.RelatedMangaAdapter
 import com.sharkaboi.mediahub.modules.anime_details.vm.AnimeDetailsState
 import com.sharkaboi.mediahub.modules.anime_details.vm.AnimeDetailsViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.*
-
 
 @AndroidEntryPoint
 class AnimeDetailsFragment : Fragment() {
@@ -186,26 +184,41 @@ class AnimeDetailsFragment : Fragment() {
                     }
                 }
             }
-            otherDetails.tvMediaType.text = animeByIDResponse.mediaType.uppercase(Locale.ROOT)
-            otherDetails.tvAnimeCurrentStatus.text = animeByIDResponse.status.getAnimeAiringStatus()
-            otherDetails.tvTotalEps.text =
+            otherDetails.btnMediaType.text = ("Type : ${animeByIDResponse.mediaType.uppercase()}")
+            otherDetails.btnMediaType.setOnClickListener {
+                val action =
+                    AnimeDetailsFragmentDirections.openAnimeRankings(animeByIDResponse.mediaType)
+                navController.navigate(action)
+            }
+            otherDetails.btnAnimeCurrentStatus.text =
+                animeByIDResponse.status.getAnimeAiringStatus()
+            otherDetails.btnTotalEps.text =
                 animeByIDResponse.numEpisodes.let {
                     if (it == 0)
-                        getString(R.string.n_a)
+                        "${getString(R.string.n_a)} eps"
                     else
-                        it.toString()
+                        "$it ${if (it == 1) "ep" else "eps"}"
                 }
-            otherDetails.tvSeason.text = animeByIDResponse.startSeason?.let {
+            otherDetails.btnSeason.text = animeByIDResponse.startSeason?.let {
                 "${it.season.capitalizeFirst()} ${it.year}"
             } ?: getString(R.string.n_a)
+            otherDetails.btnSeason.setOnClickListener {
+                val action =
+                    AnimeDetailsFragmentDirections.openAnimeSeasonals(animeByIDResponse.startSeason?.toNavString())
+                navController.navigate(action)
+            }
             otherDetails.tvSchedule.text =
                 animeByIDResponse.broadcast?.getBroadcastTime() ?: getString(R.string.n_a)
-            otherDetails.tvSource.text =
-                animeByIDResponse.source?.replace('_', ' ')?.capitalizeFirst()
-                    ?: getString(R.string.n_a)
-            otherDetails.tvAverageLength.text =
-                animeByIDResponse.averageEpisodeDuration?.getEpisodeLengthFromSeconds()
-                    ?: getString(R.string.n_a)
+            otherDetails.btnSource.text =
+                ("From ${
+                    animeByIDResponse.source?.replace('_', ' ')?.capitalizeFirst()
+                        ?: getString(R.string.n_a)
+                }")
+            otherDetails.btnAverageLength.text =
+                animeByIDResponse.averageEpisodeDuration.getEpisodeLengthFromSeconds()
+            otherDetails.ibNotify.setOnClickListener {
+                onNotifyClick(animeByIDResponse.id, animeByIDResponse.broadcast)
+            }
             otherDetails.chipGroupOptions.forEach {
                 if (it is Chip) {
                     it.setEnsureMinTouchTargetSize(false)
@@ -327,6 +340,10 @@ class AnimeDetailsFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun onNotifyClick(id: Int, broadcast: AnimeByIDResponse.Broadcast?) {
+        showToast("Coming soon!")
     }
 
     private fun openImagesViewPager(pictures: List<AnimeByIDResponse.Picture>) {

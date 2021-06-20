@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.sharkaboi.mediahub.common.data.wrappers.MHTaskState
+import com.sharkaboi.mediahub.data.wrappers.MHTaskState
 import com.sharkaboi.mediahub.modules.settings.repository.SettingsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch

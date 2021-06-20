@@ -1,6 +1,6 @@
 package com.sharkaboi.mediahub.di
 
-import com.sharkaboi.mediahub.common.data.datastore.DataStoreRepository
+import com.sharkaboi.mediahub.data.datastore.DataStoreRepository
 import com.sharkaboi.mediahub.modules.settings.repository.SettingsRepository
 import dagger.Module
 import dagger.Provides

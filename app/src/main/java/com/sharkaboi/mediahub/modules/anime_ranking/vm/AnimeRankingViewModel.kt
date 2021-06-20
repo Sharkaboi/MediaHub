@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.sharkaboi.mediahub.common.data.api.enums.AnimeRankingType
-import com.sharkaboi.mediahub.common.data.api.models.anime.AnimeRankingResponse
+import com.sharkaboi.mediahub.data.api.enums.AnimeRankingType
+import com.sharkaboi.mediahub.data.api.models.anime.AnimeRankingResponse
 import com.sharkaboi.mediahub.modules.anime_ranking.repository.AnimeRankingRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow

@@ -11,7 +11,7 @@ import com.google.android.material.behavior.HideBottomViewOnScrollBehavior
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
 import com.sharkaboi.mediahub.R
-import com.sharkaboi.mediahub.common.data.api.enums.AnimeStatus
+import com.sharkaboi.mediahub.data.api.enums.AnimeStatus
 import com.sharkaboi.mediahub.databinding.FragmentAnimeBinding
 import com.sharkaboi.mediahub.modules.anime.adapters.AnimePagerAdapter
 

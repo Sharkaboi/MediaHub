@@ -18,8 +18,8 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.shape.ShapeAppearanceModel
 import com.sharkaboi.mediahub.R
-import com.sharkaboi.mediahub.common.data.api.enums.MangaStatus
-import com.sharkaboi.mediahub.common.data.api.models.manga.MangaByIDResponse
+import com.sharkaboi.mediahub.data.api.enums.MangaStatus
+import com.sharkaboi.mediahub.data.api.models.manga.MangaByIDResponse
 import com.sharkaboi.mediahub.common.extensions.*
 import com.sharkaboi.mediahub.databinding.CustomReadCountDialogBinding
 import com.sharkaboi.mediahub.databinding.FragmentMangaDetailsBinding

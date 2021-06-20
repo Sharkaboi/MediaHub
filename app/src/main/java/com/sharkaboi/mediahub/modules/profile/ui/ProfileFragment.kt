@@ -18,7 +18,7 @@ import com.github.mikephil.charting.data.PieEntry
 import com.google.android.material.color.MaterialColors
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.sharkaboi.mediahub.R
-import com.sharkaboi.mediahub.common.data.api.models.user.UserDetailsResponse
+import com.sharkaboi.mediahub.data.api.models.user.UserDetailsResponse
 import com.sharkaboi.mediahub.common.extensions.*
 import com.sharkaboi.mediahub.common.util.MPAndroidChartValueFormatter
 import com.sharkaboi.mediahub.common.util.openShareChooser

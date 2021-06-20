@@ -4,12 +4,12 @@ import android.util.Log
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.sharkaboi.mediahub.common.data.api.ApiConstants
-import com.sharkaboi.mediahub.common.data.api.enums.MangaRankingType
-import com.sharkaboi.mediahub.common.data.api.models.manga.MangaRankingResponse
-import com.sharkaboi.mediahub.common.data.datastore.DataStoreRepository
-import com.sharkaboi.mediahub.common.data.retrofit.MangaService
-import com.sharkaboi.mediahub.common.paging.MangaRankingDataSource
+import com.sharkaboi.mediahub.data.api.ApiConstants
+import com.sharkaboi.mediahub.data.api.enums.MangaRankingType
+import com.sharkaboi.mediahub.data.api.models.manga.MangaRankingResponse
+import com.sharkaboi.mediahub.data.datastore.DataStoreRepository
+import com.sharkaboi.mediahub.data.api.retrofit.MangaService
+import com.sharkaboi.mediahub.data.paging.MangaRankingDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
 
