@@ -27,6 +27,11 @@
     <PreferenceCategory app:title="Mediahub">
 
         <Preference
+            app:icon="@drawable/ic_update"
+            app:key="updates"
+            app:title="Check for updates" />
+
+        <Preference
             app:icon="@drawable/ic_info"
             app:key="about"
             app:title="About"

@@ -165,9 +165,14 @@ class MangaDetailsFragment : Fragment() {
             ivMangaMainPicture.setOnClickListener {
                 openImagesViewPager(mangaByIDResponse.pictures)
             }
-            otherDetails.tvSynopsis.text = mangaByIDResponse.synopsis ?: getString(R.string.n_a)
+            otherDetails.tvSynopsis.text =
+                mangaByIDResponse.synopsis?.ifBlank { getString(R.string.n_a) }
+                    ?: getString(R.string.n_a)
             otherDetails.tvSynopsis.setOnClickListener {
-                showFullSynopsisDialog(mangaByIDResponse.synopsis ?: getString(R.string.n_a))
+                showFullSynopsisDialog(
+                    mangaByIDResponse.synopsis?.ifBlank { getString(R.string.n_a) }
+                        ?: getString(R.string.n_a)
+                )
             }
             otherDetails.tvNsfwRating.text =
                 mangaByIDResponse.nsfw?.getMangaNsfwRating() ?: getString(R.string.n_a)

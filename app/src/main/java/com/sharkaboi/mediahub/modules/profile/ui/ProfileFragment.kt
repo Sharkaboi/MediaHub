@@ -65,6 +65,12 @@ class ProfileFragment : Fragment() {
                 crossfade(true)
                 transformations(RoundedCornersTransformation(10f))
             }
+            profileContent.chipGroupOptions.forEach {
+                if (it is Chip) {
+                    it.setEnsureMinTouchTargetSize(false)
+                    it.shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(8f)
+                }
+            }
             profileContent.ibSettings.setOnClickListener(showSettings)
         }
     }
@@ -193,12 +199,6 @@ class ProfileFragment : Fragment() {
                                 invalidate()
                             }
                         }
-                    }
-                }
-                chipGroupOptions.forEach {
-                    if (it is Chip) {
-                        it.setEnsureMinTouchTargetSize(false)
-                        it.shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(8f)
                     }
                 }
                 btnBlogs.setOnClickListener {

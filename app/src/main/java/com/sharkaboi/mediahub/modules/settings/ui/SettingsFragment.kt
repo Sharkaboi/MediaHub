@@ -9,19 +9,23 @@ import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
+import com.github.javiersantos.appupdater.AppUpdater
+import com.github.javiersantos.appupdater.enums.Display
+import com.github.javiersantos.appupdater.enums.UpdateFrom
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.sharkaboi.mediahub.BuildConfig
 import com.sharkaboi.mediahub.R
 import com.sharkaboi.mediahub.common.constants.AppConstants
-import com.sharkaboi.mediahub.data.sharedpref.SharedPreferencesKeys
 import com.sharkaboi.mediahub.common.extensions.showToast
 import com.sharkaboi.mediahub.common.util.openUrl
 import com.sharkaboi.mediahub.common.views.MaterialToolBarPreference
+import com.sharkaboi.mediahub.data.sharedpref.SharedPreferencesKeys
 import com.sharkaboi.mediahub.modules.auth.ui.OAuthActivity
 import com.sharkaboi.mediahub.modules.settings.vm.SettingsStates
 import com.sharkaboi.mediahub.modules.settings.vm.SettingsViewModel
 import dagger.hilt.android.AndroidEntryPoint
+
 
 @AndroidEntryPoint
 class SettingsFragment : PreferenceFragmentCompat() {
@@ -71,7 +75,12 @@ class SettingsFragment : PreferenceFragmentCompat() {
             showAnimeNotificationsDialog()
             true
         }
+        findPreference<Preference>(SharedPreferencesKeys.UPDATES)?.setOnPreferenceClickListener { _ ->
+            checkForUpdates()
+            true
+        }
     }
+
 
     private fun setObservers() {
         settingsViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
@@ -81,6 +90,15 @@ class SettingsFragment : PreferenceFragmentCompat() {
                 else -> Unit
             }
         }
+    }
+
+    private fun checkForUpdates() {
+        val appUpdater = AppUpdater(activity)
+            .setUpdateFrom(UpdateFrom.GITHUB)
+            .setGitHubUserAndRepo(AppConstants.githubUsername, AppConstants.githubRepoName)
+            .showAppUpdated(true)
+            .setDisplay(Display.DIALOG)
+        appUpdater.start()
     }
 
     private fun showAnimeNotificationsDialog() {

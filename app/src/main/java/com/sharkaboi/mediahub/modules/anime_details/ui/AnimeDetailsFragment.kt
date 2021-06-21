@@ -153,9 +153,14 @@ class AnimeDetailsFragment : Fragment() {
             ivAnimeMainPicture.setOnClickListener {
                 openImagesViewPager(animeByIDResponse.pictures)
             }
-            otherDetails.tvSynopsis.text = animeByIDResponse.synopsis ?: getString(R.string.n_a)
+            otherDetails.tvSynopsis.text =
+                animeByIDResponse.synopsis?.ifBlank { getString(R.string.n_a) }
+                    ?: getString(R.string.n_a)
             otherDetails.tvSynopsis.setOnClickListener {
-                showFullSynopsisDialog(animeByIDResponse.synopsis ?: getString(R.string.n_a))
+                showFullSynopsisDialog(
+                    animeByIDResponse.synopsis?.ifBlank { getString(R.string.n_a) }
+                    ?: getString(R.string.n_a)
+                )
             }
             otherDetails.ratingsChipGroup.apply {
                 removeAllViews()
