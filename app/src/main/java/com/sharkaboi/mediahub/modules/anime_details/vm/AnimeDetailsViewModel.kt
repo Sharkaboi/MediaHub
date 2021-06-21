@@ -59,8 +59,8 @@ class AnimeDetailsViewModel
     fun setEpisodeCount(numWatchedEps: Int) {
         _animeDetailsUpdate.apply {
             if (this.value?.animeStatus == null ||
-                this.value?.animeStatus != AnimeStatus.watching ||
-                this.value?.animeStatus != AnimeStatus.completed
+                (this.value?.animeStatus != AnimeStatus.watching &&
+                        this.value?.animeStatus != AnimeStatus.completed)
             ) {
                 value = this.value?.copy(animeStatus = AnimeStatus.watching)
             }
@@ -72,8 +72,8 @@ class AnimeDetailsViewModel
         Log.d(TAG, _animeDetailsUpdate.value.toString())
         _animeDetailsUpdate.apply {
             if (this.value?.animeStatus == null ||
-                this.value?.animeStatus != AnimeStatus.watching ||
-                this.value?.animeStatus != AnimeStatus.completed
+                (this.value?.animeStatus != AnimeStatus.watching &&
+                        this.value?.animeStatus != AnimeStatus.completed)
             ) {
                 value = this.value?.copy(animeStatus = AnimeStatus.watching)
             }
@@ -93,8 +93,8 @@ class AnimeDetailsViewModel
         Log.d(TAG, _animeDetailsUpdate.value.toString())
         _animeDetailsUpdate.apply {
             if (this.value?.animeStatus == null ||
-                this.value?.animeStatus != AnimeStatus.watching ||
-                this.value?.animeStatus != AnimeStatus.completed
+                (this.value?.animeStatus != AnimeStatus.watching &&
+                        this.value?.animeStatus != AnimeStatus.completed)
             ) {
                 value = this.value?.copy(animeStatus = AnimeStatus.watching)
             }
@@ -114,8 +114,8 @@ class AnimeDetailsViewModel
         Log.d(TAG, _animeDetailsUpdate.value.toString())
         _animeDetailsUpdate.apply {
             if (this.value?.animeStatus == null ||
-                this.value?.animeStatus != AnimeStatus.watching ||
-                this.value?.animeStatus != AnimeStatus.completed
+                (this.value?.animeStatus != AnimeStatus.watching &&
+                        this.value?.animeStatus != AnimeStatus.completed)
             ) {
                 value = this.value?.copy(animeStatus = AnimeStatus.watching)
             }
