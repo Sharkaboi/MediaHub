@@ -10,19 +10,19 @@ enum class AnimeRankingType {
     movie, //Top Anime Movies
     special, //Top Anime Specials
     bypopularity, //Top Anime by Popularity
-    favorite //Top Favorited Anime
-}
+    favorite; //Top Favorited Anime
 
-internal fun AnimeRankingType.getAnimeRanking(): String {
-    return when (this) {
-        AnimeRankingType.all -> "All"
-        AnimeRankingType.airing -> "Airing"
-        AnimeRankingType.upcoming -> "Upcoming"
-        AnimeRankingType.tv -> "TV"
-        AnimeRankingType.ova -> "OVA"
-        AnimeRankingType.movie -> "Movie"
-        AnimeRankingType.special -> "Specials"
-        AnimeRankingType.bypopularity -> "By popularity"
-        AnimeRankingType.favorite -> "In your list"
+    fun getAnimeRanking(): String {
+        return when (this) {
+            all -> "All"
+            airing -> "Airing"
+            upcoming -> "Upcoming"
+            tv -> "TV"
+            ova -> "OVA"
+            movie -> "Movie"
+            special -> "Specials"
+            bypopularity -> "By popularity"
+            favorite -> "In your list"
+        }
     }
 }

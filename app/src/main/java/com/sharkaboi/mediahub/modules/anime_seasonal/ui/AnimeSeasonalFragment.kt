@@ -17,15 +17,14 @@ import com.sharkaboi.mediahub.common.extensions.capitalizeFirst
 import com.sharkaboi.mediahub.common.extensions.getAnimeSeason
 import com.sharkaboi.mediahub.common.extensions.getAnimeSeasonYear
 import com.sharkaboi.mediahub.common.extensions.showToast
-import com.sharkaboi.mediahub.data.api.enums.AnimeSeason
 import com.sharkaboi.mediahub.data.api.enums.getAnimeSeason
-import com.sharkaboi.mediahub.data.api.enums.next
-import com.sharkaboi.mediahub.data.api.enums.previous
 import com.sharkaboi.mediahub.databinding.FragmentAnimeSeasonalBinding
 import com.sharkaboi.mediahub.modules.anime_seasonal.adapters.AnimeSeasonalAdapter
 import com.sharkaboi.mediahub.modules.anime_seasonal.adapters.AnimeSeasonalLoadStateAdapter
+import com.sharkaboi.mediahub.modules.anime_seasonal.util.AnimeSeasonWrapper
 import com.sharkaboi.mediahub.modules.anime_seasonal.vm.AnimeSeasonalViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.time.LocalDate
@@ -38,8 +37,7 @@ class AnimeSeasonalFragment : Fragment() {
     private lateinit var animeSeasonalAdapter: AnimeSeasonalAdapter
     private val animeSeasonalViewModel by viewModels<AnimeSeasonalViewModel>()
     private val args: AnimeSeasonalFragmentArgs by navArgs()
-    private var selectedSeason: AnimeSeason = LocalDate.now().getAnimeSeason()
-    private var selectedYear: Int = LocalDate.now().year
+    private var resultsJob: Job? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,6 +48,8 @@ class AnimeSeasonalFragment : Fragment() {
     }
 
     override fun onDestroyView() {
+        resultsJob?.cancel()
+        resultsJob = null
         binding.rvAnimeSeasonal.adapter = null
         _binding = null
         super.onDestroyView()
@@ -65,39 +65,48 @@ class AnimeSeasonalFragment : Fragment() {
     }
 
     private fun initSeason() {
-        selectedSeason = if (args.season == null) {
-            LocalDate.now().getAnimeSeason()
-        } else {
-            args.season.getAnimeSeason()
-        }
-        selectedYear = if (args.season == null) {
-            LocalDate.now().year
-        } else {
-            args.season.getAnimeSeasonYear()
-        }
+        animeSeasonalViewModel.setAnimeSeason(
+            AnimeSeasonWrapper(
+                animeSeason = if (args.season == null) {
+                    LocalDate.now().getAnimeSeason()
+                } else {
+                    args.season.getAnimeSeason()
+                },
+                year = if (args.season == null) {
+                    LocalDate.now().year
+                } else {
+                    args.season.getAnimeSeasonYear()
+                }
+            )
+        )
     }
 
     override fun onResume() {
         super.onResume()
-        collectPagedList(selectedSeason, selectedYear)
+        collectPagedList()
     }
 
     private fun setupSeasonButtons() {
         binding.apply {
             btnPrevSeason.setOnClickListener {
-                selectedSeason = selectedSeason.previous()
-                selectedYear = LocalDate.of(selectedYear, 1, 1).minusYears(1L).year
-                tvSeason.text = ("${selectedSeason.name.capitalizeFirst()} $selectedYear")
-                collectPagedList(selectedSeason, selectedYear)
+                animeSeasonalViewModel.previousSeason()
+                setSeasonText()
+                collectPagedList()
             }
             btnNextSeason.setOnClickListener {
-                selectedSeason = selectedSeason.next()
-                selectedYear = LocalDate.of(selectedYear, 1, 1).plusYears(1L).year
-                tvSeason.text = ("${selectedSeason.name.capitalizeFirst()} $selectedYear")
-                collectPagedList(selectedSeason, selectedYear)
+                animeSeasonalViewModel.nextSeason()
+                setSeasonText()
+                collectPagedList()
             }
-            tvSeason.text = ("${selectedSeason.name.capitalizeFirst()} $selectedYear")
+            setSeasonText()
         }
+    }
+
+    private fun setSeasonText() {
+        binding.tvSeason.text =
+            animeSeasonalViewModel.animeSeasonWrapper.let {
+                "${it.animeSeason.name.capitalizeFirst()} ${it.year}"
+            }
     }
 
     private fun setUpRecyclerView() {
@@ -115,7 +124,7 @@ class AnimeSeasonalFragment : Fragment() {
     }
 
     private fun setObservers() {
-        viewLifecycleOwner.lifecycleScope.launch {
+        lifecycleScope.launch {
             animeSeasonalAdapter.addLoadStateListener { loadStates ->
                 if (loadStates.source.refresh is LoadState.Error) {
                     showToast((loadStates.source.refresh as LoadState.Error).error.message)
@@ -127,12 +136,13 @@ class AnimeSeasonalFragment : Fragment() {
         }
     }
 
-    private fun collectPagedList(animeSeason: AnimeSeason, year: Int) {
-        binding.rvAnimeSeasonal.smoothScrollToPosition(0)
-        viewLifecycleOwner.lifecycleScope.launch {
-            animeSeasonalViewModel.setSeason(animeSeason, year)
+    private fun collectPagedList() {
+        resultsJob?.cancel()
+        resultsJob = lifecycleScope.launch {
+            animeSeasonalViewModel.getAnimeOfSeason()
                 .collectLatest { pagingData ->
                     animeSeasonalAdapter.submitData(pagingData)
+                    binding.rvAnimeSeasonal.smoothScrollToPosition(0)
                 }
         }
     }

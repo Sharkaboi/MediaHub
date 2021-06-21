@@ -17,7 +17,7 @@ internal fun Double.roundOfString(): String {
     return format.format(this)
 }
 
-internal fun String.getNsfwRating(): String {
+internal fun String.getAnimeNsfwRating(): String {
     return when {
         this.trim() == "white" -> {
             "SFW"
@@ -30,6 +30,23 @@ internal fun String.getNsfwRating(): String {
         }
         else -> {
             "SFW : N/A"
+        }
+    }
+}
+
+internal fun String.getMangaNsfwRating(): String {
+    return when {
+        this.trim() == "white" -> {
+            "Safe for work (SFW)"
+        }
+        this.trim() == "gray" -> {
+            "Maybe not safe for work (NSFW)"
+        }
+        this.trim() == "black" -> {
+            "Not safe for work (NSFW)"
+        }
+        else -> {
+            "N/A"
         }
     }
 }
@@ -89,7 +106,7 @@ internal fun String.getMangaPublishStatus(): String {
             "Yet to be published"
         }
         else -> {
-            "N/A"
+            "Publishing status : N/A"
         }
     }
 }

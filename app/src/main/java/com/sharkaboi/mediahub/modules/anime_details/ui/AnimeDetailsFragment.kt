@@ -99,6 +99,10 @@ class AnimeDetailsFragment : Fragment() {
                 }
             }
         }
+        binding.swipeRefresh.setOnRefreshListener {
+            animeDetailsViewModel.getAnimeDetails(args.animeId)
+            binding.swipeRefresh.isRefreshing = false
+        }
     }
 
     private fun setData(animeByIDResponse: AnimeByIDResponse) {
@@ -143,6 +147,7 @@ class AnimeDetailsFragment : Fragment() {
                 crossfade(true)
                 placeholder(R.drawable.ic_anime_placeholder)
                 error(R.drawable.ic_anime_placeholder)
+                fallback(R.drawable.ic_anime_placeholder)
                 transformations(RoundedCornersTransformation(8f))
             }
             ivAnimeMainPicture.setOnClickListener {
@@ -157,7 +162,7 @@ class AnimeDetailsFragment : Fragment() {
                 addView(Chip(context).apply {
                     setEnsureMinTouchTargetSize(false)
                     shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(8f)
-                    text = animeByIDResponse.nsfw?.getNsfwRating() ?: getString(R.string.n_a)
+                    text = animeByIDResponse.nsfw?.getAnimeNsfwRating() ?: getString(R.string.n_a)
                 })
                 addView(Chip(context).apply {
                     setEnsureMinTouchTargetSize(false)
@@ -201,7 +206,7 @@ class AnimeDetailsFragment : Fragment() {
                 }
             otherDetails.btnSeason.text = animeByIDResponse.startSeason?.let {
                 "${it.season.capitalizeFirst()} ${it.year}"
-            } ?: getString(R.string.n_a)
+            } ?: "Season : ${getString(R.string.n_a)}"
             otherDetails.btnSeason.setOnClickListener {
                 val action =
                     AnimeDetailsFragmentDirections.openAnimeSeasonals(animeByIDResponse.startSeason?.toNavString())

@@ -17,12 +17,12 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.shape.ShapeAppearanceModel
 import com.sharkaboi.mediahub.common.extensions.showToast
 import com.sharkaboi.mediahub.data.api.enums.AnimeRankingType
-import com.sharkaboi.mediahub.data.api.enums.getAnimeRanking
 import com.sharkaboi.mediahub.databinding.FragmentAnimeRankingBinding
 import com.sharkaboi.mediahub.modules.anime_ranking.adapters.AnimeRankingDetailedAdapter
 import com.sharkaboi.mediahub.modules.anime_ranking.adapters.AnimeRankingLoadStateAdapter
 import com.sharkaboi.mediahub.modules.anime_ranking.vm.AnimeRankingViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -34,7 +34,7 @@ class AnimeRankingFragment : Fragment() {
     private lateinit var animeRankingDetailedAdapter: AnimeRankingDetailedAdapter
     private val animeRankingViewModel by viewModels<AnimeRankingViewModel>()
     private val args: AnimeRankingFragmentArgs by navArgs()
-    private var selectedRankingType: AnimeRankingType = AnimeRankingType.all
+    private var resultsJob: Job? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,6 +45,8 @@ class AnimeRankingFragment : Fragment() {
     }
 
     override fun onDestroyView() {
+        resultsJob?.cancel()
+        resultsJob = null
         binding.rvAnimeRanking.adapter = null
         _binding = null
         super.onDestroyView()
@@ -60,20 +62,23 @@ class AnimeRankingFragment : Fragment() {
     }
 
     private fun initRanking() {
-        selectedRankingType = if (args.animeRankingType == null) {
-            AnimeRankingType.all
-        } else {
-            runCatching {
-                AnimeRankingType.valueOf(
-                    args.animeRankingType?.lowercase() ?: AnimeRankingType.all.name
-                )
-            }.getOrElse { AnimeRankingType.all }
-        }
+        animeRankingViewModel.setRankingType(
+            if (args.animeRankingType == null) {
+                AnimeRankingType.all
+            } else {
+                runCatching {
+                    AnimeRankingType.valueOf(
+                        args.animeRankingType?.lowercase()
+                            ?: AnimeRankingType.all.name
+                    )
+                }.getOrElse { AnimeRankingType.all }
+            }
+        )
     }
 
     override fun onResume() {
         super.onResume()
-        collectPagedList(selectedRankingType)
+        collectPagedList()
     }
 
     private fun setupFilterChips() {
@@ -83,11 +88,11 @@ class AnimeRankingFragment : Fragment() {
                 text = rankingType.getAnimeRanking()
                 setEnsureMinTouchTargetSize(false)
                 isCheckable = true
-                isChecked = rankingType == selectedRankingType
+                isChecked = rankingType == animeRankingViewModel.selectedRankingType
                 shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(8f)
                 setOnClickListener {
-                    selectedRankingType = rankingType
-                    collectPagedList(rankingType)
+                    animeRankingViewModel.setRankingType(rankingType)
+                    collectPagedList()
                 }
             })
         }
@@ -108,7 +113,7 @@ class AnimeRankingFragment : Fragment() {
     }
 
     private fun setObservers() {
-        viewLifecycleOwner.lifecycleScope.launch {
+        lifecycleScope.launch {
             animeRankingDetailedAdapter.addLoadStateListener { loadStates ->
                 if (loadStates.source.refresh is LoadState.Error) {
                     showToast((loadStates.source.refresh as LoadState.Error).error.message)
@@ -120,14 +125,14 @@ class AnimeRankingFragment : Fragment() {
         }
     }
 
-    private fun collectPagedList(rankingType: AnimeRankingType) {
-        binding.rvAnimeRanking.smoothScrollToPosition(0)
-        viewLifecycleOwner.lifecycleScope.launch {
-            animeRankingViewModel.setRankFilterType(rankingType)
+    private fun collectPagedList() {
+        resultsJob?.cancel()
+        resultsJob = lifecycleScope.launch {
+            animeRankingViewModel.getAnimeForRankingType()
                 .collectLatest { pagingData ->
                     animeRankingDetailedAdapter.submitData(pagingData)
+                    binding.rvAnimeRanking.smoothScrollToPosition(0)
                 }
         }
     }
-
 }

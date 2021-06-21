@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import coil.load
+import com.sharkaboi.mediahub.R
 import com.sharkaboi.mediahub.databinding.FragmentFullScreenImageBinding
 
 class FullScreenImageFragment : Fragment() {
@@ -35,7 +36,11 @@ class FullScreenImageFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.ivImage.load(imageUrl)
+        binding.ivImage.load(imageUrl){
+            crossfade(true)
+            error(R.drawable.ic_broken_image)
+            fallback(R.drawable.ic_broken_image)
+        }
     }
 
     companion object {

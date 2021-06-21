@@ -13,34 +13,27 @@ import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.sharkaboi.mediahub.common.extensions.showToast
 import com.sharkaboi.mediahub.data.api.enums.MangaStatus
 import com.sharkaboi.mediahub.data.api.enums.UserMangaSortType
-import com.sharkaboi.mediahub.common.extensions.showToast
 import com.sharkaboi.mediahub.databinding.FragmentMangaListByStatusBinding
 import com.sharkaboi.mediahub.modules.manga.adapters.MangaListAdapter
 import com.sharkaboi.mediahub.modules.manga.adapters.MangaLoadStateAdapter
 import com.sharkaboi.mediahub.modules.manga.vm.MangaViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MangaListByStatusFragment : Fragment() {
-    private var status: MangaStatus = MangaStatus.all
     private var _binding: FragmentMangaListByStatusBinding? = null
     private val binding get() = _binding!!
     private val mangaViewModel by viewModels<MangaViewModel>()
     private lateinit var mangaListAdapter: MangaListAdapter
     private val navController by lazy { findNavController() }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            status = MangaStatus.valueOf(
-                it.getString(MANGA_STATUS_KEY) ?: MangaStatus.all.name
-            )
-        }
-    }
+    private var resultsJob: Job? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,25 +44,31 @@ class MangaListByStatusFragment : Fragment() {
     }
 
     override fun onDestroyView() {
+        resultsJob?.cancel()
+        resultsJob = null
         binding.rvMangaByStatus.adapter = null
         _binding = null
         super.onDestroyView()
     }
 
-    override fun onResume() {
-        super.onResume()
-        viewLifecycleOwner.lifecycleScope.launch {
-            mangaViewModel.getMangaList(status, UserMangaSortType.list_updated_at)
-                .collectLatest { pagingData ->
-                    mangaListAdapter.submitData(pagingData)
-                }
-        }
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initStatus()
         setUpRecyclerView()
         setObservers()
+        setListeners()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        getMangaList()
+    }
+
+    private fun initStatus() {
+        val status = arguments?.getString(MANGA_STATUS_KEY)?.let { status ->
+            MangaStatus.valueOf(status)
+        } ?: MangaStatus.all
+        mangaViewModel.setMangaStatus(status)
     }
 
     private fun setUpRecyclerView() {
@@ -87,13 +86,8 @@ class MangaListByStatusFragment : Fragment() {
     }
 
     private fun setObservers() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            mangaViewModel.getMangaList(status, UserMangaSortType.list_updated_at)
-                .collectLatest { pagingData ->
-                    mangaListAdapter.submitData(pagingData)
-                }
-        }
-        viewLifecycleOwner.lifecycleScope.launch {
+        getMangaList()
+        lifecycleScope.launch {
             mangaListAdapter.addLoadStateListener { loadStates ->
                 if (loadStates.source.refresh is LoadState.Error) {
                     val errorMessage = (loadStates.source.refresh as LoadState.Error).error.message
@@ -106,13 +100,38 @@ class MangaListByStatusFragment : Fragment() {
             }
         }
         binding.swipeRefresh.setOnRefreshListener {
-            viewLifecycleOwner.lifecycleScope.launch {
-                mangaViewModel.getMangaList(status, UserMangaSortType.list_updated_at)
-                    .collectLatest { pagingData ->
-                        binding.swipeRefresh.isRefreshing = false
-                        mangaListAdapter.submitData(pagingData)
-                    }
+            getMangaList()
+            binding.swipeRefresh.isRefreshing = false
+        }
+    }
+
+    private fun setListeners() {
+        binding.ibFilter.setOnClickListener {
+            openSortMenu()
+        }
+    }
+
+    private fun openSortMenu() {
+        val singleItems = UserMangaSortType.getFormattedArray()
+        val checkedItem = UserMangaSortType.values().indexOf(mangaViewModel.currentChosenSortType)
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Sort manga by")
+            .setSingleChoiceItems(singleItems, checkedItem) { dialog, which ->
+                mangaViewModel.setSortType(UserMangaSortType.values()[which])
+                getMangaList()
+                dialog.dismiss()
             }
+            .show()
+    }
+
+    private fun getMangaList() {
+        resultsJob?.cancel()
+        resultsJob = lifecycleScope.launch {
+            mangaViewModel.getMangaList()
+                .collectLatest { pagingData ->
+                    mangaListAdapter.submitData(pagingData)
+                    scrollRecyclerView()
+                }
         }
     }
 

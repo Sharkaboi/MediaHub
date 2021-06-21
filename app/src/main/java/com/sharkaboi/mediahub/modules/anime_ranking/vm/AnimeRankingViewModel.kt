@@ -16,15 +16,21 @@ class AnimeRankingViewModel
 @Inject constructor(
     private val animeRankingRepository: AnimeRankingRepository
 ) : ViewModel() {
+    private var _selectedRankingType: AnimeRankingType = AnimeRankingType.all
+    val selectedRankingType: AnimeRankingType get() = _selectedRankingType
     private var _pagedResult: Flow<PagingData<AnimeRankingResponse.Data>>? = null
 
-    suspend fun setRankFilterType(
-        it: AnimeRankingType
-    ): Flow<PagingData<AnimeRankingResponse.Data>> {
+    suspend fun getAnimeForRankingType(): Flow<PagingData<AnimeRankingResponse.Data>> {
         val newResult: Flow<PagingData<AnimeRankingResponse.Data>> =
-            animeRankingRepository.getAnimeRanking(it).cachedIn(viewModelScope)
+            animeRankingRepository
+                .getAnimeRanking(_selectedRankingType)
+                .cachedIn(viewModelScope)
         _pagedResult = newResult
         return newResult
+    }
+
+    fun setRankingType(animeRankingType: AnimeRankingType) {
+        _selectedRankingType = animeRankingType
     }
 
     companion object {

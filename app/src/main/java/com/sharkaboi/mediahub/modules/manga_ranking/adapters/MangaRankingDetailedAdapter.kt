@@ -28,6 +28,7 @@ class MangaRankingDetailedAdapter(
                         crossfade(true)
                         placeholder(R.drawable.ic_manga_placeholder)
                         error(R.drawable.ic_manga_placeholder)
+                        fallback(R.drawable.ic_manga_placeholder)
                         transformations(RoundedCornersTransformation(topLeft = 8f, topRight = 8f))
                     }
                     tvMangaName.text = it.node.title

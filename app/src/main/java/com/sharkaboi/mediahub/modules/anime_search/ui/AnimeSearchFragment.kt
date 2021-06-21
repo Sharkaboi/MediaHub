@@ -23,6 +23,7 @@ import com.sharkaboi.mediahub.modules.anime_search.adapters.AnimeSearchListAdapt
 import com.sharkaboi.mediahub.modules.anime_search.adapters.AnimeSearchLoadStateAdapter
 import com.sharkaboi.mediahub.modules.anime_search.vm.AnimeSearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -34,6 +35,7 @@ class AnimeSearchFragment : Fragment() {
     private lateinit var animeSearchListAdapter: AnimeSearchListAdapter
     private val animeSearchViewModel by viewModels<AnimeSearchViewModel>()
     private val navController by lazy { findNavController() }
+    private var searchJob: Job? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,6 +46,8 @@ class AnimeSearchFragment : Fragment() {
     }
 
     override fun onDestroyView() {
+        searchJob?.cancel()
+        searchJob = null
         binding.rvSearchResults.adapter = null
         _binding = null
         super.onDestroyView()
@@ -70,7 +74,7 @@ class AnimeSearchFragment : Fragment() {
     }
 
     private fun setObservers() {
-        viewLifecycleOwner.lifecycleScope.launch {
+        lifecycleScope.launch {
             animeSearchListAdapter.addLoadStateListener { loadStates ->
                 if (loadStates.source.refresh is LoadState.Error) {
                     showToast((loadStates.source.refresh as LoadState.Error).error.message)
@@ -90,7 +94,8 @@ class AnimeSearchFragment : Fragment() {
     }
 
     private fun searchAnime(query: CharSequence?) {
-        viewLifecycleOwner.lifecycleScope.launch {
+        searchJob?.cancel()
+        searchJob = lifecycleScope.launch {
             query?.toString()?.let {
                 if (it.length < 3) {
                     binding.searchEmptyView.root.isVisible = true
@@ -102,6 +107,7 @@ class AnimeSearchFragment : Fragment() {
                 animeSearchViewModel.getAnime(it.trim())
                     .collectLatest { pagingData ->
                         animeSearchListAdapter.submitData(pagingData)
+                        binding.rvSearchResults.scrollToPosition(0)
                     }
             }
         }

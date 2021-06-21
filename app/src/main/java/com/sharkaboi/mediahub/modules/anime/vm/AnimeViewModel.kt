@@ -17,16 +17,13 @@ class AnimeViewModel
 @Inject constructor(
     private val animeRepository: AnimeRepository
 ) : ViewModel() {
-    private var currentChosenAnimeStatus: AnimeStatus = AnimeStatus.all
-    private var currentChosenSortType: UserAnimeSortType = UserAnimeSortType.list_updated_at
+    private var _currentChosenAnimeStatus: AnimeStatus = AnimeStatus.all
+    val currentChosenAnimeStatus: AnimeStatus get() = _currentChosenAnimeStatus
+    private var _currentChosenSortType: UserAnimeSortType = UserAnimeSortType.list_updated_at
+    val currentChosenSortType: UserAnimeSortType get() = _currentChosenSortType
     private var _pagedAnimeList: Flow<PagingData<UserAnimeListResponse.Data>>? = null
 
-    suspend fun getAnimeList(
-        animeStatus: AnimeStatus,
-        userAnimeSortType: UserAnimeSortType
-    ): Flow<PagingData<UserAnimeListResponse.Data>> {
-        currentChosenAnimeStatus = animeStatus
-        currentChosenSortType = userAnimeSortType
+    suspend fun getAnimeList(): Flow<PagingData<UserAnimeListResponse.Data>> {
         val newResult: Flow<PagingData<UserAnimeListResponse.Data>> =
             animeRepository.getAnimeListFlow(
                 animeStatus = currentChosenAnimeStatus,
@@ -34,6 +31,14 @@ class AnimeViewModel
             ).cachedIn(viewModelScope)
         _pagedAnimeList = newResult
         return newResult
+    }
+
+    fun setSortType(userAnimeSortType: UserAnimeSortType) {
+        _currentChosenSortType = userAnimeSortType
+    }
+
+    fun setAnimeStatus(animeStatus: AnimeStatus) {
+        _currentChosenAnimeStatus = animeStatus
     }
 
     companion object {

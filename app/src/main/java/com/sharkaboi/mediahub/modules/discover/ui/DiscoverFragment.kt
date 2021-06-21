@@ -61,7 +61,7 @@ class DiscoverFragment : Fragment() {
                 navController.navigate(DiscoverFragmentDirections.openAnimeSuggestions())
             }
             btnMangaRanking.setOnClickListener {
-                navController.navigate(DiscoverFragmentDirections.openMangaRankings())
+                navController.navigate(DiscoverFragmentDirections.openMangaRankings(null))
             }
             btnAnimeSearch.setOnClickListener {
                 navController.navigate(DiscoverFragmentDirections.openAnimeSearch())

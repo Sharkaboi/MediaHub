@@ -17,16 +17,13 @@ class MangaViewModel
 @Inject constructor(
     private val mangaRepository: MangaRepository
 ) : ViewModel() {
-    private var currentChosenMangaStatus: MangaStatus = MangaStatus.all
-    private var currentChosenSortType: UserMangaSortType = UserMangaSortType.list_updated_at
+    private var _currentChosenMangaStatus: MangaStatus = MangaStatus.all
+    val currentChosenMangaStatus get() = _currentChosenMangaStatus
+    private var _currentChosenSortType: UserMangaSortType = UserMangaSortType.list_updated_at
+    val currentChosenSortType get() = _currentChosenSortType
     private var _pagedMangaList: Flow<PagingData<UserMangaListResponse.Data>>? = null
 
-    suspend fun getMangaList(
-        mangaStatus: MangaStatus,
-        userMangaSortType: UserMangaSortType
-    ): Flow<PagingData<UserMangaListResponse.Data>> {
-        currentChosenMangaStatus = mangaStatus
-        currentChosenSortType = userMangaSortType
+    suspend fun getMangaList(): Flow<PagingData<UserMangaListResponse.Data>> {
         val newResult: Flow<PagingData<UserMangaListResponse.Data>> =
             mangaRepository.getMangaListFlow(
                 mangaStatus = currentChosenMangaStatus,
@@ -36,7 +33,15 @@ class MangaViewModel
         return newResult
     }
 
+    fun setMangaStatus(status: MangaStatus) {
+        _currentChosenMangaStatus = status
+    }
+
+    fun setSortType(userMangaSortType: UserMangaSortType) {
+        _currentChosenSortType = userMangaSortType
+    }
+
     companion object {
-        private const val TAG = "AnimeViewModel"
+        private const val TAG = "MangaViewModel"
     }
 }

@@ -93,4 +93,11 @@
     <string name="videos">Videos</string>
     <string name="other_details">Other details</string>
     <string name="notify">Notify</string>
+    <string name="filter">Filter</string>
+    <string name="friends">Friends</string>
+    <string name="history">History</string>
+    <string name="clubs">Clubs</string>
+    <string name="blogs">Blogs</string>
+    <string name="forum_topics">Forum topics</string>
+    <string name="no_images">No images found</string>
 </resources>

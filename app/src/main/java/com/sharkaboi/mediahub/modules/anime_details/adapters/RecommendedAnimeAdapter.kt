@@ -71,6 +71,7 @@ class RecommendedAnimeAdapter(private val onClick: (Int) -> Unit) :
                 crossfade(true)
                 placeholder(R.drawable.ic_anime_placeholder)
                 error(R.drawable.ic_anime_placeholder)
+                fallback(R.drawable.ic_anime_placeholder)
                 transformations(RoundedCornersTransformation(topLeft = 8f, topRight = 8f))
             }
         }

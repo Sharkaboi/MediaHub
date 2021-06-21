@@ -9,19 +9,20 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.chip.Chip
 import com.google.android.material.shape.ShapeAppearanceModel
-import com.sharkaboi.mediahub.data.api.enums.MangaRankingType
-import com.sharkaboi.mediahub.data.api.enums.getMangaRanking
 import com.sharkaboi.mediahub.common.extensions.showToast
+import com.sharkaboi.mediahub.data.api.enums.MangaRankingType
 import com.sharkaboi.mediahub.databinding.FragmentMangaRankingBinding
 import com.sharkaboi.mediahub.modules.manga_ranking.adapters.MangaRankingDetailedAdapter
 import com.sharkaboi.mediahub.modules.manga_ranking.adapters.MangaRankingLoadStateAdapter
 import com.sharkaboi.mediahub.modules.manga_ranking.vm.MangaRankingViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -32,7 +33,8 @@ class MangaRankingFragment : Fragment() {
     private val navController by lazy { findNavController() }
     private lateinit var mangaRankingDetailedAdapter: MangaRankingDetailedAdapter
     private val mangaRankingViewModel by viewModels<MangaRankingViewModel>()
-    private var selectedRankingType: MangaRankingType = MangaRankingType.all
+    private val args: MangaRankingFragmentArgs by navArgs()
+    private var resultsJob: Job? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,6 +45,8 @@ class MangaRankingFragment : Fragment() {
     }
 
     override fun onDestroyView() {
+        resultsJob?.cancel()
+        resultsJob = null
         binding.rvMangaRanking.adapter = null
         _binding = null
         super.onDestroyView()
@@ -51,6 +55,7 @@ class MangaRankingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.toolbar.setNavigationOnClickListener { navController.navigateUp() }
+        initRanking()
         setupFilterChips()
         setUpRecyclerView()
         setObservers()
@@ -58,21 +63,36 @@ class MangaRankingFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        collectPagedList(selectedRankingType)
+        getMangaRankingList()
+    }
+
+    private fun initRanking() {
+        mangaRankingViewModel.setRankingType(
+            if (args.mangaRankingType == null) {
+                MangaRankingType.all
+            } else {
+                runCatching {
+                    MangaRankingType.valueOf(
+                        args.mangaRankingType?.lowercase()
+                            ?: MangaRankingType.all.name
+                    )
+                }.getOrElse { MangaRankingType.all }
+            }
+        )
     }
 
     private fun setupFilterChips() {
         binding.rankTypeChipGroup.removeAllViews()
         MangaRankingType.values().forEach { rankingType ->
             binding.rankTypeChipGroup.addView(Chip(context).apply {
-                text = rankingType.getMangaRanking()
+                text = rankingType.getFormattedString()
                 setEnsureMinTouchTargetSize(false)
                 isCheckable = true
-                isChecked = rankingType == selectedRankingType
+                isChecked = rankingType == mangaRankingViewModel.selectedRankingType
                 shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(8f)
                 setOnClickListener {
-                    selectedRankingType = rankingType
-                    collectPagedList(rankingType)
+                    mangaRankingViewModel.setRankingType(rankingType)
+                    getMangaRankingList()
                 }
             })
         }
@@ -93,7 +113,7 @@ class MangaRankingFragment : Fragment() {
     }
 
     private fun setObservers() {
-        viewLifecycleOwner.lifecycleScope.launch {
+        lifecycleScope.launch {
             mangaRankingDetailedAdapter.addLoadStateListener { loadStates ->
                 if (loadStates.source.refresh is LoadState.Error) {
                     showToast((loadStates.source.refresh as LoadState.Error).error.message)
@@ -105,12 +125,13 @@ class MangaRankingFragment : Fragment() {
         }
     }
 
-    private fun collectPagedList(rankingType: MangaRankingType) {
-        binding.rvMangaRanking.smoothScrollToPosition(0)
-        viewLifecycleOwner.lifecycleScope.launch {
-            mangaRankingViewModel.setRankFilterType(rankingType)
+    private fun getMangaRankingList() {
+        resultsJob?.cancel()
+        resultsJob = lifecycleScope.launch {
+            mangaRankingViewModel.getMangaRankingOfFilter()
                 .collectLatest { pagingData ->
                     mangaRankingDetailedAdapter.submitData(pagingData)
+                    binding.rvMangaRanking.smoothScrollToPosition(0)
                 }
         }
     }

@@ -72,6 +72,7 @@ class RelatedMangaAdapter(private val onClick: (Int) -> Unit) :
                 crossfade(true)
                 placeholder(R.drawable.ic_manga_placeholder)
                 error(R.drawable.ic_manga_placeholder)
+                fallback(R.drawable.ic_manga_placeholder)
                 transformations(RoundedCornersTransformation(topLeft = 8f, topRight = 8f))
             }
         }

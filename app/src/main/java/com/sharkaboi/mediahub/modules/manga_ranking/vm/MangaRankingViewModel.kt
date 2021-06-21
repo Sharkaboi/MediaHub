@@ -16,15 +16,21 @@ class MangaRankingViewModel
 @Inject constructor(
     private val mangaRankingRepository: MangaRankingRepository
 ) : ViewModel() {
+    private var _selectedRankingType: MangaRankingType = MangaRankingType.all
+    val selectedRankingType: MangaRankingType get() = _selectedRankingType
     private var _pagedResult: Flow<PagingData<MangaRankingResponse.Data>>? = null
 
-    suspend fun setRankFilterType(
-        it: MangaRankingType
-    ): Flow<PagingData<MangaRankingResponse.Data>> {
+    suspend fun getMangaRankingOfFilter(): Flow<PagingData<MangaRankingResponse.Data>> {
         val newResult: Flow<PagingData<MangaRankingResponse.Data>> =
-            mangaRankingRepository.getMangaRanking(it).cachedIn(viewModelScope)
+            mangaRankingRepository
+                .getMangaRanking(_selectedRankingType)
+                .cachedIn(viewModelScope)
         _pagedResult = newResult
         return newResult
+    }
+
+    fun setRankingType(mangaRankingType: MangaRankingType) {
+        _selectedRankingType = mangaRankingType
     }
 
     companion object {

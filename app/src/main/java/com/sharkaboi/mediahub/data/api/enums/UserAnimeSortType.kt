@@ -5,5 +5,14 @@ enum class UserAnimeSortType {
     list_score, //Descending
     list_updated_at, //Descending
     anime_title, //Ascending
-    anime_start_date, //Descending
+    anime_start_date; //Descending
+
+    companion object {
+        fun getFormattedArray() = arrayOf(
+            "Highest rating",
+            "Last updated",
+            "Alphabetical order",
+            "Newest addition"
+        )
+    }
 }
