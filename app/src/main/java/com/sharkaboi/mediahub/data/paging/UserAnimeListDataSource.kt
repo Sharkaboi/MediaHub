@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.haroldadmin.cnradapter.NetworkResponse
+import com.sharkaboi.mediahub.common.extensions.emptyString
 import com.sharkaboi.mediahub.data.api.ApiConstants
 import com.sharkaboi.mediahub.data.api.enums.AnimeStatus
 import com.sharkaboi.mediahub.data.api.enums.UserAnimeSortType
@@ -11,13 +12,13 @@ import com.sharkaboi.mediahub.data.api.models.ApiError
 import com.sharkaboi.mediahub.data.api.models.useranime.UserAnimeListResponse
 import com.sharkaboi.mediahub.data.api.retrofit.UserAnimeService
 import com.sharkaboi.mediahub.data.wrappers.NoTokenFoundError
-import com.sharkaboi.mediahub.common.extensions.emptyString
 
 class UserAnimeListDataSource(
     private val userAnimeService: UserAnimeService,
     private val accessToken: String?,
     private val animeStatus: AnimeStatus,
-    private val animeSortType: UserAnimeSortType = UserAnimeSortType.list_updated_at
+    private val animeSortType: UserAnimeSortType = UserAnimeSortType.list_updated_at,
+    private val showNsfw: Boolean = false
 ) : PagingSource<Int, UserAnimeListResponse.Data>() {
 
     override fun getRefreshKey(state: PagingState<Int, UserAnimeListResponse.Data>): Int? {
@@ -51,7 +52,8 @@ class UserAnimeListDataSource(
                     status = getStatus(),
                     offset = offset,
                     limit = limit,
-                    sort = animeSortType.name
+                    sort = animeSortType.name,
+                    nsfw = if (showNsfw) ApiConstants.NSFW_ALSO else ApiConstants.SFW_ONLY
                 ).await()
                 when (response) {
                     is NetworkResponse.Success -> {

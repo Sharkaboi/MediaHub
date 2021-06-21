@@ -4,9 +4,11 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
 import com.haroldadmin.cnradapter.NetworkResponseAdapterFactory
-import com.sharkaboi.mediahub.data.datastore.DataStoreRepository
-import com.sharkaboi.mediahub.data.datastore.dataStore
+import com.sharkaboi.mediahub.BuildConfig
 import com.sharkaboi.mediahub.data.api.retrofit.*
+import com.sharkaboi.mediahub.data.datastore.DataStoreRepository
+import com.sharkaboi.mediahub.data.datastore.DataStoreRepositoryImpl
+import com.sharkaboi.mediahub.data.datastore.dataStore
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -14,6 +16,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
@@ -24,7 +28,22 @@ object DataModule {
 
     @Provides
     @Singleton
-    fun getRetrofitBuilder(): Retrofit =
+    fun getLoggingInterceptor(): HttpLoggingInterceptor =
+        HttpLoggingInterceptor().apply { level = HttpLoggingInterceptor.Level.BASIC }
+
+    @Provides
+    @Singleton
+    fun getOkHttpClient(httpLoggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
+        return OkHttpClient.Builder().apply {
+            if (BuildConfig.DEBUG) {
+                addInterceptor(httpLoggingInterceptor)
+            }
+        }.build()
+    }
+
+    @Provides
+    @Singleton
+    fun getRetrofitBuilder(okHttpClient: OkHttpClient): Retrofit =
         Retrofit.Builder()
             .baseUrl("https://api.myanimelist.net/v2/")
             .addCallAdapterFactory(NetworkResponseAdapterFactory())
@@ -35,12 +54,13 @@ object DataModule {
                         .build()
                 )
             )
+            .client(okHttpClient)
             .build()
 
     @Provides
     @Singleton
     fun getDataStoreRepository(@ApplicationContext context: Context): DataStoreRepository =
-        DataStoreRepository(context.dataStore)
+        DataStoreRepositoryImpl(context.dataStore)
 
     @Provides
     @Singleton

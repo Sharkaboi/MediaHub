@@ -1,8 +1,10 @@
 package com.sharkaboi.mediahub.di
 
-import com.sharkaboi.mediahub.data.datastore.DataStoreRepository
+import android.content.SharedPreferences
 import com.sharkaboi.mediahub.data.api.retrofit.AnimeService
+import com.sharkaboi.mediahub.data.datastore.DataStoreRepository
 import com.sharkaboi.mediahub.modules.anime_ranking.repository.AnimeRankingRepository
+import com.sharkaboi.mediahub.modules.anime_ranking.repository.AnimeRankingRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,7 +19,8 @@ object AnimeRankingModule {
     @ActivityRetainedScoped
     fun getAnimeRankingRepository(
         animeService: AnimeService,
-        dataStoreRepository: DataStoreRepository
+        dataStoreRepository: DataStoreRepository,
+        sharedPreferences: SharedPreferences
     ): AnimeRankingRepository =
-        AnimeRankingRepository(animeService, dataStoreRepository)
+        AnimeRankingRepositoryImpl(animeService, dataStoreRepository, sharedPreferences)
 }

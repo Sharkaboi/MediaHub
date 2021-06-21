@@ -1,9 +1,10 @@
 package com.sharkaboi.mediahub.di
 
-import com.sharkaboi.mediahub.data.datastore.DataStoreRepository
 import com.sharkaboi.mediahub.data.api.retrofit.AnimeService
 import com.sharkaboi.mediahub.data.api.retrofit.UserAnimeService
+import com.sharkaboi.mediahub.data.datastore.DataStoreRepository
 import com.sharkaboi.mediahub.modules.anime_details.repository.AnimeDetailsRepository
+import com.sharkaboi.mediahub.modules.anime_details.repository.AnimeDetailsRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,5 +22,5 @@ object AnimeDetailsModule {
         userAnimeService: UserAnimeService,
         dataStoreRepository: DataStoreRepository
     ): AnimeDetailsRepository =
-        AnimeDetailsRepository(animeService, userAnimeService, dataStoreRepository)
+        AnimeDetailsRepositoryImpl(animeService, userAnimeService, dataStoreRepository)
 }

@@ -8,5 +8,6 @@ class SharedPreferencesKeys {
         const val LOG_OUT = "logout"
         const val ANIME_NOTIFS = "anime_notifs"
         const val TOOLBAR = "toolbar"
+        const val NSFW_OPTION = "nsfwOption"
     }
 }

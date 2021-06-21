@@ -39,12 +39,7 @@
     <string name="synopsis">Synopsis</string>
     <string name="rating">Rating</string>
     <string name="genres">Genres</string>
-    <string name="media_type">Media type</string>
-    <string name="airing_status">Airing status</string>
-    <string name="total_episode_count">Total episode count</string>
-    <string name="airing_season">Airing season</string>
     <string name="schedule">Schedule</string>
-    <string name="source">Source</string>
     <string name="studios">Studios</string>
     <string name="recommendations">Recommendations</string>
     <string name="related_anime">Related anime</string>
@@ -61,9 +56,6 @@
     <string name="authors">Authors</string>
     <string name="reading">Reading</string>
     <string name="nsfw_rating">NSFW rating</string>
-    <string name="publishing_status">Publishing status</string>
-    <string name="total_volume_count">Total volumes</string>
-    <string name="total_chapter_count">Total chapters</string>
     <string name="serialization">Serialization</string>
     <string name="enter_read_count">Enter read count</string>
     <string name="search_for_any_manga">Search for any manga</string>
@@ -100,4 +92,12 @@
     <string name="blogs">Blogs</string>
     <string name="forum_topics">Forum topics</string>
     <string name="no_images">No images found</string>
+    <string name="dark_mode">Dark mode</string>
+    <string name="theme">Theme</string>
+    <string name="filters">Filters</string>
+    <string name="nsfw_hint">Show 18+ media also</string>
+    <string name="anime_notifs_hint">Anime notifications</string>
+    <string name="updates_hint">Check for updates</string>
+    <string name="about">About</string>
+    <string name="log_out">Log out</string>
 </resources>

@@ -2,6 +2,7 @@ package com.sharkaboi.mediahub.di
 
 import com.sharkaboi.mediahub.data.datastore.DataStoreRepository
 import com.sharkaboi.mediahub.modules.settings.repository.SettingsRepository
+import com.sharkaboi.mediahub.modules.settings.repository.SettingsRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,5 +18,5 @@ object SettingsModule {
     fun getSettingsRepository(
         dataStoreRepository: DataStoreRepository
     ): SettingsRepository =
-        SettingsRepository(dataStoreRepository)
+        SettingsRepositoryImpl(dataStoreRepository)
 }

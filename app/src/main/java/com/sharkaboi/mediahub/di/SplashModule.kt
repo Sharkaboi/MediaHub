@@ -1,8 +1,9 @@
 package com.sharkaboi.mediahub.di
 
-import com.sharkaboi.mediahub.data.datastore.DataStoreRepository
 import com.sharkaboi.mediahub.data.api.retrofit.AuthService
+import com.sharkaboi.mediahub.data.datastore.DataStoreRepository
 import com.sharkaboi.mediahub.modules.splash.repository.SplashRepository
+import com.sharkaboi.mediahub.modules.splash.repository.SplashRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,5 +20,5 @@ object SplashModule {
         authService: AuthService,
         dataStoreRepository: DataStoreRepository
     ): SplashRepository =
-        SplashRepository(dataStoreRepository, authService)
+        SplashRepositoryImpl(dataStoreRepository, authService)
 }

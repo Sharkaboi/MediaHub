@@ -60,6 +60,7 @@ dependencies {
     kapt "com.google.dagger:hilt-compiler:$hilt_version"
     //networking
     implementation "com.squareup.retrofit2:retrofit:2.9.0"
+    implementation "com.squareup.okhttp3:logging-interceptor:3.9.0"
     implementation "com.squareup.retrofit2:converter-moshi:2.9.0"
     implementation "com.github.haroldadmin:NetworkResponseAdapter:4.1.0"
     //moshi

@@ -4,19 +4,20 @@ import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.haroldadmin.cnradapter.NetworkResponse
+import com.sharkaboi.mediahub.common.extensions.emptyString
 import com.sharkaboi.mediahub.data.api.ApiConstants
 import com.sharkaboi.mediahub.data.api.enums.AnimeSeason
 import com.sharkaboi.mediahub.data.api.models.ApiError
 import com.sharkaboi.mediahub.data.api.models.anime.AnimeSeasonalResponse
 import com.sharkaboi.mediahub.data.api.retrofit.AnimeService
 import com.sharkaboi.mediahub.data.wrappers.NoTokenFoundError
-import com.sharkaboi.mediahub.common.extensions.emptyString
 
 class AnimeSeasonalDataSource(
     private val animeService: AnimeService,
     private val accessToken: String?,
     private val animeSeason: AnimeSeason,
-    private val year: Int
+    private val year: Int,
+    private val showNsfw: Boolean = false
 ) : PagingSource<Int, AnimeSeasonalResponse.Data>() {
 
     override fun getRefreshKey(state: PagingState<Int, AnimeSeasonalResponse.Data>): Int? {
@@ -50,7 +51,8 @@ class AnimeSeasonalDataSource(
                     offset = offset,
                     limit = limit,
                     season = animeSeason.name,
-                    year = year
+                    year = year,
+                    nsfw = if (showNsfw) ApiConstants.NSFW_ALSO else ApiConstants.SFW_ONLY
                 ).await()
                 when (response) {
                     is NetworkResponse.Success -> {

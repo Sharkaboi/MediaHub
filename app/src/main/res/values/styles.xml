@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="progress" parent="Theme.MediaHub">
+        <item name="android:background">@color/black_bg</item>
+    </style>
+
+    <style name="image_slider_bg" parent="Theme.MediaHub">
+        <item name="android:background">?colorOnPrimary</item>
+    </style>
+</resources>

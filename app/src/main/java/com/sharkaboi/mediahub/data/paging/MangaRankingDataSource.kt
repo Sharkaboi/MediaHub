@@ -4,18 +4,19 @@ import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.haroldadmin.cnradapter.NetworkResponse
+import com.sharkaboi.mediahub.common.extensions.emptyString
 import com.sharkaboi.mediahub.data.api.ApiConstants
 import com.sharkaboi.mediahub.data.api.enums.MangaRankingType
 import com.sharkaboi.mediahub.data.api.models.ApiError
 import com.sharkaboi.mediahub.data.api.models.manga.MangaRankingResponse
 import com.sharkaboi.mediahub.data.api.retrofit.MangaService
 import com.sharkaboi.mediahub.data.wrappers.NoTokenFoundError
-import com.sharkaboi.mediahub.common.extensions.emptyString
 
 class MangaRankingDataSource(
     private val mangaService: MangaService,
     private val accessToken: String?,
-    private val mangaRankingType: MangaRankingType
+    private val mangaRankingType: MangaRankingType,
+    private val showNsfw: Boolean = false
 ) : PagingSource<Int, MangaRankingResponse.Data>() {
 
     override fun getRefreshKey(state: PagingState<Int, MangaRankingResponse.Data>): Int? {
@@ -48,7 +49,8 @@ class MangaRankingDataSource(
                     authHeader = ApiConstants.BEARER_SEPARATOR + accessToken,
                     offset = offset,
                     limit = limit,
-                    rankingType = mangaRankingType.name
+                    rankingType = mangaRankingType.name,
+                    nsfw = if (showNsfw) ApiConstants.NSFW_ALSO else ApiConstants.SFW_ONLY
                 ).await()
                 when (response) {
                     is NetworkResponse.Success -> {

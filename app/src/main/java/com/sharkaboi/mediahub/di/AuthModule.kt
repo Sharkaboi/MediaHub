@@ -1,8 +1,9 @@
 package com.sharkaboi.mediahub.di
 
-import com.sharkaboi.mediahub.data.datastore.DataStoreRepository
 import com.sharkaboi.mediahub.data.api.retrofit.AuthService
+import com.sharkaboi.mediahub.data.datastore.DataStoreRepository
 import com.sharkaboi.mediahub.modules.auth.repository.OAuthRepository
+import com.sharkaboi.mediahub.modules.auth.repository.OAuthRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,5 +20,5 @@ object AuthModule {
         authService: AuthService,
         dataStoreRepository: DataStoreRepository
     ): OAuthRepository =
-        OAuthRepository(authService, dataStoreRepository)
+        OAuthRepositoryImpl(authService, dataStoreRepository)
 }
