@@ -2,13 +2,12 @@ package com.sharkaboi.mediahub.common.extensions
 
 import android.text.Html
 import android.text.Spanned
-import com.sharkaboi.mediahub.common.data.api.models.anime.AnimeByIDResponse
-import com.sharkaboi.mediahub.common.data.api.models.manga.MangaByIDResponse
+import com.sharkaboi.mediahub.data.api.models.anime.AnimeByIDResponse
+import com.sharkaboi.mediahub.data.api.models.manga.MangaByIDResponse
 import java.text.DecimalFormat
 import java.time.*
 import java.time.format.DateTimeFormatter
 import java.time.temporal.WeekFields
-import java.util.*
 
 internal fun Double.roundOfString(): String {
     if (this == 0.0) {
@@ -18,7 +17,7 @@ internal fun Double.roundOfString(): String {
     return format.format(this)
 }
 
-internal fun String.getNsfwRating(): String {
+internal fun String.getAnimeNsfwRating(): String {
     return when {
         this.trim() == "white" -> {
             "SFW"
@@ -31,6 +30,23 @@ internal fun String.getNsfwRating(): String {
         }
         else -> {
             "SFW : N/A"
+        }
+    }
+}
+
+internal fun String.getMangaNsfwRating(): String {
+    return when {
+        this.trim() == "white" -> {
+            "Safe for work (SFW)"
+        }
+        this.trim() == "gray" -> {
+            "Maybe not safe for work (NSFW)"
+        }
+        this.trim() == "black" -> {
+            "Not safe for work (NSFW)"
+        }
+        else -> {
+            "N/A"
         }
     }
 }
@@ -73,7 +89,7 @@ internal fun String.getAnimeAiringStatus(): String {
             "Yet to be aired"
         }
         else -> {
-            "N/A"
+            "Airing status : N/A"
         }
     }
 }
@@ -90,7 +106,7 @@ internal fun String.getMangaPublishStatus(): String {
             "Yet to be published"
         }
         else -> {
-            "N/A"
+            "Publishing status : N/A"
         }
     }
 }
@@ -100,8 +116,8 @@ internal fun AnimeByIDResponse.Broadcast.getBroadcastTime(): String {
         if (this.startTime == null) {
             return "On ${this.dayOfTheWeek}"
         }
-        val dayOfWeek = DayOfWeek.valueOf(this.dayOfTheWeek.uppercase(Locale.ROOT))
-        val fieldIso = WeekFields.of(Locale.FRANCE).dayOfWeek()
+        val dayOfWeek = DayOfWeek.valueOf(this.dayOfTheWeek.uppercase())
+        val fieldIso = WeekFields.ISO.dayOfWeek()
         val now = OffsetDateTime.now().with(fieldIso, dayOfWeek.value.toLong())
         val (hour, mins) = this.startTime.split(":").map { it.toInt() }
         val japanTime = ZonedDateTime.of(
@@ -116,7 +132,7 @@ internal fun AnimeByIDResponse.Broadcast.getBroadcastTime(): String {
         )
         val localTimeZone = ZoneId.systemDefault()
         val localTime = japanTime.withZoneSameInstant(localTimeZone)
-        return localTime.format(DateTimeFormatter.ofPattern("EEEE h:mm a"))
+        return localTime.format(DateTimeFormatter.ofPattern("EEEE h:mm a zzzz"))
     } catch (e: Exception) {
         e.printStackTrace()
         return "N/A"
@@ -309,17 +325,17 @@ internal fun AnimeByIDResponse.Statistics.getStats(): Spanned {
     }
 }
 
-internal fun Int.getEpisodeLengthFromSeconds(): String {
+internal fun Int?.getEpisodeLengthFromSeconds(): String {
     try {
-        if (this <= 0) {
-            return "N/A"
+        if (this == null || this <= 0) {
+            return "N/A per ep"
         }
         val duration = Duration.ofSeconds(this.toLong())
         val hours = duration.seconds / (60 * 60)
         val minutes = (duration.seconds % (60 * 60) / 60).toInt()
-        return if (hours <= 0) "${minutes}m" else "${hours.toInt()}h ${minutes}m"
+        return if (hours <= 0) "${minutes}m per ep" else "${hours.toInt()}h ${minutes}m per ep"
     } catch (e: Exception) {
         e.printStackTrace()
-        return "N/A"
+        return "N/A per ep"
     }
 }

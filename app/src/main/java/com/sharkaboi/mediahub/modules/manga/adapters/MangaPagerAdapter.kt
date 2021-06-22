@@ -4,7 +4,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.sharkaboi.mediahub.common.data.api.enums.MangaStatus
+import com.sharkaboi.mediahub.data.api.enums.MangaStatus
 import com.sharkaboi.mediahub.modules.manga.ui.MangaListByStatusFragment
 
 class MangaPagerAdapter(fm: FragmentManager, lifecycle: Lifecycle) :

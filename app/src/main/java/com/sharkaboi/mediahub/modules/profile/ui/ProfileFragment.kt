@@ -1,12 +1,12 @@
 package com.sharkaboi.mediahub.modules.profile.ui
 
-import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import androidx.core.view.forEach
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -16,12 +16,17 @@ import coil.transform.RoundedCornersTransformation
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
+import com.google.android.material.chip.Chip
 import com.google.android.material.color.MaterialColors
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.shape.ShapeAppearanceModel
 import com.sharkaboi.mediahub.R
-import com.sharkaboi.mediahub.common.data.api.models.user.UserDetailsResponse
+import com.sharkaboi.mediahub.common.constants.MALExternalLinks
 import com.sharkaboi.mediahub.common.extensions.*
 import com.sharkaboi.mediahub.common.util.MPAndroidChartValueFormatter
+import com.sharkaboi.mediahub.common.util.openShareChooser
+import com.sharkaboi.mediahub.common.util.openUrl
+import com.sharkaboi.mediahub.data.api.models.user.UserDetailsResponse
 import com.sharkaboi.mediahub.databinding.FragmentProfileBinding
 import com.sharkaboi.mediahub.modules.anime_details.ui.AnimeDetailsFragmentDirections
 import com.sharkaboi.mediahub.modules.profile.vm.ProfileStates
@@ -60,6 +65,12 @@ class ProfileFragment : Fragment() {
                 crossfade(true)
                 transformations(RoundedCornersTransformation(10f))
             }
+            profileContent.chipGroupOptions.forEach {
+                if (it is Chip) {
+                    it.setEnsureMinTouchTargetSize(false)
+                    it.shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(8f)
+                }
+            }
             profileContent.ibSettings.setOnClickListener(showSettings)
         }
     }
@@ -92,6 +103,7 @@ class ProfileFragment : Fragment() {
                     transformations(RoundedCornersTransformation(10f))
                     placeholder(R.drawable.ic_profile_placeholder)
                     error(R.drawable.ic_profile_placeholder)
+                    fallback(R.drawable.ic_profile_placeholder)
                 }
                 ivProfileImage.setOnClickListener {
                     val action =
@@ -104,14 +116,18 @@ class ProfileFragment : Fragment() {
                 }
                 profileDetailsCardContent.apply {
                     tvBirthDay.text =
-                        userDetailsResponse.birthday?.tryParseDateTime()?.formatDateDMY() ?: "N/A"
+                        userDetailsResponse.birthday?.tryParseDateTime()?.formatDateDMY()
+                            ?: getString(R.string.n_a)
                     tvGender.text =
                         userDetailsResponse.gender?.capitalizeFirst()
-                            ?: "N/A"
+                            ?: getString(R.string.n_a)
                     tvJoinedAt.text =
-                        userDetailsResponse.joinedAt.tryParseDateTime()?.formatDateDMY() ?: "N/A"
-                    tvLocation.text = userDetailsResponse.location ?: "N/A"
-                    tvTimeZone.text = userDetailsResponse.timeZone ?: "N/A"
+                        userDetailsResponse.joinedAt.tryParseDateTime()?.formatDateDMY()
+                            ?: getString(R.string.n_a)
+                    tvLocation.text =
+                        userDetailsResponse.location?.ifBlank { getString(R.string.n_a) }
+                            ?: getString(R.string.n_a)
+                    tvTimeZone.text = userDetailsResponse.timeZone ?: getString(R.string.n_a)
                     tvSupporter.text =
                         if (userDetailsResponse.isSupporter == null || !userDetailsResponse.isSupporter) {
                             "No"
@@ -185,6 +201,27 @@ class ProfileFragment : Fragment() {
                         }
                     }
                 }
+                btnBlogs.setOnClickListener {
+                    openUrl(MALExternalLinks.getBlogsLink(userDetailsResponse.name))
+                }
+                btnClubs.setOnClickListener {
+                    openUrl(MALExternalLinks.getClubsLink(userDetailsResponse.name))
+                }
+                btnForumTopics.setOnClickListener {
+                    openUrl(MALExternalLinks.getForumTopicsLink(userDetailsResponse.name))
+                }
+                btnFriends.setOnClickListener {
+                    openUrl(MALExternalLinks.getFriendsLink(userDetailsResponse.name))
+                }
+                btnHistory.setOnClickListener {
+                    openUrl(MALExternalLinks.getHistoryLink(userDetailsResponse.name))
+                }
+                btnRecommendations.setOnClickListener {
+                    openUrl(MALExternalLinks.getRecommendationsLink(userDetailsResponse.name))
+                }
+                btnReviews.setOnClickListener {
+                    openUrl(MALExternalLinks.getReviewsLink(userDetailsResponse.name))
+                }
             }
         }
     }
@@ -194,25 +231,19 @@ class ProfileFragment : Fragment() {
         MaterialAlertDialogBuilder(requireContext())
             .setTitle("Share your")
             .setItems(items) { dialog, which ->
-                openShareChooser(name, which)
+                onShareClick(name, which)
                 dialog.dismiss()
             }
             .show()
     }
 
-    private fun openShareChooser(name: String, which: Int) {
+    private fun onShareClick(name: String, which: Int) {
         val url = when (which) {
             0 -> "https://myanimelist.net/profile/$name"
             1 -> "https://myanimelist.net/animelist/$name"
             else -> "https://myanimelist.net/mangalist/$name"
         }
-        val sendIntent: Intent = Intent().apply {
-            action = Intent.ACTION_SEND
-            putExtra(Intent.EXTRA_TEXT, url)
-            type = "text/plain"
-        }
-        val shareIntent = Intent.createChooser(sendIntent, "Share your MAL link to")
-        startActivity(shareIntent)
+        openShareChooser(url, "Share your MAL link to")
     }
 
     private val showSettings = View.OnClickListener {

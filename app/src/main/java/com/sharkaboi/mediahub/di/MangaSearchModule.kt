@@ -1,8 +1,10 @@
 package com.sharkaboi.mediahub.di
 
-import com.sharkaboi.mediahub.common.data.datastore.DataStoreRepository
-import com.sharkaboi.mediahub.common.data.retrofit.MangaService
+import android.content.SharedPreferences
+import com.sharkaboi.mediahub.data.api.retrofit.MangaService
+import com.sharkaboi.mediahub.data.datastore.DataStoreRepository
 import com.sharkaboi.mediahub.modules.manga_search.repository.MangaSearchRepository
+import com.sharkaboi.mediahub.modules.manga_search.repository.MangaSearchRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,7 +19,8 @@ object MangaSearchModule {
     @ActivityRetainedScoped
     fun getMangaSearchRepository(
         mangaService: MangaService,
-        dataStoreRepository: DataStoreRepository
+        dataStoreRepository: DataStoreRepository,
+        sharedPreferences: SharedPreferences
     ): MangaSearchRepository =
-        MangaSearchRepository(mangaService, dataStoreRepository)
+        MangaSearchRepositoryImpl(mangaService, dataStoreRepository, sharedPreferences)
 }

@@ -1,8 +1,10 @@
 package com.sharkaboi.mediahub.di
 
-import com.sharkaboi.mediahub.common.data.datastore.DataStoreRepository
-import com.sharkaboi.mediahub.common.data.retrofit.AnimeService
+import android.content.SharedPreferences
+import com.sharkaboi.mediahub.data.api.retrofit.AnimeService
+import com.sharkaboi.mediahub.data.datastore.DataStoreRepository
 import com.sharkaboi.mediahub.modules.anime_seasonal.repository.AnimeSeasonalRepository
+import com.sharkaboi.mediahub.modules.anime_seasonal.repository.AnimeSeasonalRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,7 +19,8 @@ object AnimeSeasonalModule {
     @ActivityRetainedScoped
     fun getAnimeSeasonalRepository(
         animeService: AnimeService,
-        dataStoreRepository: DataStoreRepository
+        dataStoreRepository: DataStoreRepository,
+        sharedPreferences: SharedPreferences
     ): AnimeSeasonalRepository =
-        AnimeSeasonalRepository(animeService, dataStoreRepository)
+        AnimeSeasonalRepositoryImpl(animeService, dataStoreRepository, sharedPreferences)
 }

@@ -6,36 +6,50 @@
         app:key="toolbar"
         app:title="@string/settings" />
 
-    <PreferenceCategory app:title="Theme">
+    <PreferenceCategory app:title="@string/theme">
 
         <SwitchPreferenceCompat
             app:icon="@drawable/ic_bulb"
             app:key="darkMode"
-            app:title="Dark mode" />
+            app:title="@string/dark_mode" />
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="Anime">
+    <PreferenceCategory app:title="@string/filters">
+
+        <SwitchPreference
+            app:icon="@drawable/ic_adult_see"
+            app:key="nsfwOption"
+            app:title="@string/nsfw_hint" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="@string/anime">
 
         <Preference
             app:icon="@drawable/ic_notifications"
             app:key="anime_notifs"
-            app:title="Anime notifications" />
+            app:title="@string/anime_notifs_hint" />
 
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="Mediahub">
+    <PreferenceCategory app:title="@string/app_name">
+
+        <Preference
+            app:icon="@drawable/ic_update"
+            app:key="updates"
+            app:title="@string/updates_hint" />
 
         <Preference
             app:icon="@drawable/ic_info"
             app:key="about"
-            app:title="About"
+            app:title="@string/about"
             tools:summary="v1.0" />
 
         <Preference
             app:icon="@drawable/ic_logout"
             app:key="logout"
-            app:title="Log out" />
+            app:title="@string/log_out" />
 
     </PreferenceCategory>
 

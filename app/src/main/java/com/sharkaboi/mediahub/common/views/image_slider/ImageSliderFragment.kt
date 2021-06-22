@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import androidx.core.view.isVisible
 import androidx.core.view.setPadding
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.navArgs
@@ -59,6 +60,7 @@ class ImageSliderFragment : DialogFragment() {
             val adapter =
                 ImageSliderAdapter(args.imagesList.toList(), childFragmentManager, lifecycle)
             vpImages.adapter = adapter
+            tvEmptyHint.isVisible = args.imagesList.isEmpty()
             TabLayoutMediator(dotsIndicator, vpImages, true) { _, _ -> }.attach()
         }
     }

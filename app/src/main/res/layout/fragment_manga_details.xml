@@ -5,293 +5,291 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.core.widget.NestedScrollView
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".modules.manga_details.ui.MangaDetailsFragment">
+        android:layout_height="match_parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            tools:context=".modules.manga_details.ui.MangaDetailsFragment">
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="?attr/actionBarSize"
-                android:theme="?attr/actionBarTheme"
-                app:contentInsetStartWithNavigation="0dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:navigationIcon="@drawable/ic_back"
-                app:title="Manga details" />
+                android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/tvMangaName"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/ivMangaMainPicture"
-                app:layout_constraintTop_toBottomOf="@+id/toolbar"
-                tools:text="JoJo no Kimyou na Bouken Part 6: Stone Ocean" />
+                <androidx.appcompat.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="?attr/actionBarSize"
+                    android:theme="?attr/actionBarTheme"
+                    app:contentInsetStartWithNavigation="0dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:navigationIcon="@drawable/ic_back"
+                    app:title="Manga details" />
 
-            <ImageView
-                android:id="@+id/ivMangaMainPicture"
-                android:layout_width="0dp"
-                android:layout_height="200dp"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="16dp"
-                android:contentDescription="@string/manga"
-                android:scaleType="centerCrop"
-                app:layout_constraintBottom_toBottomOf="@id/mangaDetailsBarrier"
-                app:layout_constraintDimensionRatio="3:4"
-                app:layout_constraintEnd_toStartOf="@+id/tvMangaName"
-                app:layout_constraintHorizontal_bias="0"
-                app:layout_constraintHorizontal_chainStyle="packed"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/toolbar"
-                app:layout_constraintVertical_bias="0"
-                tools:src="@tools:sample/avatars" />
+                <TextView
+                    android:id="@+id/tvMangaName"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/ivMangaMainPicture"
+                    app:layout_constraintTop_toBottomOf="@+id/toolbar"
+                    tools:text="JoJo no Kimyou na Bouken Part 6: Stone Ocean" />
 
-            <TextView
-                android:id="@+id/tvAlternateTitles"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:text="@string/other_titles"
-                android:textColor="@color/colorPrimary"
-                android:textStyle="bold"
-                app:layout_constraintStart_toEndOf="@id/ivMangaMainPicture"
-                app:layout_constraintTop_toBottomOf="@id/tvMangaName" />
+                <ImageView
+                    android:id="@+id/ivMangaMainPicture"
+                    android:layout_width="0dp"
+                    android:layout_height="200dp"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="16dp"
+                    android:contentDescription="@string/manga"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintBottom_toBottomOf="@id/mangaDetailsBarrier"
+                    app:layout_constraintDimensionRatio="3:4"
+                    app:layout_constraintEnd_toStartOf="@+id/tvMangaName"
+                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/toolbar"
+                    app:layout_constraintVertical_bias="0"
+                    tools:src="@tools:sample/avatars" />
 
-            <androidx.constraintlayout.helper.widget.Flow
-                android:id="@+id/flowStartDate"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                app:constraint_referenced_ids="tvStartDateHint,tvStartDate"
-                app:flow_firstVerticalStyle="packed"
-                app:flow_horizontalBias="0"
-                app:flow_horizontalStyle="packed"
-                app:flow_wrapMode="aligned"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/ivMangaMainPicture"
-                app:layout_constraintTop_toBottomOf="@+id/tvAlternateTitles" />
+                <TextView
+                    android:id="@+id/tvAlternateTitles"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/other_titles"
+                    android:textColor="@color/colorPrimary"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toEndOf="@id/ivMangaMainPicture"
+                    app:layout_constraintTop_toBottomOf="@id/tvMangaName" />
 
-            <TextView
-                android:id="@+id/tvStartDateHint"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/start_date"
-                android:textStyle="bold" />
+                <androidx.constraintlayout.helper.widget.Flow
+                    android:id="@+id/flowStartDate"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    app:constraint_referenced_ids="tvStartDateHint,tvStartDate"
+                    app:flow_firstVerticalStyle="packed"
+                    app:flow_horizontalBias="0"
+                    app:flow_horizontalStyle="packed"
+                    app:flow_wrapMode="aligned"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/ivMangaMainPicture"
+                    app:layout_constraintTop_toBottomOf="@+id/tvAlternateTitles" />
 
-            <TextView
-                android:id="@+id/tvStartDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingStart="8dp"
-                tools:ignore="RtlSymmetry"
-                tools:text="1st Jun 2019" />
+                <TextView
+                    android:id="@+id/tvStartDateHint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/start_date"
+                    android:textStyle="bold" />
 
-            <androidx.constraintlayout.helper.widget.Flow
-                android:id="@+id/flowEndDate"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                app:constraint_referenced_ids="tvEndDateHint,tvEndDate"
-                app:flow_firstVerticalStyle="packed"
-                app:flow_horizontalBias="0"
-                app:flow_horizontalStyle="packed"
-                app:flow_wrapMode="aligned"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/ivMangaMainPicture"
-                app:layout_constraintTop_toBottomOf="@+id/flowStartDate" />
+                <TextView
+                    android:id="@+id/tvStartDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="8dp"
+                    tools:ignore="RtlSymmetry"
+                    tools:text="1st Jun 2019" />
 
-            <TextView
-                android:id="@+id/tvEndDateHint"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/end_date"
-                android:textStyle="bold" />
+                <androidx.constraintlayout.helper.widget.Flow
+                    android:id="@+id/flowEndDate"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    app:constraint_referenced_ids="tvEndDateHint,tvEndDate"
+                    app:flow_firstVerticalStyle="packed"
+                    app:flow_horizontalBias="0"
+                    app:flow_horizontalStyle="packed"
+                    app:flow_wrapMode="aligned"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/ivMangaMainPicture"
+                    app:layout_constraintTop_toBottomOf="@+id/flowStartDate" />
 
-            <TextView
-                android:id="@+id/tvEndDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingStart="8dp"
-                tools:ignore="RtlSymmetry"
-                tools:text="1st Jun 2019" />
+                <TextView
+                    android:id="@+id/tvEndDateHint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/end_date"
+                    android:textStyle="bold" />
 
-            <androidx.constraintlayout.helper.widget.Flow
-                android:id="@+id/flowMeanScore"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                app:constraint_referenced_ids="tvMeanScoreHint,tvMeanScore"
-                app:flow_firstVerticalStyle="packed"
-                app:flow_horizontalBias="0"
-                app:flow_horizontalStyle="packed"
-                app:flow_wrapMode="aligned"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/ivMangaMainPicture"
-                app:layout_constraintTop_toBottomOf="@+id/flowEndDate" />
+                <TextView
+                    android:id="@+id/tvEndDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="8dp"
+                    tools:ignore="RtlSymmetry"
+                    tools:text="1st Jun 2019" />
 
-            <TextView
-                android:id="@+id/tvMeanScoreHint"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/mean_score"
-                android:textStyle="bold" />
+                <androidx.constraintlayout.helper.widget.Flow
+                    android:id="@+id/flowMeanScore"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    app:constraint_referenced_ids="tvMeanScoreHint,tvMeanScore"
+                    app:flow_firstVerticalStyle="packed"
+                    app:flow_horizontalBias="0"
+                    app:flow_horizontalStyle="packed"
+                    app:flow_wrapMode="aligned"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/ivMangaMainPicture"
+                    app:layout_constraintTop_toBottomOf="@+id/flowEndDate" />
 
-            <TextView
-                android:id="@+id/tvMeanScore"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingStart="8dp"
-                tools:ignore="RtlSymmetry"
-                tools:text="8.5" />
+                <TextView
+                    android:id="@+id/tvMeanScoreHint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/mean_score"
+                    android:textStyle="bold" />
 
-            <androidx.constraintlayout.helper.widget.Flow
-                android:id="@+id/flowRank"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                app:constraint_referenced_ids="tvRankHint,tvRank"
-                app:flow_firstVerticalStyle="packed"
-                app:flow_horizontalBias="0"
-                app:flow_horizontalStyle="packed"
-                app:flow_wrapMode="aligned"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/ivMangaMainPicture"
-                app:layout_constraintTop_toBottomOf="@+id/flowMeanScore" />
+                <TextView
+                    android:id="@+id/tvMeanScore"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="8dp"
+                    tools:ignore="RtlSymmetry"
+                    tools:text="8.5" />
 
-            <TextView
-                android:id="@+id/tvRankHint"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/mal_rank"
-                android:textStyle="bold" />
+                <androidx.constraintlayout.helper.widget.Flow
+                    android:id="@+id/flowRank"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    app:constraint_referenced_ids="tvRankHint,tvRank"
+                    app:flow_firstVerticalStyle="packed"
+                    app:flow_horizontalBias="0"
+                    app:flow_horizontalStyle="packed"
+                    app:flow_wrapMode="aligned"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/ivMangaMainPicture"
+                    app:layout_constraintTop_toBottomOf="@+id/flowMeanScore" />
 
-            <TextView
-                android:id="@+id/tvRank"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingStart="8dp"
-                tools:ignore="RtlSymmetry"
-                tools:text="17000" />
+                <TextView
+                    android:id="@+id/tvRankHint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/mal_rank"
+                    android:textStyle="bold" />
 
-            <androidx.constraintlayout.helper.widget.Flow
-                android:id="@+id/flowPopularityRank"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                app:constraint_referenced_ids="tvPopularityRankHint,tvPopularityRank"
-                app:flow_firstVerticalStyle="packed"
-                app:flow_horizontalBias="0"
-                app:flow_horizontalStyle="packed"
-                app:flow_wrapMode="aligned"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/ivMangaMainPicture"
-                app:layout_constraintTop_toBottomOf="@+id/flowRank"
-                app:layout_constraintVertical_bias="0" />
+                <TextView
+                    android:id="@+id/tvRank"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="8dp"
+                    tools:ignore="RtlSymmetry"
+                    tools:text="17000" />
 
-            <TextView
-                android:id="@+id/tvPopularityRankHint"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/popularity_rank"
-                android:textStyle="bold" />
+                <androidx.constraintlayout.helper.widget.Flow
+                    android:id="@+id/flowPopularityRank"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    app:constraint_referenced_ids="tvPopularityRankHint,tvPopularityRank"
+                    app:flow_firstVerticalStyle="packed"
+                    app:flow_horizontalBias="0"
+                    app:flow_horizontalStyle="packed"
+                    app:flow_wrapMode="aligned"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/ivMangaMainPicture"
+                    app:layout_constraintTop_toBottomOf="@+id/flowRank"
+                    app:layout_constraintVertical_bias="0" />
 
-            <TextView
-                android:id="@+id/tvPopularityRank"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingStart="8dp"
-                tools:ignore="RtlSymmetry"
-                tools:text="17000" />
+                <TextView
+                    android:id="@+id/tvPopularityRankHint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/popularity_rank"
+                    android:textStyle="bold" />
 
-            <androidx.constraintlayout.helper.widget.Flow
-                android:id="@+id/flowAuthors"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                app:constraint_referenced_ids="tvAuthorsHint,tvAuthors"
-                app:flow_firstVerticalStyle="packed"
-                app:flow_horizontalBias="0"
-                app:flow_horizontalStyle="packed"
-                app:flow_wrapMode="aligned"
-                app:layout_constraintBottom_toTopOf="@id/mangaDetailsBarrier"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/ivMangaMainPicture"
-                app:layout_constraintTop_toBottomOf="@+id/flowPopularityRank"
-                app:layout_constraintVertical_bias="0" />
+                <TextView
+                    android:id="@+id/tvPopularityRank"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="8dp"
+                    tools:ignore="RtlSymmetry"
+                    tools:text="17000" />
 
-            <TextView
-                android:id="@+id/tvAuthorsHint"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/authors"
-                android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/tvAuthorsHint"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="@string/authors"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/ivMangaMainPicture"
+                    app:layout_constraintTop_toBottomOf="@id/tvPopularityRank" />
 
-            <TextView
-                android:id="@+id/tvAuthors"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="8dp"
-                tools:ignore="RtlSymmetry"
-                tools:text="Araki, Hirohiko" />
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/authorsChipGroup"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="8dp"
+                    app:chipSpacing="8dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/ivMangaMainPicture"
+                    app:layout_constraintTop_toBottomOf="@id/tvAuthorsHint" />
 
-            <androidx.constraintlayout.widget.Barrier
-                android:id="@+id/mangaDetailsBarrier"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:barrierDirection="bottom"
-                app:constraint_referenced_ids="flowAuthors,ivMangaMainPicture" />
+                <androidx.constraintlayout.widget.Barrier
+                    android:id="@+id/mangaDetailsBarrier"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:barrierDirection="bottom"
+                    app:constraint_referenced_ids="authorsChipGroup,ivMangaMainPicture" />
 
-            <include
-                android:id="@+id/mangaDetailsUserListCard"
-                layout="@layout/manga_details_user_list_item"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/mangaDetailsBarrier" />
+                <include
+                    android:id="@+id/mangaDetailsUserListCard"
+                    layout="@layout/manga_details_user_list_item"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/mangaDetailsBarrier" />
 
-            <include
-                android:id="@+id/otherDetails"
-                layout="@layout/manga_other_details_item"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/mangaDetailsUserListCard" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <include
+                    android:id="@+id/otherDetails"
+                    layout="@layout/manga_other_details_item"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/mangaDetailsUserListCard" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.core.widget.NestedScrollView>
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <com.sharkaboi.mediahub.common.views.CustomProgressScreen
         android:id="@+id/progressBar"

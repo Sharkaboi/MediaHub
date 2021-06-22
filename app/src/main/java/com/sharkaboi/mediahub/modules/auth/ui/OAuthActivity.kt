@@ -1,7 +1,6 @@
 package com.sharkaboi.mediahub.modules.auth.ui
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -14,8 +13,9 @@ import com.github.razir.progressbutton.showProgress
 import com.sharkaboi.mediahub.BuildConfig
 import com.sharkaboi.mediahub.R
 import com.sharkaboi.mediahub.common.constants.AppConstants
-import com.sharkaboi.mediahub.common.data.retrofit.AuthService
+import com.sharkaboi.mediahub.data.api.retrofit.AuthService
 import com.sharkaboi.mediahub.common.extensions.showToast
+import com.sharkaboi.mediahub.common.util.openUrl
 import com.sharkaboi.mediahub.databinding.ActivityAuthBinding
 import com.sharkaboi.mediahub.modules.MainActivity
 import com.sharkaboi.mediahub.modules.auth.vm.OAuthState
@@ -58,17 +58,13 @@ class OAuthActivity : AppCompatActivity() {
             }
             when (state) {
                 is OAuthState.RedirectToAuth -> {
-                    val intent = Intent(
-                        Intent.ACTION_VIEW,
-                        Uri.parse(
-                            AuthService.getAuthTokenLink(
-                                BuildConfig.clientId,
-                                state.state,
-                                state.codeChallenge
-                            )
+                    openUrl(
+                        AuthService.getAuthTokenLink(
+                            BuildConfig.clientId,
+                            state.state,
+                            state.codeChallenge
                         )
                     )
-                    startActivity(intent)
                 }
                 is OAuthState.OAuthSuccess -> {
                     redirectToMainAppFlow()
@@ -105,28 +101,7 @@ class OAuthActivity : AppCompatActivity() {
         }
     }
 
-//    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
-//        outState.putString(INTENT_DATA, intent.data.toString())
-//        outPersistentState.putString(INTENT_DATA, intent.data.toString())
-//        super.onSaveInstanceState(outState, outPersistentState)
-//    }
-//
-//    override fun onRestoreInstanceState(
-//        savedInstanceState: Bundle?,
-//        persistentState: PersistableBundle?
-//    ) {
-//        val savedIntentData = savedInstanceState?.getString(INTENT_DATA)
-//        val persistedIntentData = persistentState?.getString(INTENT_DATA)
-//        if (intent.data == null && savedIntentData != null) {
-//            intent.data = Uri.parse(savedIntentData)
-//        } else if(intent.data == null && persistedIntentData != null){
-//            intent.data = Uri.parse(persistedIntentData)
-//        }
-//        super.onRestoreInstanceState(savedInstanceState, persistentState)
-//    }
-
     companion object {
         private const val TAG = "OAuthActivity"
-        private const val INTENT_DATA = "intentData"
     }
 }

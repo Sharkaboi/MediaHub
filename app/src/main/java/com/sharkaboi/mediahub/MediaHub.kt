@@ -1,7 +1,7 @@
 package com.sharkaboi.mediahub
 
-import android.app.Application
+import androidx.multidex.MultiDexApplication
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
-class MediaHub : Application()
+class MediaHub : MultiDexApplication()

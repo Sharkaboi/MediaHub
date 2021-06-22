@@ -4,9 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.sharkaboi.mediahub.common.data.api.enums.MangaStatus
-import com.sharkaboi.mediahub.common.data.api.enums.UserMangaSortType
-import com.sharkaboi.mediahub.common.data.api.models.usermanga.UserMangaListResponse
+import com.sharkaboi.mediahub.data.api.enums.MangaStatus
+import com.sharkaboi.mediahub.data.api.enums.UserMangaSortType
+import com.sharkaboi.mediahub.data.api.models.usermanga.UserMangaListResponse
 import com.sharkaboi.mediahub.modules.manga.repository.MangaRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -17,16 +17,13 @@ class MangaViewModel
 @Inject constructor(
     private val mangaRepository: MangaRepository
 ) : ViewModel() {
-    private var currentChosenMangaStatus: MangaStatus = MangaStatus.all
-    private var currentChosenSortType: UserMangaSortType = UserMangaSortType.list_updated_at
+    private var _currentChosenMangaStatus: MangaStatus = MangaStatus.all
+    val currentChosenMangaStatus get() = _currentChosenMangaStatus
+    private var _currentChosenSortType: UserMangaSortType = UserMangaSortType.list_updated_at
+    val currentChosenSortType get() = _currentChosenSortType
     private var _pagedMangaList: Flow<PagingData<UserMangaListResponse.Data>>? = null
 
-    suspend fun getMangaList(
-        mangaStatus: MangaStatus,
-        userMangaSortType: UserMangaSortType
-    ): Flow<PagingData<UserMangaListResponse.Data>> {
-        currentChosenMangaStatus = mangaStatus
-        currentChosenSortType = userMangaSortType
+    suspend fun getMangaList(): Flow<PagingData<UserMangaListResponse.Data>> {
         val newResult: Flow<PagingData<UserMangaListResponse.Data>> =
             mangaRepository.getMangaListFlow(
                 mangaStatus = currentChosenMangaStatus,
@@ -36,7 +33,15 @@ class MangaViewModel
         return newResult
     }
 
+    fun setMangaStatus(status: MangaStatus) {
+        _currentChosenMangaStatus = status
+    }
+
+    fun setSortType(userMangaSortType: UserMangaSortType) {
+        _currentChosenSortType = userMangaSortType
+    }
+
     companion object {
-        private const val TAG = "AnimeViewModel"
+        private const val TAG = "MangaViewModel"
     }
 }

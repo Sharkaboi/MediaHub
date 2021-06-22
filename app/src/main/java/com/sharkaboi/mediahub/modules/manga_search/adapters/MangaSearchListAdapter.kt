@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.RoundedCornersTransformation
 import com.sharkaboi.mediahub.R
-import com.sharkaboi.mediahub.common.data.api.models.manga.MangaSearchResponse
+import com.sharkaboi.mediahub.data.api.models.manga.MangaSearchResponse
 import com.sharkaboi.mediahub.common.extensions.roundOfString
 import com.sharkaboi.mediahub.databinding.MangaListItemBinding
 
@@ -29,6 +29,7 @@ class MangaSearchListAdapter(
                         crossfade(true)
                         placeholder(R.drawable.ic_manga_placeholder)
                         error(R.drawable.ic_manga_placeholder)
+                        fallback(R.drawable.ic_manga_placeholder)
                         transformations(RoundedCornersTransformation(topLeft = 8f, topRight = 8f))
                     }
                     tvMangaName.text = it.node.title

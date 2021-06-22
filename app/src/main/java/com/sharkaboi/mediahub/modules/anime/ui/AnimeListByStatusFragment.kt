@@ -12,32 +12,27 @@ import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
-import com.sharkaboi.mediahub.common.data.api.enums.AnimeStatus
-import com.sharkaboi.mediahub.common.data.api.enums.UserAnimeSortType
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.sharkaboi.mediahub.common.extensions.showToast
+import com.sharkaboi.mediahub.data.api.enums.AnimeStatus
+import com.sharkaboi.mediahub.data.api.enums.UserAnimeSortType
 import com.sharkaboi.mediahub.databinding.FragmentAnimeListByStatusBinding
 import com.sharkaboi.mediahub.modules.anime.adapters.AnimeListAdapter
 import com.sharkaboi.mediahub.modules.anime.adapters.AnimeLoadStateAdapter
 import com.sharkaboi.mediahub.modules.anime.vm.AnimeViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class AnimeListByStatusFragment : Fragment() {
-    private var status: AnimeStatus = AnimeStatus.all
     private var _binding: FragmentAnimeListByStatusBinding? = null
     private val binding get() = _binding!!
     private val animeViewModel by viewModels<AnimeViewModel>()
     private lateinit var animeListAdapter: AnimeListAdapter
     private val navController by lazy { findNavController() }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            status = AnimeStatus.valueOf(it.getString(ANIME_STATUS_KEY) ?: AnimeStatus.all.name)
-        }
-    }
+    private var resultsJob: Job? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,6 +43,8 @@ class AnimeListByStatusFragment : Fragment() {
     }
 
     override fun onDestroyView() {
+        resultsJob?.cancel()
+        resultsJob = null
         binding.rvAnimeByStatus.adapter = null
         _binding = null
         super.onDestroyView()
@@ -55,18 +52,22 @@ class AnimeListByStatusFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initStatus()
         setUpRecyclerView()
         setObservers()
+        setListeners()
+    }
+
+    private fun initStatus() {
+        val status = arguments?.getString(ANIME_STATUS_KEY)?.let { status ->
+            AnimeStatus.valueOf(status)
+        } ?: AnimeStatus.all
+        animeViewModel.setAnimeStatus(status)
     }
 
     override fun onResume() {
         super.onResume()
-        viewLifecycleOwner.lifecycleScope.launch {
-            animeViewModel.getAnimeList(status, UserAnimeSortType.list_updated_at)
-                .collectLatest { pagingData ->
-                    animeListAdapter.submitData(pagingData)
-                }
-        }
+        getAnimeList()
     }
 
     private fun setUpRecyclerView() {
@@ -84,13 +85,8 @@ class AnimeListByStatusFragment : Fragment() {
     }
 
     private fun setObservers() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            animeViewModel.getAnimeList(status, UserAnimeSortType.list_updated_at)
-                .collectLatest { pagingData ->
-                    animeListAdapter.submitData(pagingData)
-                }
-        }
-        viewLifecycleOwner.lifecycleScope.launch {
+        getAnimeList()
+        lifecycleScope.launch {
             animeListAdapter.addLoadStateListener { loadStates ->
                 if (loadStates.source.refresh is LoadState.Error) {
                     showToast((loadStates.source.refresh as LoadState.Error).error.message)
@@ -101,12 +97,36 @@ class AnimeListByStatusFragment : Fragment() {
             }
         }
         binding.swipeRefresh.setOnRefreshListener {
-            viewLifecycleOwner.lifecycleScope.launch {
-                animeViewModel.getAnimeList(status, UserAnimeSortType.list_updated_at)
-                    .collectLatest { pagingData ->
-                        binding.swipeRefresh.isRefreshing = false
-                        animeListAdapter.submitData(pagingData)
-                    }
+            getAnimeList()
+            binding.swipeRefresh.isRefreshing = false
+        }
+    }
+
+    private fun setListeners() {
+        binding.ibFilter.setOnClickListener {
+            openSortMenu()
+        }
+    }
+
+    private fun openSortMenu() {
+        val singleItems = UserAnimeSortType.getFormattedArray()
+        val checkedItem = UserAnimeSortType.values().indexOf(animeViewModel.currentChosenSortType)
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Sort anime by")
+            .setSingleChoiceItems(singleItems, checkedItem) { dialog, which ->
+                animeViewModel.setSortType(UserAnimeSortType.values()[which])
+                getAnimeList()
+                dialog.dismiss()
+            }
+            .show()
+    }
+
+    fun getAnimeList() {
+        resultsJob?.cancel()
+        resultsJob = lifecycleScope.launch {
+            animeViewModel.getAnimeList().collectLatest { pagingData ->
+                animeListAdapter.submitData(pagingData)
+                scrollRecyclerView()
             }
         }
     }

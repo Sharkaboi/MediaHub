@@ -1,8 +1,10 @@
 package com.sharkaboi.mediahub.di
 
-import com.sharkaboi.mediahub.common.data.datastore.DataStoreRepository
-import com.sharkaboi.mediahub.common.data.retrofit.AnimeService
+import android.content.SharedPreferences
+import com.sharkaboi.mediahub.data.api.retrofit.AnimeService
+import com.sharkaboi.mediahub.data.datastore.DataStoreRepository
 import com.sharkaboi.mediahub.modules.anime_suggestions.repository.AnimeSuggestionsRepository
+import com.sharkaboi.mediahub.modules.anime_suggestions.repository.AnimeSuggestionsRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,7 +19,8 @@ object AnimeSuggestionsModule {
     @ActivityRetainedScoped
     fun getAnimeSuggestionsRepository(
         animeService: AnimeService,
-        dataStoreRepository: DataStoreRepository
+        dataStoreRepository: DataStoreRepository,
+        sharedPreferences: SharedPreferences
     ): AnimeSuggestionsRepository =
-        AnimeSuggestionsRepository(animeService, dataStoreRepository)
+        AnimeSuggestionsRepositoryImpl(animeService, dataStoreRepository, sharedPreferences)
 }

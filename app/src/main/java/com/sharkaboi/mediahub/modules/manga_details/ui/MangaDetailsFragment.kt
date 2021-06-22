@@ -1,10 +1,14 @@
 package com.sharkaboi.mediahub.modules.manga_details.ui
 
 import android.annotation.SuppressLint
+import android.graphics.Typeface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.core.view.forEach
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -18,9 +22,11 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.shape.ShapeAppearanceModel
 import com.sharkaboi.mediahub.R
-import com.sharkaboi.mediahub.common.data.api.enums.MangaStatus
-import com.sharkaboi.mediahub.common.data.api.models.manga.MangaByIDResponse
+import com.sharkaboi.mediahub.common.constants.MALExternalLinks
 import com.sharkaboi.mediahub.common.extensions.*
+import com.sharkaboi.mediahub.common.util.openUrl
+import com.sharkaboi.mediahub.data.api.enums.MangaStatus
+import com.sharkaboi.mediahub.data.api.models.manga.MangaByIDResponse
 import com.sharkaboi.mediahub.databinding.CustomReadCountDialogBinding
 import com.sharkaboi.mediahub.databinding.FragmentMangaDetailsBinding
 import com.sharkaboi.mediahub.modules.manga_details.adapters.RecommendedMangaAdapter
@@ -105,6 +111,10 @@ class MangaDetailsFragment : Fragment() {
                 }
             }
         }
+        binding.swipeRefresh.setOnRefreshListener {
+            mangaDetailsViewModel.getMangaDetails(args.mangaId)
+            binding.swipeRefresh.isRefreshing = false
+        }
     }
 
     private fun setData(mangaByIDResponse: MangaByIDResponse) {
@@ -122,26 +132,50 @@ class MangaDetailsFragment : Fragment() {
             tvMeanScore.text = mangaByIDResponse.mean?.toString() ?: getString(R.string.n_a)
             tvRank.text = mangaByIDResponse.rank?.toString() ?: getString(R.string.n_a)
             tvPopularityRank.text = mangaByIDResponse.popularity.toString()
-            tvAuthors.text =
-                mangaByIDResponse.authors.joinToString { "${it.node.firstName} ${it.node.lastName}" }
-                    .ifBlank { getString(R.string.n_a) }
+            authorsChipGroup.apply {
+                removeAllViews()
+                if (mangaByIDResponse.authors.isEmpty()) {
+                    addView(TextView(context).apply {
+                        text = getString(R.string.n_a)
+                    })
+                } else {
+                    mangaByIDResponse.authors.forEach { author ->
+                        addView(TextView(context).apply {
+                            setTextColor(ContextCompat.getColor(context, R.color.colorPrimary))
+                            setTypeface(null, Typeface.BOLD)
+                            text = ("${author.node.firstName} ${author.node.lastName} ")
+                            setOnClickListener {
+                                openUrl(
+                                    MALExternalLinks.getMangaAuthorPageLink(author)
+                                )
+                            }
+                        })
+                    }
+                }
+            }
             ivMangaMainPicture.load(
                 mangaByIDResponse.mainPicture?.large ?: mangaByIDResponse.mainPicture?.medium
             ) {
                 crossfade(true)
                 placeholder(R.drawable.ic_manga_placeholder)
                 error(R.drawable.ic_manga_placeholder)
+                fallback(R.drawable.ic_manga_placeholder)
                 transformations(RoundedCornersTransformation(8f))
             }
             ivMangaMainPicture.setOnClickListener {
                 openImagesViewPager(mangaByIDResponse.pictures)
             }
-            otherDetails.tvSynopsis.text = mangaByIDResponse.synopsis ?: getString(R.string.n_a)
+            otherDetails.tvSynopsis.text =
+                mangaByIDResponse.synopsis?.ifBlank { getString(R.string.n_a) }
+                    ?: getString(R.string.n_a)
             otherDetails.tvSynopsis.setOnClickListener {
-                showFullSynopsisDialog(mangaByIDResponse.synopsis ?: getString(R.string.n_a))
+                showFullSynopsisDialog(
+                    mangaByIDResponse.synopsis?.ifBlank { getString(R.string.n_a) }
+                        ?: getString(R.string.n_a)
+                )
             }
             otherDetails.tvNsfwRating.text =
-                mangaByIDResponse.nsfw?.getNsfwRating() ?: getString(R.string.n_a)
+                mangaByIDResponse.nsfw?.getMangaNsfwRating() ?: getString(R.string.n_a)
             mangaByIDResponse.genres.let {
                 otherDetails.genresChipGroup.removeAllViews()
                 if (it.isEmpty()) {
@@ -156,34 +190,89 @@ class MangaDetailsFragment : Fragment() {
                             setEnsureMinTouchTargetSize(false)
                             shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(8f)
                             text = genre.name
+                            setOnClickListener { openUrl(MALExternalLinks.getMangaGenresLink(genre)) }
                         })
                     }
                 }
             }
-            otherDetails.tvMediaType.text = mangaByIDResponse.mediaType.capitalizeFirst()
-            otherDetails.tvMangaCurrentStatus.text =
+            otherDetails.btnMediaType.text =
+                ("Type : ${mangaByIDResponse.mediaType.replace('_', ' ').capitalizeFirst()}")
+            otherDetails.btnMediaType.setOnClickListener {
+                val action =
+                    MangaDetailsFragmentDirections.openMangaRankings(mangaByIDResponse.mediaType)
+                navController.navigate(action)
+            }
+            otherDetails.btnMangaCurrentStatus.text =
                 mangaByIDResponse.status.getMangaPublishStatus()
-            otherDetails.tvTotalVolumes.text =
+            otherDetails.btnTotalVols.text =
                 mangaByIDResponse.numVolumes.let {
                     if (it == 0)
-                        getString(R.string.n_a)
+                        "${getString(R.string.n_a)} vols"
                     else
-                        it.toString()
+                        "$it ${if (it == 1) "vol" else "vols"}"
                 }
-            otherDetails.tvTotalChapters.text =
+            otherDetails.btnTotalChaps.text =
                 mangaByIDResponse.numChapters.let {
                     if (it == 0)
-                        getString(R.string.n_a)
+                        "${getString(R.string.n_a)} chaps"
                     else
-                        it.toString()
+                        "$it ${if (it == 1) "chap" else "chaps"}"
                 }
-            otherDetails.tvSerialization.text =
-                mangaByIDResponse.serialization.joinToString { it.node.name }
-                    .ifBlank { getString(R.string.n_a) }
-            otherDetails.tvBackground.setOnClickListener {
+            otherDetails.serializationChipGroup.apply {
+                removeAllViews()
+                if (mangaByIDResponse.serialization.isEmpty()) {
+                    addView(TextView(context).apply {
+                        text = getString(R.string.n_a)
+                    })
+                } else {
+                    mangaByIDResponse.serialization.forEach { magazine ->
+                        addView(TextView(context).apply {
+                            setTextColor(ContextCompat.getColor(context, R.color.colorPrimary))
+                            setTypeface(null, Typeface.BOLD)
+                            text = ("${magazine.node.name} ")
+                            setOnClickListener {
+                                openUrl(
+                                    MALExternalLinks.getMangaSerializationPageLink(magazine)
+                                )
+                            }
+                        })
+                    }
+                }
+            }
+            otherDetails.chipGroupOptions.forEach {
+                if (it is Chip) {
+                    it.setEnsureMinTouchTargetSize(false)
+                    it.shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(8f)
+                }
+            }
+            otherDetails.btnBackground.setOnClickListener {
                 openBackgroundDialog(mangaByIDResponse.background)
             }
-            otherDetails.tvStatistics.setOnClickListener {
+            otherDetails.btnCharacters.setOnClickListener {
+                openUrl(
+                    MALExternalLinks.getMangaCharactersLink(
+                        mangaByIDResponse.id,
+                        mangaByIDResponse.title
+                    )
+                )
+            }
+            otherDetails.btnReviews.setOnClickListener {
+                openUrl(
+                    MALExternalLinks.getMangaReviewsLink(
+                        mangaByIDResponse.id,
+                        mangaByIDResponse.title
+                    )
+                )
+            }
+            otherDetails.btnNews.setOnClickListener {
+                openUrl(
+                    MALExternalLinks.getMangaNewsLink(
+                        mangaByIDResponse.id,
+                        mangaByIDResponse.title
+                    )
+                )
+            }
+            otherDetails.btnStatistics.setOnClickListener {
                 openStatsDialog(mangaByIDResponse.numListUsers, mangaByIDResponse.numScoringUsers)
             }
             otherDetails.rvRecommendations.apply {

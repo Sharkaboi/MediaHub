@@ -1,10 +1,14 @@
 package com.sharkaboi.mediahub.modules.anime_details.ui
 
 import android.annotation.SuppressLint
+import android.graphics.Typeface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.core.content.ContextCompat
+import androidx.core.view.forEach
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -18,9 +22,11 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.shape.ShapeAppearanceModel
 import com.sharkaboi.mediahub.R
-import com.sharkaboi.mediahub.common.data.api.enums.AnimeStatus
-import com.sharkaboi.mediahub.common.data.api.models.anime.AnimeByIDResponse
+import com.sharkaboi.mediahub.common.constants.MALExternalLinks
 import com.sharkaboi.mediahub.common.extensions.*
+import com.sharkaboi.mediahub.common.util.openUrl
+import com.sharkaboi.mediahub.data.api.enums.AnimeStatus
+import com.sharkaboi.mediahub.data.api.models.anime.AnimeByIDResponse
 import com.sharkaboi.mediahub.databinding.CustomEpisodeCountDialogBinding
 import com.sharkaboi.mediahub.databinding.FragmentAnimeDetailsBinding
 import com.sharkaboi.mediahub.modules.anime_details.adapters.RecommendedAnimeAdapter
@@ -29,8 +35,6 @@ import com.sharkaboi.mediahub.modules.anime_details.adapters.RelatedMangaAdapter
 import com.sharkaboi.mediahub.modules.anime_details.vm.AnimeDetailsState
 import com.sharkaboi.mediahub.modules.anime_details.vm.AnimeDetailsViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.*
-
 
 @AndroidEntryPoint
 class AnimeDetailsFragment : Fragment() {
@@ -95,6 +99,10 @@ class AnimeDetailsFragment : Fragment() {
                 }
             }
         }
+        binding.swipeRefresh.setOnRefreshListener {
+            animeDetailsViewModel.getAnimeDetails(args.animeId)
+            binding.swipeRefresh.isRefreshing = false
+        }
     }
 
     private fun setData(animeByIDResponse: AnimeByIDResponse) {
@@ -112,29 +120,54 @@ class AnimeDetailsFragment : Fragment() {
             tvMeanScore.text = animeByIDResponse.mean?.toString() ?: getString(R.string.n_a)
             tvRank.text = animeByIDResponse.rank?.toString() ?: getString(R.string.n_a)
             tvPopularityRank.text = animeByIDResponse.popularity.toString()
-            tvStudios.text = animeByIDResponse.studios.joinToString { it.name }
-                .ifBlank { getString(R.string.n_a) }
+            studiosChipGroup.apply {
+                removeAllViews()
+                if (animeByIDResponse.studios.isEmpty()) {
+                    addView(TextView(context).apply {
+                        text = getString(R.string.n_a)
+                    })
+                } else {
+                    animeByIDResponse.studios.forEach { studio ->
+                        addView(TextView(context).apply {
+                            setTextColor(ContextCompat.getColor(context, R.color.colorPrimary))
+                            setTypeface(null, Typeface.BOLD)
+                            text = ("${studio.name} ")
+                            setOnClickListener {
+                                openUrl(
+                                    MALExternalLinks.getAnimeProducerPageLink(studio)
+                                )
+                            }
+                        })
+                    }
+                }
+            }
             ivAnimeMainPicture.load(
                 animeByIDResponse.mainPicture?.large ?: animeByIDResponse.mainPicture?.medium
             ) {
                 crossfade(true)
                 placeholder(R.drawable.ic_anime_placeholder)
                 error(R.drawable.ic_anime_placeholder)
+                fallback(R.drawable.ic_anime_placeholder)
                 transformations(RoundedCornersTransformation(8f))
             }
             ivAnimeMainPicture.setOnClickListener {
                 openImagesViewPager(animeByIDResponse.pictures)
             }
-            otherDetails.tvSynopsis.text = animeByIDResponse.synopsis ?: getString(R.string.n_a)
+            otherDetails.tvSynopsis.text =
+                animeByIDResponse.synopsis?.ifBlank { getString(R.string.n_a) }
+                    ?: getString(R.string.n_a)
             otherDetails.tvSynopsis.setOnClickListener {
-                showFullSynopsisDialog(animeByIDResponse.synopsis ?: getString(R.string.n_a))
+                showFullSynopsisDialog(
+                    animeByIDResponse.synopsis?.ifBlank { getString(R.string.n_a) }
+                    ?: getString(R.string.n_a)
+                )
             }
             otherDetails.ratingsChipGroup.apply {
                 removeAllViews()
                 addView(Chip(context).apply {
                     setEnsureMinTouchTargetSize(false)
                     shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(8f)
-                    text = animeByIDResponse.nsfw?.getNsfwRating() ?: getString(R.string.n_a)
+                    text = animeByIDResponse.nsfw?.getAnimeNsfwRating() ?: getString(R.string.n_a)
                 })
                 addView(Chip(context).apply {
                     setEnsureMinTouchTargetSize(false)
@@ -154,37 +187,98 @@ class AnimeDetailsFragment : Fragment() {
                     it.forEach { genre ->
                         otherDetails.genresChipGroup.addView(Chip(context).apply {
                             setEnsureMinTouchTargetSize(false)
+                            setOnClickListener { openUrl(MALExternalLinks.getAnimeGenresLink(genre)) }
                             shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(8f)
                             text = genre.name
                         })
                     }
                 }
             }
-            otherDetails.tvMediaType.text = animeByIDResponse.mediaType.uppercase(Locale.ROOT)
-            otherDetails.tvAnimeCurrentStatus.text = animeByIDResponse.status.getAnimeAiringStatus()
-            otherDetails.tvTotalEps.text =
+            otherDetails.btnMediaType.text = ("Type : ${animeByIDResponse.mediaType.uppercase()}")
+            otherDetails.btnMediaType.setOnClickListener {
+                val action =
+                    AnimeDetailsFragmentDirections.openAnimeRankings(animeByIDResponse.mediaType)
+                navController.navigate(action)
+            }
+            otherDetails.btnAnimeCurrentStatus.text =
+                animeByIDResponse.status.getAnimeAiringStatus()
+            otherDetails.btnTotalEps.text =
                 animeByIDResponse.numEpisodes.let {
                     if (it == 0)
-                        getString(R.string.n_a)
+                        "${getString(R.string.n_a)} eps"
                     else
-                        it.toString()
+                        "$it ${if (it == 1) "ep" else "eps"}"
                 }
-            otherDetails.tvSeason.text = animeByIDResponse.startSeason?.let {
+            otherDetails.btnSeason.text = animeByIDResponse.startSeason?.let {
                 "${it.season.capitalizeFirst()} ${it.year}"
-            } ?: getString(R.string.n_a)
+            } ?: "Season : ${getString(R.string.n_a)}"
+            otherDetails.btnSeason.setOnClickListener {
+                val action =
+                    AnimeDetailsFragmentDirections.openAnimeSeasonals(animeByIDResponse.startSeason?.toNavString())
+                navController.navigate(action)
+            }
             otherDetails.tvSchedule.text =
                 animeByIDResponse.broadcast?.getBroadcastTime() ?: getString(R.string.n_a)
-            otherDetails.tvSource.text =
-                animeByIDResponse.source?.replace('_', ' ')?.capitalizeFirst()
-                    ?: getString(R.string.n_a)
-            otherDetails.tvAverageLength.text =
-                animeByIDResponse.averageEpisodeDuration?.getEpisodeLengthFromSeconds()
-                    ?: getString(R.string.n_a)
-            otherDetails.tvBackground.setOnClickListener {
+            otherDetails.btnSource.text =
+                ("From ${
+                    animeByIDResponse.source?.replace('_', ' ')?.capitalizeFirst()
+                        ?: getString(R.string.n_a)
+                }")
+            otherDetails.btnAverageLength.text =
+                animeByIDResponse.averageEpisodeDuration.getEpisodeLengthFromSeconds()
+            otherDetails.ibNotify.setOnClickListener {
+                onNotifyClick(animeByIDResponse.id, animeByIDResponse.broadcast)
+            }
+            otherDetails.chipGroupOptions.forEach {
+                if (it is Chip) {
+                    it.setEnsureMinTouchTargetSize(false)
+                    it.shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(8f)
+                }
+            }
+            otherDetails.btnBackground.setOnClickListener {
                 openBackgroundDialog(animeByIDResponse.background)
             }
-
-            otherDetails.tvStatistics.setOnClickListener {
+            otherDetails.btnCharacters.setOnClickListener {
+                openUrl(
+                    MALExternalLinks.getAnimeCharactersLink(
+                        animeByIDResponse.id,
+                        animeByIDResponse.title
+                    )
+                )
+            }
+            otherDetails.btnStaff.setOnClickListener {
+                openUrl(
+                    MALExternalLinks.getAnimeStaffLink(
+                        animeByIDResponse.id,
+                        animeByIDResponse.title
+                    )
+                )
+            }
+            otherDetails.btnReviews.setOnClickListener {
+                openUrl(
+                    MALExternalLinks.getAnimeReviewsLink(
+                        animeByIDResponse.id,
+                        animeByIDResponse.title
+                    )
+                )
+            }
+            otherDetails.btnNews.setOnClickListener {
+                openUrl(
+                    MALExternalLinks.getAnimeNewsLink(
+                        animeByIDResponse.id,
+                        animeByIDResponse.title
+                    )
+                )
+            }
+            otherDetails.btnVideos.setOnClickListener {
+                openUrl(
+                    MALExternalLinks.getAnimeVideosLink(
+                        animeByIDResponse.id,
+                        animeByIDResponse.title
+                    )
+                )
+            }
+            otherDetails.btnStatistics.setOnClickListener {
                 openStatsDialog(animeByIDResponse.statistics)
             }
             otherDetails.rvRecommendations.apply {
@@ -256,6 +350,10 @@ class AnimeDetailsFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun onNotifyClick(id: Int, broadcast: AnimeByIDResponse.Broadcast?) {
+        showToast("Coming soon!")
     }
 
     private fun openImagesViewPager(pictures: List<AnimeByIDResponse.Picture>) {

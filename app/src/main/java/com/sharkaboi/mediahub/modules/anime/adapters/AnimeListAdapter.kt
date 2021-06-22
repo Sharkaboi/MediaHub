@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.RoundedCornersTransformation
 import com.sharkaboi.mediahub.R
-import com.sharkaboi.mediahub.common.data.api.models.useranime.UserAnimeListResponse
+import com.sharkaboi.mediahub.data.api.models.useranime.UserAnimeListResponse
 import com.sharkaboi.mediahub.databinding.AnimeListItemBinding
 
 class AnimeListAdapter(
@@ -26,6 +26,7 @@ class AnimeListAdapter(
                         crossfade(true)
                         placeholder(R.drawable.ic_anime_placeholder)
                         error(R.drawable.ic_anime_placeholder)
+                        fallback(R.drawable.ic_anime_placeholder)
                         transformations(RoundedCornersTransformation(topLeft = 8f, topRight = 8f))
                     }
                     tvAnimeName.text = it.node.title

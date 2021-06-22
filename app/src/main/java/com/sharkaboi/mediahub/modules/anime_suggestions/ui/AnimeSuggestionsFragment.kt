@@ -65,7 +65,7 @@ class AnimeSuggestionsFragment : Fragment() {
     }
 
     private fun setObservers() {
-        viewLifecycleOwner.lifecycleScope.launch {
+        lifecycleScope.launch {
             animeSuggestionsAdapter.addLoadStateListener { loadStates ->
                 if (loadStates.source.refresh is LoadState.Error) {
                     showToast((loadStates.source.refresh as LoadState.Error).error.message)
@@ -75,7 +75,7 @@ class AnimeSuggestionsFragment : Fragment() {
                     loadStates.refresh is LoadState.NotLoading && animeSuggestionsAdapter.itemCount == 0
             }
         }
-        viewLifecycleOwner.lifecycleScope.launch {
+        lifecycleScope.launch {
             animeSuggestionsViewModel.getAnimeSuggestions()
                 .collectLatest { pagingData ->
                     animeSuggestionsAdapter.submitData(pagingData)

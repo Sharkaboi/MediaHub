@@ -1,8 +1,10 @@
 package com.sharkaboi.mediahub.di
 
-import com.sharkaboi.mediahub.common.data.datastore.DataStoreRepository
-import com.sharkaboi.mediahub.common.data.retrofit.AnimeService
+import android.content.SharedPreferences
+import com.sharkaboi.mediahub.data.api.retrofit.AnimeService
+import com.sharkaboi.mediahub.data.datastore.DataStoreRepository
 import com.sharkaboi.mediahub.modules.discover.repository.DiscoverRepository
+import com.sharkaboi.mediahub.modules.discover.repository.DiscoverRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,7 +19,8 @@ object DiscoverModule {
     @ActivityRetainedScoped
     fun getDiscoverRepository(
         animeService: AnimeService,
-        dataStoreRepository: DataStoreRepository
+        dataStoreRepository: DataStoreRepository,
+        sharedPreferences: SharedPreferences
     ): DiscoverRepository =
-        DiscoverRepository(animeService, dataStoreRepository)
+        DiscoverRepositoryImpl(animeService, dataStoreRepository, sharedPreferences)
 }

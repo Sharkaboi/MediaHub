@@ -1,7 +1,7 @@
 package com.sharkaboi.mediahub.modules.profile.vm
 
 import androidx.lifecycle.MutableLiveData
-import com.sharkaboi.mediahub.common.data.api.models.user.UserDetailsResponse
+import com.sharkaboi.mediahub.data.api.models.user.UserDetailsResponse
 
 sealed class ProfileStates {
     object Idle : ProfileStates()

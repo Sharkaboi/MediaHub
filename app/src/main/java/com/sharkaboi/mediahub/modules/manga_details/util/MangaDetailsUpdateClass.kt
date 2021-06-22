@@ -1,6 +1,6 @@
 package com.sharkaboi.mediahub.modules.manga_details.util
 
-import com.sharkaboi.mediahub.common.data.api.enums.MangaStatus
+import com.sharkaboi.mediahub.data.api.enums.MangaStatus
 
 data class MangaDetailsUpdateClass(
     val mangaStatus: MangaStatus?,
