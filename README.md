@@ -3,13 +3,25 @@
     <b><h1 align="center">MediaHub</h1></b>
 </p>
 <p align="center">
-    <a href="https://github.com/JetBrains/kotlin/releases/tag/v1.5.10" alt="Kotlin">
-        <img src="https://img.shields.io/badge/Kotlin-1.5.10-blue" /></a>
+    <a href="https://github.com/JetBrains/kotlin/releases/tag/v1.5.20" alt="Kotlin">
+        <img alt="Kotlin" src="https://img.shields.io/badge/Kotlin-1.5.20-blue" />
+    </a>
     <a href="https://github.com/Sharkaboi/MediaHub/blob/master/LICENSE" alt="License">
-        <img src="https://img.shields.io/badge/License-MIT-orange" /></a>
+        <img alt="License" src="https://img.shields.io/badge/License-MIT-orange" />
+    </a>
     <a href="https://github.com/sharkaboi/mediahub/graphs/contributors" alt="Contributors">
-        <img src="https://img.shields.io/github/contributors/sharkaboi/mediahub" /></a><br>
-    A simple MAL client. Uses the <a href="https://myanimelist.net/apiconfig/references/api/v2">MAL Api.</a>
+        <img alt="Contributors" src="https://img.shields.io/github/contributors/sharkaboi/mediahub" />
+    </a>
+    <a href="https://github.com/sharkaboi/mediahub/releases" alt="Version">
+        <img alt="Version" src="https://img.shields.io/github/v/release/Sharkaboi/MediaHub?include_prereleases">
+    </a>
+    <a href="https://github.com/sharkaboi/mediahub/releases" alt="Downloads">
+        <img alt="Downloads" src="https://img.shields.io/github/downloads-pre/Sharkaboi/MediaHub/latest/total">
+    </a>
+    <a href="https://github.com/Sharkaboi/MediaHub/actions" alt="CI">
+        <img alt="CI" src="https://github.com/Sharkaboi/MediaHub/workflows/Android%CI/badge.svg?branch=master">
+    </a><br>
+    A simple, easy to use MyAnimeList client alternative. Uses the <a href="https://myanimelist.net/apiconfig/references/api/v2">MAL Api.</a>
 </p>
 
 ## Uses

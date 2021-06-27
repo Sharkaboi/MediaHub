@@ -6,7 +6,6 @@ import com.sharkaboi.mediahub.data.api.enums.getAnimeSeason
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.*
 
 internal inline var String.Companion.emptyString: String
     get() = ""
@@ -37,10 +36,8 @@ internal fun String?.getAnimeSeasonYear(): Int {
 }
 
 internal fun String.capitalizeFirst(): String {
-    return this.replaceFirstChar {
-        if (it.isLowerCase()) it.titlecase(
-            Locale.getDefault()
-        ) else it.toString()
+    return this.lowercase().replaceFirstChar {
+        it.uppercase()
     }
 }
 

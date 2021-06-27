@@ -125,24 +125,10 @@ data class MangaByIDResponse(
         val numVolumesRead: Int,
         @Json(name = "score")
         val score: Int,
-//        @Json(name = "priority")
-//        val priority: Int,
-//        @Json(name = "reread_value")
-//        val reReadValue: Int,
-//        @Json(name = "num_times_reread")
-//        val numTimesReRead: Int,
         @Json(name = "status")
         val status: String?,
         @Json(name = "updated_at")
-        val updatedAt: String,
-//        @Json(name = "comments")
-//        val comments: String,
-//        @Json(name = "tags")
-//        val tags: List<String>,
-//        @Json(name = "start_date")
-//        val startDate: String?,
-//        @Json(name = "finish_date")
-//        val finishDate: String?
+        val updatedAt: String
     )
 
     @Keep
