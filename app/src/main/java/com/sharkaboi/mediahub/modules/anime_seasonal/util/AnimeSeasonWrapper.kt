@@ -1,6 +1,7 @@
 package com.sharkaboi.mediahub.modules.anime_seasonal.util
 
 import com.sharkaboi.mediahub.data.api.enums.AnimeSeason
+import com.sharkaboi.mediahub.data.api.enums.getAnimeSeason
 import java.time.LocalDate
 
 data class AnimeSeasonWrapper(
@@ -29,5 +30,15 @@ data class AnimeSeasonWrapper(
                 year
             }
         )
+    }
+
+    companion object {
+        fun currentSeason() :AnimeSeasonWrapper {
+            val now = LocalDate.now()
+            return AnimeSeasonWrapper(
+                animeSeason = now.getAnimeSeason(),
+                year = now.year
+            )
+        }
     }
 }

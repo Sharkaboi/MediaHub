@@ -18,7 +18,7 @@ class SettingsRepositoryImpl(
             return@withContext MHTaskState(
                 isSuccess = true,
                 data = null,
-                error = MHError.nullError
+                error = MHError.EmptyError
             )
         } catch (e: Exception) {
             e.printStackTrace()

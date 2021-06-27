@@ -7,6 +7,6 @@ data class MHError(
     val throwable: Throwable?
 ) {
     companion object {
-        val nullError = MHError(String.emptyString, null)
+        val EmptyError = MHError(String.emptyString, null)
     }
 }

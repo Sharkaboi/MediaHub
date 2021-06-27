@@ -119,22 +119,10 @@ data class AnimeByIDResponse(
         val numEpisodesWatched: Int,
         @Json(name = "score")
         val score: Int,
-//        @Json(name = "priority")
-//        val priority: Int,
-//        @Json(name = "rewatch_value")
-//        val reWatchValue: Int,
         @Json(name = "status")
         val status: String?,
         @Json(name = "updated_at")
-        val updatedAt: String,
-//        @Json(name = "comments")
-//        val comments: String,
-//        @Json(name = "tags")
-//        val tags: List<String>,
-//        @Json(name = "start_date")
-//        val startDate: String?,
-//        @Json(name = "finish_date")
-//        val finishDate: String?
+        val updatedAt: String
     )
 
     @Keep
@@ -244,11 +232,7 @@ data class AnimeByIDResponse(
         val season: String,
         @Json(name = "year")
         val year: Int
-    ) {
-        fun toNavString(): String {
-            return "${season}_$year"
-        }
-    }
+    )
 
     @Keep
     @JsonClass(generateAdapter = true)

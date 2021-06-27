@@ -6,17 +6,13 @@ import com.google.android.material.snackbar.Snackbar
 
 internal fun View.startAnim(animation: Animation, onEnd: () -> Unit = {}) {
     animation.setAnimationListener(object : Animation.AnimationListener {
-        override fun onAnimationStart(animation: Animation?) {
-            //onStart()
-        }
+        override fun onAnimationStart(animation: Animation?) = Unit
 
         override fun onAnimationEnd(animation: Animation?) {
             onEnd()
         }
 
-        override fun onAnimationRepeat(animation: Animation?) {
-            //onRepeat()
-        }
+        override fun onAnimationRepeat(animation: Animation?) = Unit
 
     })
     startAnimation(animation)
