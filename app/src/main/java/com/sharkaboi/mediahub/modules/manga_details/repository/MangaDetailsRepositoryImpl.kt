@@ -41,7 +41,7 @@ class MangaDetailsRepositoryImpl(
                             return@withContext MHTaskState(
                                 isSuccess = true,
                                 data = result.body,
-                                error = MHError.nullError
+                                error = MHError.EmptyError
                             )
                         }
                         is NetworkResponse.NetworkError -> {
@@ -111,7 +111,7 @@ class MangaDetailsRepositoryImpl(
                             return@withContext MHTaskState(
                                 isSuccess = true,
                                 data = Unit,
-                                error = MHError.nullError
+                                error = MHError.EmptyError
                             )
                         }
                         is NetworkResponse.NetworkError -> {
@@ -175,7 +175,7 @@ class MangaDetailsRepositoryImpl(
                             return@withContext MHTaskState(
                                 isSuccess = true,
                                 data = Unit,
-                                error = MHError.nullError
+                                error = MHError.EmptyError
                             )
                         }
                         is NetworkResponse.NetworkError -> {

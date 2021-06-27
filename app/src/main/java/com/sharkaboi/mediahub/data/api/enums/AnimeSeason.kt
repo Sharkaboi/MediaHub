@@ -44,3 +44,9 @@ internal fun LocalDate.getAnimeSeason(): AnimeSeason {
         else -> AnimeSeason.fall
     }
 }
+
+internal fun String?.getAnimeSeason(): AnimeSeason? {
+    return this?.let {
+        runCatching { AnimeSeason.valueOf(it) }.getOrNull()
+    }
+}

@@ -19,7 +19,7 @@
         <img alt="Downloads" src="https://img.shields.io/github/downloads-pre/Sharkaboi/MediaHub/latest/total">
     </a>
     <a href="https://github.com/Sharkaboi/MediaHub/actions" alt="CI">
-        <img alt="CI" src="https://github.com/Sharkaboi/MediaHub/workflows/Android%CI/badge.svg?branch=master">
+        <img alt="CI" src="https://github.com/Sharkaboi/MediaHub/actions/workflows/android.yaml/badge.svg">
     </a><br>
     A simple, easy to use MyAnimeList client alternative. Uses the <a href="https://myanimelist.net/apiconfig/references/api/v2">MAL Api.</a>
 </p>

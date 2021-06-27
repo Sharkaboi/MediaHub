@@ -14,8 +14,6 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import com.sharkaboi.mediahub.common.extensions.capitalizeFirst
-import com.sharkaboi.mediahub.common.extensions.getAnimeSeason
-import com.sharkaboi.mediahub.common.extensions.getAnimeSeasonYear
 import com.sharkaboi.mediahub.common.extensions.showToast
 import com.sharkaboi.mediahub.data.api.enums.getAnimeSeason
 import com.sharkaboi.mediahub.databinding.FragmentAnimeSeasonalBinding
@@ -27,7 +25,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import java.time.LocalDate
 
 @AndroidEntryPoint
 class AnimeSeasonalFragment : Fragment() {
@@ -65,19 +62,16 @@ class AnimeSeasonalFragment : Fragment() {
     }
 
     private fun initSeason() {
+        val season = args.season.getAnimeSeason()
         animeSeasonalViewModel.setAnimeSeason(
-            AnimeSeasonWrapper(
-                animeSeason = if (args.season == null) {
-                    LocalDate.now().getAnimeSeason()
-                } else {
-                    args.season.getAnimeSeason()
-                },
-                year = if (args.season == null) {
-                    LocalDate.now().year
-                } else {
-                    args.season.getAnimeSeasonYear()
-                }
-            )
+            if (season == null || args.year == 0) {
+                AnimeSeasonWrapper.currentSeason()
+            } else {
+                AnimeSeasonWrapper(
+                    animeSeason = season,
+                    year = args.year
+                )
+            }
         )
     }
 

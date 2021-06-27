@@ -232,11 +232,7 @@ data class AnimeByIDResponse(
         val season: String,
         @Json(name = "year")
         val year: Int
-    ) {
-        fun toNavString(): String {
-            return "${season}_$year"
-        }
-    }
+    )
 
     @Keep
     @JsonClass(generateAdapter = true)

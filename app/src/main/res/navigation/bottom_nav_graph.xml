@@ -274,6 +274,9 @@
             android:name="season"
             app:argType="string"
             app:nullable="true" />
+        <argument
+            android:name="year"
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/animeSuggestionsFragment"

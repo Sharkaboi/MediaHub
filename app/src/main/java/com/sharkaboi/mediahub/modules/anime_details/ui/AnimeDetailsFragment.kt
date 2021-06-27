@@ -159,7 +159,7 @@ class AnimeDetailsFragment : Fragment() {
             otherDetails.tvSynopsis.setOnClickListener {
                 showFullSynopsisDialog(
                     animeByIDResponse.synopsis?.ifBlank { getString(R.string.n_a) }
-                    ?: getString(R.string.n_a)
+                        ?: getString(R.string.n_a)
                 )
             }
             otherDetails.ratingsChipGroup.apply {
@@ -214,7 +214,10 @@ class AnimeDetailsFragment : Fragment() {
             } ?: "Season : ${getString(R.string.n_a)}"
             otherDetails.btnSeason.setOnClickListener {
                 val action =
-                    AnimeDetailsFragmentDirections.openAnimeSeasonals(animeByIDResponse.startSeason?.toNavString())
+                    AnimeDetailsFragmentDirections.openAnimeSeasonals(
+                        animeByIDResponse.startSeason?.season,
+                        animeByIDResponse.startSeason?.year ?: 0
+                    )
                 navController.navigate(action)
             }
             otherDetails.tvSchedule.text =

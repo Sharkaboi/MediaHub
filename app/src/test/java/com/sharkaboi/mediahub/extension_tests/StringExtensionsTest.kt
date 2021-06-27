@@ -63,20 +63,6 @@ class StringExtensionsTest {
     }
 
     @Test
-    fun `getAnimeSeason with valid season string returns correct season`() {
-        val testSeason = "spring_2021"
-        val parsedSeason = testSeason.getAnimeSeason()
-        assertTrue(parsedSeason == AnimeSeason.spring)
-    }
-
-    @Test
-    fun `getAnimeSeasonYear with valid season string returns correct year`() {
-        val testSeason = "spring_2021"
-        val parsedYear = testSeason.getAnimeSeasonYear()
-        assertTrue(parsedYear == 2021)
-    }
-
-    @Test
     fun `capitalizeFirst with lowercase string returns with first char uppercased`() {
         val testString = "sprinG"
         val expectedString = "Spring"
