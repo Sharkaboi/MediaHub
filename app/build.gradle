@@ -3,7 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
-    id 'com.google.secrets_gradle_plugin' version '0.6'
+    id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
     id 'com.google.android.gms.oss-licenses-plugin'
     id 'androidx.navigation.safeargs.kotlin'
 }
@@ -51,6 +51,11 @@ android {
             option("-Adagger.fastInit=ENABLED")
             option("-Adagger.hilt.android.internal.disableAndroidSuperclassValidation=true")
         }
+    }
+
+    secrets {
+        propertiesFileName 'secrets.properties'
+        defaultPropertiesFileName = 'secrets.defaults.properties'
     }
 }
 
