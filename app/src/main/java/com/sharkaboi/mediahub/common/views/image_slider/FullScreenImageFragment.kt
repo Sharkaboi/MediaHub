@@ -22,7 +22,8 @@ class FullScreenImageFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentFullScreenImageBinding.inflate(inflater, container, false)
@@ -36,7 +37,7 @@ class FullScreenImageFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.ivImage.load(imageUrl){
+        binding.ivImage.load(imageUrl) {
             crossfade(true)
             error(R.drawable.ic_broken_image)
             fallback(R.drawable.ic_broken_image)
@@ -45,7 +46,6 @@ class FullScreenImageFragment : Fragment() {
 
     companion object {
         private const val IMAGE_URL_KEY = "imageUrl"
-        private const val TAG = "FullScreenImageFragment"
 
         @JvmStatic
         fun newInstance(imageUrl: String) =

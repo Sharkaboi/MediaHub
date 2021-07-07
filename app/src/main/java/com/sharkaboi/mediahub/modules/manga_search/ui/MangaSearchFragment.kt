@@ -37,7 +37,8 @@ class MangaSearchFragment : Fragment() {
     private var searchJob: Job? = null
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMangaSearchBinding.inflate(inflater, container, false)
@@ -117,9 +118,5 @@ class MangaSearchFragment : Fragment() {
         val imm: InputMethodManager? =
             context?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager?
         imm?.hideSoftInputFromWindow(binding.svSearch.windowToken, 0)
-    }
-
-    companion object {
-        private const val TAG = "MangaSearchFragment"
     }
 }

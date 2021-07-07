@@ -28,7 +28,7 @@ interface AnimeService {
     fun getAnimeByIdAsync(
         @Header("Authorization") authHeader: String,
         @Path("id") animeId: Int,
-        @Query("fields") fields: String =ApiConstants.ANIME_ALL_FIELDS
+        @Query("fields") fields: String = ApiConstants.ANIME_ALL_FIELDS
     ): Deferred<NetworkResponse<AnimeByIDResponse, ApiError>>
 
     @GET("anime/ranking")
@@ -53,7 +53,7 @@ interface AnimeService {
         @Query("fields") fields: String? = ApiConstants.ANIME_LESS_FIELDS
     ): Deferred<NetworkResponse<AnimeSeasonalResponse, ApiError>>
 
-    //empty list if new user
+    // empty list if new user
     @GET("anime/suggestions")
     fun getAnimeSuggestionsAsync(
         @Header("Authorization") authHeader: String,

@@ -23,7 +23,6 @@ enum class AnimeStatus {
     companion object {
         val malStatuses = values().filter { it != all }
     }
-
 }
 
 fun String.animeStatusFromString(): AnimeStatus? {
@@ -33,8 +32,6 @@ fun String.animeStatusFromString(): AnimeStatus? {
         "completed" -> AnimeStatus.completed
         "on_hold" -> AnimeStatus.on_hold
         "dropped" -> AnimeStatus.dropped
-        else -> null //AnimeStatus.all
+        else -> null // AnimeStatus.all
     }
 }
-
-

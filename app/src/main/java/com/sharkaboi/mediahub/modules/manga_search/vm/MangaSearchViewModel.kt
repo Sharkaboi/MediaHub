@@ -28,8 +28,4 @@ class MangaSearchViewModel
         _pagedSearchResult = newResult
         return newResult
     }
-
-    companion object {
-        private const val TAG = "MangaSearchViewModel"
-    }
 }

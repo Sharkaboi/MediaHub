@@ -1,6 +1,5 @@
 package com.sharkaboi.mediahub.modules.auth.repository
 
-import android.util.Log
 import com.haroldadmin.cnradapter.NetworkResponse
 import com.sharkaboi.mediahub.BuildConfig
 import com.sharkaboi.mediahub.common.extensions.emptyString
@@ -8,6 +7,7 @@ import com.sharkaboi.mediahub.data.api.retrofit.AuthService
 import com.sharkaboi.mediahub.data.datastore.DataStoreRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 class OAuthRepositoryImpl(
     private val authService: AuthService,
@@ -23,29 +23,25 @@ class OAuthRepositoryImpl(
             ).await()
             when (response) {
                 is NetworkResponse.Success -> {
-                    Log.d(TAG, response.body.toString())
+                    Timber.d(response.body.toString())
                     dataStoreRepository.setAccessToken(response.body.accessToken)
                     dataStoreRepository.setExpireIn()
                     dataStoreRepository.setRefreshToken(response.body.refreshToken)
                     return@withContext null
                 }
                 is NetworkResponse.ServerError -> {
-                    Log.d(TAG, response.body.toString())
+                    Timber.d(response.body.toString())
                     return@withContext response.body?.message
                         ?: "Error with status code : ${response.code}"
                 }
                 is NetworkResponse.NetworkError -> {
-                    Log.d(TAG, response.error.message ?: String.emptyString)
+                    Timber.d(response.error.message ?: String.emptyString)
                     return@withContext response.error.message ?: "Error with network"
                 }
                 is NetworkResponse.UnknownError -> {
-                    Log.d(TAG, response.error.message ?: String.emptyString)
+                    Timber.d(response.error.message ?: String.emptyString)
                     return@withContext response.error.message ?: "Error with parsing"
                 }
             }
         }
-
-    companion object {
-        private const val TAG = "OAuthRepository"
-    }
 }

@@ -37,8 +37,4 @@ class AnimeSuggestionsLoadStateAdapter :
             }
         }
     }
-
-    companion object {
-        private const val TAG = "AnimeSuggestionsLoadStateAdapter"
-    }
 }

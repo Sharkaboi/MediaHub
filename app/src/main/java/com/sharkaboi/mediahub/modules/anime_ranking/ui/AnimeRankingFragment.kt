@@ -37,7 +37,8 @@ class AnimeRankingFragment : Fragment() {
     private var resultsJob: Job? = null
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAnimeRankingBinding.inflate(inflater, container, false)
@@ -84,17 +85,19 @@ class AnimeRankingFragment : Fragment() {
     private fun setupFilterChips() {
         binding.rankTypeChipGroup.removeAllViews()
         AnimeRankingType.values().forEach { rankingType ->
-            binding.rankTypeChipGroup.addView(Chip(context).apply {
-                text = rankingType.getAnimeRanking()
-                setEnsureMinTouchTargetSize(false)
-                isCheckable = true
-                isChecked = rankingType == animeRankingViewModel.selectedRankingType
-                shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(8f)
-                setOnClickListener {
-                    animeRankingViewModel.setRankingType(rankingType)
-                    collectPagedList()
+            binding.rankTypeChipGroup.addView(
+                Chip(context).apply {
+                    text = rankingType.getAnimeRanking()
+                    setEnsureMinTouchTargetSize(false)
+                    isCheckable = true
+                    isChecked = rankingType == animeRankingViewModel.selectedRankingType
+                    shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(8f)
+                    setOnClickListener {
+                        animeRankingViewModel.setRankingType(rankingType)
+                        collectPagedList()
+                    }
                 }
-            })
+            )
         }
     }
 

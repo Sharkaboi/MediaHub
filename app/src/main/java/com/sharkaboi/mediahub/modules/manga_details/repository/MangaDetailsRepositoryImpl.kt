@@ -1,6 +1,5 @@
 package com.sharkaboi.mediahub.modules.manga_details.repository
 
-import android.util.Log
 import com.haroldadmin.cnradapter.NetworkResponse
 import com.sharkaboi.mediahub.common.extensions.emptyString
 import com.sharkaboi.mediahub.data.api.ApiConstants
@@ -14,6 +13,7 @@ import com.sharkaboi.mediahub.modules.manga_details.util.MangaDetailsUpdateClass
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 class MangaDetailsRepositoryImpl(
     private val mangaService: MangaService,
@@ -37,7 +37,7 @@ class MangaDetailsRepositoryImpl(
                     ).await()
                     when (result) {
                         is NetworkResponse.Success -> {
-                            Log.d(TAG, result.body.toString())
+                            Timber.d(result.body.toString())
                             return@withContext MHTaskState(
                                 isSuccess = true,
                                 data = result.body,
@@ -45,7 +45,7 @@ class MangaDetailsRepositoryImpl(
                             )
                         }
                         is NetworkResponse.NetworkError -> {
-                            Log.d(TAG, result.error.message ?: String.emptyString)
+                            Timber.d(result.error.message ?: String.emptyString)
                             return@withContext MHTaskState(
                                 isSuccess = false,
                                 data = null,
@@ -53,18 +53,19 @@ class MangaDetailsRepositoryImpl(
                             )
                         }
                         is NetworkResponse.ServerError -> {
-                            Log.d(TAG, result.body.toString())
+                            Timber.d(result.body.toString())
                             return@withContext MHTaskState(
                                 isSuccess = false,
                                 data = null,
                                 error = MHError(
                                     result.body?.message
-                                        ?: "Error with status code : ${result.code}", null
+                                        ?: "Error with status code : ${result.code}",
+                                    null
                                 )
                             )
                         }
                         is NetworkResponse.UnknownError -> {
-                            Log.d(TAG, result.error.message ?: String.emptyString)
+                            Timber.d(result.error.message ?: String.emptyString)
                             return@withContext MHTaskState(
                                 isSuccess = false,
                                 data = null,
@@ -75,7 +76,7 @@ class MangaDetailsRepositoryImpl(
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                Log.d(TAG, e.message ?: String.emptyString)
+                Timber.d(e.message ?: String.emptyString)
                 return@withContext MHTaskState(
                     isSuccess = false,
                     data = null,
@@ -107,7 +108,7 @@ class MangaDetailsRepositoryImpl(
                     ).await()
                     when (result) {
                         is NetworkResponse.Success -> {
-                            Log.d(TAG, result.body.toString())
+                            Timber.d(result.body.toString())
                             return@withContext MHTaskState(
                                 isSuccess = true,
                                 data = Unit,
@@ -115,7 +116,7 @@ class MangaDetailsRepositoryImpl(
                             )
                         }
                         is NetworkResponse.NetworkError -> {
-                            Log.d(TAG, result.error.message ?: String.emptyString)
+                            Timber.d(result.error.message ?: String.emptyString)
                             return@withContext MHTaskState(
                                 isSuccess = false,
                                 data = null,
@@ -123,18 +124,19 @@ class MangaDetailsRepositoryImpl(
                             )
                         }
                         is NetworkResponse.ServerError -> {
-                            Log.d(TAG, result.body.toString())
+                            Timber.d(result.body.toString())
                             return@withContext MHTaskState(
                                 isSuccess = false,
                                 data = null,
                                 error = MHError(
                                     result.body?.message
-                                        ?: "Error with status code : ${result.code}", null
+                                        ?: "Error with status code : ${result.code}",
+                                    null
                                 )
                             )
                         }
                         is NetworkResponse.UnknownError -> {
-                            Log.d(TAG, result.error.message ?: String.emptyString)
+                            Timber.d(result.error.message ?: String.emptyString)
                             return@withContext MHTaskState(
                                 isSuccess = false,
                                 data = null,
@@ -145,7 +147,7 @@ class MangaDetailsRepositoryImpl(
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                Log.d(TAG, e.message ?: String.emptyString)
+                Timber.d(e.message ?: String.emptyString)
                 return@withContext MHTaskState(
                     isSuccess = false,
                     data = null,
@@ -171,7 +173,7 @@ class MangaDetailsRepositoryImpl(
                     ).await()
                     when (result) {
                         is NetworkResponse.Success -> {
-                            Log.d(TAG, result.body.toString())
+                            Timber.d(result.body.toString())
                             return@withContext MHTaskState(
                                 isSuccess = true,
                                 data = Unit,
@@ -179,7 +181,7 @@ class MangaDetailsRepositoryImpl(
                             )
                         }
                         is NetworkResponse.NetworkError -> {
-                            Log.d(TAG, result.error.message ?: String.emptyString)
+                            Timber.d(result.error.message ?: String.emptyString)
                             return@withContext MHTaskState(
                                 isSuccess = false,
                                 data = null,
@@ -187,7 +189,7 @@ class MangaDetailsRepositoryImpl(
                             )
                         }
                         is NetworkResponse.ServerError -> {
-                            Log.d(TAG, result.body.toString())
+                            Timber.d(result.body.toString())
                             if (result.code == 404) {
                                 return@withContext MHTaskState(
                                     isSuccess = false,
@@ -202,12 +204,13 @@ class MangaDetailsRepositoryImpl(
                                 data = null,
                                 error = MHError(
                                     result.body?.message
-                                        ?: "Error with status code : ${result.code}", null
+                                        ?: "Error with status code : ${result.code}",
+                                    null
                                 )
                             )
                         }
                         is NetworkResponse.UnknownError -> {
-                            Log.d(TAG, result.error.message ?: String.emptyString)
+                            Timber.d(result.error.message ?: String.emptyString)
                             return@withContext MHTaskState(
                                 isSuccess = false,
                                 data = null,
@@ -218,7 +221,7 @@ class MangaDetailsRepositoryImpl(
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                Log.d(TAG, e.message ?: String.emptyString)
+                Timber.d(e.message ?: String.emptyString)
                 return@withContext MHTaskState(
                     isSuccess = false,
                     data = null,
@@ -226,8 +229,4 @@ class MangaDetailsRepositoryImpl(
                 )
             }
         }
-
-    companion object {
-        private const val TAG = "MangaDetailsRepository"
-    }
 }

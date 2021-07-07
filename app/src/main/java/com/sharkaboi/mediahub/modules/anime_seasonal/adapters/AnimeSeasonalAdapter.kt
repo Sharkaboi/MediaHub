@@ -9,8 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.RoundedCornersTransformation
 import com.sharkaboi.mediahub.R
-import com.sharkaboi.mediahub.data.api.models.anime.AnimeSeasonalResponse
 import com.sharkaboi.mediahub.common.extensions.roundOfString
+import com.sharkaboi.mediahub.data.api.models.anime.AnimeSeasonalResponse
 import com.sharkaboi.mediahub.databinding.AnimeListItemBinding
 
 class AnimeSeasonalAdapter(
@@ -68,9 +68,5 @@ class AnimeSeasonalAdapter(
         ): Boolean {
             return oldItem == newItem
         }
-    }
-
-    companion object {
-        private const val TAG = "AnimeSeasonalAdapter"
     }
 }

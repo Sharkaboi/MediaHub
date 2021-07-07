@@ -13,14 +13,13 @@ internal fun View.startAnim(animation: Animation, onEnd: () -> Unit = {}) {
         }
 
         override fun onAnimationRepeat(animation: Animation?) = Unit
-
     })
     startAnimation(animation)
 }
 
-
 internal fun View.shortSnackBar(
-    message: String, action: (Snackbar.() -> Unit)? = null
+    message: String,
+    action: (Snackbar.() -> Unit)? = null
 ) {
     val snackbar = Snackbar.make(this, message, Snackbar.LENGTH_SHORT)
     action?.let { snackbar.it() }

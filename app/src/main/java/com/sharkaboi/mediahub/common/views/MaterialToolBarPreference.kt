@@ -40,8 +40,4 @@ class MaterialToolBarPreference @JvmOverloads constructor(
             }
         }
     }
-
-    companion object {
-        private const val TAG = "MaterialToolBarPreferen"
-    }
 }

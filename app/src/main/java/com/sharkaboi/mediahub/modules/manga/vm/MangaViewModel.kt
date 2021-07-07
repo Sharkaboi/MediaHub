@@ -40,8 +40,4 @@ class MangaViewModel
     fun setSortType(userMangaSortType: UserMangaSortType) {
         _currentChosenSortType = userMangaSortType
     }
-
-    companion object {
-        private const val TAG = "MangaViewModel"
-    }
 }

@@ -37,7 +37,8 @@ class MangaRankingFragment : Fragment() {
     private var resultsJob: Job? = null
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMangaRankingBinding.inflate(inflater, container, false)
@@ -84,17 +85,19 @@ class MangaRankingFragment : Fragment() {
     private fun setupFilterChips() {
         binding.rankTypeChipGroup.removeAllViews()
         MangaRankingType.values().forEach { rankingType ->
-            binding.rankTypeChipGroup.addView(Chip(context).apply {
-                text = rankingType.getFormattedString()
-                setEnsureMinTouchTargetSize(false)
-                isCheckable = true
-                isChecked = rankingType == mangaRankingViewModel.selectedRankingType
-                shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(8f)
-                setOnClickListener {
-                    mangaRankingViewModel.setRankingType(rankingType)
-                    getMangaRankingList()
+            binding.rankTypeChipGroup.addView(
+                Chip(context).apply {
+                    text = rankingType.getFormattedString()
+                    setEnsureMinTouchTargetSize(false)
+                    isCheckable = true
+                    isChecked = rankingType == mangaRankingViewModel.selectedRankingType
+                    shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(8f)
+                    setOnClickListener {
+                        mangaRankingViewModel.setRankingType(rankingType)
+                        getMangaRankingList()
+                    }
                 }
-            })
+            )
         }
     }
 
@@ -135,5 +138,4 @@ class MangaRankingFragment : Fragment() {
                 }
         }
     }
-
 }

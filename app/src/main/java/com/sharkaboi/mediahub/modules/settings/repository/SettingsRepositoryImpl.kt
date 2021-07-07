@@ -1,12 +1,12 @@
 package com.sharkaboi.mediahub.modules.settings.repository
 
-import android.util.Log
 import com.sharkaboi.mediahub.common.extensions.emptyString
 import com.sharkaboi.mediahub.data.datastore.DataStoreRepository
 import com.sharkaboi.mediahub.data.wrappers.MHError
 import com.sharkaboi.mediahub.data.wrappers.MHTaskState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 
 class SettingsRepositoryImpl(
     private val dataStoreRepository: DataStoreRepository
@@ -22,16 +22,12 @@ class SettingsRepositoryImpl(
             )
         } catch (e: Exception) {
             e.printStackTrace()
-            Log.d(TAG, e.message ?: String.emptyString)
+            Timber.d(e.message ?: String.emptyString)
             return@withContext MHTaskState(
                 isSuccess = false,
                 data = null,
                 error = MHError(e.message ?: String.emptyString, e)
             )
         }
-    }
-
-    companion object {
-        private const val TAG = "SettingsRepository"
     }
 }

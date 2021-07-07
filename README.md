@@ -42,6 +42,8 @@
 * [Jetpack Navigation, SafeArgs](https://developer.android.com/guide/navigation)
 * [Settings preference](https://developer.android.com/reference/androidx/preference/package-summary)
 * [Coil](https://coil-kt.github.io/coil/)
+* [Timber](https://github.com/JakeWharton/timber)
+* [ktlint-gradle](https://github.com/jlleitschuh/ktlint-gradle)
 * [LeakCanary](https://square.github.io/leakcanary/)
 * [Google secrets gradle plugin](https://github.com/google/secrets-gradle-plugin)
 * [OSS licenses plugin](https://developers.google.com/android/guides/opensource)
@@ -83,7 +85,7 @@ Settings           |  Share
 PR's are welcome. Please try to follow the template.
 
 ## Privacy, Security and other info
-* App only acts as intermediate to MyAnimeList and does not have it's own server or store any data
+* App only acts as intermediate to MyAnimeList and does not have it's own server or store any data.
 * App only has network permissions, the `WRITE_EXTERNAL_STORAGE`,
 `READ_EXTERNAL_STORAGE` & `FOREGROUND_SERVICE` in the merged manifest is from [LeakCanary](https://square.github.io/leakcanary/) which is not included in the release builds.
 * App stores the token using [Datastore](https://developer.android.com/topic/libraries/architecture/datastore), which doesn't have an encryption library yet.

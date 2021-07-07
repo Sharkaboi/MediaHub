@@ -62,8 +62,10 @@ class MangaDetailsViewModel
     fun setReadChapterCount(numReadChapter: Int) {
         _mangaDetailsUpdate.apply {
             if (this.value?.mangaStatus == null ||
-                (this.value?.mangaStatus != MangaStatus.reading &&
-                        this.value?.mangaStatus != MangaStatus.completed)
+                (
+                    this.value?.mangaStatus != MangaStatus.reading &&
+                        this.value?.mangaStatus != MangaStatus.completed
+                    )
             ) {
                 value = this.value?.copy(mangaStatus = MangaStatus.reading)
             }
@@ -74,8 +76,10 @@ class MangaDetailsViewModel
     fun setReadVolumeCount(numReadVolume: Int) {
         _mangaDetailsUpdate.apply {
             if (this.value?.mangaStatus == null ||
-                (this.value?.mangaStatus != MangaStatus.reading &&
-                        this.value?.mangaStatus != MangaStatus.completed)
+                (
+                    this.value?.mangaStatus != MangaStatus.reading &&
+                        this.value?.mangaStatus != MangaStatus.completed
+                    )
             ) {
                 value = this.value?.copy(mangaStatus = MangaStatus.reading)
             }
@@ -115,9 +119,5 @@ class MangaDetailsViewModel
                 _uiState.setFailure(result.error.errorMessage)
             }
         }
-    }
-
-    companion object {
-        private const val TAG = "MangaDetailsViewModel"
     }
 }

@@ -15,14 +15,14 @@ import androidx.navigation.fragment.navArgs
 import com.google.android.material.tabs.TabLayoutMediator
 import com.sharkaboi.mediahub.databinding.FragmentImageSliderBinding
 
-
 class ImageSliderFragment : DialogFragment() {
     private var _binding: FragmentImageSliderBinding? = null
     private val binding get() = _binding!!
     private val args: ImageSliderFragmentArgs by navArgs()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentImageSliderBinding.inflate(inflater, container, false)

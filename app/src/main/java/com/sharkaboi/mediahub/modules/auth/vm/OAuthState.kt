@@ -10,9 +10,10 @@ sealed class OAuthState {
     data class OAuthFailure(val message: String) : OAuthState()
 }
 
-fun MutableLiveData<OAuthState>.setRedirectToAuth(codeChallenge: String, state: String) = this.apply {
-    value = OAuthState.RedirectToAuth(codeChallenge, state)
-}
+fun MutableLiveData<OAuthState>.setRedirectToAuth(codeChallenge: String, state: String) =
+    this.apply {
+        value = OAuthState.RedirectToAuth(codeChallenge, state)
+    }
 
 fun MutableLiveData<OAuthState>.setLoading() = this.apply {
     value = OAuthState.Loading

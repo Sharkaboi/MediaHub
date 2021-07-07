@@ -1,7 +1,6 @@
 package com.sharkaboi.mediahub.modules.splash.vm
 
 import android.content.SharedPreferences
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,6 +10,7 @@ import com.sharkaboi.mediahub.modules.splash.repository.SplashRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 
@@ -34,7 +34,7 @@ class SplashViewModel
             val nowWithBuffer = Calendar.getInstance().apply {
                 add(Calendar.DAY_OF_MONTH, 3)
             }.time
-            Log.d(TAG, "nowWithBuffer : $nowWithBuffer expiresIn: $expiresIn")
+            Timber.d("nowWithBuffer : $nowWithBuffer expiresIn: $expiresIn")
             _splashState.setFetchComplete(
                 isAccessTokenValid = accessToken != null,
                 hasExpired = expiresIn <= nowWithBuffer,
@@ -56,9 +56,5 @@ class SplashViewModel
                 _splashState.setLoginExpired()
             }
         }
-    }
-
-    companion object {
-        private const val TAG = "SplashViewModel"
     }
 }

@@ -14,7 +14,6 @@ import com.sharkaboi.mediahub.common.extensions.startAnim
 import com.sharkaboi.mediahub.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 
-
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -59,9 +58,5 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-    }
-
-    companion object {
-        private const val TAG = "MainActivity"
     }
 }

@@ -8,37 +8,37 @@ class MALExternalLinks {
     companion object {
         fun getAnimeGenresLink(genre: AnimeByIDResponse.Genre): String {
             return "https://myanimelist.net/anime/genre" +
-                    "/${genre.id}/${genre.name.replaceWhiteSpaceWithUnderScore()}"
+                "/${genre.id}/${genre.name.replaceWhiteSpaceWithUnderScore()}"
         }
 
         fun getAnimeCharactersLink(id: Int, title: String): String {
             return "https://myanimelist.net/anime" +
-                    "/$id/${title.replaceWhiteSpaceWithUnderScore()}/characters"
+                "/$id/${title.replaceWhiteSpaceWithUnderScore()}/characters"
         }
 
         fun getAnimeStaffLink(id: Int, title: String): String {
             return "https://myanimelist.net/anime" +
-                    "/$id/${title.replaceWhiteSpaceWithUnderScore()}/characters#staff"
+                "/$id/${title.replaceWhiteSpaceWithUnderScore()}/characters#staff"
         }
 
         fun getAnimeReviewsLink(id: Int, title: String): String {
             return "https://myanimelist.net/anime" +
-                    "/$id/${title.replaceWhiteSpaceWithUnderScore()}/reviews"
+                "/$id/${title.replaceWhiteSpaceWithUnderScore()}/reviews"
         }
 
         fun getAnimeNewsLink(id: Int, title: String): String {
             return "https://myanimelist.net/anime" +
-                    "/$id/${title.replaceWhiteSpaceWithUnderScore()}/news"
+                "/$id/${title.replaceWhiteSpaceWithUnderScore()}/news"
         }
 
         fun getAnimeVideosLink(id: Int, title: String): String {
             return "https://myanimelist.net/anime" +
-                    "/$id/${title.replaceWhiteSpaceWithUnderScore()}/video"
+                "/$id/${title.replaceWhiteSpaceWithUnderScore()}/video"
         }
 
         fun getAnimeProducerPageLink(studio: AnimeByIDResponse.Studio): String {
             return "https://myanimelist.net/anime/producer" +
-                    "/${studio.id}/${studio.name.replaceWhiteSpaceWithUnderScore()}"
+                "/${studio.id}/${studio.name.replaceWhiteSpaceWithUnderScore()}"
         }
 
         fun getMangaAuthorPageLink(author: MangaByIDResponse.Author): String {
@@ -46,32 +46,32 @@ class MALExternalLinks {
                 "${author.node.firstName} ${author.node.lastName}"
                     .replaceWhiteSpaceWithUnderScore()
             return "https://myanimelist.net/people" +
-                    "/${author.node.id}/$name"
+                "/${author.node.id}/$name"
         }
 
         fun getMangaGenresLink(genre: MangaByIDResponse.Genre): String {
             return "https://myanimelist.net/manga/genre" +
-                    "/${genre.id}/${genre.name.replaceWhiteSpaceWithUnderScore()}"
+                "/${genre.id}/${genre.name.replaceWhiteSpaceWithUnderScore()}"
         }
 
         fun getMangaCharactersLink(id: Int, title: String): String {
             return "https://myanimelist.net/manga" +
-                    "/$id/${title.replaceWhiteSpaceWithUnderScore()}/characters"
+                "/$id/${title.replaceWhiteSpaceWithUnderScore()}/characters"
         }
 
         fun getMangaReviewsLink(id: Int, title: String): String {
             return "https://myanimelist.net/manga" +
-                    "/$id/${title.replaceWhiteSpaceWithUnderScore()}/reviews"
+                "/$id/${title.replaceWhiteSpaceWithUnderScore()}/reviews"
         }
 
         fun getMangaNewsLink(id: Int, title: String): String {
             return "https://myanimelist.net/manga" +
-                    "/$id/${title.replaceWhiteSpaceWithUnderScore()}/news"
+                "/$id/${title.replaceWhiteSpaceWithUnderScore()}/news"
         }
 
         fun getMangaSerializationPageLink(magazine: MangaByIDResponse.Serialization): String {
             return "https://myanimelist.net/manga/magazine" +
-                    "/${magazine.node.id}/${magazine.node.name.replaceWhiteSpaceWithUnderScore()}"
+                "/${magazine.node.id}/${magazine.node.name.replaceWhiteSpaceWithUnderScore()}"
         }
 
         fun getBlogsLink(name: String): String {

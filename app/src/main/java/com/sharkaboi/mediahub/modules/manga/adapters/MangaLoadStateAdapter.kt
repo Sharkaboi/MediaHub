@@ -36,8 +36,4 @@ class MangaLoadStateAdapter : LoadStateAdapter<MangaLoadStateAdapter.LoadStateVi
             }
         }
     }
-
-    companion object {
-        private const val TAG = "MangaLoadStateAdapter"
-    }
 }

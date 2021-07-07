@@ -14,8 +14,4 @@ class MangaPagerAdapter(fm: FragmentManager, lifecycle: Lifecycle) :
     override fun createFragment(position: Int): Fragment {
         return MangaListByStatusFragment.newInstance(MangaStatus.values()[position])
     }
-
-    companion object {
-        private const val TAG = "MangaPagerAdapter"
-    }
 }

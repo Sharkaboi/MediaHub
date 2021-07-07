@@ -12,6 +12,7 @@ import com.sharkaboi.mediahub.modules.auth.ui.OAuthActivity
 import com.sharkaboi.mediahub.modules.splash.vm.SplashState
 import com.sharkaboi.mediahub.modules.splash.vm.SplashViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class SplashActivity : AppCompatActivity() {
@@ -54,17 +55,13 @@ class SplashActivity : AppCompatActivity() {
         startActivity(Intent(this, MainActivity::class.java))
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
         finish()
-        Log.d(TAG, "redirectToMainAppFlow")
+        Timber.d("redirectToMainAppFlow")
     }
 
     private fun redirectToOAuthFlow() {
         startActivity(Intent(this, OAuthActivity::class.java))
         overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
         finish()
-        Log.d(TAG, "redirectToOAuthFlow")
-    }
-
-    companion object {
-        private const val TAG = "SplashActivity"
+        Timber.d("redirectToOAuthFlow")
     }
 }

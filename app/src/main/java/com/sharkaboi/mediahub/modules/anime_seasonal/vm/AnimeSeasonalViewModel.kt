@@ -45,8 +45,4 @@ class AnimeSeasonalViewModel
     fun nextSeason() {
         _animeSeasonWrapper = _animeSeasonWrapper.next()
     }
-
-    companion object {
-        private const val TAG = "AnimeSeasonalViewModel"
-    }
 }

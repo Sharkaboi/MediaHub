@@ -125,5 +125,4 @@ class PresentationExtensionsTest {
         val resultString = testLength.getEpisodeLengthFromSeconds()
         assertTrue(resultString == expectedString)
     }
-
 }

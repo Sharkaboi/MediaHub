@@ -8,7 +8,6 @@ import com.sharkaboi.mediahub.databinding.LoadMoreItemBinding
 class LoadMoreAdapter(private val onClick: () -> Unit) :
     RecyclerView.Adapter<LoadMoreAdapter.LoadMoreViewHolder>() {
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): LoadMoreViewHolder {
         val binding =
             LoadMoreItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)

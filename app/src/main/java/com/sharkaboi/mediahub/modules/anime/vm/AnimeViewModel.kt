@@ -40,8 +40,4 @@ class AnimeViewModel
     fun setAnimeStatus(animeStatus: AnimeStatus) {
         _currentChosenAnimeStatus = animeStatus
     }
-
-    companion object {
-        private const val TAG = "AnimeViewModel"
-    }
 }

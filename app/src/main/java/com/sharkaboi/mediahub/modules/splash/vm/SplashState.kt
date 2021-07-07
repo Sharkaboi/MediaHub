@@ -10,6 +10,7 @@ sealed class SplashState {
         val hasExpired: Boolean,
         val isDarkMode: Boolean
     ) : SplashState()
+
     object LoginExpired : SplashState()
 }
 

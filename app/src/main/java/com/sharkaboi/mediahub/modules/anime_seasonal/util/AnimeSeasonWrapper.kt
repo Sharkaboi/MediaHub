@@ -33,7 +33,7 @@ data class AnimeSeasonWrapper(
     }
 
     companion object {
-        fun currentSeason() :AnimeSeasonWrapper {
+        fun currentSeason(): AnimeSeasonWrapper {
             val now = LocalDate.now()
             return AnimeSeasonWrapper(
                 animeSeason = now.getAnimeSeason(),

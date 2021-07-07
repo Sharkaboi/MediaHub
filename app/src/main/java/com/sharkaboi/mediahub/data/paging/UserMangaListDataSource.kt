@@ -1,6 +1,5 @@
 package com.sharkaboi.mediahub.data.paging
 
-import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.haroldadmin.cnradapter.NetworkResponse
@@ -12,6 +11,7 @@ import com.sharkaboi.mediahub.data.api.models.ApiError
 import com.sharkaboi.mediahub.data.api.models.usermanga.UserMangaListResponse
 import com.sharkaboi.mediahub.data.api.retrofit.UserMangaService
 import com.sharkaboi.mediahub.data.wrappers.NoTokenFoundError
+import timber.log.Timber
 
 class UserMangaListDataSource(
     private val userMangaService: UserMangaService,
@@ -38,7 +38,7 @@ class UserMangaListDataSource(
     }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, UserMangaListResponse.Data> {
-        Log.d(TAG, "params : ${params.key}")
+        Timber.d("params : ${params.key}")
         try {
             val offset = params.key ?: ApiConstants.API_START_OFFSET
             val limit = ApiConstants.API_PAGE_LIMIT
@@ -83,7 +83,7 @@ class UserMangaListDataSource(
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            Log.d(TAG, e.message ?: String.emptyString)
+            Timber.d(e.message ?: String.emptyString)
             return LoadResult.Error(e)
         }
     }
@@ -92,9 +92,5 @@ class UserMangaListDataSource(
         null
     } else {
         mangaStatus.name
-    }
-
-    companion object {
-        private const val TAG = "UserMangaListDataSource"
     }
 }

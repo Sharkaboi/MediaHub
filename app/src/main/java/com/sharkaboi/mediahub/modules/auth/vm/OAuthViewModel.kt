@@ -1,10 +1,10 @@
 package com.sharkaboi.mediahub.modules.auth.vm
 
-import android.util.Log
 import androidx.lifecycle.*
 import com.sharkaboi.mediahub.modules.auth.repository.OAuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 import kotlin.random.Random
@@ -23,8 +23,8 @@ class OAuthViewModel
     init {
         val savedCodeChallenge = savedStateHandle.get<String>(CODE_CHALLENGE)
         val savedState = savedStateHandle.get<String>(STATE)
-        Log.d(TAG, "challenge : $savedCodeChallenge")
-        Log.d(TAG, "state : $savedState")
+        Timber.d("challenge : $savedCodeChallenge")
+        Timber.d("state : $savedState")
 
         if (savedCodeChallenge == null || savedState == null) {
             codeChallenge = getCodeChallengeString()
@@ -47,8 +47,8 @@ class OAuthViewModel
     fun receivedAuthToken(code: String) {
         _oAuthState.setLoading()
         viewModelScope.launch {
-            Log.d(TAG, "challenge retrieved: $codeChallenge")
-            Log.d(TAG, "code received: $code")
+            Timber.d("challenge retrieved: $codeChallenge")
+            Timber.d("code received: $code")
             val result = oAuthRepository.getAccessToken(code, codeChallenge)
             if (result == null) {
                 _oAuthState.setOAuthSuccess()
@@ -68,6 +68,5 @@ class OAuthViewModel
     companion object {
         private const val CODE_CHALLENGE = "codeChallenge"
         private const val STATE = "state"
-        private const val TAG = "OAuthViewModel"
     }
 }

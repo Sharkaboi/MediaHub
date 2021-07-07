@@ -2,7 +2,6 @@ package com.sharkaboi.mediahub.modules.auth.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -13,14 +12,15 @@ import com.github.razir.progressbutton.showProgress
 import com.sharkaboi.mediahub.BuildConfig
 import com.sharkaboi.mediahub.R
 import com.sharkaboi.mediahub.common.constants.AppConstants
-import com.sharkaboi.mediahub.data.api.retrofit.AuthService
 import com.sharkaboi.mediahub.common.extensions.showToast
 import com.sharkaboi.mediahub.common.util.openUrl
+import com.sharkaboi.mediahub.data.api.retrofit.AuthService
 import com.sharkaboi.mediahub.databinding.ActivityAuthBinding
 import com.sharkaboi.mediahub.modules.MainActivity
 import com.sharkaboi.mediahub.modules.auth.vm.OAuthState
 import com.sharkaboi.mediahub.modules.auth.vm.OAuthViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class OAuthActivity : AppCompatActivity() {
@@ -45,7 +45,7 @@ class OAuthActivity : AppCompatActivity() {
 
     private fun setObservers() {
         oAuthViewModel.oAuthState.observe(this) { state ->
-            Log.d(TAG, "state : $state")
+            Timber.d("state : $state")
             if (state is OAuthState.Idle || state is OAuthState.OAuthFailure) {
                 binding.btnRedirect.isEnabled = true
             } else {
@@ -92,16 +92,12 @@ class OAuthActivity : AppCompatActivity() {
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         val uri = intent?.data
-        Log.d(TAG, "onNewIntent uri :${uri.toString()}")
+        Timber.d("onNewIntent uri :$uri")
         if (uri != null && uri.toString().startsWith(AppConstants.oAuthDeepLinkUri)) {
             val code = uri.getQueryParameter("code")
             if (code != null) {
                 oAuthViewModel.receivedAuthToken(code)
             }
         }
-    }
-
-    companion object {
-        private const val TAG = "OAuthActivity"
     }
 }

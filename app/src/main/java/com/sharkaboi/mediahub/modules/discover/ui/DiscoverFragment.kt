@@ -30,7 +30,8 @@ class DiscoverFragment : Fragment() {
     private val discoverDetailsViewModel by viewModels<DiscoverViewModel>()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentDiscoverBinding.inflate(inflater, container, false)
@@ -138,9 +139,5 @@ class DiscoverFragment : Fragment() {
             setHasFixedSize(true)
             itemAnimator = DefaultItemAnimator()
         }
-    }
-
-    companion object {
-        private const val TAG = "DiscoverFragment"
     }
 }

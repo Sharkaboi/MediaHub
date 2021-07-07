@@ -29,5 +29,4 @@ class MPAndroidChartValueFormatter : ValueFormatter() {
         }
         return r
     }
-
 }

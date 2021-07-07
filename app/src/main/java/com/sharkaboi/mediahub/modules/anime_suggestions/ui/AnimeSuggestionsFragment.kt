@@ -30,7 +30,8 @@ class AnimeSuggestionsFragment : Fragment() {
     private val animeSuggestionsViewModel by viewModels<AnimeSuggestionsViewModel>()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAnimeSuggestionsBinding.inflate(inflater, container, false)

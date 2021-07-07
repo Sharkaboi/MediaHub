@@ -1,7 +1,6 @@
 package com.sharkaboi.mediahub.modules.anime_seasonal.repository
 
 import android.content.SharedPreferences
-import android.util.Log
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
@@ -14,6 +13,7 @@ import com.sharkaboi.mediahub.data.paging.AnimeSeasonalDataSource
 import com.sharkaboi.mediahub.data.sharedpref.SharedPreferencesKeys
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
+import timber.log.Timber
 
 class AnimeSeasonalRepositoryImpl(
     private val animeService: AnimeService,
@@ -27,7 +27,7 @@ class AnimeSeasonalRepositoryImpl(
     ): Flow<PagingData<AnimeSeasonalResponse.Data>> {
         val showNsfw = sharedPreferences.getBoolean(SharedPreferencesKeys.NSFW_OPTION, false)
         val accessToken: String? = dataStoreRepository.accessTokenFlow.firstOrNull()
-        Log.d(TAG, "accessToken: $accessToken")
+        Timber.d("accessToken: $accessToken")
         return Pager(
             config = PagingConfig(
                 pageSize = ApiConstants.API_PAGE_LIMIT,
@@ -43,9 +43,5 @@ class AnimeSeasonalRepositoryImpl(
                 )
             }
         ).flow
-    }
-
-    companion object {
-        private const val TAG = "AnimeSeasonalRepository"
     }
 }

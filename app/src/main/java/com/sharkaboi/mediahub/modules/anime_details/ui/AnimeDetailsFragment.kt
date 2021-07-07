@@ -45,7 +45,8 @@ class AnimeDetailsFragment : Fragment() {
     private val animeDetailsViewModel by viewModels<AnimeDetailsViewModel>()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAnimeDetailsBinding.inflate(inflater, container, false)
@@ -77,14 +78,16 @@ class AnimeDetailsFragment : Fragment() {
             binding.animeDetailsUserListCard.apply {
                 btnStatus.text =
                     animeDetails.animeStatus?.getFormattedString()
-                        ?: getString(R.string.not_added)
+                    ?: getString(R.string.not_added)
                 btnScore.text = ("${animeDetails.score ?: 0}/10")
-                btnCount.text = ("${animeDetails.numWatchedEpisode ?: 0}/${
+                btnCount.text = (
+                    "${animeDetails.numWatchedEpisode ?: 0}/${
                     if (animeDetails.totalEps == 0)
                         "??"
                     else
                         animeDetails.totalEps.toString()
-                }")
+                    }"
+                    )
                 btnScore.setOnClickListener {
                     openScoreDialog(animeDetails.score)
                 }
@@ -113,31 +116,35 @@ class AnimeDetailsFragment : Fragment() {
             }
             tvStartDate.text =
                 animeByIDResponse.startDate?.tryParseDate()?.formatDateDMY()
-                    ?: getString(R.string.n_a)
+                ?: getString(R.string.n_a)
             tvEndDate.text =
                 animeByIDResponse.endDate?.tryParseDate()?.formatDateDMY()
-                    ?: getString(R.string.n_a)
+                ?: getString(R.string.n_a)
             tvMeanScore.text = animeByIDResponse.mean?.toString() ?: getString(R.string.n_a)
             tvRank.text = animeByIDResponse.rank?.toString() ?: getString(R.string.n_a)
             tvPopularityRank.text = animeByIDResponse.popularity.toString()
             studiosChipGroup.apply {
                 removeAllViews()
                 if (animeByIDResponse.studios.isEmpty()) {
-                    addView(TextView(context).apply {
-                        text = getString(R.string.n_a)
-                    })
+                    addView(
+                        TextView(context).apply {
+                            text = getString(R.string.n_a)
+                        }
+                    )
                 } else {
                     animeByIDResponse.studios.forEach { studio ->
-                        addView(TextView(context).apply {
-                            setTextColor(ContextCompat.getColor(context, R.color.colorPrimary))
-                            setTypeface(null, Typeface.BOLD)
-                            text = ("${studio.name} ")
-                            setOnClickListener {
-                                openUrl(
-                                    MALExternalLinks.getAnimeProducerPageLink(studio)
-                                )
+                        addView(
+                            TextView(context).apply {
+                                setTextColor(ContextCompat.getColor(context, R.color.colorPrimary))
+                                setTypeface(null, Typeface.BOLD)
+                                text = ("${studio.name} ")
+                                setOnClickListener {
+                                    openUrl(
+                                        MALExternalLinks.getAnimeProducerPageLink(studio)
+                                    )
+                                }
                             }
-                        })
+                        )
                     }
                 }
             }
@@ -155,7 +162,7 @@ class AnimeDetailsFragment : Fragment() {
             }
             otherDetails.tvSynopsis.text =
                 animeByIDResponse.synopsis?.ifBlank { getString(R.string.n_a) }
-                    ?: getString(R.string.n_a)
+                ?: getString(R.string.n_a)
             otherDetails.tvSynopsis.setOnClickListener {
                 showFullSynopsisDialog(
                     animeByIDResponse.synopsis?.ifBlank { getString(R.string.n_a) }
@@ -164,33 +171,41 @@ class AnimeDetailsFragment : Fragment() {
             }
             otherDetails.ratingsChipGroup.apply {
                 removeAllViews()
-                addView(Chip(context).apply {
-                    setEnsureMinTouchTargetSize(false)
-                    shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(8f)
-                    text = animeByIDResponse.nsfw?.getAnimeNsfwRating() ?: getString(R.string.n_a)
-                })
-                addView(Chip(context).apply {
-                    setEnsureMinTouchTargetSize(false)
-                    shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(8f)
-                    text = animeByIDResponse.rating?.getRating() ?: getString(R.string.n_a)
-                })
+                addView(
+                    Chip(context).apply {
+                        setEnsureMinTouchTargetSize(false)
+                        shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(8f)
+                        text = animeByIDResponse.nsfw?.getAnimeNsfwRating() ?: getString(R.string.n_a)
+                    }
+                )
+                addView(
+                    Chip(context).apply {
+                        setEnsureMinTouchTargetSize(false)
+                        shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(8f)
+                        text = animeByIDResponse.rating?.getRating() ?: getString(R.string.n_a)
+                    }
+                )
             }
             animeByIDResponse.genres.let {
                 otherDetails.genresChipGroup.removeAllViews()
                 if (it.isEmpty()) {
-                    otherDetails.genresChipGroup.addView(Chip(context).apply {
-                        setEnsureMinTouchTargetSize(false)
-                        shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(8f)
-                        text = getString(R.string.n_a)
-                    })
+                    otherDetails.genresChipGroup.addView(
+                        Chip(context).apply {
+                            setEnsureMinTouchTargetSize(false)
+                            shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(8f)
+                            text = getString(R.string.n_a)
+                        }
+                    )
                 } else {
                     it.forEach { genre ->
-                        otherDetails.genresChipGroup.addView(Chip(context).apply {
-                            setEnsureMinTouchTargetSize(false)
-                            setOnClickListener { openUrl(MALExternalLinks.getAnimeGenresLink(genre)) }
-                            shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(8f)
-                            text = genre.name
-                        })
+                        otherDetails.genresChipGroup.addView(
+                            Chip(context).apply {
+                                setEnsureMinTouchTargetSize(false)
+                                setOnClickListener { openUrl(MALExternalLinks.getAnimeGenresLink(genre)) }
+                                shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(8f)
+                                text = genre.name
+                            }
+                        )
                     }
                 }
             }
@@ -223,10 +238,12 @@ class AnimeDetailsFragment : Fragment() {
             otherDetails.tvSchedule.text =
                 animeByIDResponse.broadcast?.getBroadcastTime() ?: getString(R.string.n_a)
             otherDetails.btnSource.text =
-                ("From ${
+                (
+                    "From ${
                     animeByIDResponse.source?.replace('_', ' ')?.capitalizeFirst()
                         ?: getString(R.string.n_a)
-                }")
+                    }"
+                    )
             otherDetails.btnAverageLength.text =
                 animeByIDResponse.averageEpisodeDuration.getEpisodeLengthFromSeconds()
             otherDetails.ibNotify.setOnClickListener {
@@ -472,6 +489,4 @@ class AnimeDetailsFragment : Fragment() {
                 dialog.dismiss()
             }.show()
     }
-
 }
-

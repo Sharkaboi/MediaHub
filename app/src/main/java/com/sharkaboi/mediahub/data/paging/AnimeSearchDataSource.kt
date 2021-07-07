@@ -1,6 +1,5 @@
 package com.sharkaboi.mediahub.data.paging
 
-import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.haroldadmin.cnradapter.NetworkResponse
@@ -10,6 +9,7 @@ import com.sharkaboi.mediahub.data.api.models.ApiError
 import com.sharkaboi.mediahub.data.api.models.anime.AnimeSearchResponse
 import com.sharkaboi.mediahub.data.api.retrofit.AnimeService
 import com.sharkaboi.mediahub.data.wrappers.NoTokenFoundError
+import timber.log.Timber
 
 class AnimeSearchDataSource(
     private val animeService: AnimeService,
@@ -35,7 +35,7 @@ class AnimeSearchDataSource(
     }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, AnimeSearchResponse.Data> {
-        Log.d(TAG, "params : ${params.key}")
+        Timber.d("params : ${params.key}")
         try {
             val offset = params.key ?: ApiConstants.API_START_OFFSET
             val limit = ApiConstants.API_PAGE_LIMIT
@@ -79,12 +79,8 @@ class AnimeSearchDataSource(
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            Log.d(TAG, e.message ?: String.emptyString)
+            Timber.d(e.message ?: String.emptyString)
             return LoadResult.Error(e)
         }
-    }
-
-    companion object {
-        private const val TAG = "AnimeSearchDataSource"
     }
 }

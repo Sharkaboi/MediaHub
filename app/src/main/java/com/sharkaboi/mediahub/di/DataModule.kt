@@ -96,5 +96,4 @@ object DataModule {
     @Singleton
     fun getUserService(retrofit: Retrofit): UserService =
         retrofit.create(UserService::class.java)
-
 }

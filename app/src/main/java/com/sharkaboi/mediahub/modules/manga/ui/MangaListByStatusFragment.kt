@@ -1,7 +1,6 @@
 package com.sharkaboi.mediahub.modules.manga.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,6 +24,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @AndroidEntryPoint
 class MangaListByStatusFragment : Fragment() {
@@ -36,7 +36,8 @@ class MangaListByStatusFragment : Fragment() {
     private var resultsJob: Job? = null
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMangaListByStatusBinding.inflate(inflater, container, false)
@@ -91,7 +92,7 @@ class MangaListByStatusFragment : Fragment() {
             mangaListAdapter.addLoadStateListener { loadStates ->
                 if (loadStates.source.refresh is LoadState.Error) {
                     val errorMessage = (loadStates.source.refresh as LoadState.Error).error.message
-                    Log.d(TAG, "setObservers: $errorMessage")
+                    Timber.d("setObservers: $errorMessage")
                     showToast(errorMessage)
                 }
                 binding.progressBar.isShowing = loadStates.refresh is LoadState.Loading
@@ -139,7 +140,6 @@ class MangaListByStatusFragment : Fragment() {
 
     companion object {
         private const val MANGA_STATUS_KEY = "status"
-        private const val TAG = "MangaListByStatusFragme"
 
         @JvmStatic
         fun newInstance(status: MangaStatus) =

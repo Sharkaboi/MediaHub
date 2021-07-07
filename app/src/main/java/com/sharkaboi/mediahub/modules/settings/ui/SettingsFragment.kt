@@ -26,7 +26,6 @@ import com.sharkaboi.mediahub.modules.settings.vm.SettingsStates
 import com.sharkaboi.mediahub.modules.settings.vm.SettingsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
-
 @AndroidEntryPoint
 class SettingsFragment : PreferenceFragmentCompat() {
 
@@ -80,7 +79,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
             true
         }
     }
-
 
     private fun setObservers() {
         settingsViewModel.uiState.observe(viewLifecycleOwner) { uiState ->

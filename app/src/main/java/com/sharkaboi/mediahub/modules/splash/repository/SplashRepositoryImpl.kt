@@ -1,6 +1,5 @@
 package com.sharkaboi.mediahub.modules.splash.repository
 
-import android.util.Log
 import com.haroldadmin.cnradapter.NetworkResponse
 import com.sharkaboi.mediahub.BuildConfig
 import com.sharkaboi.mediahub.common.extensions.emptyString
@@ -10,6 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import java.util.*
 
 class SplashRepositoryImpl(
@@ -31,29 +31,25 @@ class SplashRepositoryImpl(
             ).await()
             when (response) {
                 is NetworkResponse.Success -> {
-                    Log.d(TAG, response.body.toString())
+                    Timber.d(response.body.toString())
                     dataStoreRepository.setAccessToken(response.body.accessToken)
                     dataStoreRepository.setExpireIn()
                     dataStoreRepository.setRefreshToken(response.body.refreshToken)
                     return@withContext true
                 }
                 is NetworkResponse.ServerError -> {
-                    Log.d(TAG, response.body.toString())
+                    Timber.d(response.body.toString())
                     return@withContext false
                 }
                 is NetworkResponse.NetworkError -> {
-                    Log.d(TAG, response.error.message ?: String.emptyString)
+                    Timber.d(response.error.message ?: String.emptyString)
                     return@withContext false
                 }
                 is NetworkResponse.UnknownError -> {
-                    Log.d(TAG, response.error.message ?: String.emptyString)
+                    Timber.d(response.error.message ?: String.emptyString)
                     return@withContext false
                 }
             }
         }
-    }
-
-    companion object {
-        private const val TAG = "SplashRepository"
     }
 }
