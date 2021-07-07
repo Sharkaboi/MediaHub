@@ -24,7 +24,8 @@ class MangaFragment : Fragment() {
     private lateinit var onPageChanged: ViewPager2.OnPageChangeCallback
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMangaBinding.inflate(inflater, container, false)
@@ -82,9 +83,5 @@ class MangaFragment : Fragment() {
         }
         binding.mangaTabLayout.addOnTabSelectedListener(onTabChanged)
         binding.vpManga.registerOnPageChangeCallback(onPageChanged)
-    }
-
-    companion object {
-        private const val TAG = "MangaFragment"
     }
 }

@@ -33,7 +33,7 @@ class AnimeListAdapter(
                     val numEpisodes =
                         if (it.node.numTotalEpisodes == 0) "??" else it.node.numTotalEpisodes
                     tvEpisodesWatched.text =
-                        ("${it.listStatus.numWatchedEpisodes}/${numEpisodes}")
+                        ("${it.listStatus.numWatchedEpisodes}/$numEpisodes")
                     tvScore.text = ("★ ${it.listStatus.score}")
                     root.setOnClickListener {
                         onItemClick(item.node.id)
@@ -69,9 +69,5 @@ class AnimeListAdapter(
         ): Boolean {
             return oldItem == newItem
         }
-    }
-
-    companion object {
-        private const val TAG = "AnimeListAdapter"
     }
 }

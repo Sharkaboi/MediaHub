@@ -107,7 +107,7 @@ class CustomProgressScreen : FrameLayout {
      */
     @Synchronized
     fun show() {
-        //Reset the start time.
+        // Reset the start time.
         startTime = -1
         isDismissed = false
         removeCallbacks(mDelayedHide)

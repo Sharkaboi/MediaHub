@@ -41,7 +41,8 @@ class ProfileFragment : Fragment() {
     private val navController by lazy { findNavController() }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
@@ -117,16 +118,16 @@ class ProfileFragment : Fragment() {
                 profileDetailsCardContent.apply {
                     tvBirthDay.text =
                         userDetailsResponse.birthday?.tryParseDateTime()?.formatDateDMY()
-                            ?: getString(R.string.n_a)
+                        ?: getString(R.string.n_a)
                     tvGender.text =
                         userDetailsResponse.gender?.capitalizeFirst()
-                            ?: getString(R.string.n_a)
+                        ?: getString(R.string.n_a)
                     tvJoinedAt.text =
                         userDetailsResponse.joinedAt.tryParseDateTime()?.formatDateDMY()
-                            ?: getString(R.string.n_a)
+                        ?: getString(R.string.n_a)
                     tvLocation.text =
                         userDetailsResponse.location?.ifBlank { getString(R.string.n_a) }
-                            ?: getString(R.string.n_a)
+                        ?: getString(R.string.n_a)
                     tvTimeZone.text = userDetailsResponse.timeZone ?: getString(R.string.n_a)
                     tvSupporter.text =
                         if (userDetailsResponse.isSupporter == null || !userDetailsResponse.isSupporter) {
@@ -173,18 +174,20 @@ class ProfileFragment : Fragment() {
                                 )
                             )
                             if (entries.count { it.value == 0f } != entries.count()) {
-                                val pieData = PieData(PieDataSet(entries, "").apply {
-                                    colors = listOf(
-                                        "#2ecc71".parseRGB(),
-                                        "#ffa500".parseRGB(),
-                                        "#e74c3c".parseRGB(),
-                                        "#3498db".parseRGB(),
-                                        "#5634eb".parseRGB(),
-                                    )
-                                    valueTextSize = 14f
-                                    valueTextColor = Color.WHITE
-                                    valueFormatter = MPAndroidChartValueFormatter()
-                                })
+                                val pieData = PieData(
+                                    PieDataSet(entries, "").apply {
+                                        colors = listOf(
+                                            "#2ecc71".parseRGB(),
+                                            "#ffa500".parseRGB(),
+                                            "#e74c3c".parseRGB(),
+                                            "#3498db".parseRGB(),
+                                            "#5634eb".parseRGB(),
+                                        )
+                                        valueTextSize = 14f
+                                        valueTextColor = Color.WHITE
+                                        valueFormatter = MPAndroidChartValueFormatter()
+                                    }
+                                )
                                 data = pieData
                                 setTouchEnabled(false)
                                 setDrawEntryLabels(false)
@@ -275,9 +278,5 @@ class ProfileFragment : Fragment() {
             context,
             R.anim.rotate_close_anim
         )
-    }
-
-    companion object {
-        private const val TAG = "ProfileFragment"
     }
 }

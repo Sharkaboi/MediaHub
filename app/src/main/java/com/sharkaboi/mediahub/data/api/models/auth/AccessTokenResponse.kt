@@ -1,9 +1,8 @@
 package com.sharkaboi.mediahub.data.api.models.auth
 
-
+import androidx.annotation.Keep
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import androidx.annotation.Keep
 
 @Keep
 @JsonClass(generateAdapter = true)

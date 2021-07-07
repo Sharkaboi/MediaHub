@@ -37,8 +37,4 @@ class MangaRankingLoadStateAdapter :
             }
         }
     }
-
-    companion object {
-        private const val TAG = "MangaRankingLoadStateAdapter"
-    }
 }

@@ -73,8 +73,4 @@ class AnimeSuggestionsAdapter(
             return oldItem == newItem
         }
     }
-
-    companion object {
-        private const val TAG = "AnimeSuggestionsAdapter"
-    }
 }

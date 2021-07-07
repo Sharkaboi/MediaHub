@@ -1,6 +1,5 @@
 package com.sharkaboi.mediahub.modules.anime_details.vm
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,6 +10,7 @@ import com.sharkaboi.mediahub.modules.anime_details.repository.AnimeDetailsRepos
 import com.sharkaboi.mediahub.modules.anime_details.util.AnimeDetailsUpdateClass
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -31,7 +31,7 @@ class AnimeDetailsViewModel
             val result = animeDetailsRepository.getAnimeById(animeId)
             if (result.isSuccess) {
                 result.data?.let {
-                    Log.d(TAG, "getAnimeDetails: ${result.data}")
+                    Timber.d("getAnimeDetails: ${result.data}")
                     _animeDetailsUpdate.value = AnimeDetailsUpdateClass(
                         animeStatus = it.myListStatus?.status?.animeStatusFromString(),
                         animeId = it.id,
@@ -59,21 +59,32 @@ class AnimeDetailsViewModel
     fun setEpisodeCount(numWatchedEps: Int) {
         _animeDetailsUpdate.apply {
             if (this.value?.animeStatus == null ||
-                (this.value?.animeStatus != AnimeStatus.watching &&
-                        this.value?.animeStatus != AnimeStatus.completed)
+                (
+                    this.value?.animeStatus != AnimeStatus.watching &&
+                        this.value?.animeStatus != AnimeStatus.completed
+                    )
             ) {
                 value = this.value?.copy(animeStatus = AnimeStatus.watching)
             }
-            value = value?.copy(numWatchedEpisode = numWatchedEps)
+            value = if (value?.totalEps != 0 && numWatchedEps >= value?.totalEps ?: 0) {
+                value?.copy(
+                    numWatchedEpisode = value?.totalEps,
+                    animeStatus = AnimeStatus.completed
+                )
+            } else {
+                value?.copy(numWatchedEpisode = numWatchedEps)
+            }
         }
     }
 
     fun add1ToWatchedEps() {
-        Log.d(TAG, _animeDetailsUpdate.value.toString())
+        Timber.d(_animeDetailsUpdate.value.toString())
         _animeDetailsUpdate.apply {
             if (this.value?.animeStatus == null ||
-                (this.value?.animeStatus != AnimeStatus.watching &&
-                        this.value?.animeStatus != AnimeStatus.completed)
+                (
+                    this.value?.animeStatus != AnimeStatus.watching &&
+                        this.value?.animeStatus != AnimeStatus.completed
+                    )
             ) {
                 value = this.value?.copy(animeStatus = AnimeStatus.watching)
             }
@@ -90,11 +101,13 @@ class AnimeDetailsViewModel
     }
 
     fun add5ToWatchedEps() {
-        Log.d(TAG, _animeDetailsUpdate.value.toString())
+        Timber.d(_animeDetailsUpdate.value.toString())
         _animeDetailsUpdate.apply {
             if (this.value?.animeStatus == null ||
-                (this.value?.animeStatus != AnimeStatus.watching &&
-                        this.value?.animeStatus != AnimeStatus.completed)
+                (
+                    this.value?.animeStatus != AnimeStatus.watching &&
+                        this.value?.animeStatus != AnimeStatus.completed
+                    )
             ) {
                 value = this.value?.copy(animeStatus = AnimeStatus.watching)
             }
@@ -111,11 +124,13 @@ class AnimeDetailsViewModel
     }
 
     fun add10ToWatchedEps() {
-        Log.d(TAG, _animeDetailsUpdate.value.toString())
+        Timber.d(_animeDetailsUpdate.value.toString())
         _animeDetailsUpdate.apply {
             if (this.value?.animeStatus == null ||
-                (this.value?.animeStatus != AnimeStatus.watching &&
-                        this.value?.animeStatus != AnimeStatus.completed)
+                (
+                    this.value?.animeStatus != AnimeStatus.watching &&
+                        this.value?.animeStatus != AnimeStatus.completed
+                    )
             ) {
                 value = this.value?.copy(animeStatus = AnimeStatus.watching)
             }
@@ -141,7 +156,7 @@ class AnimeDetailsViewModel
         viewModelScope.launch {
             _uiState.setLoading()
             animeDetailsUpdate.value?.let {
-                Log.d(TAG, "submitStatusUpdate: $it")
+                Timber.d("submitStatusUpdate: $it")
                 val result = animeDetailsRepository.updateAnimeStatus(
                     animeId = animeId,
                     animeStatus = it.animeStatus?.name,
@@ -169,9 +184,5 @@ class AnimeDetailsViewModel
                 _uiState.setFailure(result.error.errorMessage)
             }
         }
-    }
-
-    companion object {
-        private const val TAG = "AnimeDetailsViewModel"
     }
 }

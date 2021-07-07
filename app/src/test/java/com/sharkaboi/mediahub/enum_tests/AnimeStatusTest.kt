@@ -2,7 +2,9 @@ package com.sharkaboi.mediahub.enum_tests
 
 import com.sharkaboi.mediahub.data.api.enums.AnimeStatus
 import com.sharkaboi.mediahub.data.api.enums.animeStatusFromString
-import org.junit.Assert.*
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class AnimeStatusTest {

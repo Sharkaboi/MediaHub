@@ -144,65 +144,66 @@ internal fun AnimeByIDResponse.AlternativeTitles.getFormattedString(): Spanned {
         Html.fromHtml(
             """
             <b>English title</b> : ${
-                this.en?.let {
-                    if (it.isBlank()) {
-                        "N/A"
-                    } else {
-                        it
-                    }
-                } ?: "N/A"
+            this.en?.let {
+                if (it.isBlank()) {
+                    "N/A"
+                } else {
+                    it
+                }
+            } ?: "N/A"
             }<br>
             <b>Japanese title</b> : ${
-                this.ja?.let {
-                    if (it.isBlank()) {
-                        "N/A"
-                    } else {
-                        it
-                    }
-                } ?: "N/A"
+            this.ja?.let {
+                if (it.isBlank()) {
+                    "N/A"
+                } else {
+                    it
+                }
+            } ?: "N/A"
             }<br>
             <b>Synonyms</b> : ${
-                this.synonyms?.let {
-                    if (it.isEmpty()) {
-                        "N/A"
-                    } else {
-                        it.joinToString().ifBlank { "N/A" }
-                    }
-                } ?: "N/A"
+            this.synonyms?.let {
+                if (it.isEmpty()) {
+                    "N/A"
+                } else {
+                    it.joinToString().ifBlank { "N/A" }
+                }
+            } ?: "N/A"
             }
-        """.trimIndent(), Html.FROM_HTML_MODE_COMPACT
+            """.trimIndent(),
+            Html.FROM_HTML_MODE_COMPACT
         )
     } else {
         Html.fromHtml(
             """
             <b>English title</b> : ${
-                this.en?.let {
-                    if (it.isBlank()) {
-                        "N/A"
-                    } else {
-                        it
-                    }
-                } ?: "N/A"
+            this.en?.let {
+                if (it.isBlank()) {
+                    "N/A"
+                } else {
+                    it
+                }
+            } ?: "N/A"
             }<br>
             <b>Japanese title</b> : ${
-                this.ja?.let {
-                    if (it.isBlank()) {
-                        "N/A"
-                    } else {
-                        it
-                    }
-                } ?: "N/A"
+            this.ja?.let {
+                if (it.isBlank()) {
+                    "N/A"
+                } else {
+                    it
+                }
+            } ?: "N/A"
             }<br>
             <b>Synonyms</b> : ${
-                this.synonyms?.let {
-                    if (it.isEmpty()) {
-                        "N/A"
-                    } else {
-                        it.joinToString().ifBlank { "N/A" }
-                    }
-                } ?: "N/A"
+            this.synonyms?.let {
+                if (it.isEmpty()) {
+                    "N/A"
+                } else {
+                    it.joinToString().ifBlank { "N/A" }
+                }
+            } ?: "N/A"
             }
-        """.trimIndent()
+            """.trimIndent()
         )
     }
 }
@@ -212,65 +213,66 @@ internal fun MangaByIDResponse.AlternativeTitles.getFormattedString(): Spanned {
         Html.fromHtml(
             """
             <b>English title</b> : ${
-                this.en?.let {
-                    if (it.isBlank()) {
-                        "N/A"
-                    } else {
-                        it
-                    }
-                } ?: "N/A"
+            this.en?.let {
+                if (it.isBlank()) {
+                    "N/A"
+                } else {
+                    it
+                }
+            } ?: "N/A"
             }<br>
             <b>Japanese title</b> : ${
-                this.ja?.let {
-                    if (it.isBlank()) {
-                        "N/A"
-                    } else {
-                        it
-                    }
-                } ?: "N/A"
+            this.ja?.let {
+                if (it.isBlank()) {
+                    "N/A"
+                } else {
+                    it
+                }
+            } ?: "N/A"
             }<br>
             <b>Synonyms</b> : ${
-                this.synonyms?.let {
-                    if (it.isEmpty()) {
-                        "N/A"
-                    } else {
-                        it.joinToString().ifBlank { "N/A" }
-                    }
-                } ?: "N/A"
+            this.synonyms?.let {
+                if (it.isEmpty()) {
+                    "N/A"
+                } else {
+                    it.joinToString().ifBlank { "N/A" }
+                }
+            } ?: "N/A"
             }
-        """.trimIndent(), Html.FROM_HTML_MODE_COMPACT
+            """.trimIndent(),
+            Html.FROM_HTML_MODE_COMPACT
         )
     } else {
         Html.fromHtml(
             """
             <b>English title</b> : ${
-                this.en?.let {
-                    if (it.isBlank()) {
-                        "N/A"
-                    } else {
-                        it
-                    }
-                } ?: "N/A"
+            this.en?.let {
+                if (it.isBlank()) {
+                    "N/A"
+                } else {
+                    it
+                }
+            } ?: "N/A"
             }<br>
             <b>Japanese title</b> : ${
-                this.ja?.let {
-                    if (it.isBlank()) {
-                        "N/A"
-                    } else {
-                        it
-                    }
-                } ?: "N/A"
+            this.ja?.let {
+                if (it.isBlank()) {
+                    "N/A"
+                } else {
+                    it
+                }
+            } ?: "N/A"
             }<br>
             <b>Synonyms</b> : ${
-                this.synonyms?.let {
-                    if (it.isEmpty()) {
-                        "N/A"
-                    } else {
-                        it.joinToString().ifBlank { "N/A" }
-                    }
-                } ?: "N/A"
+            this.synonyms?.let {
+                if (it.isEmpty()) {
+                    "N/A"
+                } else {
+                    it.joinToString().ifBlank { "N/A" }
+                }
+            } ?: "N/A"
             }
-        """.trimIndent()
+            """.trimIndent()
         )
     }
 }
@@ -280,47 +282,48 @@ internal fun AnimeByIDResponse.Statistics.getStats(): Spanned {
         Html.fromHtml(
             """
             <b>Number of users with this anime in list</b> : ${
-                this.numListUsers
+            this.numListUsers
             }<br>
             <b>Watching count</b> : ${
-                this.status.watching
+            this.status.watching
             }<br>
             <b>Planned count</b> : ${
-                this.status.planToWatch
+            this.status.planToWatch
             }<br>
             <b>Completed count</b> : ${
-                this.status.completed
+            this.status.completed
             }<br>
             <b>Dropped count</b> : ${
-                this.status.dropped
+            this.status.dropped
             }<br>
             <b>On hold count</b> : ${
-                this.status.onHold
+            this.status.onHold
             }
-        """.trimIndent(), Html.FROM_HTML_MODE_COMPACT
+            """.trimIndent(),
+            Html.FROM_HTML_MODE_COMPACT
         )
     } else {
         Html.fromHtml(
             """
             <b>Number of users with this anime in list</b> : ${
-                this.numListUsers
+            this.numListUsers
             }<br>
             <b>Watching count</b> : ${
-                this.status.watching
+            this.status.watching
             }<br>
             <b>Planned count</b> : ${
-                this.status.planToWatch
+            this.status.planToWatch
             }<br>
             <b>Completed count</b> : ${
-                this.status.completed
+            this.status.completed
             }<br>
             <b>Dropped count</b> : ${
-                this.status.dropped
+            this.status.dropped
             }<br>
             <b>On hold count</b> : ${
-                this.status.onHold
+            this.status.onHold
             }
-        """.trimIndent()
+            """.trimIndent()
         )
     }
 }

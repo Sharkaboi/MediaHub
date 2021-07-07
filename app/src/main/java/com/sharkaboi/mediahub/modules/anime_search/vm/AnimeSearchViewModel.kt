@@ -28,8 +28,4 @@ class AnimeSearchViewModel
         _pagedSearchResult = newResult
         return newResult
     }
-
-    companion object {
-        private const val TAG = "AnimeSearchViewModel"
-    }
 }

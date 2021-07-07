@@ -33,11 +33,11 @@ class MangaListAdapter(
                     val numChapters =
                         if (it.node.numChapters == 0) "??" else it.node.numChapters
                     tvChapsRead.text =
-                        ("${it.listStatus.numChaptersRead}/${numChapters}")
+                        ("${it.listStatus.numChaptersRead}/$numChapters")
                     val numVolumes =
                         if (it.node.numVolumes == 0) "??" else it.node.numVolumes
                     tvVolumesRead.text =
-                        ("${it.listStatus.numVolumesRead}/${numVolumes}")
+                        ("${it.listStatus.numVolumesRead}/$numVolumes")
                     tvScore.text = ("★ ${it.listStatus.score}")
                     root.setOnClickListener {
                         onItemClick(item.node.id)
@@ -73,9 +73,5 @@ class MangaListAdapter(
         ): Boolean {
             return oldItem == newItem
         }
-    }
-
-    companion object {
-        private const val TAG = "MangaListAdapter"
     }
 }

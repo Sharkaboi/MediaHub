@@ -30,7 +30,6 @@ class RecommendedAnimeAdapter(private val onClick: (Int) -> Unit) :
             ): Boolean {
                 return oldItem == newItem
             }
-
         }
 
     private val listDiffer = AsyncListDiffer(this, diffUtilItemCallback)

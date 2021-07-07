@@ -32,6 +32,6 @@ fun String.mangaStatusFromString(): MangaStatus? {
         "completed" -> MangaStatus.completed
         "on_hold" -> MangaStatus.on_hold
         "dropped" -> MangaStatus.dropped
-        else -> null //MangaStatus.all
+        else -> null // MangaStatus.all
     }
 }

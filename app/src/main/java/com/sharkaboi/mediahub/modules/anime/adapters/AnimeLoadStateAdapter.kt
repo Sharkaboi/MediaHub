@@ -36,8 +36,4 @@ class AnimeLoadStateAdapter : LoadStateAdapter<AnimeLoadStateAdapter.LoadStateVi
             }
         }
     }
-
-    companion object {
-        private const val TAG = "AnimeLoadStateAdapter"
-    }
 }

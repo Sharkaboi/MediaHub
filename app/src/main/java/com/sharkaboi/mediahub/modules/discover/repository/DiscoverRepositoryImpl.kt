@@ -1,7 +1,6 @@
 package com.sharkaboi.mediahub.modules.discover.repository
 
 import android.content.SharedPreferences
-import android.util.Log
 import com.haroldadmin.cnradapter.NetworkResponse
 import com.sharkaboi.mediahub.common.extensions.emptyString
 import com.sharkaboi.mediahub.data.api.ApiConstants
@@ -17,6 +16,7 @@ import com.sharkaboi.mediahub.data.wrappers.MHTaskState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import java.time.LocalDate
 
 class DiscoverRepositoryImpl(
@@ -46,7 +46,7 @@ class DiscoverRepositoryImpl(
                     ).await()
                     when (result) {
                         is NetworkResponse.Success -> {
-                            Log.d(TAG, result.body.toString())
+                            Timber.d(result.body.toString())
                             return@withContext MHTaskState(
                                 isSuccess = true,
                                 data = result.body,
@@ -54,7 +54,7 @@ class DiscoverRepositoryImpl(
                             )
                         }
                         is NetworkResponse.NetworkError -> {
-                            Log.d(TAG, result.error.message ?: String.emptyString)
+                            Timber.d(result.error.message ?: String.emptyString)
                             return@withContext MHTaskState(
                                 isSuccess = false,
                                 data = null,
@@ -62,18 +62,19 @@ class DiscoverRepositoryImpl(
                             )
                         }
                         is NetworkResponse.ServerError -> {
-                            Log.d(TAG, result.body.toString())
+                            Timber.d(result.body.toString())
                             return@withContext MHTaskState(
                                 isSuccess = false,
                                 data = null,
                                 error = MHError(
                                     result.body?.message
-                                        ?: "Error with status code : ${result.code}", null
+                                        ?: "Error with status code : ${result.code}",
+                                    null
                                 )
                             )
                         }
                         is NetworkResponse.UnknownError -> {
-                            Log.d(TAG, result.error.message ?: String.emptyString)
+                            Timber.d(result.error.message ?: String.emptyString)
                             return@withContext MHTaskState(
                                 isSuccess = false,
                                 data = null,
@@ -84,7 +85,7 @@ class DiscoverRepositoryImpl(
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                Log.d(TAG, e.message ?: String.emptyString)
+                Timber.d(e.message ?: String.emptyString)
                 return@withContext MHTaskState(
                     isSuccess = false,
                     data = null,
@@ -117,7 +118,7 @@ class DiscoverRepositoryImpl(
                     ).await()
                     when (result) {
                         is NetworkResponse.Success -> {
-                            Log.d(TAG, result.body.toString())
+                            Timber.d(result.body.toString())
                             return@withContext MHTaskState(
                                 isSuccess = true,
                                 data = result.body,
@@ -125,7 +126,7 @@ class DiscoverRepositoryImpl(
                             )
                         }
                         is NetworkResponse.NetworkError -> {
-                            Log.d(TAG, result.error.message ?: String.emptyString)
+                            Timber.d(result.error.message ?: String.emptyString)
                             return@withContext MHTaskState(
                                 isSuccess = false,
                                 data = null,
@@ -133,18 +134,19 @@ class DiscoverRepositoryImpl(
                             )
                         }
                         is NetworkResponse.ServerError -> {
-                            Log.d(TAG, result.body.toString())
+                            Timber.d(result.body.toString())
                             return@withContext MHTaskState(
                                 isSuccess = false,
                                 data = null,
                                 error = MHError(
                                     result.body?.message
-                                        ?: "Error with status code : ${result.code}", null
+                                        ?: "Error with status code : ${result.code}",
+                                    null
                                 )
                             )
                         }
                         is NetworkResponse.UnknownError -> {
-                            Log.d(TAG, result.error.message ?: String.emptyString)
+                            Timber.d(result.error.message ?: String.emptyString)
                             return@withContext MHTaskState(
                                 isSuccess = false,
                                 data = null,
@@ -155,7 +157,7 @@ class DiscoverRepositoryImpl(
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                Log.d(TAG, e.message ?: String.emptyString)
+                Timber.d(e.message ?: String.emptyString)
                 return@withContext MHTaskState(
                     isSuccess = false,
                     data = null,
@@ -185,7 +187,7 @@ class DiscoverRepositoryImpl(
                     ).await()
                     when (result) {
                         is NetworkResponse.Success -> {
-                            Log.d(TAG, result.body.toString())
+                            Timber.d(result.body.toString())
                             return@withContext MHTaskState(
                                 isSuccess = true,
                                 data = result.body,
@@ -193,7 +195,7 @@ class DiscoverRepositoryImpl(
                             )
                         }
                         is NetworkResponse.NetworkError -> {
-                            Log.d(TAG, result.error.message ?: String.emptyString)
+                            Timber.d(result.error.message ?: String.emptyString)
                             return@withContext MHTaskState(
                                 isSuccess = false,
                                 data = null,
@@ -201,18 +203,19 @@ class DiscoverRepositoryImpl(
                             )
                         }
                         is NetworkResponse.ServerError -> {
-                            Log.d(TAG, result.body.toString())
+                            Timber.d(result.body.toString())
                             return@withContext MHTaskState(
                                 isSuccess = false,
                                 data = null,
                                 error = MHError(
                                     result.body?.message
-                                        ?: "Error with status code : ${result.code}", null
+                                        ?: "Error with status code : ${result.code}",
+                                    null
                                 )
                             )
                         }
                         is NetworkResponse.UnknownError -> {
-                            Log.d(TAG, result.error.message ?: String.emptyString)
+                            Timber.d(result.error.message ?: String.emptyString)
                             return@withContext MHTaskState(
                                 isSuccess = false,
                                 data = null,
@@ -223,7 +226,7 @@ class DiscoverRepositoryImpl(
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                Log.d(TAG, e.message ?: String.emptyString)
+                Timber.d(e.message ?: String.emptyString)
                 return@withContext MHTaskState(
                     isSuccess = false,
                     data = null,
@@ -231,8 +234,4 @@ class DiscoverRepositoryImpl(
                 )
             }
         }
-
-    companion object {
-        private const val TAG = "DiscoverRepository"
-    }
 }

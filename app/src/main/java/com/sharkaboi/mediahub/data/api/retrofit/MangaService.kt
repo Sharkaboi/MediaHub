@@ -41,5 +41,4 @@ interface MangaService {
         @Query("nsfw") nsfw: Int = ApiConstants.NSFW_ALSO,
         @Query("fields") fields: String = ApiConstants.MANGA_LESS_FIELDS
     ): Deferred<NetworkResponse<MangaRankingResponse, ApiError>>
-
 }

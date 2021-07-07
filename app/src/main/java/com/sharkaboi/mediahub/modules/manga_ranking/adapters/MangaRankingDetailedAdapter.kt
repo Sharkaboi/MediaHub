@@ -9,8 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.RoundedCornersTransformation
 import com.sharkaboi.mediahub.R
-import com.sharkaboi.mediahub.data.api.models.manga.MangaRankingResponse
 import com.sharkaboi.mediahub.common.extensions.roundOfString
+import com.sharkaboi.mediahub.data.api.models.manga.MangaRankingResponse
 import com.sharkaboi.mediahub.databinding.MangaListItemBinding
 
 class MangaRankingDetailedAdapter(
@@ -69,9 +69,5 @@ class MangaRankingDetailedAdapter(
         ): Boolean {
             return oldItem == newItem
         }
-    }
-
-    companion object {
-        private const val TAG = "MangaRankingDetailedAdapter"
     }
 }

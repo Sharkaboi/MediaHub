@@ -35,7 +35,8 @@ class AnimeListByStatusFragment : Fragment() {
     private var resultsJob: Job? = null
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAnimeListByStatusBinding.inflate(inflater, container, false)
@@ -135,7 +136,6 @@ class AnimeListByStatusFragment : Fragment() {
 
     companion object {
         private const val ANIME_STATUS_KEY = "status"
-        private const val TAG = "AnimeListByStatusFrgmnt"
 
         @JvmStatic
         fun newInstance(status: AnimeStatus) =

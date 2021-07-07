@@ -15,8 +15,4 @@ class ImageSliderAdapter(
     override fun createFragment(position: Int): Fragment {
         return FullScreenImageFragment.newInstance(imagesList[position])
     }
-
-    companion object {
-        private const val TAG = "ImageSliderAdapter"
-    }
 }

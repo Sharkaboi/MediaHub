@@ -1,7 +1,6 @@
 package com.sharkaboi.mediahub.extension_tests
 
 import com.sharkaboi.mediahub.common.extensions.*
-import com.sharkaboi.mediahub.data.api.enums.AnimeSeason
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test

@@ -9,5 +9,4 @@ interface SplashRepository {
     val refreshTokenFlow: Flow<String>
 
     suspend fun refreshToken(): Boolean
-
 }

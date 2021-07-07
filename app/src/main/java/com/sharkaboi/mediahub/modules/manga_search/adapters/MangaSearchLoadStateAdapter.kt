@@ -37,8 +37,4 @@ class MangaSearchLoadStateAdapter :
             }
         }
     }
-
-    companion object {
-        private const val TAG = "MangaSearchLoadStateAdapter"
-    }
 }

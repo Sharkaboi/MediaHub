@@ -1,6 +1,5 @@
 package com.sharkaboi.mediahub.modules.manga_search.adapters
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
@@ -10,8 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import coil.transform.RoundedCornersTransformation
 import com.sharkaboi.mediahub.R
-import com.sharkaboi.mediahub.data.api.models.manga.MangaSearchResponse
 import com.sharkaboi.mediahub.common.extensions.roundOfString
+import com.sharkaboi.mediahub.data.api.models.manga.MangaSearchResponse
 import com.sharkaboi.mediahub.databinding.MangaListItemBinding
 
 class MangaSearchListAdapter(
@@ -46,7 +45,6 @@ class MangaSearchListAdapter(
 
     override fun onBindViewHolder(holder: MangaSearchListViewHolder, position: Int) {
         holder.bind(getItem(position))
-        Log.d(TAG, getItem(position).toString())
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MangaSearchListViewHolder {
@@ -71,9 +69,5 @@ class MangaSearchListAdapter(
         ): Boolean {
             return oldItem == newItem
         }
-    }
-
-    companion object {
-        private const val TAG = "MangaSearchListAdapter"
     }
 }

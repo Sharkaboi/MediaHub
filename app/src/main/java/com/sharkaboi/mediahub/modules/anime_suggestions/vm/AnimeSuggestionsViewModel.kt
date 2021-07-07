@@ -23,8 +23,4 @@ class AnimeSuggestionsViewModel
         _pagedResult = newResult
         return newResult
     }
-
-    companion object {
-        private const val TAG = "AnimeSuggestionsViewModel"
-    }
 }

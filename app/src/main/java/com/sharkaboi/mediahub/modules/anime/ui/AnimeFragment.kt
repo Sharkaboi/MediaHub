@@ -24,7 +24,8 @@ class AnimeFragment : Fragment() {
     private lateinit var onPageChanged: OnPageChangeCallback
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAnimeBinding.inflate(inflater, container, false)
@@ -82,9 +83,5 @@ class AnimeFragment : Fragment() {
         }
         binding.animeTabLayout.addOnTabSelectedListener(onTabChanged)
         binding.vpAnime.registerOnPageChangeCallback(onPageChanged)
-    }
-
-    companion object {
-        private const val TAG = "AnimeFragment"
     }
 }

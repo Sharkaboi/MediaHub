@@ -37,8 +37,4 @@ class AnimeSeasonalLoadStateAdapter :
             }
         }
     }
-
-    companion object {
-        private const val TAG = "AnimeSeasonalLoadStateAdapter"
-    }
 }

@@ -32,8 +32,4 @@ class AnimeRankingViewModel
     fun setRankingType(animeRankingType: AnimeRankingType) {
         _selectedRankingType = animeRankingType
     }
-
-    companion object {
-        private const val TAG = "AnimeRankingViewModel"
-    }
 }

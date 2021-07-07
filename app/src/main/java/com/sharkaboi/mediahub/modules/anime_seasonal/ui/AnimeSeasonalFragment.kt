@@ -37,7 +37,8 @@ class AnimeSeasonalFragment : Fragment() {
     private var resultsJob: Job? = null
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAnimeSeasonalBinding.inflate(inflater, container, false)
@@ -140,5 +141,4 @@ class AnimeSeasonalFragment : Fragment() {
                 }
         }
     }
-
 }
