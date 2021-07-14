@@ -44,15 +44,6 @@ android {
         viewBinding true
     }
 
-    kapt {
-        correctErrorTypes = true
-        javacOptions {
-            // FIXME : Remove after kotlin 1.5.20 support in dagger-hilt
-            option("-Adagger.fastInit=ENABLED")
-            option("-Adagger.hilt.android.internal.disableAndroidSuperclassValidation=true")
-        }
-    }
-
     secrets {
         propertiesFileName 'secrets.properties'
         defaultPropertiesFileName = 'secrets.defaults.properties'
@@ -79,7 +70,6 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-moshi:2.9.0"
     implementation "com.github.haroldadmin:NetworkResponseAdapter:4.1.0"
     //moshi
-    implementation 'com.squareup.moshi:moshi:1.12.0'
     implementation "com.squareup.moshi:moshi-kotlin:1.12.0"
     kapt "com.squareup.moshi:moshi-kotlin-codegen:1.12.0"
     //navigation

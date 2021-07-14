@@ -2,7 +2,6 @@ package com.sharkaboi.mediahub.modules.splash.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate.*
@@ -25,7 +24,7 @@ class SplashActivity : AppCompatActivity() {
 
     private fun setUpObservers() {
         splashViewModel.splashState.observe(this) { state ->
-            Log.d("SplashActivity", state.toString())
+            Timber.d(state.toString())
             when (state) {
                 is SplashState.LoginExpired -> {
                     redirectToOAuthFlow()

@@ -1,5 +1,6 @@
 package com.sharkaboi.mediahub.modules
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AnimationUtils
@@ -58,5 +59,10 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        navController.handleDeepLink(intent)
     }
 }

@@ -168,6 +168,10 @@
             app:exitAnim="@anim/fade_out"
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/fade_out" />
+        <deepLink
+            android:id="@+id/animeDetailsDeepLink"
+            app:action="ACTION_VIEW"
+            app:uri="myanimelist.net/anime/{animeId}/{slug}" />
     </fragment>
 
     <dialog
@@ -211,7 +215,12 @@
         tools:layout="@layout/fragment_manga_details">
         <argument
             android:name="mangaId"
+            android:defaultValue="0"
             app:argType="integer" />
+        <deepLink
+            android:id="@+id/mangaDetailsDeepLink"
+            app:action="ACTION_VIEW"
+            app:uri="myanimelist.net/manga/{mangaId}/{slug}" />
         <action
             android:id="@+id/openMangaDetailsWithId"
             app:destination="@id/mangaDetailsFragment"
