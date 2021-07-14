@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             setVisibilityAndListeners(destination.id)
         }
-        binding.bottomNav.setOnNavigationItemReselectedListener {
+        binding.bottomNav.setOnItemReselectedListener {
             navController.popBackStack(it.itemId, false)
             setVisibilityAndListeners(it.itemId)
         }

@@ -1,8 +1,7 @@
 package com.sharkaboi.mediahub.extension_tests
 
 import com.sharkaboi.mediahub.common.extensions.*
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
+import org.junit.Assert.*
 import org.junit.Test
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -12,7 +11,20 @@ class StringExtensionsTest {
 
     @Test
     fun `String's emptyString property returns empty string`() {
-        assertTrue(String.emptyString == "")
+        assertEquals(String.emptyString, "")
+    }
+
+    @Test
+    fun `String's ifNullOrBlank returns expected output on null or blank string`() {
+        val testString1: String? = null
+        val testString2 = "  "
+        val testString3 = "test"
+        val expectedOutput1 = "output"
+        val expectedOutput2 = "output"
+        val expectedOutput3 = "test"
+        assertEquals(testString1.ifNullOrBlank { expectedOutput1 }, expectedOutput1)
+        assertEquals(testString2.ifNullOrBlank { expectedOutput2 }, expectedOutput2)
+        assertEquals(testString3.ifNullOrBlank { "" }, expectedOutput3)
     }
 
     @Test
@@ -50,7 +62,7 @@ class StringExtensionsTest {
         val testString = "a b  c   d ee ffff_g"
         val expectedString = "a_b__c___d_ee_ffff_g"
         val resultString = testString.replaceWhiteSpaceWithUnderScore()
-        assertTrue(expectedString == resultString)
+        assertEquals(expectedString, resultString)
     }
 
     @Test
@@ -58,7 +70,7 @@ class StringExtensionsTest {
         val testString = "\n\t"
         val expectedString = "\n\t"
         val resultString = testString.replaceWhiteSpaceWithUnderScore()
-        assertTrue(expectedString == resultString)
+        assertEquals(expectedString, resultString)
     }
 
     @Test
@@ -66,6 +78,6 @@ class StringExtensionsTest {
         val testString = "sprinG"
         val expectedString = "Spring"
         val resultString = testString.capitalizeFirst()
-        assertTrue(expectedString == resultString)
+        assertEquals(expectedString, resultString)
     }
 }

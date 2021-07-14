@@ -1,6 +1,7 @@
 package com.sharkaboi.mediahub.modules.settings.repository
 
 import com.sharkaboi.mediahub.common.extensions.emptyString
+import com.sharkaboi.mediahub.common.extensions.ifNullOrBlank
 import com.sharkaboi.mediahub.data.datastore.DataStoreRepository
 import com.sharkaboi.mediahub.data.wrappers.MHError
 import com.sharkaboi.mediahub.data.wrappers.MHTaskState
@@ -26,7 +27,7 @@ class SettingsRepositoryImpl(
             return@withContext MHTaskState(
                 isSuccess = false,
                 data = null,
-                error = MHError(e.message ?: String.emptyString, e)
+                error = MHError(e.message.ifNullOrBlank { "Unknown Error" }, e)
             )
         }
     }

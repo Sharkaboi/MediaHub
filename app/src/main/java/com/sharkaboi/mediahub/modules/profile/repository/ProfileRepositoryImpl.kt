@@ -2,6 +2,7 @@ package com.sharkaboi.mediahub.modules.profile.repository
 
 import com.haroldadmin.cnradapter.NetworkResponse
 import com.sharkaboi.mediahub.common.extensions.emptyString
+import com.sharkaboi.mediahub.common.extensions.ifNullOrBlank
 import com.sharkaboi.mediahub.data.api.ApiConstants
 import com.sharkaboi.mediahub.data.api.models.user.UserDetailsResponse
 import com.sharkaboi.mediahub.data.api.retrofit.UserService
@@ -46,7 +47,10 @@ class ProfileRepositoryImpl(
                             return@withContext MHTaskState(
                                 isSuccess = false,
                                 data = null,
-                                error = MHError(result.error.message ?: "Error with network", null)
+                                error = MHError(
+                                    result.error.message.ifNullOrBlank { "Error with network" },
+                                    null
+                                )
                             )
                         }
                         is NetworkResponse.ServerError -> {
@@ -55,8 +59,7 @@ class ProfileRepositoryImpl(
                                 isSuccess = false,
                                 data = null,
                                 error = MHError(
-                                    result.body?.message
-                                        ?: "Error with status code : ${result.code}",
+                                    result.body?.message.ifNullOrBlank { "Error with status code : ${result.code}" },
                                     null
                                 )
                             )
@@ -66,7 +69,10 @@ class ProfileRepositoryImpl(
                             return@withContext MHTaskState(
                                 isSuccess = false,
                                 data = null,
-                                error = MHError(result.error.message ?: "Error with parsing", null)
+                                error = MHError(
+                                    result.error.message.ifNullOrBlank { "Error with parsing" },
+                                    null
+                                )
                             )
                         }
                     }
@@ -77,7 +83,7 @@ class ProfileRepositoryImpl(
                 return@withContext MHTaskState(
                     isSuccess = false,
                     data = null,
-                    error = MHError(e.message ?: String.emptyString, e)
+                    error = MHError(e.message.ifNullOrBlank { "Unknown Error" }, e)
                 )
             }
         }

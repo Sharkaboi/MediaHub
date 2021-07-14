@@ -2,6 +2,7 @@ package com.sharkaboi.mediahub.modules.anime_details.repository
 
 import com.haroldadmin.cnradapter.NetworkResponse
 import com.sharkaboi.mediahub.common.extensions.emptyString
+import com.sharkaboi.mediahub.common.extensions.ifNullOrBlank
 import com.sharkaboi.mediahub.data.api.ApiConstants
 import com.sharkaboi.mediahub.data.api.models.anime.AnimeByIDResponse
 import com.sharkaboi.mediahub.data.api.retrofit.AnimeService
@@ -49,7 +50,10 @@ class AnimeDetailsRepositoryImpl(
                             return@withContext MHTaskState(
                                 isSuccess = false,
                                 data = null,
-                                error = MHError(result.error.message ?: "Error with network", null)
+                                error = MHError(
+                                    result.error.message.ifNullOrBlank { "Error with network" },
+                                    null
+                                )
                             )
                         }
                         is NetworkResponse.ServerError -> {
@@ -58,8 +62,7 @@ class AnimeDetailsRepositoryImpl(
                                 isSuccess = false,
                                 data = null,
                                 error = MHError(
-                                    result.body?.message
-                                        ?: "Error with status code : ${result.code}",
+                                    result.body?.message.ifNullOrBlank { "Error with status code : ${result.code}" },
                                     null
                                 )
                             )
@@ -69,7 +72,10 @@ class AnimeDetailsRepositoryImpl(
                             return@withContext MHTaskState(
                                 isSuccess = false,
                                 data = null,
-                                error = MHError(result.error.message ?: "Error with parsing", null)
+                                error = MHError(
+                                    result.error.message.ifNullOrBlank { "Error with parsing" },
+                                    null
+                                )
                             )
                         }
                     }
@@ -80,7 +86,7 @@ class AnimeDetailsRepositoryImpl(
                 return@withContext MHTaskState(
                     isSuccess = false,
                     data = null,
-                    error = MHError(e.message ?: String.emptyString, e)
+                    error = MHError(e.message.ifNullOrBlank { "Unknown error" }, e)
                 )
             }
         }
@@ -122,7 +128,10 @@ class AnimeDetailsRepositoryImpl(
                             return@withContext MHTaskState(
                                 isSuccess = false,
                                 data = null,
-                                error = MHError(result.error.message ?: "Error with network", null)
+                                error = MHError(
+                                    result.error.message.ifNullOrBlank { "Error with network" },
+                                    null
+                                )
                             )
                         }
                         is NetworkResponse.ServerError -> {
@@ -131,8 +140,7 @@ class AnimeDetailsRepositoryImpl(
                                 isSuccess = false,
                                 data = null,
                                 error = MHError(
-                                    result.body?.message
-                                        ?: "Error with status code : ${result.code}",
+                                    result.body?.message.ifNullOrBlank { "Error with status code : ${result.code}" },
                                     null
                                 )
                             )
@@ -142,7 +150,10 @@ class AnimeDetailsRepositoryImpl(
                             return@withContext MHTaskState(
                                 isSuccess = false,
                                 data = null,
-                                error = MHError(result.error.message ?: "Error with parsing", null)
+                                error = MHError(
+                                    result.error.message.ifNullOrBlank { "Error with parsing" },
+                                    null
+                                )
                             )
                         }
                     }
@@ -153,7 +164,7 @@ class AnimeDetailsRepositoryImpl(
                 return@withContext MHTaskState(
                     isSuccess = false,
                     data = null,
-                    error = MHError(e.message ?: String.emptyString, e)
+                    error = MHError(e.message.ifNullOrBlank { "Unknown Error" }, e)
                 )
             }
         }
@@ -189,7 +200,10 @@ class AnimeDetailsRepositoryImpl(
                             return@withContext MHTaskState(
                                 isSuccess = false,
                                 data = null,
-                                error = MHError(result.error.message ?: "Error with network", null)
+                                error = MHError(
+                                    result.error.message.ifNullOrBlank { "Error with network" },
+                                    null
+                                )
                             )
                         }
                         is NetworkResponse.ServerError -> {
@@ -207,8 +221,7 @@ class AnimeDetailsRepositoryImpl(
                                 isSuccess = false,
                                 data = null,
                                 error = MHError(
-                                    result.body?.message
-                                        ?: "Error with status code : ${result.code}",
+                                    result.body?.message.ifNullOrBlank { "Error with status code : ${result.code}" },
                                     null
                                 )
                             )
@@ -218,7 +231,10 @@ class AnimeDetailsRepositoryImpl(
                             return@withContext MHTaskState(
                                 isSuccess = false,
                                 data = null,
-                                error = MHError(result.error.message ?: "Error with parsing", null)
+                                error = MHError(
+                                    result.error.message.ifNullOrBlank { "Error with parsing" },
+                                    null
+                                )
                             )
                         }
                     }
@@ -229,7 +245,7 @@ class AnimeDetailsRepositoryImpl(
                 return@withContext MHTaskState(
                     isSuccess = false,
                     data = null,
-                    error = MHError(e.message ?: String.emptyString, e)
+                    error = MHError(e.message.ifNullOrBlank { "Unknown error" }, e)
                 )
             }
         }

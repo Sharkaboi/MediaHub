@@ -1,6 +1,7 @@
 package com.sharkaboi.mediahub.data.api.models
 
 import androidx.annotation.Keep
+import com.sharkaboi.mediahub.common.extensions.ifNullOrBlank
 import com.squareup.moshi.JsonClass
 
 @Keep
@@ -10,11 +11,12 @@ data class ApiError(
     val message: String
 ) {
     fun getThrowable(): Throwable {
-        return Throwable(message = message)
+        return Throwable(message = message.ifNullOrBlank { defaultErrorMessage })
     }
 
     companion object {
+        private const val defaultErrorMessage = "An error occurred with MAL server"
         val DefaultError =
-            ApiError(message = "An error occurred with MAL server", error = "unknown_error")
+            ApiError(message = defaultErrorMessage, error = "unknown_error")
     }
 }

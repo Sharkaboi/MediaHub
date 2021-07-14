@@ -9,6 +9,13 @@ internal inline var String.Companion.emptyString: String
     get() = ""
     private set(_) {}
 
+internal fun String?.ifNullOrBlank(block: () -> String): String {
+    if (this == null || this.isBlank()) {
+        return block()
+    }
+    return this
+}
+
 internal fun String.tryParseDateTime(): LocalDateTime? {
     return try {
         val format = DateTimeFormatter.ISO_DATE_TIME
