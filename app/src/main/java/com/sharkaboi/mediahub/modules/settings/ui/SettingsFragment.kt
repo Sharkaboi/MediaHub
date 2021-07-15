@@ -17,6 +17,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.sharkaboi.mediahub.BuildConfig
 import com.sharkaboi.mediahub.R
 import com.sharkaboi.mediahub.common.constants.AppConstants
+import com.sharkaboi.mediahub.common.extensions.observe
 import com.sharkaboi.mediahub.common.extensions.showToast
 import com.sharkaboi.mediahub.common.util.openUrl
 import com.sharkaboi.mediahub.common.views.MaterialToolBarPreference
@@ -81,7 +82,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
     }
 
     private fun setObservers() {
-        settingsViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+        observe(settingsViewModel.uiState) { uiState ->
             when (uiState) {
                 is SettingsStates.LogOutFailure -> showToast(uiState.message)
                 SettingsStates.LogOutSuccess -> moveToOAuthScreen()

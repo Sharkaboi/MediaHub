@@ -38,6 +38,7 @@
             tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
@@ -47,12 +48,14 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".modules.MainActivity"
+            android:name=".modules.main.ui.MainActivity"
             android:launchMode="singleInstance"
             android:screenOrientation="sensorPortrait"
             android:theme="@style/Theme.MediaHub"
             android:windowSoftInputMode="adjustPan"
-            tools:ignore="LockedOrientationActivity" />
+            tools:ignore="LockedOrientationActivity">
+            <nav-graph android:value="@navigation/bottom_nav_graph" />
+        </activity>
         <activity
             android:name="com.google.android.gms.oss.licenses.OssLicensesMenuActivity"
             android:theme="@style/Theme.MediaHub.ActionBar" />

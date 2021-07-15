@@ -1,7 +1,12 @@
 package com.sharkaboi.mediahub.modules.anime_details.repository
 
+import GetNextAiringAnimeEpisodeQuery
+import com.apollographql.apollo.ApolloClient
+import com.apollographql.apollo.coroutines.await
+import com.apollographql.apollo.exception.ApolloException
 import com.haroldadmin.cnradapter.NetworkResponse
 import com.sharkaboi.mediahub.common.extensions.emptyString
+import com.sharkaboi.mediahub.common.extensions.ifNullOrBlank
 import com.sharkaboi.mediahub.data.api.ApiConstants
 import com.sharkaboi.mediahub.data.api.models.anime.AnimeByIDResponse
 import com.sharkaboi.mediahub.data.api.retrofit.AnimeService
@@ -9,14 +14,14 @@ import com.sharkaboi.mediahub.data.api.retrofit.UserAnimeService
 import com.sharkaboi.mediahub.data.datastore.DataStoreRepository
 import com.sharkaboi.mediahub.data.wrappers.MHError
 import com.sharkaboi.mediahub.data.wrappers.MHTaskState
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 class AnimeDetailsRepositoryImpl(
     private val animeService: AnimeService,
     private val userAnimeService: UserAnimeService,
+    private val apolloClient: ApolloClient,
     private val dataStoreRepository: DataStoreRepository
 ) : AnimeDetailsRepository {
 
@@ -49,7 +54,10 @@ class AnimeDetailsRepositoryImpl(
                             return@withContext MHTaskState(
                                 isSuccess = false,
                                 data = null,
-                                error = MHError(result.error.message ?: "Error with network", null)
+                                error = MHError(
+                                    result.error.message.ifNullOrBlank { "Error with network" },
+                                    null
+                                )
                             )
                         }
                         is NetworkResponse.ServerError -> {
@@ -58,8 +66,7 @@ class AnimeDetailsRepositoryImpl(
                                 isSuccess = false,
                                 data = null,
                                 error = MHError(
-                                    result.body?.message
-                                        ?: "Error with status code : ${result.code}",
+                                    result.body?.message.ifNullOrBlank { "Error with status code : ${result.code}" },
                                     null
                                 )
                             )
@@ -69,7 +76,10 @@ class AnimeDetailsRepositoryImpl(
                             return@withContext MHTaskState(
                                 isSuccess = false,
                                 data = null,
-                                error = MHError(result.error.message ?: "Error with parsing", null)
+                                error = MHError(
+                                    result.error.message.ifNullOrBlank { "Error with parsing" },
+                                    null
+                                )
                             )
                         }
                     }
@@ -80,7 +90,36 @@ class AnimeDetailsRepositoryImpl(
                 return@withContext MHTaskState(
                     isSuccess = false,
                     data = null,
-                    error = MHError(e.message ?: String.emptyString, e)
+                    error = MHError(e.message.ifNullOrBlank { "Unknown error" }, e)
+                )
+            }
+        }
+
+    override suspend fun getNextAiringEpisodeById(animeId: Int): MHTaskState<GetNextAiringAnimeEpisodeQuery.Media> =
+        withContext(Dispatchers.IO) {
+            val response = try {
+                apolloClient.query(GetNextAiringAnimeEpisodeQuery(idMal = animeId)).await()
+            } catch (e: ApolloException) {
+                return@withContext MHTaskState(
+                    isSuccess = false,
+                    data = null,
+                    error = MHError(e.message.ifNullOrBlank { "Protocol error" }, e.cause)
+                )
+            }
+
+            val mediaDetails = response.data?.media
+            if (mediaDetails == null || response.hasErrors()) {
+                val errorMessage = response.errors?.first()?.message
+                return@withContext MHTaskState(
+                    isSuccess = false,
+                    data = null,
+                    error = MHError(errorMessage.ifNullOrBlank { "Application error" }, null)
+                )
+            } else {
+                return@withContext MHTaskState(
+                    isSuccess = true,
+                    data = mediaDetails,
+                    error = MHError.EmptyError
                 )
             }
         }
@@ -122,7 +161,10 @@ class AnimeDetailsRepositoryImpl(
                             return@withContext MHTaskState(
                                 isSuccess = false,
                                 data = null,
-                                error = MHError(result.error.message ?: "Error with network", null)
+                                error = MHError(
+                                    result.error.message.ifNullOrBlank { "Error with network" },
+                                    null
+                                )
                             )
                         }
                         is NetworkResponse.ServerError -> {
@@ -131,8 +173,7 @@ class AnimeDetailsRepositoryImpl(
                                 isSuccess = false,
                                 data = null,
                                 error = MHError(
-                                    result.body?.message
-                                        ?: "Error with status code : ${result.code}",
+                                    result.body?.message.ifNullOrBlank { "Error with status code : ${result.code}" },
                                     null
                                 )
                             )
@@ -142,7 +183,10 @@ class AnimeDetailsRepositoryImpl(
                             return@withContext MHTaskState(
                                 isSuccess = false,
                                 data = null,
-                                error = MHError(result.error.message ?: "Error with parsing", null)
+                                error = MHError(
+                                    result.error.message.ifNullOrBlank { "Error with parsing" },
+                                    null
+                                )
                             )
                         }
                     }
@@ -153,7 +197,7 @@ class AnimeDetailsRepositoryImpl(
                 return@withContext MHTaskState(
                     isSuccess = false,
                     data = null,
-                    error = MHError(e.message ?: String.emptyString, e)
+                    error = MHError(e.message.ifNullOrBlank { "Unknown Error" }, e)
                 )
             }
         }
@@ -189,7 +233,10 @@ class AnimeDetailsRepositoryImpl(
                             return@withContext MHTaskState(
                                 isSuccess = false,
                                 data = null,
-                                error = MHError(result.error.message ?: "Error with network", null)
+                                error = MHError(
+                                    result.error.message.ifNullOrBlank { "Error with network" },
+                                    null
+                                )
                             )
                         }
                         is NetworkResponse.ServerError -> {
@@ -207,8 +254,7 @@ class AnimeDetailsRepositoryImpl(
                                 isSuccess = false,
                                 data = null,
                                 error = MHError(
-                                    result.body?.message
-                                        ?: "Error with status code : ${result.code}",
+                                    result.body?.message.ifNullOrBlank { "Error with status code : ${result.code}" },
                                     null
                                 )
                             )
@@ -218,7 +264,10 @@ class AnimeDetailsRepositoryImpl(
                             return@withContext MHTaskState(
                                 isSuccess = false,
                                 data = null,
-                                error = MHError(result.error.message ?: "Error with parsing", null)
+                                error = MHError(
+                                    result.error.message.ifNullOrBlank { "Error with parsing" },
+                                    null
+                                )
                             )
                         }
                     }
@@ -229,7 +278,7 @@ class AnimeDetailsRepositoryImpl(
                 return@withContext MHTaskState(
                     isSuccess = false,
                     data = null,
-                    error = MHError(e.message ?: String.emptyString, e)
+                    error = MHError(e.message.ifNullOrBlank { "Unknown error" }, e)
                 )
             }
         }

@@ -6,7 +6,8 @@ plugins {
     id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
     id 'com.google.android.gms.oss-licenses-plugin'
     id 'androidx.navigation.safeargs.kotlin'
-    id 'org.jlleitschuh.gradle.ktlint' version "10.1.0"
+    id 'org.jlleitschuh.gradle.ktlint' version '10.1.0'
+    id 'com.apollographql.apollo' version '2.5.5'
 }
 
 android {
@@ -44,15 +45,6 @@ android {
         viewBinding true
     }
 
-    kapt {
-        correctErrorTypes = true
-        javacOptions {
-            // FIXME : Remove after kotlin 1.5.20 support in dagger-hilt
-            option("-Adagger.fastInit=ENABLED")
-            option("-Adagger.hilt.android.internal.disableAndroidSuperclassValidation=true")
-        }
-    }
-
     secrets {
         propertiesFileName 'secrets.properties'
         defaultPropertiesFileName = 'secrets.defaults.properties'
@@ -69,32 +61,35 @@ dependencies {
     implementation 'androidx.preference:preference-ktx:1.1.1'
     implementation 'androidx.annotation:annotation:1.2.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation "androidx.fragment:fragment-ktx:1.3.5"
+    implementation 'androidx.fragment:fragment-ktx:1.4.0-alpha04'
     //hilt
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-compiler:$hilt_version"
-    //networking
+    //retrofit
     implementation "com.squareup.retrofit2:retrofit:2.9.0"
     implementation 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2'
-    implementation "com.squareup.retrofit2:converter-moshi:2.9.0"
+    //apollo grahql client
+    implementation 'com.apollographql.apollo:apollo-runtime:2.5.5'
+    implementation 'com.apollographql.apollo:apollo-coroutines-support:2.5.5'
+    //network util
     implementation "com.github.haroldadmin:NetworkResponseAdapter:4.1.0"
     //moshi
-    implementation 'com.squareup.moshi:moshi:1.12.0'
     implementation "com.squareup.moshi:moshi-kotlin:1.12.0"
     kapt "com.squareup.moshi:moshi-kotlin-codegen:1.12.0"
+    implementation "com.squareup.retrofit2:converter-moshi:2.9.0"
     //navigation
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
     //datastore
     implementation "androidx.datastore:datastore-preferences:1.0.0-rc01"
     //coil
-    implementation 'io.coil-kt:coil:1.2.2'
+    implementation 'io.coil-kt:coil:1.3.0'
     //paging
     implementation "androidx.paging:paging-runtime-ktx:$paging_version"
     //design
     implementation 'com.github.razir.progressbutton:progressbutton:2.1.0'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
-    implementation "com.airbnb.android:lottie:3.7.0"
+    implementation 'com.airbnb.android:lottie:3.7.1'
     //util
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
     implementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
@@ -105,6 +100,10 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+}
+
+apollo {
+    generateKotlinModels.set(true)
 }
 
 ktlint {

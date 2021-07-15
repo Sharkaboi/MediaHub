@@ -3,6 +3,7 @@ package com.sharkaboi.mediahub.di
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
+import com.apollographql.apollo.ApolloClient
 import com.haroldadmin.cnradapter.NetworkResponseAdapterFactory
 import com.sharkaboi.mediahub.BuildConfig
 import com.sharkaboi.mediahub.data.api.retrofit.*
@@ -55,6 +56,14 @@ object DataModule {
                 )
             )
             .client(okHttpClient)
+            .build()
+
+    @Provides
+    @Singleton
+    fun getApolloClient(okHttpClient: OkHttpClient): ApolloClient =
+        ApolloClient.builder()
+            .serverUrl("https://graphql.anilist.co")
+            .okHttpClient(okHttpClient)
             .build()
 
     @Provides

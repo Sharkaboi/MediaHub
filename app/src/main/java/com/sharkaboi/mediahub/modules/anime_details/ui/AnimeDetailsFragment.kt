@@ -1,5 +1,6 @@
 package com.sharkaboi.mediahub.modules.anime_details.ui
 
+import GetNextAiringAnimeEpisodeQuery
 import android.annotation.SuppressLint
 import android.graphics.Typeface
 import android.os.Bundle
@@ -9,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.forEach
+import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -32,11 +34,15 @@ import com.sharkaboi.mediahub.databinding.FragmentAnimeDetailsBinding
 import com.sharkaboi.mediahub.modules.anime_details.adapters.RecommendedAnimeAdapter
 import com.sharkaboi.mediahub.modules.anime_details.adapters.RelatedAnimeAdapter
 import com.sharkaboi.mediahub.modules.anime_details.adapters.RelatedMangaAdapter
+import com.sharkaboi.mediahub.modules.anime_details.util.AnimeDetailsUpdateClass
 import com.sharkaboi.mediahub.modules.anime_details.vm.AnimeDetailsState
 import com.sharkaboi.mediahub.modules.anime_details.vm.AnimeDetailsViewModel
+import com.sharkaboi.mediahub.modules.anime_details.vm.NextEpisodeDetailsState
 import dagger.hilt.android.AndroidEntryPoint
+import kotlin.time.ExperimentalTime
 
 @AndroidEntryPoint
+@ExperimentalTime
 class AnimeDetailsFragment : Fragment() {
     private var _binding: FragmentAnimeDetailsBinding? = null
     private val binding get() = _binding!!
@@ -60,51 +66,92 @@ class AnimeDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.toolbar.setNavigationOnClickListener { navController.navigateUp() }
+        setUpListeners()
         setUpObservers()
     }
 
+    private fun setUpListeners() {
+        binding.toolbar.setNavigationOnClickListener { navController.navigateUp() }
+        binding.swipeRefresh.setOnRefreshListener(handleSwipeRefresh)
+    }
+
+    private val handleSwipeRefresh = {
+        animeDetailsViewModel.getAnimeDetails(args.animeId)
+        animeDetailsViewModel.getNextEpisodeDetails(args.animeId)
+        binding.swipeRefresh.isRefreshing = false
+    }
+
     private fun setUpObservers() {
-        animeDetailsViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
-            binding.progressBar.isShowing = uiState is AnimeDetailsState.Loading
-            when (uiState) {
-                is AnimeDetailsState.Idle -> animeDetailsViewModel.getAnimeDetails(args.animeId)
-                is AnimeDetailsState.FetchSuccess -> setData(uiState.animeByIDResponse)
-                is AnimeDetailsState.AnimeDetailsFailure -> showToast(uiState.message)
-                else -> Unit
+        observe(animeDetailsViewModel.animeDetailState, handleAnimeDetailsStateUpdate)
+        observe(animeDetailsViewModel.nextEpisodeDetails, handleNewEpisodeStateUpdate)
+        observe(animeDetailsViewModel.animeDetailsUpdate, handleListStatusUpdate)
+    }
+
+    private val handleAnimeDetailsStateUpdate = { state: AnimeDetailsState ->
+        binding.progressBar.isShowing = state is AnimeDetailsState.Loading
+        when (state) {
+            is AnimeDetailsState.Idle -> animeDetailsViewModel.getAnimeDetails(args.animeId)
+            is AnimeDetailsState.FetchSuccess -> setData(state.animeByIDResponse)
+            is AnimeDetailsState.AnimeDetailsFailure -> showToast(state.message)
+            else -> Unit
+        }
+    }
+
+    private val handleNewEpisodeStateUpdate = { state: NextEpisodeDetailsState ->
+        binding.nextEpisodeDetails.nextEpisodeProgress.isVisible =
+            state is NextEpisodeDetailsState.Loading
+        binding.nextEpisodeDetails.root.isGone =
+            state is NextEpisodeDetailsState.NextEpisodeDetailsFailure
+        when (state) {
+            is NextEpisodeDetailsState.Idle -> animeDetailsViewModel.getNextEpisodeDetails(args.animeId)
+            is NextEpisodeDetailsState.FetchSuccess -> setNextEpisodeData(state.nextAiringEpisode)
+            else -> Unit
+        }
+    }
+
+    private val handleListStatusUpdate = { state: AnimeDetailsUpdateClass ->
+        binding.animeDetailsUserListCard.apply {
+            btnStatus.text =
+                state.animeStatus?.getFormattedString()
+                ?: getString(R.string.not_added)
+            btnScore.text = ("${state.score ?: 0}/10")
+            btnCount.text = (
+                "${state.numWatchedEpisode ?: 0}/${
+                if (state.totalEps == 0)
+                    "??"
+                else
+                    state.totalEps.toString()
+                }"
+                )
+            btnScore.setOnClickListener {
+                openScoreDialog(state.score)
+            }
+            btnStatus.setOnClickListener {
+                openStatusDialog(state.animeStatus?.name, state.animeId)
+            }
+            btnCount.setOnClickListener {
+                openAnimeWatchedCountDialog(
+                    state.totalEps,
+                    state.numWatchedEpisode
+                )
             }
         }
-        animeDetailsViewModel.animeDetailsUpdate.observe(viewLifecycleOwner) { animeDetails ->
-            binding.animeDetailsUserListCard.apply {
-                btnStatus.text =
-                    animeDetails.animeStatus?.getFormattedString()
-                    ?: getString(R.string.not_added)
-                btnScore.text = ("${animeDetails.score ?: 0}/10")
-                btnCount.text = (
-                    "${animeDetails.numWatchedEpisode ?: 0}/${
-                    if (animeDetails.totalEps == 0)
-                        "??"
-                    else
-                        animeDetails.totalEps.toString()
-                    }"
-                    )
-                btnScore.setOnClickListener {
-                    openScoreDialog(animeDetails.score)
-                }
-                btnStatus.setOnClickListener {
-                    openStatusDialog(animeDetails.animeStatus?.name, animeDetails.animeId)
-                }
-                btnCount.setOnClickListener {
-                    openAnimeWatchedCountDialog(
-                        animeDetails.totalEps,
-                        animeDetails.numWatchedEpisode
-                    )
-                }
+        Unit
+    }
+
+    private fun setNextEpisodeData(nextAiringEpisodeDetails: GetNextAiringAnimeEpisodeQuery.Media) {
+        val nextEp = nextAiringEpisodeDetails.nextAiringEpisode
+        if (nextEp == null) {
+            binding.nextEpisodeDetails.root.isGone = true
+        } else {
+            val timeFromNow = nextEp.timeUntilAiring.getAiringTimeFormatted()
+            val airingString = buildString {
+                append("Episode ")
+                append(nextEp.episode)
+                append(" airs in ")
+                append(timeFromNow)
             }
-        }
-        binding.swipeRefresh.setOnRefreshListener {
-            animeDetailsViewModel.getAnimeDetails(args.animeId)
-            binding.swipeRefresh.isRefreshing = false
+            binding.nextEpisodeDetails.tvNextEpisodeDetails.text = airingString
         }
     }
 
@@ -175,7 +222,8 @@ class AnimeDetailsFragment : Fragment() {
                     Chip(context).apply {
                         setEnsureMinTouchTargetSize(false)
                         shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(8f)
-                        text = animeByIDResponse.nsfw?.getAnimeNsfwRating() ?: getString(R.string.n_a)
+                        text =
+                            animeByIDResponse.nsfw?.getAnimeNsfwRating() ?: getString(R.string.n_a)
                     }
                 )
                 addView(
@@ -201,7 +249,13 @@ class AnimeDetailsFragment : Fragment() {
                         otherDetails.genresChipGroup.addView(
                             Chip(context).apply {
                                 setEnsureMinTouchTargetSize(false)
-                                setOnClickListener { openUrl(MALExternalLinks.getAnimeGenresLink(genre)) }
+                                setOnClickListener {
+                                    openUrl(
+                                        MALExternalLinks.getAnimeGenresLink(
+                                            genre
+                                        )
+                                    )
+                                }
                                 shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(8f)
                                 text = genre.name
                             }
@@ -240,7 +294,8 @@ class AnimeDetailsFragment : Fragment() {
             otherDetails.btnSource.text =
                 (
                     "From ${
-                    animeByIDResponse.source?.replace('_', ' ')?.capitalizeFirst()
+                    animeByIDResponse.source?.replaceUnderScoreWithWhiteSpace()
+                        ?.capitalizeFirst()
                         ?: getString(R.string.n_a)
                     }"
                     )

@@ -1,5 +1,6 @@
 package com.sharkaboi.mediahub.di
 
+import com.apollographql.apollo.ApolloClient
 import com.sharkaboi.mediahub.data.api.retrofit.AnimeService
 import com.sharkaboi.mediahub.data.api.retrofit.UserAnimeService
 import com.sharkaboi.mediahub.data.datastore.DataStoreRepository
@@ -20,7 +21,13 @@ object AnimeDetailsModule {
     fun getAnimeDetailsRepository(
         animeService: AnimeService,
         userAnimeService: UserAnimeService,
+        apolloClient: ApolloClient,
         dataStoreRepository: DataStoreRepository
     ): AnimeDetailsRepository =
-        AnimeDetailsRepositoryImpl(animeService, userAnimeService, dataStoreRepository)
+        AnimeDetailsRepositoryImpl(
+            animeService,
+            userAnimeService,
+            apolloClient,
+            dataStoreRepository
+        )
 }

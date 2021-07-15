@@ -274,6 +274,17 @@
                     app:layout_constraintTop_toBottomOf="@id/animeDetailsBarrier" />
 
                 <include
+                    android:id="@+id/nextEpisodeDetails"
+                    layout="@layout/next_episode_details_card"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/animeDetailsUserListCard" />
+
+                <include
                     android:id="@+id/otherDetails"
                     layout="@layout/anime_other_details_item"
                     android:layout_width="0dp"
@@ -284,7 +295,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/animeDetailsUserListCard" />
+                    app:layout_constraintTop_toBottomOf="@id/nextEpisodeDetails" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.core.widget.NestedScrollView>

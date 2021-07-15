@@ -21,13 +21,14 @@
     <a href="https://github.com/Sharkaboi/MediaHub/actions" alt="CI">
         <img alt="CI" src="https://github.com/Sharkaboi/MediaHub/actions/workflows/android.yaml/badge.svg">
     </a><br>
-    A simple, easy to use MyAnimeList client alternative. Uses the <a href="https://myanimelist.net/apiconfig/references/api/v2">MAL Api.</a>
+    A simple, easy to use MyAnimeList client alternative. Uses the <a href="https://myanimelist.net/apiconfig/references/api/v2">MAL Api</a> & <a href="https://anilist.gitbook.io/anilist-apiv2-docs/">Anilist Api</a>. 
 </p>
 
 ## Uses
 * [Kotlin](https://kotlinlang.org/)
 * MVI/MVVM Architecture
 * [Retrofit](https://square.github.io/retrofit/)
+* [Apollo Android](https://github.com/apollographql/apollo-android)
 * [Coroutines](https://kotlinlang.org/docs/coroutines-overview.html)
 * [Hilt](https://dagger.dev/hilt/)
 * [Datastore](https://developer.android.com/topic/libraries/architecture/datastore)
@@ -57,23 +58,27 @@ Anime            |  Manga
 ![](assets/screenshots/anime.png)  |  ![](assets/screenshots/manga.png)
 Anime details            |   Manga details
 ![](assets/screenshots/anime_details.png)  |  ![](assets/screenshots/manga_details.png)
+Anime details            |   Manga details
+![](assets/screenshots/anime_details2.png)  |  ![](assets/screenshots/manga_details2.png)
 Anime ranking           |  Manga ranking
 ![](assets/screenshots/anime_ranking.png)  |  ![](assets/screenshots/manga_ranking.png)
 Anime search            |  Manga search
 ![](assets/screenshots/anime_search.png)  |  ![](assets/screenshots/manga_search.png)
-Discover           |  Profile
-![](assets/screenshots/discover.png)  |  ![](assets/screenshots/profile.png)
-Anime suggestions           |  Anime seasonals
-![](assets/screenshots/anime_suggestions.png)  |  ![](assets/screenshots/anime_seasonal.png)
-Settings           |  Share
-![](assets/screenshots/settings.png)  |  ![](assets/screenshots/share.png)
+Discover           |  Anime suggestions
+![](assets/screenshots/discover.png)  |  ![](assets/screenshots/anime_suggestions.png)
+Anime seasonals           |  Profile
+![](assets/screenshots/anime_seasonal.png)  |  ![](assets/screenshots/profile.png)
+Profile           |  Share
+![](assets/screenshots/profile2.png)  |  ![](assets/screenshots/share.png)
+Settings           |  Update
+![](assets/screenshots/settings.png)  |  ![](assets/screenshots/update.png)
 
 ## Build instructions
 * Install Gradle and Kotlin.
 * Clone project.
 * Register your app with MyAnimeList as show [here](https://myanimelist.net/blog.php?eid=835707)
 * In the project root, add `clientId=<CLIENT ID>` to the `local.properties` file. Create if not found.
-* Open in Android studio or Intellij and build and sync project.
+* Open in Android studio or Intellij and build and sync project (Be sure the generated classes of Hilt, ViewBinding and Apollo are generated).
 * Run on any device and perform OAuth login to give access to your account.
 
 ## Credits

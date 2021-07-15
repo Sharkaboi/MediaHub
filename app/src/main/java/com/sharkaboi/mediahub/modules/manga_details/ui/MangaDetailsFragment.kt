@@ -32,6 +32,7 @@ import com.sharkaboi.mediahub.databinding.FragmentMangaDetailsBinding
 import com.sharkaboi.mediahub.modules.manga_details.adapters.RecommendedMangaAdapter
 import com.sharkaboi.mediahub.modules.manga_details.adapters.RelatedAnimeAdapter
 import com.sharkaboi.mediahub.modules.manga_details.adapters.RelatedMangaAdapter
+import com.sharkaboi.mediahub.modules.manga_details.util.MangaDetailsUpdateClass
 import com.sharkaboi.mediahub.modules.manga_details.vm.MangaDetailsState
 import com.sharkaboi.mediahub.modules.manga_details.vm.MangaDetailsViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -60,66 +61,76 @@ class MangaDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.toolbar.setNavigationOnClickListener { navController.navigateUp() }
+        setUpListeners()
         setUpObservers()
     }
 
+    private fun setUpListeners() {
+        binding.toolbar.setNavigationOnClickListener { navController.navigateUp() }
+        binding.swipeRefresh.setOnRefreshListener(handleSwipeRefresh)
+    }
+
+    private val handleSwipeRefresh = {
+        mangaDetailsViewModel.getMangaDetails(args.mangaId)
+        binding.swipeRefresh.isRefreshing = false
+    }
+
     private fun setUpObservers() {
-        mangaDetailsViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
-            binding.progressBar.isShowing = uiState is MangaDetailsState.Loading
-            when (uiState) {
-                is MangaDetailsState.Idle -> mangaDetailsViewModel.getMangaDetails(args.mangaId)
-                is MangaDetailsState.FetchSuccess -> setData(uiState.mangaByIDResponse)
-                is MangaDetailsState.MangaDetailsFailure -> showToast(uiState.message)
-                else -> Unit
+        observe(mangaDetailsViewModel.uiState, handleMangaDetailsUpdate)
+        observe(mangaDetailsViewModel.mangaDetailsUpdate, handleListStatusUpdate)
+    }
+
+    private val handleMangaDetailsUpdate = { state: MangaDetailsState ->
+        binding.progressBar.isShowing = state is MangaDetailsState.Loading
+        when (state) {
+            is MangaDetailsState.Idle -> mangaDetailsViewModel.getMangaDetails(args.mangaId)
+            is MangaDetailsState.FetchSuccess -> setData(state.mangaByIDResponse)
+            is MangaDetailsState.MangaDetailsFailure -> showToast(state.message)
+            else -> Unit
+        }
+    }
+    private val handleListStatusUpdate = { state: MangaDetailsUpdateClass ->
+        binding.mangaDetailsUserListCard.apply {
+            btnStatus.text =
+                state.mangaStatus?.getFormattedString()
+                ?: getString(R.string.not_added)
+            btnScore.text = ("${state.score ?: 0}/10")
+            btnCountVolumes.text = (
+                "${state.numReadVolumes ?: 0}/${
+                if (state.totalVolumes == 0)
+                    "??"
+                else
+                    state.totalVolumes.toString()
+                }"
+                )
+            btnCountChaps.text = (
+                "${state.numReadChapters ?: 0}/${
+                if (state.totalChapters == 0)
+                    "??"
+                else
+                    state.totalChapters.toString()
+                }"
+                )
+            btnScore.setOnClickListener {
+                openScoreDialog(state.score)
+            }
+            btnStatus.setOnClickListener {
+                openStatusDialog(state.mangaStatus?.name, state.mangaId)
+            }
+            btnCountVolumes.setOnClickListener {
+                openMangaVolumeCountDialog(
+                    state.totalVolumes,
+                    state.numReadVolumes
+                )
+            }
+            btnCountChaps.setOnClickListener {
+                openMangaChapterCountDialog(
+                    state.totalChapters,
+                    state.numReadChapters
+                )
             }
         }
-        mangaDetailsViewModel.mangaDetailsUpdate.observe(viewLifecycleOwner) { mangaDetails ->
-            binding.mangaDetailsUserListCard.apply {
-                btnStatus.text =
-                    mangaDetails.mangaStatus?.getFormattedString()
-                    ?: getString(R.string.not_added)
-                btnScore.text = ("${mangaDetails.score ?: 0}/10")
-                btnCountVolumes.text = (
-                    "${mangaDetails.numReadVolumes ?: 0}/${
-                    if (mangaDetails.totalVolumes == 0)
-                        "??"
-                    else
-                        mangaDetails.totalVolumes.toString()
-                    }"
-                    )
-                btnCountChaps.text = (
-                    "${mangaDetails.numReadChapters ?: 0}/${
-                    if (mangaDetails.totalChapters == 0)
-                        "??"
-                    else
-                        mangaDetails.totalChapters.toString()
-                    }"
-                    )
-                btnScore.setOnClickListener {
-                    openScoreDialog(mangaDetails.score)
-                }
-                btnStatus.setOnClickListener {
-                    openStatusDialog(mangaDetails.mangaStatus?.name, mangaDetails.mangaId)
-                }
-                btnCountVolumes.setOnClickListener {
-                    openMangaVolumeCountDialog(
-                        mangaDetails.totalVolumes,
-                        mangaDetails.numReadVolumes
-                    )
-                }
-                btnCountChaps.setOnClickListener {
-                    openMangaChapterCountDialog(
-                        mangaDetails.totalChapters,
-                        mangaDetails.numReadChapters
-                    )
-                }
-            }
-        }
-        binding.swipeRefresh.setOnRefreshListener {
-            mangaDetailsViewModel.getMangaDetails(args.mangaId)
-            binding.swipeRefresh.isRefreshing = false
-        }
+        Unit
     }
 
     private fun setData(mangaByIDResponse: MangaByIDResponse) {
@@ -202,7 +213,13 @@ class MangaDetailsFragment : Fragment() {
                                 setEnsureMinTouchTargetSize(false)
                                 shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(8f)
                                 text = genre.name
-                                setOnClickListener { openUrl(MALExternalLinks.getMangaGenresLink(genre)) }
+                                setOnClickListener {
+                                    openUrl(
+                                        MALExternalLinks.getMangaGenresLink(
+                                            genre
+                                        )
+                                    )
+                                }
                             }
                         )
                     }
