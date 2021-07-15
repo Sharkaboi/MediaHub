@@ -30,6 +30,10 @@ internal fun String.replaceWhiteSpaceWithUnderScore(): String {
     return this.replace(' ', '_')
 }
 
+internal fun String.replaceUnderScoreWithWhiteSpace(): String {
+    return this.replace('_', ' ')
+}
+
 internal fun String.capitalizeFirst(): String {
     return this.lowercase().replaceFirstChar {
         it.uppercase()

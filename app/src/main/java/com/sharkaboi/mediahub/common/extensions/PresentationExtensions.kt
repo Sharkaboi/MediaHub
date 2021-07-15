@@ -2,12 +2,12 @@ package com.sharkaboi.mediahub.common.extensions
 
 import android.text.Html
 import android.text.Spanned
+import com.sharkaboi.mediahub.common.util.getLocalDateFromDayAndTime
 import com.sharkaboi.mediahub.data.api.models.anime.AnimeByIDResponse
 import com.sharkaboi.mediahub.data.api.models.manga.MangaByIDResponse
 import java.text.DecimalFormat
-import java.time.*
+import java.time.Duration
 import java.time.format.DateTimeFormatter
-import java.time.temporal.WeekFields
 
 internal fun Double.roundOfString(): String {
     if (this == 0.0) {
@@ -116,23 +116,8 @@ internal fun AnimeByIDResponse.Broadcast.getBroadcastTime(): String {
         if (this.startTime == null) {
             return "On ${this.dayOfTheWeek}"
         }
-        val dayOfWeek = DayOfWeek.valueOf(this.dayOfTheWeek.uppercase())
-        val fieldIso = WeekFields.ISO.dayOfWeek()
-        val now = OffsetDateTime.now().with(fieldIso, dayOfWeek.value.toLong())
-        val (hour, mins) = this.startTime.split(":").map { it.toInt() }
-        val japanTime = ZonedDateTime.of(
-            now.year,
-            now.month.value,
-            now.dayOfMonth,
-            hour,
-            mins,
-            0,
-            0,
-            ZoneOffset.ofHoursMinutes(9, 0)
-        )
-        val localTimeZone = ZoneId.systemDefault()
-        val localTime = japanTime.withZoneSameInstant(localTimeZone)
-        return localTime.format(DateTimeFormatter.ofPattern("EEEE h:mm a zzzz"))
+        val localTime = getLocalDateFromDayAndTime(this.dayOfTheWeek, this.startTime)
+        return localTime?.format(DateTimeFormatter.ofPattern("EEEE h:mm a zzzz")) ?: "N/A"
     } catch (e: Exception) {
         e.printStackTrace()
         return "N/A"

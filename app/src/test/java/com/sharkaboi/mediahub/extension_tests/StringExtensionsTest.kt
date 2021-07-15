@@ -66,6 +66,14 @@ class StringExtensionsTest {
     }
 
     @Test
+    fun `replaceUnderScoreWithWhiteSpace replaces underscore with whitespace`() {
+        val testString = "a_b__c___d_ee_ffff g"
+        val expectedString = "a b  c   d ee ffff g"
+        val resultString = testString.replaceUnderScoreWithWhiteSpace()
+        assertEquals(expectedString, resultString)
+    }
+
+    @Test
     fun `replaceWhiteSpaceWithUnderScore replaces nothing in string with no whitespace`() {
         val testString = "\n\t"
         val expectedString = "\n\t"

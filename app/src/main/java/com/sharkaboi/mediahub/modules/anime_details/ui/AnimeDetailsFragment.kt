@@ -175,7 +175,8 @@ class AnimeDetailsFragment : Fragment() {
                     Chip(context).apply {
                         setEnsureMinTouchTargetSize(false)
                         shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(8f)
-                        text = animeByIDResponse.nsfw?.getAnimeNsfwRating() ?: getString(R.string.n_a)
+                        text =
+                            animeByIDResponse.nsfw?.getAnimeNsfwRating() ?: getString(R.string.n_a)
                     }
                 )
                 addView(
@@ -201,7 +202,13 @@ class AnimeDetailsFragment : Fragment() {
                         otherDetails.genresChipGroup.addView(
                             Chip(context).apply {
                                 setEnsureMinTouchTargetSize(false)
-                                setOnClickListener { openUrl(MALExternalLinks.getAnimeGenresLink(genre)) }
+                                setOnClickListener {
+                                    openUrl(
+                                        MALExternalLinks.getAnimeGenresLink(
+                                            genre
+                                        )
+                                    )
+                                }
                                 shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(8f)
                                 text = genre.name
                             }
@@ -240,7 +247,8 @@ class AnimeDetailsFragment : Fragment() {
             otherDetails.btnSource.text =
                 (
                     "From ${
-                    animeByIDResponse.source?.replace('_', ' ')?.capitalizeFirst()
+                    animeByIDResponse.source?.replaceUnderScoreWithWhiteSpace()
+                        ?.capitalizeFirst()
                         ?: getString(R.string.n_a)
                     }"
                     )
