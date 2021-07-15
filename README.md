@@ -3,8 +3,8 @@
     <b><h1 align="center">MediaHub</h1></b>
 </p>
 <p align="center">
-    <a href="https://github.com/JetBrains/kotlin/releases/tag/v1.5.20" alt="Kotlin">
-        <img alt="Kotlin" src="https://img.shields.io/badge/Kotlin-1.5.20-blue" />
+    <a href="https://github.com/JetBrains/kotlin/releases/tag/v1.5.21" alt="Kotlin">
+        <img alt="Kotlin" src="https://img.shields.io/badge/Kotlin-1.5.21-blue" />
     </a>
     <a href="https://github.com/Sharkaboi/MediaHub/blob/master/LICENSE" alt="License">
         <img alt="License" src="https://img.shields.io/badge/License-MIT-orange" />
