@@ -77,7 +77,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun setObservers() {
-        profileViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+        observe(profileViewModel.uiState) { uiState ->
             binding.progressBar.isShowing = uiState is ProfileStates.Loading
             when (uiState) {
                 is ProfileStates.Idle -> {

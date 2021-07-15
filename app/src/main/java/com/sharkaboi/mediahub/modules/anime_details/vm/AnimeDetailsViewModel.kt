@@ -19,8 +19,8 @@ class AnimeDetailsViewModel
     private val animeDetailsRepository: AnimeDetailsRepository
 ) : ViewModel() {
 
-    private val _uiState = MutableLiveData<AnimeDetailsState>().getDefault()
-    val uiState: LiveData<AnimeDetailsState> = _uiState
+    private val _animeDetailState = MutableLiveData<AnimeDetailsState>().getDefault()
+    val animeDetailState: LiveData<AnimeDetailsState> = _animeDetailState
     private var _animeDetailsUpdate: MutableLiveData<AnimeDetailsUpdateClass> =
         MutableLiveData<AnimeDetailsUpdateClass>()
     val animeDetailsUpdate: LiveData<AnimeDetailsUpdateClass> = _animeDetailsUpdate
@@ -30,7 +30,7 @@ class AnimeDetailsViewModel
 
     fun getAnimeDetails(animeId: Int) {
         viewModelScope.launch {
-            _uiState.setLoading()
+            _animeDetailState.setLoading()
             val result = animeDetailsRepository.getAnimeById(animeId)
             if (result.isSuccess) {
                 result.data?.let {
@@ -42,10 +42,10 @@ class AnimeDetailsViewModel
                         numWatchedEpisode = it.myListStatus?.numEpisodesWatched,
                         totalEps = it.numEpisodes
                     )
-                    _uiState.setFetchSuccess(result.data)
+                    _animeDetailState.setFetchSuccess(result.data)
                 }
             } else {
-                _uiState.setFailure(result.error.errorMessage)
+                _animeDetailState.setFailure(result.error.errorMessage)
             }
         }
     }
@@ -172,7 +172,7 @@ class AnimeDetailsViewModel
 
     fun submitStatusUpdate(animeId: Int) {
         viewModelScope.launch {
-            _uiState.setLoading()
+            _animeDetailState.setLoading()
             animeDetailsUpdate.value?.let {
                 Timber.d("submitStatusUpdate: $it")
                 val result = animeDetailsRepository.updateAnimeStatus(
@@ -184,22 +184,22 @@ class AnimeDetailsViewModel
                 if (result.isSuccess) {
                     getAnimeDetails(animeId)
                 } else {
-                    _uiState.setFailure(result.error.errorMessage)
+                    _animeDetailState.setFailure(result.error.errorMessage)
                 }
             } ?: run {
-                _uiState.setFailure("No data to update")
+                _animeDetailState.setFailure("No data to update")
             }
         }
     }
 
     fun removeFromList(animeId: Int) {
         viewModelScope.launch {
-            _uiState.setLoading()
+            _animeDetailState.setLoading()
             val result = animeDetailsRepository.removeAnimeFromList(animeId = animeId)
             if (result.isSuccess) {
                 getAnimeDetails(animeId)
             } else {
-                _uiState.setFailure(result.error.errorMessage)
+                _animeDetailState.setFailure(result.error.errorMessage)
             }
         }
     }

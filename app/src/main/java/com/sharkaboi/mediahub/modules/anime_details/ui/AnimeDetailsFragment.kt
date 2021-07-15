@@ -34,6 +34,7 @@ import com.sharkaboi.mediahub.databinding.FragmentAnimeDetailsBinding
 import com.sharkaboi.mediahub.modules.anime_details.adapters.RecommendedAnimeAdapter
 import com.sharkaboi.mediahub.modules.anime_details.adapters.RelatedAnimeAdapter
 import com.sharkaboi.mediahub.modules.anime_details.adapters.RelatedMangaAdapter
+import com.sharkaboi.mediahub.modules.anime_details.util.AnimeDetailsUpdateClass
 import com.sharkaboi.mediahub.modules.anime_details.vm.AnimeDetailsState
 import com.sharkaboi.mediahub.modules.anime_details.vm.AnimeDetailsViewModel
 import com.sharkaboi.mediahub.modules.anime_details.vm.NextEpisodeDetailsState
@@ -65,64 +66,77 @@ class AnimeDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.toolbar.setNavigationOnClickListener { navController.navigateUp() }
+        setUpListeners()
         setUpObservers()
     }
 
+    private fun setUpListeners() {
+        binding.toolbar.setNavigationOnClickListener { navController.navigateUp() }
+        binding.swipeRefresh.setOnRefreshListener(handleSwipeRefresh)
+    }
+
+    private val handleSwipeRefresh = {
+        animeDetailsViewModel.getAnimeDetails(args.animeId)
+        animeDetailsViewModel.getNextEpisodeDetails(args.animeId)
+        binding.swipeRefresh.isRefreshing = false
+    }
+
     private fun setUpObservers() {
-        animeDetailsViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
-            binding.progressBar.isShowing = uiState is AnimeDetailsState.Loading
-            when (uiState) {
-                is AnimeDetailsState.Idle -> animeDetailsViewModel.getAnimeDetails(args.animeId)
-                is AnimeDetailsState.FetchSuccess -> setData(uiState.animeByIDResponse)
-                is AnimeDetailsState.AnimeDetailsFailure -> showToast(uiState.message)
-                else -> Unit
+        observe(animeDetailsViewModel.animeDetailState, handleAnimeDetailsStateUpdate)
+        observe(animeDetailsViewModel.nextEpisodeDetails, handleNewEpisodeStateUpdate)
+        observe(animeDetailsViewModel.animeDetailsUpdate, handleListStatusUpdate)
+    }
+
+    private val handleAnimeDetailsStateUpdate = { state: AnimeDetailsState ->
+        binding.progressBar.isShowing = state is AnimeDetailsState.Loading
+        when (state) {
+            is AnimeDetailsState.Idle -> animeDetailsViewModel.getAnimeDetails(args.animeId)
+            is AnimeDetailsState.FetchSuccess -> setData(state.animeByIDResponse)
+            is AnimeDetailsState.AnimeDetailsFailure -> showToast(state.message)
+            else -> Unit
+        }
+    }
+
+    private val handleNewEpisodeStateUpdate = { state: NextEpisodeDetailsState ->
+        binding.nextEpisodeDetails.nextEpisodeProgress.isVisible =
+            state is NextEpisodeDetailsState.Loading
+        binding.nextEpisodeDetails.root.isGone =
+            state is NextEpisodeDetailsState.NextEpisodeDetailsFailure
+        when (state) {
+            is NextEpisodeDetailsState.Idle -> animeDetailsViewModel.getNextEpisodeDetails(args.animeId)
+            is NextEpisodeDetailsState.FetchSuccess -> setNextEpisodeData(state.nextAiringEpisode)
+            else -> Unit
+        }
+    }
+
+    private val handleListStatusUpdate = { state: AnimeDetailsUpdateClass ->
+        binding.animeDetailsUserListCard.apply {
+            btnStatus.text =
+                state.animeStatus?.getFormattedString()
+                ?: getString(R.string.not_added)
+            btnScore.text = ("${state.score ?: 0}/10")
+            btnCount.text = (
+                "${state.numWatchedEpisode ?: 0}/${
+                if (state.totalEps == 0)
+                    "??"
+                else
+                    state.totalEps.toString()
+                }"
+                )
+            btnScore.setOnClickListener {
+                openScoreDialog(state.score)
+            }
+            btnStatus.setOnClickListener {
+                openStatusDialog(state.animeStatus?.name, state.animeId)
+            }
+            btnCount.setOnClickListener {
+                openAnimeWatchedCountDialog(
+                    state.totalEps,
+                    state.numWatchedEpisode
+                )
             }
         }
-        animeDetailsViewModel.nextEpisodeDetails.observe(viewLifecycleOwner) { state ->
-            binding.nextEpisodeDetails.nextEpisodeProgress.isVisible =
-                state is NextEpisodeDetailsState.Loading
-            binding.nextEpisodeDetails.root.isGone =
-                state is NextEpisodeDetailsState.NextEpisodeDetailsFailure
-            when (state) {
-                is NextEpisodeDetailsState.Idle -> animeDetailsViewModel.getNextEpisodeDetails(args.animeId)
-                is NextEpisodeDetailsState.FetchSuccess -> setNextEpisodeData(state.nextAiringEpisode)
-                else -> Unit
-            }
-        }
-        animeDetailsViewModel.animeDetailsUpdate.observe(viewLifecycleOwner) { animeDetails ->
-            binding.animeDetailsUserListCard.apply {
-                btnStatus.text =
-                    animeDetails.animeStatus?.getFormattedString()
-                        ?: getString(R.string.not_added)
-                btnScore.text = ("${animeDetails.score ?: 0}/10")
-                btnCount.text = (
-                        "${animeDetails.numWatchedEpisode ?: 0}/${
-                            if (animeDetails.totalEps == 0)
-                                "??"
-                            else
-                                animeDetails.totalEps.toString()
-                        }"
-                        )
-                btnScore.setOnClickListener {
-                    openScoreDialog(animeDetails.score)
-                }
-                btnStatus.setOnClickListener {
-                    openStatusDialog(animeDetails.animeStatus?.name, animeDetails.animeId)
-                }
-                btnCount.setOnClickListener {
-                    openAnimeWatchedCountDialog(
-                        animeDetails.totalEps,
-                        animeDetails.numWatchedEpisode
-                    )
-                }
-            }
-        }
-        binding.swipeRefresh.setOnRefreshListener {
-            animeDetailsViewModel.getAnimeDetails(args.animeId)
-            animeDetailsViewModel.getNextEpisodeDetails(args.animeId)
-            binding.swipeRefresh.isRefreshing = false
-        }
+        Unit
     }
 
     private fun setNextEpisodeData(nextAiringEpisodeDetails: GetNextAiringAnimeEpisodeQuery.Media) {
@@ -149,10 +163,10 @@ class AnimeDetailsFragment : Fragment() {
             }
             tvStartDate.text =
                 animeByIDResponse.startDate?.tryParseDate()?.formatDateDMY()
-                    ?: getString(R.string.n_a)
+                ?: getString(R.string.n_a)
             tvEndDate.text =
                 animeByIDResponse.endDate?.tryParseDate()?.formatDateDMY()
-                    ?: getString(R.string.n_a)
+                ?: getString(R.string.n_a)
             tvMeanScore.text = animeByIDResponse.mean?.toString() ?: getString(R.string.n_a)
             tvRank.text = animeByIDResponse.rank?.toString() ?: getString(R.string.n_a)
             tvPopularityRank.text = animeByIDResponse.popularity.toString()
@@ -195,7 +209,7 @@ class AnimeDetailsFragment : Fragment() {
             }
             otherDetails.tvSynopsis.text =
                 animeByIDResponse.synopsis?.ifBlank { getString(R.string.n_a) }
-                    ?: getString(R.string.n_a)
+                ?: getString(R.string.n_a)
             otherDetails.tvSynopsis.setOnClickListener {
                 showFullSynopsisDialog(
                     animeByIDResponse.synopsis?.ifBlank { getString(R.string.n_a) }
@@ -279,12 +293,12 @@ class AnimeDetailsFragment : Fragment() {
                 animeByIDResponse.broadcast?.getBroadcastTime() ?: getString(R.string.n_a)
             otherDetails.btnSource.text =
                 (
-                        "From ${
-                            animeByIDResponse.source?.replaceUnderScoreWithWhiteSpace()
-                                ?.capitalizeFirst()
-                                ?: getString(R.string.n_a)
-                        }"
-                        )
+                    "From ${
+                    animeByIDResponse.source?.replaceUnderScoreWithWhiteSpace()
+                        ?.capitalizeFirst()
+                        ?: getString(R.string.n_a)
+                    }"
+                    )
             otherDetails.btnAverageLength.text =
                 animeByIDResponse.averageEpisodeDuration.getEpisodeLengthFromSeconds()
             otherDetails.ibNotify.setOnClickListener {

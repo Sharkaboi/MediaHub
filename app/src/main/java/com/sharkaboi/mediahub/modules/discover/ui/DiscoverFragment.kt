@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sharkaboi.mediahub.common.extensions.addFooter
+import com.sharkaboi.mediahub.common.extensions.observe
 import com.sharkaboi.mediahub.common.extensions.showToast
 import com.sharkaboi.mediahub.databinding.FragmentDiscoverBinding
 import com.sharkaboi.mediahub.modules.discover.adapters.AiringAnimeAdapter
@@ -74,7 +75,7 @@ class DiscoverFragment : Fragment() {
     }
 
     private fun setupObservers() {
-        discoverDetailsViewModel.uiState.observe(viewLifecycleOwner) { uiState ->
+        observe(discoverDetailsViewModel.uiState) { uiState ->
             binding.progress.isVisible = uiState is DiscoverState.Loading
             when (uiState) {
                 is DiscoverState.AnimeDetailsFailure -> showToast(uiState.message)
