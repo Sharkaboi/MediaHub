@@ -130,7 +130,7 @@ class PresentationExtensionsTest {
 
     @Test
     fun `getAiringTimeFormatted for length with days returns expected string`() {
-        val testLength = 5 * 24 * 60 * 60 * 1000 // 5 days
+        val testLength = 5 * 24 * 60 * 60 // 5 days
         val expectedString = "5d 0h 0m"
         val resultString = testLength.getAiringTimeFormatted()
         assertEquals(resultString, expectedString)
@@ -138,7 +138,7 @@ class PresentationExtensionsTest {
 
     @Test
     fun `getAiringTimeFormatted for length with hours returns expected string`() {
-        val testLength = 60 * 90 * 1000 // 90 minutes
+        val testLength = 60 * 90 // 90 minutes
         val expectedString = "1h 30m"
         val resultString = testLength.getAiringTimeFormatted()
         assertEquals(resultString, expectedString)
@@ -146,7 +146,7 @@ class PresentationExtensionsTest {
 
     @Test
     fun `getAiringTimeFormatted for length with minutes returns expected string`() {
-        val testLength = 60 * 5 * 1000 // 5 minutes
+        val testLength = 60 * 5 // 5 minutes
         val expectedString = "5m"
         val resultString = testLength.getAiringTimeFormatted()
         assertEquals(resultString, expectedString)
