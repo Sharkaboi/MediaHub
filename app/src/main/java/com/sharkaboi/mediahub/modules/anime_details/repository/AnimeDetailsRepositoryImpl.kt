@@ -1,5 +1,9 @@
 package com.sharkaboi.mediahub.modules.anime_details.repository
 
+import GetNextAiringAnimeEpisodeQuery
+import com.apollographql.apollo.ApolloClient
+import com.apollographql.apollo.coroutines.await
+import com.apollographql.apollo.exception.ApolloException
 import com.haroldadmin.cnradapter.NetworkResponse
 import com.sharkaboi.mediahub.common.extensions.emptyString
 import com.sharkaboi.mediahub.common.extensions.ifNullOrBlank
@@ -10,14 +14,14 @@ import com.sharkaboi.mediahub.data.api.retrofit.UserAnimeService
 import com.sharkaboi.mediahub.data.datastore.DataStoreRepository
 import com.sharkaboi.mediahub.data.wrappers.MHError
 import com.sharkaboi.mediahub.data.wrappers.MHTaskState
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 class AnimeDetailsRepositoryImpl(
     private val animeService: AnimeService,
     private val userAnimeService: UserAnimeService,
+    private val apolloClient: ApolloClient,
     private val dataStoreRepository: DataStoreRepository
 ) : AnimeDetailsRepository {
 
@@ -87,6 +91,35 @@ class AnimeDetailsRepositoryImpl(
                     isSuccess = false,
                     data = null,
                     error = MHError(e.message.ifNullOrBlank { "Unknown error" }, e)
+                )
+            }
+        }
+
+    override suspend fun getNextAiringEpisodeById(animeId: Int): MHTaskState<GetNextAiringAnimeEpisodeQuery.Media> =
+        withContext(Dispatchers.IO) {
+            val response = try {
+                apolloClient.query(GetNextAiringAnimeEpisodeQuery(idMal = animeId)).await()
+            } catch (e: ApolloException) {
+                return@withContext MHTaskState(
+                    isSuccess = false,
+                    data = null,
+                    error = MHError(e.message.ifNullOrBlank { "Protocol error" }, e.cause)
+                )
+            }
+
+            val mediaDetails = response.data?.media
+            if (mediaDetails == null || response.hasErrors()) {
+                val errorMessage = response.errors?.first()?.message
+                return@withContext MHTaskState(
+                    isSuccess = false,
+                    data = null,
+                    error = MHError(errorMessage.ifNullOrBlank { "Application error" }, null)
+                )
+            } else {
+                return@withContext MHTaskState(
+                    isSuccess = true,
+                    data = mediaDetails,
+                    error = MHError.EmptyError
                 )
             }
         }

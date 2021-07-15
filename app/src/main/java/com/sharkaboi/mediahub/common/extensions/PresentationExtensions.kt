@@ -6,8 +6,9 @@ import com.sharkaboi.mediahub.common.util.getLocalDateFromDayAndTime
 import com.sharkaboi.mediahub.data.api.models.anime.AnimeByIDResponse
 import com.sharkaboi.mediahub.data.api.models.manga.MangaByIDResponse
 import java.text.DecimalFormat
-import java.time.Duration
 import java.time.format.DateTimeFormatter
+import kotlin.time.Duration
+import kotlin.time.ExperimentalTime
 
 internal fun Double.roundOfString(): String {
     if (this == 0.0) {
@@ -313,17 +314,43 @@ internal fun AnimeByIDResponse.Statistics.getStats(): Spanned {
     }
 }
 
+@ExperimentalTime
 internal fun Int?.getEpisodeLengthFromSeconds(): String {
     try {
         if (this == null || this <= 0) {
             return "N/A per ep"
         }
-        val duration = Duration.ofSeconds(this.toLong())
-        val hours = duration.seconds / (60 * 60)
-        val minutes = (duration.seconds % (60 * 60) / 60).toInt()
-        return if (hours <= 0) "${minutes}m per ep" else "${hours.toInt()}h ${minutes}m per ep"
+        val duration = Duration.seconds(this.toLong())
+        val hours = duration.inWholeHours.toInt()
+        val minutes = duration.minus(Duration.Companion.hours(hours)).inWholeMinutes
+        return if (hours <= 0) "${minutes}m per ep" else "${hours}h ${minutes}m per ep"
     } catch (e: Exception) {
         e.printStackTrace()
         return "N/A per ep"
+    }
+}
+
+@ExperimentalTime
+internal fun Int.getAiringTimeFormatted(): String {
+    try {
+        if (this <= 0) {
+            return "0h 0m 0s"
+        }
+        var currentDuration = Duration.seconds(this.toLong())
+        val days = currentDuration.inWholeDays.toInt()
+        currentDuration = currentDuration.minus(Duration.days(days))
+        val hours = currentDuration.inWholeHours.toInt()
+        currentDuration = currentDuration.minus(Duration.hours(hours))
+        val minutes = currentDuration.inWholeMinutes.toInt()
+        return if (days <= 0 && hours <= 0) {
+            "${minutes}m"
+        } else if (days <= 0) {
+            "${hours}h ${minutes}m"
+        } else {
+            "${days}d ${hours}h ${minutes}m"
+        }
+    } catch (e: Exception) {
+        e.printStackTrace()
+        return "0h 0m 0s"
     }
 }

@@ -21,13 +21,14 @@
     <a href="https://github.com/Sharkaboi/MediaHub/actions" alt="CI">
         <img alt="CI" src="https://github.com/Sharkaboi/MediaHub/actions/workflows/android.yaml/badge.svg">
     </a><br>
-    A simple, easy to use MyAnimeList client alternative. Uses the <a href="https://myanimelist.net/apiconfig/references/api/v2">MAL Api.</a>
+    A simple, easy to use MyAnimeList client alternative. Uses the <a href="https://myanimelist.net/apiconfig/references/api/v2">MAL Api</a> & <a href="https://anilist.gitbook.io/anilist-apiv2-docs/">Anilist Api</a>. 
 </p>
 
 ## Uses
 * [Kotlin](https://kotlinlang.org/)
 * MVI/MVVM Architecture
 * [Retrofit](https://square.github.io/retrofit/)
+* [Apollo Android](https://github.com/apollographql/apollo-android)
 * [Coroutines](https://kotlinlang.org/docs/coroutines-overview.html)
 * [Hilt](https://dagger.dev/hilt/)
 * [Datastore](https://developer.android.com/topic/libraries/architecture/datastore)

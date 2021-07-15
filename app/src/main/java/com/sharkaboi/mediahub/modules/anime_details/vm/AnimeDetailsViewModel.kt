@@ -24,6 +24,9 @@ class AnimeDetailsViewModel
     private var _animeDetailsUpdate: MutableLiveData<AnimeDetailsUpdateClass> =
         MutableLiveData<AnimeDetailsUpdateClass>()
     val animeDetailsUpdate: LiveData<AnimeDetailsUpdateClass> = _animeDetailsUpdate
+    private var _nextEpisodeDetails: MutableLiveData<NextEpisodeDetailsState> =
+        MutableLiveData<NextEpisodeDetailsState>().getDefault()
+    val nextEpisodeDetails: LiveData<NextEpisodeDetailsState> = _nextEpisodeDetails
 
     fun getAnimeDetails(animeId: Int) {
         viewModelScope.launch {
@@ -43,6 +46,21 @@ class AnimeDetailsViewModel
                 }
             } else {
                 _uiState.setFailure(result.error.errorMessage)
+            }
+        }
+    }
+
+    fun getNextEpisodeDetails(animeId: Int) {
+        viewModelScope.launch {
+            _nextEpisodeDetails.setLoading()
+            val result = animeDetailsRepository.getNextAiringEpisodeById(animeId)
+            if (result.isSuccess) {
+                result.data?.let {
+                    Timber.d("nextEpisodeDetails: ${result.data}")
+                    _nextEpisodeDetails.setFetchSuccess(result.data)
+                }
+            } else {
+                _nextEpisodeDetails.setFailure(result.error.errorMessage)
             }
         }
     }
