@@ -16,9 +16,9 @@ import com.sharkaboi.mediahub.common.extensions.showToast
 import com.sharkaboi.mediahub.common.util.openUrl
 import com.sharkaboi.mediahub.data.api.retrofit.AuthService
 import com.sharkaboi.mediahub.databinding.ActivityAuthBinding
-import com.sharkaboi.mediahub.modules.MainActivity
 import com.sharkaboi.mediahub.modules.auth.vm.OAuthState
 import com.sharkaboi.mediahub.modules.auth.vm.OAuthViewModel
+import com.sharkaboi.mediahub.modules.main.ui.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 

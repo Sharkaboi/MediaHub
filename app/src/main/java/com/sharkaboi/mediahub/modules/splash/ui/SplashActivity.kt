@@ -6,8 +6,8 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate.*
 import com.sharkaboi.mediahub.R
-import com.sharkaboi.mediahub.modules.MainActivity
 import com.sharkaboi.mediahub.modules.auth.ui.OAuthActivity
+import com.sharkaboi.mediahub.modules.main.ui.MainActivity
 import com.sharkaboi.mediahub.modules.splash.vm.SplashState
 import com.sharkaboi.mediahub.modules.splash.vm.SplashViewModel
 import dagger.hilt.android.AndroidEntryPoint

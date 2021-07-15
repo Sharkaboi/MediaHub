@@ -48,7 +48,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".modules.MainActivity"
+            android:name=".modules.main.ui.MainActivity"
             android:launchMode="singleInstance"
             android:screenOrientation="sensorPortrait"
             android:theme="@style/Theme.MediaHub"
