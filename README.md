@@ -77,7 +77,7 @@ Settings           |  Update
 * Install Gradle and Kotlin.
 * Clone project.
 * Register your app with MyAnimeList as show [here](https://myanimelist.net/blog.php?eid=835707)
-* In the project root, add `clientId=<CLIENT ID>` to the `local.properties` file. Create if not found.
+* In the project root, add `clientId=<CLIENT ID>` to the `secrets.properties` file. Create if not found.
 * Open in Android studio or Intellij and build and sync project (Be sure the generated classes of Hilt, ViewBinding and Apollo are generated).
 * Run on any device and perform OAuth login to give access to your account.
 
@@ -90,11 +90,11 @@ Settings           |  Update
 PR's are welcome. Please try to follow the template.
 
 ## Privacy, Security and other info
-* App only acts as intermediate to MyAnimeList and does not have it's own server or store any data.
+* App only acts as intermediate to MyAnimeList and AniList and does not have it's own server or store any data.
 * App only has network permissions, the `WRITE_EXTERNAL_STORAGE`,
 `READ_EXTERNAL_STORAGE` & `FOREGROUND_SERVICE` in the merged manifest is from [LeakCanary](https://square.github.io/leakcanary/) which is not included in the release builds.
 * App stores the token using [Datastore](https://developer.android.com/topic/libraries/architecture/datastore), which doesn't have an encryption library yet.
-This implies anyone with debugging access or root access to your phone can get the token. Please keep this in mind.
+This implies anyone with debugging access or root access to your phone can get the your OAuth token. Please keep this in mind.
 * The app doesn't fetch "live data" and only shows the snapshot of data of when it was fetched. Please refresh to see any changes made through the MyAnimeList website or other clients.
 
 ## Licence
