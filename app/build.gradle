@@ -12,6 +12,7 @@ plugins {
 
 android {
     compileSdkVersion 31
+    buildToolsVersion "31.0.0-rc4"
 
     defaultConfig {
         applicationId "com.sharkaboi.mediahub"
