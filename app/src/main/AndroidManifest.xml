@@ -20,6 +20,7 @@
         tools:targetApi="n">
         <activity
             android:name=".modules.splash.ui.SplashActivity"
+            android:exported="true"
             android:launchMode="singleInstance"
             android:screenOrientation="sensorPortrait"
             android:theme="@style/splashStyle"
@@ -32,6 +33,7 @@
         </activity>
         <activity
             android:name=".modules.auth.ui.OAuthActivity"
+            android:exported="true"
             android:launchMode="singleTop"
             android:screenOrientation="sensorPortrait"
             android:theme="@style/Theme.MediaHub"
@@ -49,6 +51,7 @@
         </activity>
         <activity
             android:name=".modules.main.ui.MainActivity"
+            android:exported="true"
             android:launchMode="singleInstance"
             android:screenOrientation="sensorPortrait"
             android:theme="@style/Theme.MediaHub"
