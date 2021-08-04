@@ -77,11 +77,6 @@ class AnimeRankingFragment : Fragment() {
         )
     }
 
-    override fun onResume() {
-        super.onResume()
-        collectPagedList()
-    }
-
     private fun setupFilterChips() {
         binding.rankTypeChipGroup.removeAllViews()
         AnimeRankingType.values().forEach { rankingType ->

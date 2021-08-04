@@ -62,11 +62,6 @@ class MangaRankingFragment : Fragment() {
         setObservers()
     }
 
-    override fun onResume() {
-        super.onResume()
-        getMangaRankingList()
-    }
-
     private fun initRanking() {
         mangaRankingViewModel.setRankingType(
             if (args.mangaRankingType == null) {

@@ -76,11 +76,6 @@ class AnimeSeasonalFragment : Fragment() {
         )
     }
 
-    override fun onResume() {
-        super.onResume()
-        collectPagedList()
-    }
-
     private fun setupSeasonButtons() {
         binding.apply {
             btnPrevSeason.setOnClickListener {
