@@ -35,7 +35,7 @@ jobs:
     needs: build
     strategy:
       matrix:
-        api-level: [23, 28, 31]
+        api-level: [23, 28, 30]
 
     steps:
       - name: Checkout repo
@@ -66,7 +66,8 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
-          profile: Pixel 5
+          arch: x86
+          emulator-build: 7425822 # https://github.com/ReactiveCircus/android-emulator-runner/issues/160
           script: ./gradlew connectedCheck --stacktrace
 
       - name: Upload Reports
