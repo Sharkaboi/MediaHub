@@ -14,7 +14,7 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.chip.Chip
-import com.google.android.material.shape.ShapeAppearanceModel
+import com.sharkaboi.mediahub.common.constants.UIConstants.setMediaHubChipStyle
 import com.sharkaboi.mediahub.common.extensions.showToast
 import com.sharkaboi.mediahub.data.api.enums.AnimeRankingType
 import com.sharkaboi.mediahub.databinding.FragmentAnimeRankingBinding
@@ -60,6 +60,7 @@ class AnimeRankingFragment : Fragment() {
         setupFilterChips()
         setUpRecyclerView()
         setObservers()
+        collectPagedList()
     }
 
     private fun initRanking() {
@@ -82,14 +83,14 @@ class AnimeRankingFragment : Fragment() {
         AnimeRankingType.values().forEach { rankingType ->
             binding.rankTypeChipGroup.addView(
                 Chip(context).apply {
-                    text = rankingType.getAnimeRanking()
-                    setEnsureMinTouchTargetSize(false)
+                    text = rankingType.getAnimeRanking(context)
+                    setMediaHubChipStyle()
                     isCheckable = true
                     isChecked = rankingType == animeRankingViewModel.selectedRankingType
-                    shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(8f)
                     setOnClickListener {
                         animeRankingViewModel.setRankingType(rankingType)
                         collectPagedList()
+                        binding.rvAnimeRanking.smoothScrollToPosition(0)
                     }
                 }
             )
@@ -99,7 +100,7 @@ class AnimeRankingFragment : Fragment() {
     private fun setUpRecyclerView() {
         binding.rvAnimeRanking.apply {
             animeRankingDetailedAdapter = AnimeRankingDetailedAdapter { animeId ->
-                val action = AnimeRankingFragmentDirections.openAnimeDetailsWithId(animeId)
+                val action = AnimeRankingFragmentDirections.openAnimeById(animeId)
                 navController.navigate(action)
             }
             layoutManager = GridLayoutManager(context, 3)

@@ -14,6 +14,8 @@ import androidx.navigation.ui.setupWithNavController
 import com.sharkaboi.mediahub.R
 import com.sharkaboi.mediahub.common.extensions.observe
 import com.sharkaboi.mediahub.common.extensions.startAnim
+import com.sharkaboi.mediahub.common.util.forceLaunchInBrowser
+import com.sharkaboi.mediahub.data.api.constants.ApiConstants
 import com.sharkaboi.mediahub.databinding.ActivityMainBinding
 import com.sharkaboi.mediahub.modules.auth.ui.OAuthActivity
 import com.sharkaboi.mediahub.modules.main.vm.MainViewModel
@@ -43,7 +45,20 @@ class MainActivity : AppCompatActivity() {
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        navController.handleDeepLink(intent)
+        if (intent?.dataString?.matches(ApiConstants.appAcceptedDeepLinkRegex) == true) {
+            val result = navController.handleDeepLink(intent)
+            if (result.not()) {
+                handleNonSupportedIntent(intent)
+            }
+        } else {
+            handleNonSupportedIntent(intent)
+        }
+    }
+
+    private fun handleNonSupportedIntent(intent: Intent?) {
+        val url = intent?.dataString
+        Timber.d("Can't handle intent $url")
+        url?.let { forceLaunchInBrowser(it) }
     }
 
     private fun configBottomNav() {
@@ -71,7 +86,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun setVisibilityAndListeners(@IdRes id: Int) {
+    private fun setVisibilityAndListeners(@IdRes id: Int) {
         val isAnimeItem =
             id == R.id.anime_item && navController.currentDestination?.id == R.id.anime_item
         val isMangaItem =
@@ -82,11 +97,11 @@ class MainActivity : AppCompatActivity() {
             binding.circleAnimeView.isVisible = true
             binding.circleAnimeView.startAnim(anim) {
                 binding.fabSearch.isVisible = isAnimeItem || isMangaItem
-                binding.circleAnimeView.isVisible = false
                 when {
                     isAnimeItem -> navController.navigate(R.id.openAnimeSearch)
                     isMangaItem -> navController.navigate(R.id.openMangaSearch)
                 }
+                binding.circleAnimeView.isVisible = false
             }
         }
     }

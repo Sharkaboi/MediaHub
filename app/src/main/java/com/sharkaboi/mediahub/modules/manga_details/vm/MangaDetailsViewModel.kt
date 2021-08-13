@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sharkaboi.mediahub.data.api.enums.MangaStatus
 import com.sharkaboi.mediahub.data.api.enums.mangaStatusFromString
+import com.sharkaboi.mediahub.data.wrappers.MHError
 import com.sharkaboi.mediahub.modules.manga_details.repository.MangaDetailsRepository
 import com.sharkaboi.mediahub.modules.manga_details.util.MangaDetailsUpdateClass
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -104,7 +105,7 @@ class MangaDetailsViewModel
                     _uiState.setFailure(result.error.errorMessage)
                 }
             } ?: run {
-                _uiState.setFailure("No data to update")
+                _uiState.setFailure(MHError.InvalidStateError.errorMessage)
             }
         }
     }

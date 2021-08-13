@@ -11,10 +11,13 @@ import com.sharkaboi.mediahub.data.datastore.DataStoreConstants.REFRESH_TOKEN
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
+import timber.log.Timber
 import java.io.IOException
 import java.util.*
+import kotlin.coroutines.coroutineContext
 
 internal val Context.dataStore by preferencesDataStore(
     name = DataStoreConstants.PREFERENCES_NAME
@@ -30,8 +33,9 @@ class DataStoreRepositoryImpl(
             throw exception
         }
     }.map { preferences ->
+        Timber.d("Collected access token on $coroutineContext")
         preferences[ACCESS_TOKEN]
-    }
+    }.flowOn(Dispatchers.IO)
 
     override val refreshTokenFlow: Flow<String> = dataStore.data.catch { exception ->
         if (exception is IOException) {
@@ -45,7 +49,7 @@ class DataStoreRepositoryImpl(
         } ?: run {
             return@map String.emptyString
         }
-    }
+    }.flowOn(Dispatchers.IO)
 
     override val expiresInFlow: Flow<Date> = dataStore.data.catch { exception ->
         if (exception is IOException) {
@@ -59,7 +63,7 @@ class DataStoreRepositoryImpl(
             timeInMillis = expiredIn
         }
         date.time
-    }
+    }.flowOn(Dispatchers.IO)
 
     override suspend fun setAccessToken(token: String): Unit = withContext(Dispatchers.IO) {
         dataStore.edit { preferences ->
@@ -82,7 +86,7 @@ class DataStoreRepositoryImpl(
         }
     }
 
-    override suspend fun clearDataStore() {
+    override suspend fun clearDataStore(): Unit = withContext(Dispatchers.IO) {
         dataStore.edit { preferences ->
             preferences.clear()
         }

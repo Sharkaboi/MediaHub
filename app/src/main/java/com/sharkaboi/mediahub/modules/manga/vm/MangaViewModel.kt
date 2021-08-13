@@ -18,7 +18,7 @@ class MangaViewModel
     private val mangaRepository: MangaRepository
 ) : ViewModel() {
     private var _currentChosenMangaStatus: MangaStatus = MangaStatus.all
-    val currentChosenMangaStatus get() = _currentChosenMangaStatus
+    private val currentChosenMangaStatus get() = _currentChosenMangaStatus
     private var _currentChosenSortType: UserMangaSortType = UserMangaSortType.list_updated_at
     val currentChosenSortType get() = _currentChosenSortType
     private var _pagedMangaList: Flow<PagingData<UserMangaListResponse.Data>>? = null

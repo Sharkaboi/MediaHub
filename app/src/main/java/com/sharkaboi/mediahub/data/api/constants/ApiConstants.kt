@@ -1,4 +1,4 @@
-package com.sharkaboi.mediahub.data.api
+package com.sharkaboi.mediahub.data.api.constants
 
 object ApiConstants {
     const val BEARER_SEPARATOR = "Bearer "
@@ -16,4 +16,5 @@ object ApiConstants {
     const val MANGA_ALL_FIELDS =
         "id,title,main_picture,alternative_titles,start_date,end_date,synopsis,mean,rank,popularity,num_list_users,num_scoring_users,nsfw,created_at,updated_at,media_type,status,genres,my_list_status,num_volumes,num_chapters,authors{first_name,last_name},pictures,background,related_anime,related_manga,recommendations,serialization{name}"
     const val PROFILE_FIELDS = "anime_statistics"
+    val appAcceptedDeepLinkRegex = """^(https://myanimelist.net/(anime|manga)/(\d+)/([^/])+)$""".toRegex()
 }

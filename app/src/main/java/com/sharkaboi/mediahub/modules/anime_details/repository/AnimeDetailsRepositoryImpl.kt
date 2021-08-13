@@ -6,8 +6,7 @@ import com.apollographql.apollo.coroutines.await
 import com.apollographql.apollo.exception.ApolloException
 import com.haroldadmin.cnradapter.NetworkResponse
 import com.sharkaboi.mediahub.common.extensions.emptyString
-import com.sharkaboi.mediahub.common.extensions.ifNullOrBlank
-import com.sharkaboi.mediahub.data.api.ApiConstants
+import com.sharkaboi.mediahub.data.api.constants.ApiConstants
 import com.sharkaboi.mediahub.data.api.models.anime.AnimeByIDResponse
 import com.sharkaboi.mediahub.data.api.retrofit.AnimeService
 import com.sharkaboi.mediahub.data.api.retrofit.UserAnimeService
@@ -17,6 +16,7 @@ import com.sharkaboi.mediahub.data.wrappers.MHTaskState
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.firstOrNull
 import timber.log.Timber
+import java.util.*
 
 class AnimeDetailsRepositoryImpl(
     private val animeService: AnimeService,
@@ -33,7 +33,7 @@ class AnimeDetailsRepositoryImpl(
                     return@withContext MHTaskState(
                         isSuccess = false,
                         data = null,
-                        error = MHError("Log in has expired, Log in again.", null)
+                        error = MHError.LoginExpiredError
                     )
                 } else {
                     val result = animeService.getAnimeByIdAsync(
@@ -54,10 +54,8 @@ class AnimeDetailsRepositoryImpl(
                             return@withContext MHTaskState(
                                 isSuccess = false,
                                 data = null,
-                                error = MHError(
-                                    result.error.message.ifNullOrBlank { "Error with network" },
-                                    null
-                                )
+                                error = result.error.message?.let { MHError(it) }
+                                    ?: MHError.NetworkError
                             )
                         }
                         is NetworkResponse.ServerError -> {
@@ -65,10 +63,8 @@ class AnimeDetailsRepositoryImpl(
                             return@withContext MHTaskState(
                                 isSuccess = false,
                                 data = null,
-                                error = MHError(
-                                    result.body?.message.ifNullOrBlank { "Error with status code : ${result.code}" },
-                                    null
-                                )
+                                error = result.body?.message?.let { MHError(it) }
+                                    ?: MHError.apiErrorWithCode(result.code)
                             )
                         }
                         is NetworkResponse.UnknownError -> {
@@ -76,10 +72,8 @@ class AnimeDetailsRepositoryImpl(
                             return@withContext MHTaskState(
                                 isSuccess = false,
                                 data = null,
-                                error = MHError(
-                                    result.error.message.ifNullOrBlank { "Error with parsing" },
-                                    null
-                                )
+                                error = result.error.message?.let { MHError(it) }
+                                    ?: MHError.ParsingError
                             )
                         }
                     }
@@ -90,7 +84,7 @@ class AnimeDetailsRepositoryImpl(
                 return@withContext MHTaskState(
                     isSuccess = false,
                     data = null,
-                    error = MHError(e.message.ifNullOrBlank { "Unknown error" }, e)
+                    error = e.message?.let { MHError(it) } ?: MHError.UnknownError
                 )
             }
         }
@@ -103,7 +97,7 @@ class AnimeDetailsRepositoryImpl(
                 return@withContext MHTaskState(
                     isSuccess = false,
                     data = null,
-                    error = MHError(e.message.ifNullOrBlank { "Protocol error" }, e.cause)
+                    error = e.message?.let { MHError(it) } ?: MHError.ProtocolError
                 )
             }
 
@@ -113,7 +107,7 @@ class AnimeDetailsRepositoryImpl(
                 return@withContext MHTaskState(
                     isSuccess = false,
                     data = null,
-                    error = MHError(errorMessage.ifNullOrBlank { "Application error" }, null)
+                    error = errorMessage?.let { MHError(it) } ?: MHError.ApplicationError
                 )
             } else {
                 return@withContext MHTaskState(
@@ -137,7 +131,7 @@ class AnimeDetailsRepositoryImpl(
                     return@withContext MHTaskState(
                         isSuccess = false,
                         data = null,
-                        error = MHError("Log in has expired, Log in again.", null)
+                        error = MHError.LoginExpiredError
                     )
                 } else {
                     val result = userAnimeService.updateAnimeStatusAsync(
@@ -161,10 +155,8 @@ class AnimeDetailsRepositoryImpl(
                             return@withContext MHTaskState(
                                 isSuccess = false,
                                 data = null,
-                                error = MHError(
-                                    result.error.message.ifNullOrBlank { "Error with network" },
-                                    null
-                                )
+                                error = result.error.message?.let { MHError(it) }
+                                    ?: MHError.NetworkError
                             )
                         }
                         is NetworkResponse.ServerError -> {
@@ -172,10 +164,8 @@ class AnimeDetailsRepositoryImpl(
                             return@withContext MHTaskState(
                                 isSuccess = false,
                                 data = null,
-                                error = MHError(
-                                    result.body?.message.ifNullOrBlank { "Error with status code : ${result.code}" },
-                                    null
-                                )
+                                error = result.body?.message?.let { MHError(it) }
+                                    ?: MHError.apiErrorWithCode(result.code)
                             )
                         }
                         is NetworkResponse.UnknownError -> {
@@ -183,10 +173,8 @@ class AnimeDetailsRepositoryImpl(
                             return@withContext MHTaskState(
                                 isSuccess = false,
                                 data = null,
-                                error = MHError(
-                                    result.error.message.ifNullOrBlank { "Error with parsing" },
-                                    null
-                                )
+                                error = result.error.message?.let { MHError(it) }
+                                    ?: MHError.ParsingError
                             )
                         }
                     }
@@ -197,7 +185,7 @@ class AnimeDetailsRepositoryImpl(
                 return@withContext MHTaskState(
                     isSuccess = false,
                     data = null,
-                    error = MHError(e.message.ifNullOrBlank { "Unknown Error" }, e)
+                    error = e.message?.let { MHError(it) } ?: MHError.UnknownError
                 )
             }
         }
@@ -212,7 +200,7 @@ class AnimeDetailsRepositoryImpl(
                     return@withContext MHTaskState(
                         isSuccess = false,
                         data = null,
-                        error = MHError("Log in has expired, Log in again.", null)
+                        error = MHError.LoginExpiredError
                     )
                 } else {
                     val result = userAnimeService.deleteAnimeFromListAsync(
@@ -233,10 +221,8 @@ class AnimeDetailsRepositoryImpl(
                             return@withContext MHTaskState(
                                 isSuccess = false,
                                 data = null,
-                                error = MHError(
-                                    result.error.message.ifNullOrBlank { "Error with network" },
-                                    null
-                                )
+                                error = result.error.message?.let { MHError(it) }
+                                    ?: MHError.NetworkError
                             )
                         }
                         is NetworkResponse.ServerError -> {
@@ -245,18 +231,14 @@ class AnimeDetailsRepositoryImpl(
                                 return@withContext MHTaskState(
                                     isSuccess = false,
                                     data = null,
-                                    error = MHError(
-                                        "Anime isn't in your list", null
-                                    )
+                                    error = MHError.AnimeNotFoundError
                                 )
                             }
                             return@withContext MHTaskState(
                                 isSuccess = false,
                                 data = null,
-                                error = MHError(
-                                    result.body?.message.ifNullOrBlank { "Error with status code : ${result.code}" },
-                                    null
-                                )
+                                error = result.body?.message?.let { MHError(it) }
+                                    ?: MHError.apiErrorWithCode(result.code)
                             )
                         }
                         is NetworkResponse.UnknownError -> {
@@ -264,10 +246,8 @@ class AnimeDetailsRepositoryImpl(
                             return@withContext MHTaskState(
                                 isSuccess = false,
                                 data = null,
-                                error = MHError(
-                                    result.error.message.ifNullOrBlank { "Error with parsing" },
-                                    null
-                                )
+                                error = result.error.message?.let { MHError(it) }
+                                    ?: MHError.ParsingError
                             )
                         }
                     }
@@ -278,7 +258,7 @@ class AnimeDetailsRepositoryImpl(
                 return@withContext MHTaskState(
                     isSuccess = false,
                     data = null,
-                    error = MHError(e.message.ifNullOrBlank { "Unknown error" }, e)
+                    error = e.message?.let { MHError(it) } ?: MHError.UnknownError
                 )
             }
         }

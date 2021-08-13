@@ -1,6 +1,6 @@
 package com.sharkaboi.mediahub
 
-import com.sharkaboi.mediahub.common.constants.MALExternalLinks
+import com.sharkaboi.mediahub.data.api.constants.MALExternalLinks
 import com.sharkaboi.mediahub.data.api.models.anime.AnimeByIDResponse
 import com.sharkaboi.mediahub.data.api.models.manga.MangaByIDResponse
 import org.junit.Assert.assertTrue

@@ -4,13 +4,15 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.haroldadmin.cnradapter.NetworkResponse
 import com.sharkaboi.mediahub.common.extensions.emptyString
-import com.sharkaboi.mediahub.data.api.ApiConstants
+import com.sharkaboi.mediahub.data.api.constants.ApiConstants
 import com.sharkaboi.mediahub.data.api.enums.MangaStatus
 import com.sharkaboi.mediahub.data.api.enums.UserMangaSortType
 import com.sharkaboi.mediahub.data.api.models.ApiError
 import com.sharkaboi.mediahub.data.api.models.usermanga.UserMangaListResponse
 import com.sharkaboi.mediahub.data.api.retrofit.UserMangaService
-import com.sharkaboi.mediahub.data.wrappers.NoTokenFoundError
+import com.sharkaboi.mediahub.data.wrappers.MHError
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 class UserMangaListDataSource(
@@ -21,14 +23,12 @@ class UserMangaListDataSource(
     private val showNsfw: Boolean = false
 ) : PagingSource<Int, UserMangaListResponse.Data>() {
 
+    /**
+     *   prevKey == null -> first page
+     *   nextKey == null -> last page
+     *   both prevKey and nextKey null -> only one page
+     */
     override fun getRefreshKey(state: PagingState<Int, UserMangaListResponse.Data>): Int? {
-        // Try to find the page key of the closest page to anchorPosition, from
-        // either the prevKey or the nextKey, but you need to handle nullability
-        // here:
-        //  * prevKey == null -> anchorPage is the first page.
-        //  * nextKey == null -> anchorPage is the last page.
-        //  * both prevKey and nextKey null -> anchorPage is the initial page, so
-        //    just return null.
         return state.anchorPosition?.let { anchorPosition ->
             val anchorPage = state.closestPageToPosition(anchorPosition)
             anchorPage?.prevKey?.plus(ApiConstants.API_PAGE_LIMIT) ?: anchorPage?.nextKey?.minus(
@@ -44,17 +44,19 @@ class UserMangaListDataSource(
             val limit = ApiConstants.API_PAGE_LIMIT
             if (accessToken == null) {
                 return LoadResult.Error(
-                    NoTokenFoundError.getThrowable()
+                    MHError.LoginExpiredError.getThrowable()
                 )
             } else {
-                val response = userMangaService.getMangaListOfUserAsync(
-                    authHeader = ApiConstants.BEARER_SEPARATOR + accessToken,
-                    status = getStatus(),
-                    offset = offset,
-                    limit = limit,
-                    sort = mangaSortType.name,
-                    nsfw = if (showNsfw) ApiConstants.NSFW_ALSO else ApiConstants.SFW_ONLY
-                ).await()
+                val response = withContext(Dispatchers.IO) {
+                    userMangaService.getMangaListOfUserAsync(
+                        authHeader = ApiConstants.BEARER_SEPARATOR + accessToken,
+                        status = getStatus(),
+                        offset = offset,
+                        limit = limit,
+                        sort = mangaSortType.name,
+                        nsfw = if (showNsfw) ApiConstants.NSFW_ALSO else ApiConstants.SFW_ONLY
+                    ).await()
+                }
                 when (response) {
                     is NetworkResponse.Success -> {
                         val nextOffset = if (response.body.data.isEmpty()) null else offset + limit

@@ -13,6 +13,9 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.sharkaboi.mediahub.BottomNavGraphDirections
+import com.sharkaboi.mediahub.R
+import com.sharkaboi.mediahub.common.constants.UIConstants
 import com.sharkaboi.mediahub.common.extensions.showToast
 import com.sharkaboi.mediahub.data.api.enums.AnimeStatus
 import com.sharkaboi.mediahub.data.api.enums.UserAnimeSortType
@@ -74,10 +77,10 @@ class AnimeListByStatusFragment : Fragment() {
     private fun setUpRecyclerView() {
         binding.rvAnimeByStatus.apply {
             animeListAdapter = AnimeListAdapter { animeId ->
-                val action = AnimeFragmentDirections.openAnimeDetailsWithId(animeId)
+                val action = BottomNavGraphDirections.openAnimeById(animeId)
                 navController.navigate(action)
             }
-            layoutManager = GridLayoutManager(context, 3)
+            layoutManager = GridLayoutManager(context, UIConstants.AnimeAndMangaGridSpanCount)
             itemAnimator = DefaultItemAnimator()
             adapter = animeListAdapter.withLoadStateFooter(
                 footer = AnimeLoadStateAdapter()
@@ -110,10 +113,10 @@ class AnimeListByStatusFragment : Fragment() {
     }
 
     private fun openSortMenu() {
-        val singleItems = UserAnimeSortType.getFormattedArray()
+        val singleItems = UserAnimeSortType.getFormattedArray(requireContext())
         val checkedItem = UserAnimeSortType.values().indexOf(animeViewModel.currentChosenSortType)
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Sort anime by")
+            .setTitle(R.string.sort_anime_by_hint)
             .setSingleChoiceItems(singleItems, checkedItem) { dialog, which ->
                 animeViewModel.setSortType(UserAnimeSortType.values()[which])
                 getAnimeList()
@@ -122,7 +125,7 @@ class AnimeListByStatusFragment : Fragment() {
             .show()
     }
 
-    fun getAnimeList() {
+    private fun getAnimeList() {
         resultsJob?.cancel()
         resultsJob = lifecycleScope.launch {
             animeViewModel.getAnimeList().collectLatest { pagingData ->

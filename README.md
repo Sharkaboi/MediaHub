@@ -3,8 +3,8 @@
     <b><h1 align="center">MediaHub</h1></b>
 </p>
 <p align="center">
-    <a href="https://github.com/JetBrains/kotlin/releases/tag/v1.5.21" alt="Kotlin">
-        <img alt="Kotlin" src="https://img.shields.io/badge/Kotlin-1.5.21-blue" />
+    <a href="https://github.com/JetBrains/kotlin/releases" alt="Kotlin">
+        <img alt="Kotlin" src="https://img.shields.io/github/v/release/Jetbrains/kotlin" />
     </a>
     <a href="https://github.com/Sharkaboi/MediaHub/blob/master/LICENSE" alt="License">
         <img alt="License" src="https://img.shields.io/badge/License-MIT-orange" />
@@ -25,6 +25,7 @@
 </p>
 
 ## Uses
+
 * [Kotlin](https://kotlinlang.org/)
 * MVI/MVVM Architecture
 * [Retrofit](https://square.github.io/retrofit/)
@@ -50,9 +51,11 @@
 * [OSS licenses plugin](https://developers.google.com/android/guides/opensource)
 
 ## Releases
+
 * Check out the latest releases [here](https://github.com/Sharkaboi/MediaHub/releases)
 
 ## Screenshots
+
 Anime            |  Manga
 :-------------------------:|:-------------------------:
 ![](assets/screenshots/anime.png)  |  ![](assets/screenshots/manga.png)
@@ -74,30 +77,45 @@ Settings           |  Update
 ![](assets/screenshots/settings.png)  |  ![](assets/screenshots/update.png)
 
 ## Build instructions
+
 * Install Gradle and Kotlin.
 * Clone project.
 * Register your app with MyAnimeList as show [here](https://myanimelist.net/blog.php?eid=835707)
-* In the project root, add `clientId=<CLIENT ID>` to the `secrets.properties` file. Create if not found.
-* Open in Android studio or Intellij and build and sync project (Be sure the generated classes of Hilt, ViewBinding and Apollo are generated).
+* In the project root, add `clientId=<CLIENT ID>` to the `secrets.properties` file. Create if not
+  found.
+* Open in Android studio or Intellij and build and sync project (Be sure the generated classes of
+  Hilt, ViewBinding and Apollo are generated).
 * Run on any device and perform OAuth login to give access to your account.
 
 ## Credits
+
 * [Photo by Audrey Mari from Pexels](https://www.pexels.com/photo/photo-of-japanese-lanterns-3421920/)
 * [Tabler icons by Paweł Kuna](https://tablericons.com/)
 * [Bubbles icons by Umar Irshad](https://www.iconfinder.com/iconsets/48-bubbles)
 
 ## Contributing
+
 PR's are welcome. Please try to follow the template.
 
 ## Privacy, Security and other info
-* App only acts as intermediate to MyAnimeList and AniList and does not have it's own server or store any data.
+
+* App only acts as intermediate to MyAnimeList and AniList and does not have it's own server or
+  store any data.
 * App only has network permissions, the `WRITE_EXTERNAL_STORAGE`,
-`READ_EXTERNAL_STORAGE` & `FOREGROUND_SERVICE` in the merged manifest is from [LeakCanary](https://square.github.io/leakcanary/) which is not included in the release builds.
-* App stores the token using [Datastore](https://developer.android.com/topic/libraries/architecture/datastore), which doesn't have an encryption library yet.
-This implies anyone with debugging access or root access to your phone can get the your OAuth token. Please keep this in mind.
-* The app doesn't fetch "live data" and only shows the snapshot of data of when it was fetched. Please refresh to see any changes made through the MyAnimeList website or other clients.
+  `READ_EXTERNAL_STORAGE` & `FOREGROUND_SERVICE` in the merged manifest is
+  from [LeakCanary](https://square.github.io/leakcanary/) which is not included in the release
+  builds.
+* App stores the token
+  using [Datastore](https://developer.android.com/topic/libraries/architecture/datastore), which
+  is not encrypted. This implies anyone with debugging access or root access
+  to your phone can get the your OAuth token if needed. Please keep this in mind.
+* The app doesn't fetch "live data" and only shows the snapshot of data of when it was fetched.
+  Please refresh to see any changes made through the MyAnimeList website or other clients.
+* The app queries all browsers in the device to handle unsupported MyAnimeList deeplinks. This is
+  done as the API does not still support all the features provided in the web interface.
 
 ## Licence
+
 ```
 MIT License
 

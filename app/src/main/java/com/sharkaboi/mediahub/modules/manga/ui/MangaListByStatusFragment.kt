@@ -13,6 +13,9 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.sharkaboi.mediahub.BottomNavGraphDirections
+import com.sharkaboi.mediahub.R
+import com.sharkaboi.mediahub.common.constants.UIConstants
 import com.sharkaboi.mediahub.common.extensions.showToast
 import com.sharkaboi.mediahub.data.api.enums.MangaStatus
 import com.sharkaboi.mediahub.data.api.enums.UserMangaSortType
@@ -75,10 +78,10 @@ class MangaListByStatusFragment : Fragment() {
     private fun setUpRecyclerView() {
         binding.rvMangaByStatus.apply {
             mangaListAdapter = MangaListAdapter { mangaId ->
-                val action = MangaFragmentDirections.openMangaDetailsWithId(mangaId)
+                val action = BottomNavGraphDirections.openMangaById(mangaId)
                 navController.navigate(action)
             }
-            layoutManager = GridLayoutManager(context, 3)
+            layoutManager = GridLayoutManager(context, UIConstants.AnimeAndMangaGridSpanCount)
             itemAnimator = DefaultItemAnimator()
             adapter = mangaListAdapter.withLoadStateFooter(
                 footer = MangaLoadStateAdapter()
@@ -113,16 +116,15 @@ class MangaListByStatusFragment : Fragment() {
     }
 
     private fun openSortMenu() {
-        val singleItems = UserMangaSortType.getFormattedArray()
+        val singleItems = UserMangaSortType.getFormattedArray(requireContext())
         val checkedItem = UserMangaSortType.values().indexOf(mangaViewModel.currentChosenSortType)
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Sort manga by")
+            .setTitle(R.string.sort_manga_by_hint)
             .setSingleChoiceItems(singleItems, checkedItem) { dialog, which ->
                 mangaViewModel.setSortType(UserMangaSortType.values()[which])
                 getMangaList()
                 dialog.dismiss()
-            }
-            .show()
+            }.show()
     }
 
     private fun getMangaList() {

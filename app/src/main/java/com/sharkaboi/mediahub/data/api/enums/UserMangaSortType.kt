@@ -1,5 +1,8 @@
 package com.sharkaboi.mediahub.data.api.enums
 
+import android.content.Context
+import com.sharkaboi.mediahub.R
+
 @Suppress("EnumEntryName")
 enum class UserMangaSortType {
     list_score, // Descending
@@ -8,11 +11,11 @@ enum class UserMangaSortType {
     manga_start_date; // Descending
 
     companion object {
-        fun getFormattedArray() = arrayOf(
-            "Highest rating",
-            "Last updated",
-            "Alphabetical order",
-            "Newest addition"
+        fun getFormattedArray(context: Context) = arrayOf(
+            context.getString(R.string.user_manga_sort_by_rating),
+            context.getString(R.string.user_manga_sort_by_updated),
+            context.getString(R.string.user_manga_sort_by_alphabetical),
+            context.getString(R.string.user_manga_sort_by_newest)
         )
     }
 }

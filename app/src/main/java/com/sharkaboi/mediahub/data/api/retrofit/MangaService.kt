@@ -1,7 +1,7 @@
 package com.sharkaboi.mediahub.data.api.retrofit
 
 import com.haroldadmin.cnradapter.NetworkResponse
-import com.sharkaboi.mediahub.data.api.ApiConstants
+import com.sharkaboi.mediahub.data.api.constants.ApiConstants
 import com.sharkaboi.mediahub.data.api.enums.MangaRankingType
 import com.sharkaboi.mediahub.data.api.models.ApiError
 import com.sharkaboi.mediahub.data.api.models.manga.MangaByIDResponse

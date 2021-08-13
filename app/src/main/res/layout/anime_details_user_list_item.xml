@@ -44,7 +44,7 @@
             app:icon="@drawable/ic_bookmark"
             app:iconGravity="top"
             app:iconTint="?colorOnSurface"
-            tools:text="@string/watching" />
+            tools:text="Watching" />
 
         <Button
             android:id="@+id/btnCount"

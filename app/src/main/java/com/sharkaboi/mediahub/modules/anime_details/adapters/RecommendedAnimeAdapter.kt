@@ -7,8 +7,8 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import coil.transform.RoundedCornersTransformation
 import com.sharkaboi.mediahub.R
+import com.sharkaboi.mediahub.common.constants.UIConstants
 import com.sharkaboi.mediahub.data.api.models.anime.AnimeByIDResponse
 import com.sharkaboi.mediahub.databinding.AnimeListItemBinding
 
@@ -62,17 +62,16 @@ class RecommendedAnimeAdapter(private val onClick: (Int) -> Unit) :
             }
             binding.tvAnimeName.text = item.node.title
             binding.tvEpisodesWatched.text =
-                ("Recommended ${item.numRecommendations} ${if (item.numRecommendations == 1) "time" else "times"}")
+                binding.tvEpisodesWatched.context.resources.getQuantityString(
+                    R.plurals.recommendation_times,
+                    item.numRecommendations,
+                    item.numRecommendations
+                )
             binding.cardRating.isGone = true
             binding.ivAnimeBanner.load(
-                item.node.mainPicture?.large ?: item.node.mainPicture?.medium
-            ) {
-                crossfade(true)
-                placeholder(R.drawable.ic_anime_placeholder)
-                error(R.drawable.ic_anime_placeholder)
-                fallback(R.drawable.ic_anime_placeholder)
-                transformations(RoundedCornersTransformation(topLeft = 8f, topRight = 8f))
-            }
+                uri = item.node.mainPicture?.large ?: item.node.mainPicture?.medium,
+                builder = UIConstants.AnimeImageBuilder
+            )
         }
     }
 }

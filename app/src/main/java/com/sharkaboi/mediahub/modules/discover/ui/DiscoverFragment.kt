@@ -10,9 +10,13 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.sharkaboi.mediahub.BottomNavGraphDirections
 import com.sharkaboi.mediahub.common.extensions.addFooter
 import com.sharkaboi.mediahub.common.extensions.observe
 import com.sharkaboi.mediahub.common.extensions.showToast
+import com.sharkaboi.mediahub.data.api.models.anime.AnimeRankingResponse
+import com.sharkaboi.mediahub.data.api.models.anime.AnimeSeasonalResponse
+import com.sharkaboi.mediahub.data.api.models.anime.AnimeSuggestionsResponse
 import com.sharkaboi.mediahub.databinding.FragmentDiscoverBinding
 import com.sharkaboi.mediahub.modules.discover.adapters.AiringAnimeAdapter
 import com.sharkaboi.mediahub.modules.discover.adapters.AnimeRankingAdapter
@@ -86,59 +90,64 @@ class DiscoverFragment : Fragment() {
     }
 
     private fun setupRecyclerViews(discoverAnimeListWrapper: DiscoverAnimeListWrapper) {
-        binding.tvAnimeRecommendationsEmpty.isVisible =
-            discoverAnimeListWrapper.animeSuggestions.isEmpty()
-        binding.rvAnimeRecommendations.apply {
-            adapter = AnimeSuggestionsAdapter { animeId ->
-                val action = DiscoverFragmentDirections.openAnimeById(animeId)
-                navController.navigate(action)
-            }.apply {
-                submitList(discoverAnimeListWrapper.animeSuggestions)
-            }.addFooter {
-                LoadMoreAdapter {
-                    navController.navigate(DiscoverFragmentDirections.openAnimeSuggestions())
-                }
+        setupAnimeRecommendationsList(discoverAnimeListWrapper.animeSuggestions)
+        setupAnimeAiringList(discoverAnimeListWrapper.animeOfCurrentSeason)
+        setupAnimeRankingList(discoverAnimeListWrapper.animeRankings)
+    }
+
+    private fun setupAnimeRankingList(animeRankings: List<AnimeRankingResponse.Data>) {
+        binding.tvAnimeRankingEmpty.isVisible = animeRankings.isEmpty()
+        binding.rvAnimeRanking.adapter = AnimeRankingAdapter { animeId ->
+            openAnimeWithId(animeId)
+        }.apply {
+            submitList(animeRankings)
+        }.addFooter {
+            LoadMoreAdapter {
+                navController.navigate(DiscoverFragmentDirections.openAnimeRankings(null))
             }
-            layoutManager =
-                LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            setHasFixedSize(true)
-            itemAnimator = DefaultItemAnimator()
         }
-        binding.tvAnimeAiringEmpty.isVisible =
-            discoverAnimeListWrapper.animeOfCurrentSeason.isEmpty()
-        binding.rvAnimeAiring.apply {
-            adapter = AiringAnimeAdapter { animeId ->
-                val action = DiscoverFragmentDirections.openAnimeById(animeId)
-                navController.navigate(action)
-            }.apply {
-                submitList(discoverAnimeListWrapper.animeOfCurrentSeason)
-            }.addFooter {
-                LoadMoreAdapter {
-                    navController.navigate(DiscoverFragmentDirections.openAnimeSeasonals(null, 0))
-                }
+        binding.rvAnimeRanking.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        binding.rvAnimeRanking.setHasFixedSize(true)
+        binding.rvAnimeRanking.itemAnimator = DefaultItemAnimator()
+    }
+
+    private fun setupAnimeAiringList(animeOfCurrentSeason: List<AnimeSeasonalResponse.Data>) {
+        binding.tvAnimeAiringEmpty.isVisible = animeOfCurrentSeason.isEmpty()
+        binding.rvAnimeAiring.adapter = AiringAnimeAdapter { animeId ->
+            openAnimeWithId(animeId)
+        }.apply {
+            submitList(animeOfCurrentSeason)
+        }.addFooter {
+            LoadMoreAdapter {
+                navController.navigate(DiscoverFragmentDirections.openAnimeSeasonals(null, 0))
             }
-            layoutManager =
-                LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            setHasFixedSize(true)
-            itemAnimator = DefaultItemAnimator()
         }
-        binding.tvAnimeRankingEmpty.isVisible =
-            discoverAnimeListWrapper.animeRankings.isEmpty()
-        binding.rvAnimeRanking.apply {
-            adapter = AnimeRankingAdapter { animeId ->
-                val action = DiscoverFragmentDirections.openAnimeById(animeId)
-                navController.navigate(action)
-            }.apply {
-                submitList(discoverAnimeListWrapper.animeRankings)
-            }.addFooter {
-                LoadMoreAdapter {
-                    navController.navigate(DiscoverFragmentDirections.openAnimeRankings(null))
-                }
+        binding.rvAnimeAiring.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        binding.rvAnimeAiring.setHasFixedSize(true)
+        binding.rvAnimeAiring.itemAnimator = DefaultItemAnimator()
+    }
+
+    private fun setupAnimeRecommendationsList(animeSuggestions: List<AnimeSuggestionsResponse.Data>) {
+        binding.tvAnimeRecommendationsEmpty.isVisible = animeSuggestions.isEmpty()
+        binding.rvAnimeRecommendations.adapter = AnimeSuggestionsAdapter { animeId ->
+            openAnimeWithId(animeId)
+        }.apply {
+            submitList(animeSuggestions)
+        }.addFooter {
+            LoadMoreAdapter {
+                navController.navigate(DiscoverFragmentDirections.openAnimeSuggestions())
             }
-            layoutManager =
-                LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            setHasFixedSize(true)
-            itemAnimator = DefaultItemAnimator()
         }
+        binding.rvAnimeRecommendations.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        binding.rvAnimeRecommendations.setHasFixedSize(true)
+        binding.rvAnimeRecommendations.itemAnimator = DefaultItemAnimator()
+    }
+
+    private fun openAnimeWithId(animeId: Int) {
+        val action = BottomNavGraphDirections.openAnimeById(animeId)
+        navController.navigate(action)
     }
 }

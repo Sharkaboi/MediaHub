@@ -14,7 +14,8 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.chip.Chip
-import com.google.android.material.shape.ShapeAppearanceModel
+import com.sharkaboi.mediahub.BottomNavGraphDirections
+import com.sharkaboi.mediahub.common.constants.UIConstants.setMediaHubChipStyle
 import com.sharkaboi.mediahub.common.extensions.showToast
 import com.sharkaboi.mediahub.data.api.enums.MangaRankingType
 import com.sharkaboi.mediahub.databinding.FragmentMangaRankingBinding
@@ -60,46 +61,36 @@ class MangaRankingFragment : Fragment() {
         setupFilterChips()
         setUpRecyclerView()
         setObservers()
+        getMangaRankingList()
     }
 
     private fun initRanking() {
         mangaRankingViewModel.setRankingType(
-            if (args.mangaRankingType == null) {
-                MangaRankingType.all
-            } else {
-                runCatching {
-                    MangaRankingType.valueOf(
-                        args.mangaRankingType?.lowercase()
-                            ?: MangaRankingType.all.name
-                    )
-                }.getOrElse { MangaRankingType.all }
-            }
+            MangaRankingType.getMangaRankingFromString(args.mangaRankingType)
         )
     }
 
     private fun setupFilterChips() {
         binding.rankTypeChipGroup.removeAllViews()
         MangaRankingType.values().forEach { rankingType ->
-            binding.rankTypeChipGroup.addView(
-                Chip(context).apply {
-                    text = rankingType.getFormattedString()
-                    setEnsureMinTouchTargetSize(false)
-                    isCheckable = true
-                    isChecked = rankingType == mangaRankingViewModel.selectedRankingType
-                    shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(8f)
-                    setOnClickListener {
-                        mangaRankingViewModel.setRankingType(rankingType)
-                        getMangaRankingList()
-                    }
-                }
-            )
+            val rankChip = Chip(context)
+            rankChip.text = rankingType.getFormattedString(rankChip.context)
+            rankChip.setMediaHubChipStyle()
+            rankChip.isCheckable = true
+            rankChip.isChecked = rankingType == mangaRankingViewModel.selectedRankingType
+            rankChip.setOnClickListener {
+                mangaRankingViewModel.setRankingType(rankingType)
+                getMangaRankingList()
+                binding.rvMangaRanking.smoothScrollToPosition(0)
+            }
+            binding.rankTypeChipGroup.addView(rankChip)
         }
     }
 
     private fun setUpRecyclerView() {
         binding.rvMangaRanking.apply {
             mangaRankingDetailedAdapter = MangaRankingDetailedAdapter { mangaId ->
-                val action = MangaRankingFragmentDirections.openMangaDetailsWithId(mangaId)
+                val action = BottomNavGraphDirections.openMangaById(mangaId)
                 navController.navigate(action)
             }
             layoutManager = GridLayoutManager(context, 3)

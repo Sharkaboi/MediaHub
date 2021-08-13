@@ -3,8 +3,7 @@ package com.sharkaboi.mediahub.modules.discover.repository
 import android.content.SharedPreferences
 import com.haroldadmin.cnradapter.NetworkResponse
 import com.sharkaboi.mediahub.common.extensions.emptyString
-import com.sharkaboi.mediahub.common.extensions.ifNullOrBlank
-import com.sharkaboi.mediahub.data.api.ApiConstants
+import com.sharkaboi.mediahub.data.api.constants.ApiConstants
 import com.sharkaboi.mediahub.data.api.enums.getAnimeSeason
 import com.sharkaboi.mediahub.data.api.models.anime.AnimeRankingResponse
 import com.sharkaboi.mediahub.data.api.models.anime.AnimeSeasonalResponse
@@ -36,7 +35,7 @@ class DiscoverRepositoryImpl(
                     return@withContext MHTaskState(
                         isSuccess = false,
                         data = null,
-                        error = MHError("Log in has expired, Log in again.", null)
+                        error = MHError.LoginExpiredError
                     )
                 } else {
                     val result = animeService.getAnimeSuggestionsAsync(
@@ -59,10 +58,8 @@ class DiscoverRepositoryImpl(
                             return@withContext MHTaskState(
                                 isSuccess = false,
                                 data = null,
-                                error = MHError(
-                                    result.error.message.ifNullOrBlank { "Error with network" },
-                                    null
-                                )
+                                error = result.error.message?.let { MHError(it) }
+                                    ?: MHError.NetworkError
                             )
                         }
                         is NetworkResponse.ServerError -> {
@@ -70,10 +67,8 @@ class DiscoverRepositoryImpl(
                             return@withContext MHTaskState(
                                 isSuccess = false,
                                 data = null,
-                                error = MHError(
-                                    result.body?.message.ifNullOrBlank { "Error with status code : ${result.code}" },
-                                    null
-                                )
+                                error = result.body?.message?.let { MHError(it) }
+                                    ?: MHError.apiErrorWithCode(result.code)
                             )
                         }
                         is NetworkResponse.UnknownError -> {
@@ -81,10 +76,8 @@ class DiscoverRepositoryImpl(
                             return@withContext MHTaskState(
                                 isSuccess = false,
                                 data = null,
-                                error = MHError(
-                                    result.error.message.ifNullOrBlank { "Error with parsing" },
-                                    null
-                                )
+                                error = result.error.message?.let { MHError(it) }
+                                    ?: MHError.ParsingError
                             )
                         }
                     }
@@ -95,7 +88,7 @@ class DiscoverRepositoryImpl(
                 return@withContext MHTaskState(
                     isSuccess = false,
                     data = null,
-                    error = MHError(e.message.ifNullOrBlank { "Unknown Error" }, e)
+                    error = e.message?.let { MHError(it) } ?: MHError.UnknownError
                 )
             }
         }
@@ -110,7 +103,7 @@ class DiscoverRepositoryImpl(
                     return@withContext MHTaskState(
                         isSuccess = false,
                         data = null,
-                        error = MHError("Log in has expired, Log in again.", null)
+                        error = MHError.LoginExpiredError
                     )
                 } else {
                     val today = LocalDate.now()
@@ -136,10 +129,8 @@ class DiscoverRepositoryImpl(
                             return@withContext MHTaskState(
                                 isSuccess = false,
                                 data = null,
-                                error = MHError(
-                                    result.error.message.ifNullOrBlank { "Error with network" },
-                                    null
-                                )
+                                error = result.error.message?.let { MHError(it) }
+                                    ?: MHError.NetworkError
                             )
                         }
                         is NetworkResponse.ServerError -> {
@@ -147,10 +138,8 @@ class DiscoverRepositoryImpl(
                             return@withContext MHTaskState(
                                 isSuccess = false,
                                 data = null,
-                                error = MHError(
-                                    result.body?.message.ifNullOrBlank { "Error with status code : ${result.code}" },
-                                    null
-                                )
+                                error = result.body?.message?.let { MHError(it) }
+                                    ?: MHError.apiErrorWithCode(result.code)
                             )
                         }
                         is NetworkResponse.UnknownError -> {
@@ -158,10 +147,8 @@ class DiscoverRepositoryImpl(
                             return@withContext MHTaskState(
                                 isSuccess = false,
                                 data = null,
-                                error = MHError(
-                                    result.error.message.ifNullOrBlank { "Error with parsing" },
-                                    null
-                                )
+                                error = result.error.message?.let { MHError(it) }
+                                    ?: MHError.ParsingError
                             )
                         }
                     }
@@ -172,7 +159,7 @@ class DiscoverRepositoryImpl(
                 return@withContext MHTaskState(
                     isSuccess = false,
                     data = null,
-                    error = MHError(e.message.ifNullOrBlank { "Unknown Error" }, e)
+                    error = e.message?.let { MHError(it) } ?: MHError.UnknownError
                 )
             }
         }
@@ -187,7 +174,7 @@ class DiscoverRepositoryImpl(
                     return@withContext MHTaskState(
                         isSuccess = false,
                         data = null,
-                        error = MHError("Log in has expired, Log in again.", null)
+                        error = MHError.LoginExpiredError
                     )
                 } else {
                     val result = animeService.getAnimeRankingAsync(
@@ -210,10 +197,8 @@ class DiscoverRepositoryImpl(
                             return@withContext MHTaskState(
                                 isSuccess = false,
                                 data = null,
-                                error = MHError(
-                                    result.error.message.ifNullOrBlank { "Error with network" },
-                                    null
-                                )
+                                error = result.error.message?.let { MHError(it) }
+                                    ?: MHError.NetworkError
                             )
                         }
                         is NetworkResponse.ServerError -> {
@@ -221,10 +206,8 @@ class DiscoverRepositoryImpl(
                             return@withContext MHTaskState(
                                 isSuccess = false,
                                 data = null,
-                                error = MHError(
-                                    result.body?.message.ifNullOrBlank { "Error with status code : ${result.code}" },
-                                    null
-                                )
+                                error = result.body?.message?.let { MHError(it) }
+                                    ?: MHError.apiErrorWithCode(result.code)
                             )
                         }
                         is NetworkResponse.UnknownError -> {
@@ -232,10 +215,8 @@ class DiscoverRepositoryImpl(
                             return@withContext MHTaskState(
                                 isSuccess = false,
                                 data = null,
-                                error = MHError(
-                                    result.error.message.ifNullOrBlank { "Error with parsing" },
-                                    null
-                                )
+                                error = result.error.message?.let { MHError(it) }
+                                    ?: MHError.ParsingError
                             )
                         }
                     }
@@ -246,7 +227,7 @@ class DiscoverRepositoryImpl(
                 return@withContext MHTaskState(
                     isSuccess = false,
                     data = null,
-                    error = MHError(e.message.ifNullOrBlank { "Unknown Error" }, e)
+                    error = e.message?.let { MHError(it) } ?: MHError.UnknownError
                 )
             }
         }

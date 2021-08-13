@@ -10,7 +10,7 @@ import androidx.core.view.isVisible
 import com.sharkaboi.mediahub.R
 
 /**
- * Progress view with dimmed bg
+ * Progress view with dimmed background
  * that shows only if hide isn't called within set time
  * and hides only if set delay is over
  */

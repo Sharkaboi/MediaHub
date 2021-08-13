@@ -13,6 +13,7 @@ import androidx.navigation.fragment.navArgs
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
+import com.sharkaboi.mediahub.BottomNavGraphDirections
 import com.sharkaboi.mediahub.common.extensions.capitalizeFirst
 import com.sharkaboi.mediahub.common.extensions.showToast
 import com.sharkaboi.mediahub.data.api.enums.getAnimeSeason
@@ -60,6 +61,7 @@ class AnimeSeasonalFragment : Fragment() {
         setupSeasonButtons()
         setUpRecyclerView()
         setObservers()
+        collectPagedList()
     }
 
     private fun initSeason() {
@@ -102,7 +104,7 @@ class AnimeSeasonalFragment : Fragment() {
     private fun setUpRecyclerView() {
         binding.rvAnimeSeasonal.apply {
             animeSeasonalAdapter = AnimeSeasonalAdapter { animeId ->
-                val action = AnimeSeasonalFragmentDirections.openAnimeDetailsWithId(animeId)
+                val action = BottomNavGraphDirections.openAnimeById(animeId)
                 navController.navigate(action)
             }
             layoutManager = GridLayoutManager(context, 3)

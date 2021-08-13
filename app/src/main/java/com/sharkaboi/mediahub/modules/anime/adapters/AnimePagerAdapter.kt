@@ -9,7 +9,7 @@ import com.sharkaboi.mediahub.modules.anime.ui.AnimeListByStatusFragment
 
 class AnimePagerAdapter(fm: FragmentManager, lifecycle: Lifecycle) :
     FragmentStateAdapter(fm, lifecycle) {
-    override fun getItemCount(): Int = 6
+    override fun getItemCount(): Int = AnimeStatus.values().count()
 
     override fun createFragment(position: Int): Fragment {
         return AnimeListByStatusFragment.newInstance(AnimeStatus.values()[position])
