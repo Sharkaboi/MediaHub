@@ -17,15 +17,18 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
-import coil.transform.RoundedCornersTransformation
 import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.shape.ShapeAppearanceModel
+import com.sharkaboi.mediahub.BottomNavGraphDirections
 import com.sharkaboi.mediahub.R
-import com.sharkaboi.mediahub.common.constants.MALExternalLinks
+import com.sharkaboi.mediahub.common.constants.UIConstants
+import com.sharkaboi.mediahub.common.constants.UIConstants.setMediaHubChipStyle
 import com.sharkaboi.mediahub.common.extensions.*
 import com.sharkaboi.mediahub.common.util.openUrl
+import com.sharkaboi.mediahub.data.api.constants.MALExternalLinks
 import com.sharkaboi.mediahub.data.api.enums.MangaStatus
+import com.sharkaboi.mediahub.data.api.enums.getMangaNsfwRating
+import com.sharkaboi.mediahub.data.api.enums.getMangaPublishStatus
 import com.sharkaboi.mediahub.data.api.models.manga.MangaByIDResponse
 import com.sharkaboi.mediahub.databinding.CustomReadCountDialogBinding
 import com.sharkaboi.mediahub.databinding.FragmentMangaDetailsBinding
@@ -89,28 +92,17 @@ class MangaDetailsFragment : Fragment() {
             else -> Unit
         }
     }
+
     private val handleListStatusUpdate = { state: MangaDetailsUpdateClass ->
         binding.mangaDetailsUserListCard.apply {
             btnStatus.text =
-                state.mangaStatus?.getFormattedString()
+                state.mangaStatus?.getFormattedString(requireContext())
                 ?: getString(R.string.not_added)
-            btnScore.text = ("${state.score ?: 0}/10")
-            btnCountVolumes.text = (
-                "${state.numReadVolumes ?: 0}/${
-                if (state.totalVolumes == 0)
-                    "??"
-                else
-                    state.totalVolumes.toString()
-                }"
-                )
-            btnCountChaps.text = (
-                "${state.numReadChapters ?: 0}/${
-                if (state.totalChapters == 0)
-                    "??"
-                else
-                    state.totalChapters.toString()
-                }"
-                )
+            btnScore.text = getString(R.string.media_rating_template, state.score ?: 0)
+            btnCountVolumes.text =
+                context?.getProgressStringWith(state.numReadVolumes, state.totalVolumes)
+            btnCountChaps.text =
+                context?.getProgressStringWith(state.numReadChapters, state.totalChapters)
             btnScore.setOnClickListener {
                 openScoreDialog(state.score)
             }
@@ -134,155 +126,74 @@ class MangaDetailsFragment : Fragment() {
     }
 
     private fun setData(mangaByIDResponse: MangaByIDResponse) {
-        binding.apply {
-            tvMangaName.text = mangaByIDResponse.title
-            tvAlternateTitles.setOnClickListener {
-                showAlternateTitlesDialog(mangaByIDResponse.alternativeTitles)
-            }
-            tvStartDate.text =
-                mangaByIDResponse.startDate?.tryParseDate()?.formatDateDMY()
-                ?: getString(R.string.n_a)
-            tvEndDate.text =
-                mangaByIDResponse.endDate?.tryParseDate()?.formatDateDMY()
-                ?: getString(R.string.n_a)
-            tvMeanScore.text = mangaByIDResponse.mean?.toString() ?: getString(R.string.n_a)
-            tvRank.text = mangaByIDResponse.rank?.toString() ?: getString(R.string.n_a)
-            tvPopularityRank.text = mangaByIDResponse.popularity.toString()
-            authorsChipGroup.apply {
-                removeAllViews()
-                if (mangaByIDResponse.authors.isEmpty()) {
-                    addView(
-                        TextView(context).apply {
-                            text = getString(R.string.n_a)
-                        }
-                    )
-                } else {
-                    mangaByIDResponse.authors.forEach { author ->
-                        addView(
-                            TextView(context).apply {
-                                setTextColor(ContextCompat.getColor(context, R.color.colorPrimary))
-                                setTypeface(null, Typeface.BOLD)
-                                text = ("${author.node.firstName} ${author.node.lastName} ")
-                                setOnClickListener {
-                                    openUrl(
-                                        MALExternalLinks.getMangaAuthorPageLink(author)
-                                    )
-                                }
-                            }
-                        )
-                    }
-                }
-            }
-            ivMangaMainPicture.load(
-                mangaByIDResponse.mainPicture?.large ?: mangaByIDResponse.mainPicture?.medium
-            ) {
-                crossfade(true)
-                placeholder(R.drawable.ic_manga_placeholder)
-                error(R.drawable.ic_manga_placeholder)
-                fallback(R.drawable.ic_manga_placeholder)
-                transformations(RoundedCornersTransformation(8f))
-            }
-            ivMangaMainPicture.setOnClickListener {
-                openImagesViewPager(mangaByIDResponse.pictures)
-            }
-            otherDetails.tvSynopsis.text =
-                mangaByIDResponse.synopsis?.ifBlank { getString(R.string.n_a) }
-                ?: getString(R.string.n_a)
-            otherDetails.tvSynopsis.setOnClickListener {
-                showFullSynopsisDialog(
-                    mangaByIDResponse.synopsis?.ifBlank { getString(R.string.n_a) }
-                        ?: getString(R.string.n_a)
-                )
-            }
-            otherDetails.tvNsfwRating.text =
-                mangaByIDResponse.nsfw?.getMangaNsfwRating() ?: getString(R.string.n_a)
-            mangaByIDResponse.genres.let {
-                otherDetails.genresChipGroup.removeAllViews()
-                if (it.isEmpty()) {
-                    otherDetails.genresChipGroup.addView(
-                        Chip(context).apply {
-                            setEnsureMinTouchTargetSize(false)
-                            shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(8f)
-                            text = getString(R.string.n_a)
-                        }
-                    )
-                } else {
-                    it.forEach { genre ->
-                        otherDetails.genresChipGroup.addView(
-                            Chip(context).apply {
-                                setEnsureMinTouchTargetSize(false)
-                                shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(8f)
-                                text = genre.name
-                                setOnClickListener {
-                                    openUrl(
-                                        MALExternalLinks.getMangaGenresLink(
-                                            genre
-                                        )
-                                    )
-                                }
-                            }
-                        )
-                    }
-                }
-            }
-            otherDetails.btnMediaType.text =
-                ("Type : ${mangaByIDResponse.mediaType.replace('_', ' ').capitalizeFirst()}")
-            otherDetails.btnMediaType.setOnClickListener {
-                val action =
-                    MangaDetailsFragmentDirections.openMangaRankings(mangaByIDResponse.mediaType)
-                navController.navigate(action)
-            }
-            otherDetails.btnMangaCurrentStatus.text =
-                mangaByIDResponse.status.getMangaPublishStatus()
-            otherDetails.btnTotalVols.text =
-                mangaByIDResponse.numVolumes.let {
-                    if (it == 0)
-                        "${getString(R.string.n_a)} vols"
-                    else
-                        "$it ${if (it == 1) "vol" else "vols"}"
-                }
-            otherDetails.btnTotalChaps.text =
-                mangaByIDResponse.numChapters.let {
-                    if (it == 0)
-                        "${getString(R.string.n_a)} chaps"
-                    else
-                        "$it ${if (it == 1) "chap" else "chaps"}"
-                }
-            otherDetails.serializationChipGroup.apply {
-                removeAllViews()
-                if (mangaByIDResponse.serialization.isEmpty()) {
-                    addView(
-                        TextView(context).apply {
-                            text = getString(R.string.n_a)
-                        }
-                    )
-                } else {
-                    mangaByIDResponse.serialization.forEach { magazine ->
-                        addView(
-                            TextView(context).apply {
-                                setTextColor(ContextCompat.getColor(context, R.color.colorPrimary))
-                                setTypeface(null, Typeface.BOLD)
-                                text = ("${magazine.node.name} ")
-                                setOnClickListener {
-                                    openUrl(
-                                        MALExternalLinks.getMangaSerializationPageLink(magazine)
-                                    )
-                                }
-                            }
-                        )
-                    }
-                }
-            }
-            otherDetails.chipGroupOptions.forEach {
-                if (it is Chip) {
-                    it.setEnsureMinTouchTargetSize(false)
-                    it.shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(8f)
-                }
-            }
-            otherDetails.btnBackground.setOnClickListener {
+        setupMangaMainDetailLayout(mangaByIDResponse)
+        setupMangaUserListStatusCard(mangaByIDResponse)
+        setupMangaOtherDetailLayout(mangaByIDResponse)
+        setupMangaOtherDetailsCard(mangaByIDResponse)
+        setupMangaOtherDetailsButtons(mangaByIDResponse)
+        setupMangaRecommendationsList(mangaByIDResponse.recommendations)
+        setupRelatedMangaList(mangaByIDResponse.relatedManga)
+        setupRelatedAnimeList(mangaByIDResponse.relatedAnime)
+    }
+
+    private fun setupRelatedMangaList(relatedManga: List<MangaByIDResponse.RelatedManga>) {
+        val rvRelatedManga = binding.otherDetails.rvRelatedManga
+        rvRelatedManga.adapter = RelatedMangaAdapter { mangaId ->
+            openMangaWithId(mangaId)
+        }.apply {
+            submitList(relatedManga)
+        }
+        binding.otherDetails.tvRelatedMangaHint.isVisible = relatedManga.isNotEmpty()
+        rvRelatedManga.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        rvRelatedManga.setHasFixedSize(true)
+        rvRelatedManga.itemAnimator = DefaultItemAnimator()
+    }
+
+    private fun setupRelatedAnimeList(relatedAnime: List<MangaByIDResponse.RelatedAnime>) {
+        val rvRelatedAnime = binding.otherDetails.rvRelatedAnime
+        rvRelatedAnime.adapter = RelatedAnimeAdapter { animeId ->
+            openAnimeById(animeId)
+        }.apply {
+            submitList(relatedAnime)
+        }
+        binding.otherDetails.tvRelatedAnimeHint.isVisible = relatedAnime.isNotEmpty()
+        rvRelatedAnime.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        rvRelatedAnime.setHasFixedSize(true)
+        rvRelatedAnime.itemAnimator = DefaultItemAnimator()
+    }
+
+    private fun openAnimeById(animeId: Int) {
+        val action = BottomNavGraphDirections.openAnimeById(animeId)
+        navController.navigate(action)
+    }
+
+    private fun setupMangaRecommendationsList(recommendations: List<MangaByIDResponse.Recommendation>) {
+        val rvRecommendations = binding.otherDetails.rvRecommendations
+        rvRecommendations.adapter = RecommendedMangaAdapter { mangaId ->
+            openMangaWithId(mangaId)
+        }.apply {
+            submitList(recommendations)
+        }
+        binding.otherDetails.tvRecommendations.isVisible = recommendations.isNotEmpty()
+        rvRecommendations.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        rvRecommendations.setHasFixedSize(true)
+        rvRecommendations.itemAnimator = DefaultItemAnimator()
+    }
+
+    private fun openMangaWithId(mangaId: Int) {
+        val action = BottomNavGraphDirections.openMangaById(mangaId)
+        navController.navigate(action)
+    }
+
+    private fun setupMangaOtherDetailsButtons(mangaByIDResponse: MangaByIDResponse) =
+        binding.otherDetails.apply {
+            btnBackground.setOnClickListener {
                 openBackgroundDialog(mangaByIDResponse.background)
             }
-            otherDetails.btnCharacters.setOnClickListener {
+            btnCharacters.setOnClickListener {
                 openUrl(
                     MALExternalLinks.getMangaCharactersLink(
                         mangaByIDResponse.id,
@@ -290,7 +201,7 @@ class MangaDetailsFragment : Fragment() {
                     )
                 )
             }
-            otherDetails.btnReviews.setOnClickListener {
+            btnReviews.setOnClickListener {
                 openUrl(
                     MALExternalLinks.getMangaReviewsLink(
                         mangaByIDResponse.id,
@@ -298,7 +209,7 @@ class MangaDetailsFragment : Fragment() {
                     )
                 )
             }
-            otherDetails.btnNews.setOnClickListener {
+            btnNews.setOnClickListener {
                 openUrl(
                     MALExternalLinks.getMangaNewsLink(
                         mangaByIDResponse.id,
@@ -306,100 +217,193 @@ class MangaDetailsFragment : Fragment() {
                     )
                 )
             }
-            otherDetails.btnStatistics.setOnClickListener {
+            btnStatistics.setOnClickListener {
                 openStatsDialog(mangaByIDResponse.numListUsers, mangaByIDResponse.numScoringUsers)
             }
-            otherDetails.rvRecommendations.apply {
-                adapter = RecommendedMangaAdapter { mangaId ->
-                    val action = MangaDetailsFragmentDirections.openMangaDetailsWithId(mangaId)
-                    navController.navigate(action)
-                }.apply {
-                    submitList(mangaByIDResponse.recommendations)
-                }
-                otherDetails.tvRecommendations.isVisible =
-                    mangaByIDResponse.recommendations.isNotEmpty()
-                layoutManager =
-                    LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                setHasFixedSize(true)
-                itemAnimator = DefaultItemAnimator()
+        }
+
+    private fun setupMangaOtherDetailsCard(mangaByIDResponse: MangaByIDResponse) =
+        binding.otherDetails.apply {
+            btnMediaType.text = context?.getMediaTypeStringWith(
+                mangaByIDResponse.mediaType.replaceUnderScoreWithWhiteSpace().capitalizeFirst()
+            )
+            btnMediaType.setOnClickListener {
+                openMangaRankingWith(mangaByIDResponse.mediaType)
             }
-            otherDetails.rvRelatedAnime.apply {
-                adapter = RelatedAnimeAdapter { animeId ->
-                    val action = MangaDetailsFragmentDirections.openAnimeDetailsWithId(animeId)
-                    navController.navigate(action)
-                }.apply {
-                    submitList(mangaByIDResponse.relatedAnime)
+            btnMangaCurrentStatus.text =
+                context?.getMangaPublishStatus(mangaByIDResponse.status)
+            btnTotalVols.text = context?.getVolumesOfMangaString(mangaByIDResponse.numVolumes)
+            btnTotalChaps.text = context?.getChaptersOfMangaString(mangaByIDResponse.numChapters)
+            setupSerializationsChipGroup(mangaByIDResponse.serialization)
+            chipGroupOptions.forEach {
+                if (it is Chip) {
+                    it.setMediaHubChipStyle()
                 }
-                otherDetails.tvRelatedAnimeHint.isVisible =
-                    mangaByIDResponse.relatedAnime.isNotEmpty()
-                layoutManager =
-                    LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                setHasFixedSize(true)
-                itemAnimator = DefaultItemAnimator()
             }
-            otherDetails.rvRelatedManga.apply {
-                adapter = RelatedMangaAdapter { mangaId ->
-                    val action = MangaDetailsFragmentDirections.openMangaDetailsWithId(mangaId)
-                    navController.navigate(action)
-                }.apply {
-                    submitList(mangaByIDResponse.relatedManga)
-                }
-                otherDetails.tvRelatedMangaHint.isVisible =
-                    mangaByIDResponse.relatedManga.isNotEmpty()
-                layoutManager =
-                    LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                setHasFixedSize(true)
-                itemAnimator = DefaultItemAnimator()
-            }
-            mangaDetailsUserListCard.apply {
-                btnScore.setOnClickListener {
-                    openScoreDialog(mangaByIDResponse.myListStatus?.score)
-                }
-                btnStatus.setOnClickListener {
-                    openStatusDialog(mangaByIDResponse.myListStatus?.status, mangaByIDResponse.id)
-                }
-                btnCountVolumes.setOnClickListener {
-                    openMangaVolumeCountDialog(
-                        mangaByIDResponse.numVolumes,
-                        mangaByIDResponse.myListStatus?.numVolumesRead
+        }
+
+    private fun setupSerializationsChipGroup(serialization: List<MangaByIDResponse.Serialization>) {
+        val chipGroup = binding.otherDetails.serializationChipGroup
+        chipGroup.removeAllViews()
+        if (serialization.isEmpty()) {
+            val textView = TextView(context)
+            textView.text = getString(R.string.n_a)
+            chipGroup.addView(textView)
+        } else {
+            serialization.forEach { magazine ->
+                val textView = TextView(context)
+                textView.setTextColor(
+                    ContextCompat.getColor(textView.context, R.color.colorPrimary)
+                )
+                textView.setTypeface(null, Typeface.BOLD)
+                textView.text = magazine.node.name.plus(" ")
+                textView.setOnClickListener {
+                    openUrl(
+                        MALExternalLinks.getMangaSerializationPageLink(magazine)
                     )
                 }
-                btnCountChaps.setOnClickListener {
-                    openMangaChapterCountDialog(
-                        mangaByIDResponse.numChapters,
-                        mangaByIDResponse.myListStatus?.numChaptersRead
-                    )
-                }
-                btnConfirm.setOnClickListener {
-                    mangaDetailsViewModel.submitStatusUpdate(mangaByIDResponse.id)
-                }
+                chipGroup.addView(textView)
             }
+        }
+    }
+
+    private fun openMangaRankingWith(mediaType: String) {
+        val action =
+            MangaDetailsFragmentDirections.openMangaRankings(mediaType)
+        navController.navigate(action)
+    }
+
+    private fun setupMangaOtherDetailLayout(mangaByIDResponse: MangaByIDResponse) = binding.apply {
+        otherDetails.tvSynopsis.text =
+            mangaByIDResponse.synopsis.ifNullOrBlank { getString(R.string.n_a) }
+        otherDetails.tvSynopsis.setOnClickListener {
+            showFullSynopsisDialog(
+                mangaByIDResponse.synopsis.ifNullOrBlank { getString(R.string.n_a) }
+            )
+        }
+        otherDetails.tvNsfwRating.text = context?.getMangaNsfwRating(mangaByIDResponse.nsfw)
+        setupGenresChipGroup(mangaByIDResponse.genres)
+    }
+
+    private fun setupGenresChipGroup(genres: List<MangaByIDResponse.Genre>) {
+        val chipGroup = binding.otherDetails.genresChipGroup
+        chipGroup.removeAllViews()
+        if (genres.isEmpty()) {
+            val naChip = Chip(context)
+            naChip.setMediaHubChipStyle()
+            naChip.text = getString(R.string.n_a)
+            chipGroup.addView(naChip)
+        } else {
+            genres.forEach { genre ->
+                val chip = Chip(context)
+                chip.setMediaHubChipStyle()
+                chip.text = genre.name
+                chip.setOnClickListener {
+                    openUrl(MALExternalLinks.getMangaGenresLink(genre))
+                }
+                chipGroup.addView(chip)
+            }
+        }
+    }
+
+    private fun setupMangaUserListStatusCard(mangaByIDResponse: MangaByIDResponse) =
+        binding.mangaDetailsUserListCard.apply {
+            btnScore.setOnClickListener {
+                openScoreDialog(mangaByIDResponse.myListStatus?.score)
+            }
+            btnStatus.setOnClickListener {
+                openStatusDialog(mangaByIDResponse.myListStatus?.status, mangaByIDResponse.id)
+            }
+            btnCountVolumes.setOnClickListener {
+                openMangaVolumeCountDialog(
+                    mangaByIDResponse.numVolumes,
+                    mangaByIDResponse.myListStatus?.numVolumesRead
+                )
+            }
+            btnCountChaps.setOnClickListener {
+                openMangaChapterCountDialog(
+                    mangaByIDResponse.numChapters,
+                    mangaByIDResponse.myListStatus?.numChaptersRead
+                )
+            }
+            btnConfirm.setOnClickListener {
+                mangaDetailsViewModel.submitStatusUpdate(mangaByIDResponse.id)
+            }
+        }
+
+    private fun setupMangaMainDetailLayout(mangaByIDResponse: MangaByIDResponse) = binding.apply {
+        setupMangaImagePreview(mangaByIDResponse)
+        tvMangaName.text = mangaByIDResponse.title
+        tvAlternateTitles.setOnClickListener {
+            showAlternateTitlesDialog(mangaByIDResponse.alternativeTitles)
+        }
+        tvStartDate.text =
+            mangaByIDResponse.startDate?.tryParseDate()?.formatDateDMY()
+            ?: getString(R.string.n_a)
+        tvEndDate.text =
+            mangaByIDResponse.endDate?.tryParseDate()?.formatDateDMY()
+            ?: getString(R.string.n_a)
+        tvMeanScore.text = mangaByIDResponse.mean?.toString() ?: getString(R.string.n_a)
+        tvRank.text = mangaByIDResponse.rank?.toString() ?: getString(R.string.n_a)
+        tvPopularityRank.text = mangaByIDResponse.popularity?.toString() ?: getString(R.string.n_a)
+        setupAuthorsChipGroup(mangaByIDResponse.authors)
+    }
+
+    private fun setupAuthorsChipGroup(authors: List<MangaByIDResponse.Author>) {
+        val chipGroup = binding.authorsChipGroup
+        chipGroup.removeAllViews()
+        if (authors.isEmpty()) {
+            val textView = TextView(context)
+            textView.text = getString(R.string.n_a)
+            chipGroup.addView(textView)
+        } else {
+            authors.forEach { author ->
+                val textView = TextView(context)
+                textView.setTextColor(
+                    ContextCompat.getColor(textView.context, R.color.colorPrimary)
+                )
+                textView.setTypeface(null, Typeface.BOLD)
+                textView.text = getString(
+                    R.string.manga_author_template,
+                    author.node.firstName,
+                    author.node.lastName
+                )
+                textView.setOnClickListener {
+                    openUrl(MALExternalLinks.getMangaAuthorPageLink(author))
+                }
+                chipGroup.addView(textView)
+            }
+        }
+    }
+
+    private fun setupMangaImagePreview(mangaByIDResponse: MangaByIDResponse) = binding.apply {
+        ivMangaMainPicture.load(
+            uri = mangaByIDResponse.mainPicture?.large ?: mangaByIDResponse.mainPicture?.medium,
+            builder = UIConstants.MangaImageBuilder
+        )
+        ivMangaMainPicture.setOnClickListener {
+            openImagesViewPager(mangaByIDResponse.pictures)
         }
     }
 
     private fun openImagesViewPager(pictures: List<MangaByIDResponse.Picture>) {
         val images: List<String> = pictures.map { it.large ?: it.medium }
-        val action = MangaDetailsFragmentDirections.openImages(images.toTypedArray())
+        val action = BottomNavGraphDirections.openImageSlider(images.toTypedArray())
         navController.navigate(action)
     }
 
-    private fun showFullSynopsisDialog(synopsis: String) {
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Synopsis")
-            .setMessage(
-                synopsis
-            ).setPositiveButton(android.R.string.ok) { dialog, _ ->
-                dialog.dismiss()
-            }.show()
-    }
+    private fun showFullSynopsisDialog(synopsis: String) =
+        requireContext().showNoActionOkDialog(R.string.synopsis, synopsis)
 
     private fun openStatusDialog(status: String?, mangaId: Int) {
         val singleItems =
-            arrayOf("Not added") + MangaStatus.malStatuses.map { it.getFormattedString() }
+            arrayOf(getString(R.string.not_added)) + MangaStatus.malStatuses.map {
+                it.getFormattedString(requireContext())
+            }
         val checkedItem =
             status?.let { MangaStatus.malStatuses.indexOfFirst { it.name == status } + 1 } ?: 0
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Set status as")
+            .setTitle(R.string.media_set_status_hint)
             .setSingleChoiceItems(singleItems, checkedItem) { dialog, which ->
                 when (which) {
                     checkedItem -> Unit
@@ -407,15 +411,14 @@ class MangaDetailsFragment : Fragment() {
                     else -> mangaDetailsViewModel.setStatus(MangaStatus.malStatuses[which - 1])
                 }
                 dialog.dismiss()
-            }
-            .show()
+            }.show()
     }
 
     private fun openScoreDialog(score: Int?) {
         val singleItems = (0..10).map { it.toString() }.toTypedArray()
         val checkedItem = score ?: 0
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Set score as")
+            .setTitle(R.string.media_set_score_hint)
             .setSingleChoiceItems(singleItems, checkedItem) { dialog, which ->
                 when (which) {
                     checkedItem -> Unit
@@ -426,103 +429,94 @@ class MangaDetailsFragment : Fragment() {
             .show()
     }
 
-    @SuppressLint("InflateParams")
     private fun openMangaVolumeCountDialog(totalVolumes: Int?, readVolumes: Int?) {
         if (totalVolumes == null || totalVolumes == 0) {
-            val view =
-                LayoutInflater.from(context).inflate(R.layout.custom_read_count_dialog, null)
-            val binding: CustomReadCountDialogBinding =
-                CustomReadCountDialogBinding.bind(view)
-            binding.etNum.setText(readVolumes?.toString() ?: "")
-            MaterialAlertDialogBuilder(requireContext())
-                .setView(binding.root)
-                .setPositiveButton("Ok") { dialog, _ ->
-                    val count = binding.etNum.text?.toString()?.toInt() ?: 0
-                    mangaDetailsViewModel.setReadVolumeCount(count)
-                    dialog.dismiss()
-                }
-                .setNegativeButton("Cancel") { dialog, _ ->
-                    dialog.dismiss()
-                }
-                .show()
+            showMangaVolumeDialogWithTextField(readVolumes)
         } else {
-            val singleItems = (0..totalVolumes).map { it.toString() }.toTypedArray()
-            val checkedItem = readVolumes ?: 0
-            MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Read till volume")
-                .setSingleChoiceItems(singleItems, checkedItem) { dialog, which ->
-                    mangaDetailsViewModel.setReadVolumeCount(which)
-                    dialog.dismiss()
-                }
-                .show()
+            showMangaVolumesReadListDialog(totalVolumes, readVolumes)
         }
+    }
+
+    private fun showMangaVolumesReadListDialog(totalVolumes: Int, readVolumes: Int?) {
+        val singleItems = (0..totalVolumes).map { it.toString() }.toTypedArray()
+        val checkedItem = readVolumes ?: 0
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(R.string.manga_volume_till_hint)
+            .setSingleChoiceItems(singleItems, checkedItem) { dialog, which ->
+                mangaDetailsViewModel.setReadVolumeCount(which)
+                dialog.dismiss()
+            }.show()
     }
 
     @SuppressLint("InflateParams")
+    private fun showMangaVolumeDialogWithTextField(readVolumes: Int?) {
+        val view =
+            LayoutInflater.from(context).inflate(R.layout.custom_read_count_dialog, null)
+        val binding: CustomReadCountDialogBinding =
+            CustomReadCountDialogBinding.bind(view)
+        binding.etNum.setText(readVolumes?.toString() ?: String.emptyString)
+        MaterialAlertDialogBuilder(requireContext())
+            .setView(binding.root)
+            .setPositiveButton(R.string.ok) { dialog, _ ->
+                val count = binding.etNum.text?.toString()?.toInt() ?: 0
+                mangaDetailsViewModel.setReadVolumeCount(count)
+                dialog.dismiss()
+            }
+            .setNegativeButton(R.string.cancel) { dialog, _ ->
+                dialog.dismiss()
+            }.show()
+    }
+
     private fun openMangaChapterCountDialog(totalChapters: Int?, readChapters: Int?) {
         if (totalChapters == null || totalChapters == 0) {
-            val view =
-                LayoutInflater.from(context).inflate(R.layout.custom_read_count_dialog, null)
-            val binding: CustomReadCountDialogBinding =
-                CustomReadCountDialogBinding.bind(view)
-            binding.etNum.setText(readChapters?.toString() ?: "")
-            MaterialAlertDialogBuilder(requireContext())
-                .setView(binding.root)
-                .setPositiveButton("Ok") { dialog, _ ->
-                    val count = binding.etNum.text?.toString()?.toInt() ?: 0
-                    mangaDetailsViewModel.setReadChapterCount(count)
-                    dialog.dismiss()
-                }
-                .setNegativeButton("Cancel") { dialog, _ ->
-                    dialog.dismiss()
-                }
-                .show()
+            showMangaChapterDialogWithTextField(readChapters)
         } else {
-            val singleItems = (0..totalChapters).map { it.toString() }.toTypedArray()
-            val checkedItem = readChapters ?: 0
-            MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Read till chapter")
-                .setSingleChoiceItems(singleItems, checkedItem) { dialog, which ->
-                    mangaDetailsViewModel.setReadChapterCount(which)
-                    dialog.dismiss()
-                }
-                .show()
+            showMangaChapterReadListDialog(totalChapters, readChapters)
         }
     }
 
-    private fun openBackgroundDialog(background: String?) {
+    private fun showMangaChapterReadListDialog(totalChapters: Int, readChapters: Int?) {
+        val singleItems = (0..totalChapters).map { it.toString() }.toTypedArray()
+        val checkedItem = readChapters ?: 0
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Background")
-            .setMessage(
-                if (background != null && background.isNotBlank())
-                    background
-                else
-                    getString(R.string.n_a)
-            ).setPositiveButton(android.R.string.ok) { dialog, _ ->
+            .setTitle(R.string.manga_chapter_till_hint)
+            .setSingleChoiceItems(singleItems, checkedItem) { dialog, which ->
+                mangaDetailsViewModel.setReadChapterCount(which)
                 dialog.dismiss()
             }.show()
     }
 
-    private fun openStatsDialog(numListUsers: Int, numScoringUsers: Int) {
+    @SuppressLint("InflateParams")
+    private fun showMangaChapterDialogWithTextField(readChapters: Int?) {
+        val view =
+            LayoutInflater.from(context).inflate(R.layout.custom_read_count_dialog, null)
+        val binding: CustomReadCountDialogBinding =
+            CustomReadCountDialogBinding.bind(view)
+        binding.etNum.setText(readChapters?.toString() ?: String.emptyString)
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Statistics")
-            .setMessage(
-                """
-                    Added in $numListUsers manga lists
-                    Scored by $numScoringUsers users
-                """.trimIndent()
-            ).setPositiveButton(android.R.string.ok) { dialog, _ ->
+            .setView(binding.root)
+            .setPositiveButton(R.string.ok) { dialog, _ ->
+                val count = binding.etNum.text?.toString()?.toInt() ?: 0
+                mangaDetailsViewModel.setReadChapterCount(count)
+                dialog.dismiss()
+            }
+            .setNegativeButton(R.string.cancel) { dialog, _ ->
                 dialog.dismiss()
             }.show()
     }
 
-    private fun showAlternateTitlesDialog(alternativeTitles: MangaByIDResponse.AlternativeTitles?) {
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Alternate titles")
-            .setMessage(
-                alternativeTitles?.getFormattedString() ?: getString(R.string.n_a)
-            ).setPositiveButton(android.R.string.ok) { dialog, _ ->
-                dialog.dismiss()
-            }.show()
-    }
+    private fun openBackgroundDialog(background: String?) =
+        requireContext().showNoActionOkDialog(R.string.background, background)
+
+    private fun openStatsDialog(numListUsers: Int, numScoringUsers: Int) =
+        requireContext().showNoActionOkDialog(
+            R.string.statistics,
+            context?.getMangaStats(numListUsers, numScoringUsers)
+        )
+
+    private fun showAlternateTitlesDialog(alternativeTitles: MangaByIDResponse.AlternativeTitles?) =
+        requireContext().showNoActionOkDialog(
+            R.string.alternate_titles_hint,
+            context?.getFormattedMangaTitlesString(alternativeTitles)
+        )
 }

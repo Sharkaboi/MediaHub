@@ -19,15 +19,19 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
-import coil.transform.RoundedCornersTransformation
 import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.shape.ShapeAppearanceModel
+import com.sharkaboi.mediahub.BottomNavGraphDirections
 import com.sharkaboi.mediahub.R
-import com.sharkaboi.mediahub.common.constants.MALExternalLinks
+import com.sharkaboi.mediahub.common.constants.UIConstants
+import com.sharkaboi.mediahub.common.constants.UIConstants.setMediaHubChipStyle
 import com.sharkaboi.mediahub.common.extensions.*
 import com.sharkaboi.mediahub.common.util.openUrl
+import com.sharkaboi.mediahub.data.api.constants.MALExternalLinks
+import com.sharkaboi.mediahub.data.api.enums.AnimeRating.getAnimeRating
 import com.sharkaboi.mediahub.data.api.enums.AnimeStatus
+import com.sharkaboi.mediahub.data.api.enums.getAnimeAiringStatus
+import com.sharkaboi.mediahub.data.api.enums.getAnimeNsfwRating
 import com.sharkaboi.mediahub.data.api.models.anime.AnimeByIDResponse
 import com.sharkaboi.mediahub.databinding.CustomEpisodeCountDialogBinding
 import com.sharkaboi.mediahub.databinding.FragmentAnimeDetailsBinding
@@ -112,17 +116,10 @@ class AnimeDetailsFragment : Fragment() {
     private val handleListStatusUpdate = { state: AnimeDetailsUpdateClass ->
         binding.animeDetailsUserListCard.apply {
             btnStatus.text =
-                state.animeStatus?.getFormattedString()
+                state.animeStatus?.getFormattedString(requireContext())
                 ?: getString(R.string.not_added)
-            btnScore.text = ("${state.score ?: 0}/10")
-            btnCount.text = (
-                "${state.numWatchedEpisode ?: 0}/${
-                if (state.totalEps == 0)
-                    "??"
-                else
-                    state.totalEps.toString()
-                }"
-                )
+            btnScore.text = getString(R.string.media_rating_template, state.score ?: 0)
+            btnCount.text = context?.getProgressStringWith(state.numWatchedEpisode, state.totalEps)
             btnScore.setOnClickListener {
                 openScoreDialog(state.score)
             }
@@ -144,172 +141,104 @@ class AnimeDetailsFragment : Fragment() {
         if (nextEp == null) {
             binding.nextEpisodeDetails.root.isGone = true
         } else {
-            val timeFromNow = nextEp.timeUntilAiring.getAiringTimeFormatted()
-            val airingString = buildString {
-                append("Episode ")
-                append(nextEp.episode)
-                append(" airs in ")
-                append(timeFromNow)
-            }
-            binding.nextEpisodeDetails.tvNextEpisodeDetails.text = airingString
+            binding.nextEpisodeDetails.tvNextEpisodeDetails.text =
+                context?.getAiringTimeFormatted(nextEp)
         }
     }
 
     private fun setData(animeByIDResponse: AnimeByIDResponse) {
+        setupAnimeMainDetailLayout(animeByIDResponse)
+        setupAnimeUserListStatusCard(animeByIDResponse)
+        setupAnimeOtherDetailLayout(animeByIDResponse)
+        setupAnimeOtherDetailsCard(animeByIDResponse)
+        setupAnimeOtherDetailsButtons(animeByIDResponse)
+        setupAnimeRecommendationsList(animeByIDResponse.recommendations)
+        setupRelatedAnimeList(animeByIDResponse.relatedAnime)
+        setupRelatedMangaList(animeByIDResponse.relatedManga)
+    }
+
+    private fun setupAnimeUserListStatusCard(animeByIDResponse: AnimeByIDResponse) =
+        binding.animeDetailsUserListCard.apply {
+            btnPlus1.setOnClickListener {
+                animeDetailsViewModel.add1ToWatchedEps()
+            }
+            btnPlus5.setOnClickListener {
+                animeDetailsViewModel.add5ToWatchedEps()
+            }
+            btnPlus10.setOnClickListener {
+                animeDetailsViewModel.add10ToWatchedEps()
+            }
+            btnCount.setOnClickListener {
+                openAnimeWatchedCountDialog(
+                    animeByIDResponse.numEpisodes,
+                    animeByIDResponse.myListStatus?.numEpisodesWatched
+                )
+            }
+            btnScore.setOnClickListener {
+                openScoreDialog(animeByIDResponse.myListStatus?.score)
+            }
+            btnStatus.setOnClickListener {
+                openStatusDialog(animeByIDResponse.myListStatus?.status, animeByIDResponse.id)
+            }
+            btnConfirm.setOnClickListener {
+                animeDetailsViewModel.submitStatusUpdate(animeByIDResponse.id)
+            }
+        }
+
+    private fun setupRelatedMangaList(relatedManga: List<AnimeByIDResponse.RelatedManga>) {
+        val rvRelatedManga = binding.otherDetails.rvRelatedManga
+        rvRelatedManga.adapter = RelatedMangaAdapter { mangaId ->
+            openMangaWithId(mangaId)
+        }.apply {
+            submitList(relatedManga)
+        }
+        binding.otherDetails.tvRelatedMangaHint.isVisible = relatedManga.isNotEmpty()
+        rvRelatedManga.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        rvRelatedManga.setHasFixedSize(true)
+        rvRelatedManga.itemAnimator = DefaultItemAnimator()
+    }
+
+    private fun openMangaWithId(mangaId: Int) {
+        val action = BottomNavGraphDirections.openMangaById(mangaId)
+        navController.navigate(action)
+    }
+
+    private fun setupRelatedAnimeList(relatedAnime: List<AnimeByIDResponse.RelatedAnime>) {
+        val rvRelatedAnime = binding.otherDetails.rvRelatedAnime
+        rvRelatedAnime.adapter = RelatedAnimeAdapter { animeId ->
+            openAnimeWithId(animeId)
+        }.apply {
+            submitList(relatedAnime)
+        }
+        binding.otherDetails.tvRelatedAnimeHint.isVisible = relatedAnime.isNotEmpty()
+        rvRelatedAnime.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        rvRelatedAnime.setHasFixedSize(true)
+        rvRelatedAnime.itemAnimator = DefaultItemAnimator()
+    }
+
+    private fun setupAnimeRecommendationsList(recommendations: List<AnimeByIDResponse.Recommendation>) {
+        val rvRecommendations = binding.otherDetails.rvRecommendations
+        rvRecommendations.adapter = RecommendedAnimeAdapter { animeId ->
+            openAnimeWithId(animeId)
+        }.apply {
+            submitList(recommendations)
+        }
+        binding.otherDetails.tvRecommendations.isVisible = recommendations.isNotEmpty()
+        rvRecommendations.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        rvRecommendations.setHasFixedSize(true)
+        rvRecommendations.itemAnimator = DefaultItemAnimator()
+    }
+
+    private fun openAnimeWithId(animeId: Int) {
+        val action = BottomNavGraphDirections.openAnimeById(animeId)
+        navController.navigate(action)
+    }
+
+    private fun setupAnimeOtherDetailsButtons(animeByIDResponse: AnimeByIDResponse) =
         binding.apply {
-            tvAnimeName.text = animeByIDResponse.title
-            tvAlternateTitles.setOnClickListener {
-                showAlternateTitlesDialog(animeByIDResponse.alternativeTitles)
-            }
-            tvStartDate.text =
-                animeByIDResponse.startDate?.tryParseDate()?.formatDateDMY()
-                ?: getString(R.string.n_a)
-            tvEndDate.text =
-                animeByIDResponse.endDate?.tryParseDate()?.formatDateDMY()
-                ?: getString(R.string.n_a)
-            tvMeanScore.text = animeByIDResponse.mean?.toString() ?: getString(R.string.n_a)
-            tvRank.text = animeByIDResponse.rank?.toString() ?: getString(R.string.n_a)
-            tvPopularityRank.text = animeByIDResponse.popularity.toString()
-            studiosChipGroup.apply {
-                removeAllViews()
-                if (animeByIDResponse.studios.isEmpty()) {
-                    addView(
-                        TextView(context).apply {
-                            text = getString(R.string.n_a)
-                        }
-                    )
-                } else {
-                    animeByIDResponse.studios.forEach { studio ->
-                        addView(
-                            TextView(context).apply {
-                                setTextColor(ContextCompat.getColor(context, R.color.colorPrimary))
-                                setTypeface(null, Typeface.BOLD)
-                                text = ("${studio.name} ")
-                                setOnClickListener {
-                                    openUrl(
-                                        MALExternalLinks.getAnimeProducerPageLink(studio)
-                                    )
-                                }
-                            }
-                        )
-                    }
-                }
-            }
-            ivAnimeMainPicture.load(
-                animeByIDResponse.mainPicture?.large ?: animeByIDResponse.mainPicture?.medium
-            ) {
-                crossfade(true)
-                placeholder(R.drawable.ic_anime_placeholder)
-                error(R.drawable.ic_anime_placeholder)
-                fallback(R.drawable.ic_anime_placeholder)
-                transformations(RoundedCornersTransformation(8f))
-            }
-            ivAnimeMainPicture.setOnClickListener {
-                openImagesViewPager(animeByIDResponse.pictures)
-            }
-            otherDetails.tvSynopsis.text =
-                animeByIDResponse.synopsis?.ifBlank { getString(R.string.n_a) }
-                ?: getString(R.string.n_a)
-            otherDetails.tvSynopsis.setOnClickListener {
-                showFullSynopsisDialog(
-                    animeByIDResponse.synopsis?.ifBlank { getString(R.string.n_a) }
-                        ?: getString(R.string.n_a)
-                )
-            }
-            otherDetails.ratingsChipGroup.apply {
-                removeAllViews()
-                addView(
-                    Chip(context).apply {
-                        setEnsureMinTouchTargetSize(false)
-                        shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(8f)
-                        text =
-                            animeByIDResponse.nsfw?.getAnimeNsfwRating() ?: getString(R.string.n_a)
-                    }
-                )
-                addView(
-                    Chip(context).apply {
-                        setEnsureMinTouchTargetSize(false)
-                        shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(8f)
-                        text = animeByIDResponse.rating?.getRating() ?: getString(R.string.n_a)
-                    }
-                )
-            }
-            animeByIDResponse.genres.let {
-                otherDetails.genresChipGroup.removeAllViews()
-                if (it.isEmpty()) {
-                    otherDetails.genresChipGroup.addView(
-                        Chip(context).apply {
-                            setEnsureMinTouchTargetSize(false)
-                            shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(8f)
-                            text = getString(R.string.n_a)
-                        }
-                    )
-                } else {
-                    it.forEach { genre ->
-                        otherDetails.genresChipGroup.addView(
-                            Chip(context).apply {
-                                setEnsureMinTouchTargetSize(false)
-                                setOnClickListener {
-                                    openUrl(
-                                        MALExternalLinks.getAnimeGenresLink(
-                                            genre
-                                        )
-                                    )
-                                }
-                                shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(8f)
-                                text = genre.name
-                            }
-                        )
-                    }
-                }
-            }
-            otherDetails.btnMediaType.text = ("Type : ${animeByIDResponse.mediaType.uppercase()}")
-            otherDetails.btnMediaType.setOnClickListener {
-                val action =
-                    AnimeDetailsFragmentDirections.openAnimeRankings(animeByIDResponse.mediaType)
-                navController.navigate(action)
-            }
-            otherDetails.btnAnimeCurrentStatus.text =
-                animeByIDResponse.status.getAnimeAiringStatus()
-            otherDetails.btnTotalEps.text =
-                animeByIDResponse.numEpisodes.let {
-                    if (it == 0)
-                        "${getString(R.string.n_a)} eps"
-                    else
-                        "$it ${if (it == 1) "ep" else "eps"}"
-                }
-            otherDetails.btnSeason.text = animeByIDResponse.startSeason?.let {
-                "${it.season.capitalizeFirst()} ${it.year}"
-            } ?: "Season : ${getString(R.string.n_a)}"
-            otherDetails.btnSeason.setOnClickListener {
-                val action =
-                    AnimeDetailsFragmentDirections.openAnimeSeasonals(
-                        animeByIDResponse.startSeason?.season,
-                        animeByIDResponse.startSeason?.year ?: 0
-                    )
-                navController.navigate(action)
-            }
-            otherDetails.tvSchedule.text =
-                animeByIDResponse.broadcast?.getBroadcastTime() ?: getString(R.string.n_a)
-            otherDetails.btnSource.text =
-                (
-                    "From ${
-                    animeByIDResponse.source?.replaceUnderScoreWithWhiteSpace()
-                        ?.capitalizeFirst()
-                        ?: getString(R.string.n_a)
-                    }"
-                    )
-            otherDetails.btnAverageLength.text =
-                animeByIDResponse.averageEpisodeDuration.getEpisodeLengthFromSeconds()
-            otherDetails.ibNotify.setOnClickListener {
-                onNotifyClick(animeByIDResponse.id, animeByIDResponse.broadcast)
-            }
-            otherDetails.chipGroupOptions.forEach {
-                if (it is Chip) {
-                    it.setEnsureMinTouchTargetSize(false)
-                    it.shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(8f)
-                }
-            }
             otherDetails.btnBackground.setOnClickListener {
                 openBackgroundDialog(animeByIDResponse.background)
             }
@@ -356,104 +285,171 @@ class AnimeDetailsFragment : Fragment() {
             otherDetails.btnStatistics.setOnClickListener {
                 openStatsDialog(animeByIDResponse.statistics)
             }
-            otherDetails.rvRecommendations.apply {
-                adapter = RecommendedAnimeAdapter { animeId ->
-                    val action = AnimeDetailsFragmentDirections.animeDetailsWithId(animeId)
-                    navController.navigate(action)
-                }.apply {
-                    submitList(animeByIDResponse.recommendations)
-                }
-                otherDetails.tvRecommendations.isVisible =
-                    animeByIDResponse.recommendations.isNotEmpty()
-                layoutManager =
-                    LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                setHasFixedSize(true)
-                itemAnimator = DefaultItemAnimator()
+        }
+
+    private fun setupAnimeOtherDetailsCard(animeByIDResponse: AnimeByIDResponse) = binding.apply {
+        otherDetails.btnMediaType.text =
+            context?.getMediaTypeStringWith(animeByIDResponse.mediaType.capitalizeFirst())
+        otherDetails.btnMediaType.setOnClickListener {
+            openAnimeRankingWith(animeByIDResponse.mediaType)
+        }
+        otherDetails.btnAnimeCurrentStatus.text =
+            context?.getAnimeAiringStatus(animeByIDResponse.status)
+        otherDetails.btnTotalEps.text =
+            context?.getEpisodesOfAnimeString(animeByIDResponse.numEpisodes)
+        otherDetails.btnSeason.text = context?.getAnimeSeasonString(
+            animeByIDResponse.startSeason?.season,
+            animeByIDResponse.startSeason?.year
+        )
+        otherDetails.btnSeason.setOnClickListener {
+            openAnimeSeasonalWith(
+                animeByIDResponse.startSeason?.season,
+                animeByIDResponse.startSeason?.year ?: 0
+            )
+        }
+        otherDetails.tvSchedule.text =
+            context?.getAnimeBroadcastTime(animeByIDResponse.broadcast)
+        otherDetails.btnSource.text =
+            context?.getAnimeOriginalSourceString(animeByIDResponse.source)
+        otherDetails.btnAverageLength.text =
+            context?.getEpisodeLengthFromSeconds(animeByIDResponse.averageEpisodeDuration)
+        otherDetails.ibNotify.setOnClickListener {
+            onNotifyClick(animeByIDResponse.id, animeByIDResponse.broadcast)
+        }
+        otherDetails.chipGroupOptions.forEach {
+            if (it is Chip) {
+                it.setMediaHubChipStyle()
             }
-            otherDetails.rvRelatedAnime.apply {
-                adapter = RelatedAnimeAdapter { animeId ->
-                    val action = AnimeDetailsFragmentDirections.animeDetailsWithId(animeId)
-                    navController.navigate(action)
-                }.apply {
-                    submitList(animeByIDResponse.relatedAnime)
+        }
+    }
+
+    private fun openAnimeSeasonalWith(season: String?, year: Int) {
+        val action =
+            AnimeDetailsFragmentDirections.openAnimeSeasonals(season, year)
+        navController.navigate(action)
+    }
+
+    private fun openAnimeRankingWith(mediaType: String) {
+        val action =
+            AnimeDetailsFragmentDirections.openAnimeRankings(mediaType)
+        navController.navigate(action)
+    }
+
+    private fun setupAnimeOtherDetailLayout(animeByIDResponse: AnimeByIDResponse) {
+        binding.otherDetails.tvSynopsis.text =
+            animeByIDResponse.synopsis.ifNullOrBlank { getString(R.string.n_a) }
+        binding.otherDetails.tvSynopsis.setOnClickListener {
+            showFullSynopsisDialog(animeByIDResponse.synopsis)
+        }
+        setupRatingsChipGroup(animeByIDResponse)
+        setupGenresChipGroup(animeByIDResponse.genres)
+    }
+
+    private fun setupGenresChipGroup(genres: List<AnimeByIDResponse.Genre>) {
+        val chipGroup = binding.otherDetails.genresChipGroup
+        chipGroup.removeAllViews()
+        if (genres.isEmpty()) {
+            val naChip = Chip(context)
+            naChip.setMediaHubChipStyle()
+            naChip.text = getString(R.string.n_a)
+            chipGroup.addView(naChip)
+        } else {
+            genres.forEach { genre ->
+                val genreChip = Chip(context)
+                genreChip.setMediaHubChipStyle()
+                genreChip.text = genre.name
+                genreChip.setOnClickListener {
+                    openUrl(MALExternalLinks.getAnimeGenresLink(genre))
                 }
-                otherDetails.tvRelatedAnimeHint.isVisible =
-                    animeByIDResponse.relatedAnime.isNotEmpty()
-                layoutManager =
-                    LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                setHasFixedSize(true)
-                itemAnimator = DefaultItemAnimator()
+                chipGroup.addView(genreChip)
             }
-            otherDetails.rvRelatedManga.apply {
-                adapter = RelatedMangaAdapter { mangaId ->
-                    val action = AnimeDetailsFragmentDirections.openMangaDetailsWithId(mangaId)
-                    navController.navigate(action)
-                }.apply {
-                    submitList(animeByIDResponse.relatedManga)
+        }
+    }
+
+    private fun setupAnimeMainDetailLayout(animeByIDResponse: AnimeByIDResponse) = binding.apply {
+        setupAnimeImagePreview(animeByIDResponse)
+        tvAnimeName.text = animeByIDResponse.title
+        tvAlternateTitles.setOnClickListener {
+            showAlternateTitlesDialog(animeByIDResponse.alternativeTitles)
+        }
+        tvStartDate.text =
+            animeByIDResponse.startDate?.tryParseDate()?.formatDateDMY()
+            ?: getString(R.string.n_a)
+        tvEndDate.text =
+            animeByIDResponse.endDate?.tryParseDate()?.formatDateDMY()
+            ?: getString(R.string.n_a)
+        tvMeanScore.text = animeByIDResponse.mean?.toString() ?: getString(R.string.n_a)
+        tvRank.text = animeByIDResponse.rank?.toString() ?: getString(R.string.n_a)
+        tvPopularityRank.text = animeByIDResponse.popularity.toString()
+        setupStudiosChipGroup(animeByIDResponse.studios)
+    }
+
+    private fun setupRatingsChipGroup(animeByIDResponse: AnimeByIDResponse) {
+        val chipGroup = binding.otherDetails.ratingsChipGroup
+        chipGroup.removeAllViews()
+        val nsfwRatingChip = Chip(context)
+        nsfwRatingChip.setMediaHubChipStyle()
+        nsfwRatingChip.text = nsfwRatingChip.context.getAnimeNsfwRating(animeByIDResponse.nsfw)
+        chipGroup.addView(nsfwRatingChip)
+        val pgRatingChip = Chip(context)
+        pgRatingChip.setMediaHubChipStyle()
+        pgRatingChip.text = pgRatingChip.context.getAnimeRating(animeByIDResponse.rating)
+        chipGroup.addView(pgRatingChip)
+    }
+
+    private fun setupAnimeImagePreview(animeByIDResponse: AnimeByIDResponse) {
+        binding.ivAnimeMainPicture.load(
+            uri = animeByIDResponse.mainPicture?.large ?: animeByIDResponse.mainPicture?.medium,
+            builder = UIConstants.AnimeImageBuilder
+        )
+        binding.ivAnimeMainPicture.setOnClickListener {
+            openImagesViewPager(animeByIDResponse.pictures)
+        }
+    }
+
+    private fun setupStudiosChipGroup(studios: List<AnimeByIDResponse.Studio>) {
+        binding.studiosChipGroup.removeAllViews()
+        if (studios.isEmpty()) {
+            val textView = TextView(context)
+            textView.text = getString(R.string.n_a)
+            binding.studiosChipGroup.addView(textView)
+        } else {
+            studios.forEach { studio ->
+                val textView = TextView(context)
+                textView.setTextColor(
+                    ContextCompat.getColor(textView.context, R.color.colorPrimary)
+                )
+                textView.setTypeface(null, Typeface.BOLD)
+                textView.text = studio.name.plus(" ")
+                textView.setOnClickListener {
+                    openUrl(MALExternalLinks.getAnimeProducerPageLink(studio))
                 }
-                otherDetails.tvRelatedMangaHint.isVisible =
-                    animeByIDResponse.relatedManga.isNotEmpty()
-                layoutManager =
-                    LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                setHasFixedSize(true)
-                itemAnimator = DefaultItemAnimator()
-            }
-            animeDetailsUserListCard.apply {
-                btnPlus1.setOnClickListener {
-                    animeDetailsViewModel.add1ToWatchedEps()
-                }
-                btnPlus5.setOnClickListener {
-                    animeDetailsViewModel.add5ToWatchedEps()
-                }
-                btnPlus10.setOnClickListener {
-                    animeDetailsViewModel.add10ToWatchedEps()
-                }
-                btnCount.setOnClickListener {
-                    openAnimeWatchedCountDialog(
-                        animeByIDResponse.numEpisodes,
-                        animeByIDResponse.myListStatus?.numEpisodesWatched
-                    )
-                }
-                btnScore.setOnClickListener {
-                    openScoreDialog(animeByIDResponse.myListStatus?.score)
-                }
-                btnStatus.setOnClickListener {
-                    openStatusDialog(animeByIDResponse.myListStatus?.status, animeByIDResponse.id)
-                }
-                btnConfirm.setOnClickListener {
-                    animeDetailsViewModel.submitStatusUpdate(animeByIDResponse.id)
-                }
+                binding.studiosChipGroup.addView(textView)
             }
         }
     }
 
     private fun onNotifyClick(id: Int, broadcast: AnimeByIDResponse.Broadcast?) {
-        showToast("Coming soon!")
+        showToast(R.string.coming_soon_hint)
     }
 
     private fun openImagesViewPager(pictures: List<AnimeByIDResponse.Picture>) {
         val images: List<String> = pictures.map { it.large ?: it.medium }
-        val action = AnimeDetailsFragmentDirections.openImages(images.toTypedArray())
+        val action = BottomNavGraphDirections.openImageSlider(images.toTypedArray())
         navController.navigate(action)
     }
 
-    private fun showFullSynopsisDialog(synopsis: String) {
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Synopsis")
-            .setMessage(
-                synopsis
-            ).setPositiveButton(android.R.string.ok) { dialog, _ ->
-                dialog.dismiss()
-            }.show()
-    }
+    private fun showFullSynopsisDialog(synopsis: String?) =
+        requireContext().showNoActionOkDialog(R.string.synopsis, synopsis)
 
     private fun openStatusDialog(status: String?, animeId: Int) {
-        val singleItems =
-            arrayOf("Not added") + AnimeStatus.malStatuses.map { it.getFormattedString() }
+        val singleItems = arrayOf(getString(R.string.not_added)) + AnimeStatus.malStatuses.map {
+            it.getFormattedString(requireContext())
+        }
         val checkedItem =
             status?.let { AnimeStatus.malStatuses.indexOfFirst { it.name == status } + 1 } ?: 0
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Set status as")
+            .setTitle(R.string.media_set_status_hint)
             .setSingleChoiceItems(singleItems, checkedItem) { dialog, which ->
                 when (which) {
                     checkedItem -> Unit
@@ -469,79 +465,69 @@ class AnimeDetailsFragment : Fragment() {
         val singleItems = (0..10).map { it.toString() }.toTypedArray()
         val checkedItem = score ?: 0
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Set score as")
+            .setTitle(R.string.media_set_score_hint)
             .setSingleChoiceItems(singleItems, checkedItem) { dialog, which ->
                 when (which) {
                     checkedItem -> Unit
                     else -> animeDetailsViewModel.setScore(which)
                 }
                 dialog.dismiss()
+            }.show()
+    }
+
+    private fun openAnimeWatchedCountDialog(totalEps: Int?, watchedEps: Int?) {
+        if (totalEps == null || totalEps == 0) {
+            showWatchedCountDialogWithTextField(watchedEps)
+        } else {
+            showWatchedCountDialogWithList(totalEps, watchedEps)
+        }
+    }
+
+    private fun showWatchedCountDialogWithList(totalEps: Int, watchedEps: Int?) {
+        val singleItems = (0..totalEps).map { it.toString() }.toTypedArray()
+        val checkedItem = watchedEps ?: 0
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(R.string.anime_watched_till_hint)
+            .setSingleChoiceItems(singleItems, checkedItem) { dialog, which ->
+                animeDetailsViewModel.setEpisodeCount(which)
+                dialog.dismiss()
             }
             .show()
     }
 
     @SuppressLint("InflateParams")
-    private fun openAnimeWatchedCountDialog(totalEps: Int?, watchedEps: Int?) {
-        if (totalEps == null || totalEps == 0) {
-            val view =
-                LayoutInflater.from(context).inflate(R.layout.custom_episode_count_dialog, null)
-            val binding: CustomEpisodeCountDialogBinding =
-                CustomEpisodeCountDialogBinding.bind(view)
-            binding.etNum.setText(watchedEps?.toString() ?: "")
-            MaterialAlertDialogBuilder(requireContext())
-                .setView(binding.root)
-                .setPositiveButton("Ok") { dialog, _ ->
-                    val count = binding.etNum.text?.toString()?.toInt() ?: 0
-                    animeDetailsViewModel.setEpisodeCount(count)
-                    dialog.dismiss()
-                }
-                .setNegativeButton("Cancel") { dialog, _ ->
-                    dialog.dismiss()
-                }
-                .show()
-        } else {
-            val singleItems = (0..totalEps).map { it.toString() }.toTypedArray()
-            val checkedItem = watchedEps ?: 0
-            MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Watched till episode")
-                .setSingleChoiceItems(singleItems, checkedItem) { dialog, which ->
-                    animeDetailsViewModel.setEpisodeCount(which)
-                    dialog.dismiss()
-                }
-                .show()
-        }
+    private fun showWatchedCountDialogWithTextField(watchedEps: Int?) {
+        val view = LayoutInflater
+            .from(context)
+            .inflate(R.layout.custom_episode_count_dialog, null)
+        val binding: CustomEpisodeCountDialogBinding =
+            CustomEpisodeCountDialogBinding.bind(view)
+        binding.etNum.setText(watchedEps?.toString() ?: String.emptyString)
+        MaterialAlertDialogBuilder(requireContext())
+            .setView(binding.root)
+            .setPositiveButton(R.string.ok) { dialog, _ ->
+                val count = binding.etNum.text?.toString()?.toInt() ?: 0
+                animeDetailsViewModel.setEpisodeCount(count)
+                dialog.dismiss()
+            }
+            .setNegativeButton(R.string.cancel) { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
     }
 
-    private fun openBackgroundDialog(background: String?) {
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Background")
-            .setMessage(
-                if (background != null && background.isNotBlank())
-                    background
-                else
-                    getString(R.string.n_a)
-            ).setPositiveButton(android.R.string.ok) { dialog, _ ->
-                dialog.dismiss()
-            }.show()
-    }
+    private fun openBackgroundDialog(background: String?) =
+        requireContext().showNoActionOkDialog(R.string.background, background)
 
-    private fun openStatsDialog(statistics: AnimeByIDResponse.Statistics?) {
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Statistics")
-            .setMessage(
-                statistics?.getStats() ?: getString(R.string.n_a)
-            ).setPositiveButton(android.R.string.ok) { dialog, _ ->
-                dialog.dismiss()
-            }.show()
-    }
+    private fun openStatsDialog(statistics: AnimeByIDResponse.Statistics?) =
+        requireContext().showNoActionOkDialog(
+            R.string.statistics,
+            context?.getAnimeStats(statistics)
+        )
 
-    private fun showAlternateTitlesDialog(alternativeTitles: AnimeByIDResponse.AlternativeTitles?) {
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Alternate titles")
-            .setMessage(
-                alternativeTitles?.getFormattedString() ?: getString(R.string.n_a)
-            ).setPositiveButton(android.R.string.ok) { dialog, _ ->
-                dialog.dismiss()
-            }.show()
-    }
+    private fun showAlternateTitlesDialog(alternativeTitles: AnimeByIDResponse.AlternativeTitles?) =
+        requireContext().showNoActionOkDialog(
+            R.string.alternate_titles_hint,
+            context?.getFormattedAnimeTitlesString(alternativeTitles)
+        )
 }

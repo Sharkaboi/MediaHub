@@ -47,7 +47,7 @@ class MangaFragment : Fragment() {
         binding.vpManga.adapter = vpMangaAdapter
         binding.mangaTabLayout.apply {
             MangaStatus.values().forEach {
-                addTab(newTab().apply { text = it.getFormattedString() })
+                addTab(newTab().apply { text = it.getFormattedString(context) })
             }
         }
         onTabChanged = object : TabLayout.OnTabSelectedListener {

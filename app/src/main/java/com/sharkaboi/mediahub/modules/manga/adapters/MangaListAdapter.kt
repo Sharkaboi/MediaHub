@@ -6,8 +6,9 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import coil.transform.RoundedCornersTransformation
-import com.sharkaboi.mediahub.R
+import com.sharkaboi.mediahub.common.constants.UIConstants
+import com.sharkaboi.mediahub.common.extensions.getProgressStringWith
+import com.sharkaboi.mediahub.common.extensions.getRatingStringWithRating
 import com.sharkaboi.mediahub.data.api.models.usermanga.UserMangaListResponse
 import com.sharkaboi.mediahub.databinding.MangaListItemBinding
 
@@ -22,23 +23,20 @@ class MangaListAdapter(
         fun bind(item: UserMangaListResponse.Data?) {
             item?.let {
                 mangaListItemBinding.apply {
-                    ivMangaBanner.load(it.node.mainPicture?.large ?: it.node.mainPicture?.medium) {
-                        crossfade(true)
-                        placeholder(R.drawable.ic_manga_placeholder)
-                        error(R.drawable.ic_manga_placeholder)
-                        fallback(R.drawable.ic_manga_placeholder)
-                        transformations(RoundedCornersTransformation(topLeft = 8f, topRight = 8f))
-                    }
+                    ivMangaBanner.load(
+                        uri = it.node.mainPicture?.large ?: it.node.mainPicture?.medium,
+                        builder = UIConstants.MangaImageBuilder
+                    )
                     tvMangaName.text = it.node.title
-                    val numChapters =
-                        if (it.node.numChapters == 0) "??" else it.node.numChapters
-                    tvChapsRead.text =
-                        ("${it.listStatus.numChaptersRead}/$numChapters")
-                    val numVolumes =
-                        if (it.node.numVolumes == 0) "??" else it.node.numVolumes
-                    tvVolumesRead.text =
-                        ("${it.listStatus.numVolumesRead}/$numVolumes")
-                    tvScore.text = ("★ ${it.listStatus.score}")
+                    tvChapsRead.text = tvChapsRead.context.getProgressStringWith(
+                        it.listStatus.numChaptersRead,
+                        it.node.numChapters
+                    )
+                    tvVolumesRead.text = tvVolumesRead.context.getProgressStringWith(
+                        it.listStatus.numVolumesRead,
+                        it.node.numVolumes
+                    )
+                    tvScore.text = tvScore.context.getRatingStringWithRating(it.listStatus.score)
                     root.setOnClickListener {
                         onItemClick(item.node.id)
                     }

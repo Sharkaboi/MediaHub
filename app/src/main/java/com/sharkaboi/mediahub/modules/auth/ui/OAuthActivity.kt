@@ -94,10 +94,14 @@ class OAuthActivity : AppCompatActivity() {
         val uri = intent?.data
         Timber.d("onNewIntent uri :$uri")
         if (uri != null && uri.toString().startsWith(AppConstants.oAuthDeepLinkUri)) {
-            val code = uri.getQueryParameter("code")
+            val code = uri.getQueryParameter(CODE_QUERY_PARAM_KEY)
             if (code != null) {
                 oAuthViewModel.receivedAuthToken(code)
             }
         }
+    }
+
+    companion object {
+        private const val CODE_QUERY_PARAM_KEY = "code"
     }
 }

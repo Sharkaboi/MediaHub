@@ -16,6 +16,8 @@ import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
+import com.sharkaboi.mediahub.BottomNavGraphDirections
+import com.sharkaboi.mediahub.R
 import com.sharkaboi.mediahub.common.extensions.debounce
 import com.sharkaboi.mediahub.common.extensions.showToast
 import com.sharkaboi.mediahub.databinding.FragmentAnimeSearchBinding
@@ -62,7 +64,7 @@ class AnimeSearchFragment : Fragment() {
     private fun setUpRecyclerView() {
         binding.rvSearchResults.apply {
             animeSearchListAdapter = AnimeSearchListAdapter { animeId ->
-                val action = AnimeSearchFragmentDirections.openAnimeDetailsWithId(animeId)
+                val action = BottomNavGraphDirections.openAnimeById(animeId)
                 navController.navigate(action)
             }
             layoutManager = GridLayoutManager(context, 3)
@@ -82,7 +84,8 @@ class AnimeSearchFragment : Fragment() {
                 binding.progress.isShowing = loadStates.refresh is LoadState.Loading
                 binding.searchEmptyView.root.isVisible =
                     loadStates.refresh is LoadState.NotLoading && animeSearchListAdapter.itemCount == 0
-                binding.searchEmptyView.tvHint.text = ("No anime found for query")
+                binding.searchEmptyView.tvHint.text =
+                    getString(R.string.anime_search_no_result_hint)
             }
         }
         val debounce = debounce<CharSequence>(scope = lifecycleScope) {
@@ -99,7 +102,7 @@ class AnimeSearchFragment : Fragment() {
             query?.toString()?.let {
                 if (it.length < 3) {
                     binding.searchEmptyView.root.isVisible = true
-                    binding.searchEmptyView.tvHint.text = ("Search for any anime")
+                    binding.searchEmptyView.tvHint.text = getString(R.string.anime_search_hint)
                     animeSearchListAdapter.submitData(PagingData.empty())
                     return@launch
                 }

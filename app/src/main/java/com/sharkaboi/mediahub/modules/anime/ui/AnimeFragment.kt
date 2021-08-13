@@ -47,7 +47,7 @@ class AnimeFragment : Fragment() {
         binding.vpAnime.adapter = vpAnimeAdapter
         binding.animeTabLayout.apply {
             AnimeStatus.values().forEach {
-                addTab(newTab().apply { text = it.getFormattedString() })
+                addTab(newTab().apply { text = it.getFormattedString(context) })
             }
         }
         onTabChanged = object : TabLayout.OnTabSelectedListener {
@@ -59,6 +59,7 @@ class AnimeFragment : Fragment() {
             override fun onTabUnselected(tab: TabLayout.Tab?) = Unit
 
             override fun onTabReselected(tab: TabLayout.Tab?) {
+                // Scroll RV on tab reselect and bring up bottom nav
                 childFragmentManager.findFragmentByTag("f${tab?.position ?: 0}")?.let {
                     if (it is AnimeListByStatusFragment) {
                         it.scrollRecyclerView()

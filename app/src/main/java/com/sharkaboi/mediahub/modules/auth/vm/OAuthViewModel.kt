@@ -50,10 +50,10 @@ class OAuthViewModel
             Timber.d("challenge retrieved: $codeChallenge")
             Timber.d("code received: $code")
             val result = oAuthRepository.getAccessToken(code, codeChallenge)
-            if (result == null) {
+            if (result.isSuccess) {
                 _oAuthState.setOAuthSuccess()
             } else {
-                _oAuthState.setOAuthFailure(result)
+                _oAuthState.setOAuthFailure(result.error.errorMessage)
             }
         }
     }

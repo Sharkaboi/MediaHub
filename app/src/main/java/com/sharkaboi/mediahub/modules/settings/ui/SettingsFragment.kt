@@ -18,6 +18,7 @@ import com.sharkaboi.mediahub.BuildConfig
 import com.sharkaboi.mediahub.R
 import com.sharkaboi.mediahub.common.constants.AppConstants
 import com.sharkaboi.mediahub.common.extensions.observe
+import com.sharkaboi.mediahub.common.extensions.showNoActionOkDialog
 import com.sharkaboi.mediahub.common.extensions.showToast
 import com.sharkaboi.mediahub.common.util.openUrl
 import com.sharkaboi.mediahub.common.views.MaterialToolBarPreference
@@ -46,7 +47,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
 
     private fun setData() {
         findPreference<Preference>(SharedPreferencesKeys.ABOUT)?.summary =
-            "v${BuildConfig.VERSION_NAME}"
+            getString(R.string.app_version_template, BuildConfig.VERSION_NAME)
         findPreference<MaterialToolBarPreference>(SharedPreferencesKeys.TOOLBAR)?.setNavigationIconListener {
             navController.navigateUp()
         }
@@ -100,40 +101,41 @@ class SettingsFragment : PreferenceFragmentCompat() {
         appUpdater.start()
     }
 
-    private fun showAnimeNotificationsDialog() {
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Anime notifications")
-            .setMessage("This feature is coming soon!")
-            .setPositiveButton("Pog") { dialog, _ ->
-                dialog.dismiss()
-            }.show()
-    }
+    private fun showAnimeNotificationsDialog() =
+        requireContext().showNoActionOkDialog(
+            R.string.anime_notifs_hint,
+            getString(R.string.coming_soon_hint)
+        )
 
     private fun showLogOutDialog() {
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Log out?")
-            .setMessage("This is permanent and you have to log in again after to use MediaHub.")
-            .setPositiveButton("Yes, Log me out") { _, _ ->
+            .setTitle(R.string.log_out_hint)
+            .setMessage(R.string.log_out_message)
+            .setPositiveButton(R.string.log_out_positive_hint) { _, _ ->
                 settingsViewModel.logOutUser()
             }
-            .setNegativeButton("No, take me back") { dialog, _ ->
+            .setNegativeButton(R.string.log_out_negative_hint) { dialog, _ ->
                 dialog.dismiss()
             }.show()
     }
 
     private fun showAboutDialog() {
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("About")
+            .setTitle(R.string.about)
             .setMessage(AppConstants.description)
-            .setNeutralButton("View licenses") { _, _ ->
-                startActivity(Intent(context, OssLicensesMenuActivity::class.java))
-                activity?.overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
-            }.setNegativeButton("Github") { _, _ ->
+            .setNeutralButton(R.string.view_licenses_hint) { _, _ ->
+                openLicenses()
+            }.setNegativeButton(R.string.github) { _, _ ->
                 openUrl(AppConstants.githubLink)
                 activity?.overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
-            }.setPositiveButton(android.R.string.ok) { dialog, _ ->
+            }.setPositiveButton(R.string.ok) { dialog, _ ->
                 dialog.dismiss()
             }.show()
+    }
+
+    private fun openLicenses() {
+        startActivity(Intent(context, OssLicensesMenuActivity::class.java))
+        activity?.overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
     }
 
     private fun moveToOAuthScreen() {

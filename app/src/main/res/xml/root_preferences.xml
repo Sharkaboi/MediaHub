@@ -4,7 +4,7 @@
     <com.sharkaboi.mediahub.common.views.MaterialToolBarPreference
         app:icon="@drawable/ic_back"
         app:key="toolbar"
-        app:title="@string/settings" />
+        app:title="@string/settings_description" />
 
     <PreferenceCategory app:title="@string/theme">
 

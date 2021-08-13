@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
+import com.sharkaboi.mediahub.BottomNavGraphDirections
 import com.sharkaboi.mediahub.common.extensions.showToast
 import com.sharkaboi.mediahub.databinding.FragmentAnimeSuggestionsBinding
 import com.sharkaboi.mediahub.modules.anime_suggestions.adapters.AnimeSuggestionsAdapter
@@ -54,7 +55,7 @@ class AnimeSuggestionsFragment : Fragment() {
     private fun setUpRecyclerView() {
         binding.rvAnimeSuggestions.apply {
             animeSuggestionsAdapter = AnimeSuggestionsAdapter { animeId ->
-                val action = AnimeSuggestionsFragmentDirections.openAnimeById(animeId)
+                val action = BottomNavGraphDirections.openAnimeById(animeId)
                 navController.navigate(action)
             }
             layoutManager = GridLayoutManager(context, 3)

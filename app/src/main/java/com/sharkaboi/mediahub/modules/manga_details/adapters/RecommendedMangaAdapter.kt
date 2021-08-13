@@ -8,8 +8,8 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import coil.transform.RoundedCornersTransformation
 import com.sharkaboi.mediahub.R
+import com.sharkaboi.mediahub.common.constants.UIConstants
 import com.sharkaboi.mediahub.data.api.models.manga.MangaByIDResponse
 import com.sharkaboi.mediahub.databinding.MangaListItemBinding
 
@@ -64,17 +64,16 @@ class RecommendedMangaAdapter(private val onClick: (Int) -> Unit) :
             binding.tvMangaName.text = item.node.title
             binding.tvVolumesRead.isVisible = false
             binding.tvChapsRead.text =
-                ("Recommended ${item.numRecommendations} ${if (item.numRecommendations == 1) "time" else "times"}")
+                binding.tvChapsRead.context.resources.getQuantityString(
+                    R.plurals.recommendation_times,
+                    item.numRecommendations,
+                    item.numRecommendations
+                )
             binding.cardRating.isGone = true
             binding.ivMangaBanner.load(
-                item.node.mainPicture?.large ?: item.node.mainPicture?.medium
-            ) {
-                crossfade(true)
-                placeholder(R.drawable.ic_manga_placeholder)
-                error(R.drawable.ic_manga_placeholder)
-                fallback(R.drawable.ic_manga_placeholder)
-                transformations(RoundedCornersTransformation(topLeft = 8f, topRight = 8f))
-            }
+                uri = item.node.mainPicture?.large ?: item.node.mainPicture?.medium,
+                builder = UIConstants.MangaImageBuilder
+            )
         }
     }
 }

@@ -1,356 +1,228 @@
 package com.sharkaboi.mediahub.common.extensions
 
-import android.text.Html
+import GetNextAiringAnimeEpisodeQuery
+import android.content.Context
 import android.text.Spanned
+import androidx.annotation.StringRes
+import androidx.core.text.HtmlCompat
+import androidx.core.text.toSpanned
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.sharkaboi.mediahub.R
 import com.sharkaboi.mediahub.common.util.getLocalDateFromDayAndTime
 import com.sharkaboi.mediahub.data.api.models.anime.AnimeByIDResponse
 import com.sharkaboi.mediahub.data.api.models.manga.MangaByIDResponse
-import java.text.DecimalFormat
 import java.time.format.DateTimeFormatter
 import kotlin.time.Duration
 import kotlin.time.ExperimentalTime
 
-internal fun Double.roundOfString(): String {
-    if (this == 0.0) {
-        return "0"
-    }
-    val format = DecimalFormat("#.##")
-    return format.format(this)
+internal fun Context.getProgressStringWith(progress: Int?, total: Int?): String {
+    val totalCountString = if (total == null || total == 0)
+        getString(R.string.no_count_fount_marker)
+    else
+        total.toString()
+    val progressCount = progress ?: 0
+    return getString(
+        R.string.media_progress_template,
+        progressCount,
+        totalCountString
+    )
 }
 
-internal fun String.getAnimeNsfwRating(): String {
-    return when {
-        this.trim() == "white" -> {
-            "SFW"
-        }
-        this.trim() == "gray" -> {
-            "NSFW?"
-        }
-        this.trim() == "black" -> {
-            "NSFW"
-        }
-        else -> {
-            "SFW : N/A"
-        }
-    }
+internal fun Context.getEpisodesOfAnimeString(episodes: Int): String {
+    return resources.getQuantityString(
+        R.plurals.episode_count_template,
+        episodes,
+        if (episodes == 0) getString(R.string.n_a) else episodes.toString()
+    )
 }
 
-internal fun String.getMangaNsfwRating(): String {
-    return when {
-        this.trim() == "white" -> {
-            "Safe for work (SFW)"
-        }
-        this.trim() == "gray" -> {
-            "Maybe not safe for work (NSFW)"
-        }
-        this.trim() == "black" -> {
-            "Not safe for work (NSFW)"
-        }
-        else -> {
-            "N/A"
-        }
-    }
+internal fun Context.getEpisodesOfAnimeFullString(episodes: Double): String {
+    return resources.getQuantityString(
+        R.plurals.episode_count_full_template,
+        episodes.toInt(),
+        if (episodes == 0.0) getString(R.string.n_a) else episodes.toInt().toString()
+    )
 }
 
-internal fun String.getRating(): String {
-    return when {
-        this.trim() == "g" -> {
-            "G - All ages"
-        }
-        this.trim() == "pg" -> {
-            "PG"
-        }
-        this.trim() == "pg_13" -> {
-            "PG 13"
-        }
-        this.trim() == "r" -> {
-            "R - 17+"
-        }
-        this.trim() == "r+" -> {
-            "R+"
-        }
-        this.trim() == "rx" -> {
-            "Rx - Hentai"
-        }
-        else -> {
-            "N/A"
-        }
-    }
+internal fun Context.getDaysCountString(days: Long): String {
+    return resources.getQuantityString(
+        R.plurals.days_count_template,
+        days.toInt(),
+        if (days == 0L) getString(R.string.n_a) else days.toString()
+    )
 }
 
-internal fun String.getAnimeAiringStatus(): String {
-    return when {
-        this.trim() == "finished_airing" -> {
-            "Finished airing"
-        }
-        this.trim() == "currently_airing" -> {
-            "Currently airing"
-        }
-        this.trim() == "not_yet_aired" -> {
-            "Yet to be aired"
-        }
-        else -> {
-            "Airing status : N/A"
-        }
-    }
+internal fun Context.getVolumesOfMangaString(volumes: Int): String {
+    return resources.getQuantityString(
+        R.plurals.volume_count_template,
+        volumes,
+        if (volumes == 0) getString(R.string.n_a) else volumes.toString()
+    )
 }
 
-internal fun String.getMangaPublishStatus(): String {
-    return when {
-        this.trim() == "finished" -> {
-            "Finished publishing"
-        }
-        this.trim() == "currently_publishing" -> {
-            "Currently publishing"
-        }
-        this.trim() == "not_yet_published" -> {
-            "Yet to be published"
-        }
-        else -> {
-            "Publishing status : N/A"
-        }
-    }
+internal fun Context.getChaptersOfMangaString(chapters: Int): String {
+    return resources.getQuantityString(
+        R.plurals.chapter_count_template,
+        chapters,
+        if (chapters == 0) getString(R.string.n_a) else chapters.toString()
+    )
 }
 
-internal fun AnimeByIDResponse.Broadcast.getBroadcastTime(): String {
-    try {
-        if (this.startTime == null) {
-            return "On ${this.dayOfTheWeek}"
-        }
-        val localTime = getLocalDateFromDayAndTime(this.dayOfTheWeek, this.startTime)
-        return localTime?.format(DateTimeFormatter.ofPattern("EEEE h:mm a zzzz")) ?: "N/A"
-    } catch (e: Exception) {
-        e.printStackTrace()
-        return "N/A"
-    }
-}
-
-internal fun AnimeByIDResponse.AlternativeTitles.getFormattedString(): Spanned {
-    return if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-        Html.fromHtml(
-            """
-            <b>English title</b> : ${
-            this.en?.let {
-                if (it.isBlank()) {
-                    "N/A"
-                } else {
-                    it
-                }
-            } ?: "N/A"
-            }<br>
-            <b>Japanese title</b> : ${
-            this.ja?.let {
-                if (it.isBlank()) {
-                    "N/A"
-                } else {
-                    it
-                }
-            } ?: "N/A"
-            }<br>
-            <b>Synonyms</b> : ${
-            this.synonyms?.let {
-                if (it.isEmpty()) {
-                    "N/A"
-                } else {
-                    it.joinToString().ifBlank { "N/A" }
-                }
-            } ?: "N/A"
-            }
-            """.trimIndent(),
-            Html.FROM_HTML_MODE_COMPACT
-        )
+internal fun Context.getAnimeSeasonString(season: String?, year: Int?): String {
+    return if (season == null || year == null) {
+        getString(R.string.anime_season_unknown_template, getString(R.string.n_a))
     } else {
-        Html.fromHtml(
-            """
-            <b>English title</b> : ${
-            this.en?.let {
-                if (it.isBlank()) {
-                    "N/A"
-                } else {
-                    it
-                }
-            } ?: "N/A"
-            }<br>
-            <b>Japanese title</b> : ${
-            this.ja?.let {
-                if (it.isBlank()) {
-                    "N/A"
-                } else {
-                    it
-                }
-            } ?: "N/A"
-            }<br>
-            <b>Synonyms</b> : ${
-            this.synonyms?.let {
-                if (it.isEmpty()) {
-                    "N/A"
-                } else {
-                    it.joinToString().ifBlank { "N/A" }
-                }
-            } ?: "N/A"
-            }
-            """.trimIndent()
-        )
+        getString(R.string.anime_season_template, season.capitalizeFirst(), year)
     }
 }
 
-internal fun MangaByIDResponse.AlternativeTitles.getFormattedString(): Spanned {
-    return if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-        Html.fromHtml(
-            """
-            <b>English title</b> : ${
-            this.en?.let {
-                if (it.isBlank()) {
-                    "N/A"
-                } else {
-                    it
-                }
-            } ?: "N/A"
-            }<br>
-            <b>Japanese title</b> : ${
-            this.ja?.let {
-                if (it.isBlank()) {
-                    "N/A"
-                } else {
-                    it
-                }
-            } ?: "N/A"
-            }<br>
-            <b>Synonyms</b> : ${
-            this.synonyms?.let {
-                if (it.isEmpty()) {
-                    "N/A"
-                } else {
-                    it.joinToString().ifBlank { "N/A" }
-                }
-            } ?: "N/A"
-            }
-            """.trimIndent(),
-            Html.FROM_HTML_MODE_COMPACT
-        )
-    } else {
-        Html.fromHtml(
-            """
-            <b>English title</b> : ${
-            this.en?.let {
-                if (it.isBlank()) {
-                    "N/A"
-                } else {
-                    it
-                }
-            } ?: "N/A"
-            }<br>
-            <b>Japanese title</b> : ${
-            this.ja?.let {
-                if (it.isBlank()) {
-                    "N/A"
-                } else {
-                    it
-                }
-            } ?: "N/A"
-            }<br>
-            <b>Synonyms</b> : ${
-            this.synonyms?.let {
-                if (it.isEmpty()) {
-                    "N/A"
-                } else {
-                    it.joinToString().ifBlank { "N/A" }
-                }
-            } ?: "N/A"
-            }
-            """.trimIndent()
-        )
+internal fun Context.getAnimeOriginalSourceString(source: String?): String {
+    val sourceValue = source?.replaceUnderScoreWithWhiteSpace()
+        ?.capitalizeFirst()
+        ?: getString(R.string.n_a)
+    return getString(R.string.anime_original_source_template, sourceValue)
+}
+
+internal fun Context.getMediaTypeStringWith(type: String): String {
+    return getString(
+        R.string.media_type_template,
+        type.uppercase()
+    )
+}
+
+internal fun Context.getRatingStringWithRating(rating: Number?): String {
+    return resources.getQuantityString(
+        R.plurals.rating_hint,
+        rating?.toInt() ?: 0,
+        rating?.toFloat() ?: 0F
+    )
+}
+
+internal fun Context.getAnimeBroadcastTime(broadcast: AnimeByIDResponse.Broadcast?): String {
+    runCatching {
+        if (broadcast == null) {
+            return getString(R.string.n_a)
+        } else if (broadcast.startTime == null) {
+            return getString(R.string.anime_broadcast_on_day, broadcast.dayOfTheWeek)
+        }
+        val localTime = getLocalDateFromDayAndTime(broadcast.dayOfTheWeek, broadcast.startTime)
+        return localTime?.format(DateTimeFormatter.ofPattern("EEEE h:mm a zzzz"))
+            ?: getString(R.string.n_a)
+    }.getOrElse {
+        it.printStackTrace()
+        return getString(R.string.n_a)
     }
 }
 
-internal fun AnimeByIDResponse.Statistics.getStats(): Spanned {
-    return if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-        Html.fromHtml(
-            """
-            <b>Number of users with this anime in list</b> : ${
-            this.numListUsers
-            }<br>
-            <b>Watching count</b> : ${
-            this.status.watching
-            }<br>
-            <b>Planned count</b> : ${
-            this.status.planToWatch
-            }<br>
-            <b>Completed count</b> : ${
-            this.status.completed
-            }<br>
-            <b>Dropped count</b> : ${
-            this.status.dropped
-            }<br>
-            <b>On hold count</b> : ${
-            this.status.onHold
-            }
-            """.trimIndent(),
-            Html.FROM_HTML_MODE_COMPACT
-        )
-    } else {
-        Html.fromHtml(
-            """
-            <b>Number of users with this anime in list</b> : ${
-            this.numListUsers
-            }<br>
-            <b>Watching count</b> : ${
-            this.status.watching
-            }<br>
-            <b>Planned count</b> : ${
-            this.status.planToWatch
-            }<br>
-            <b>Completed count</b> : ${
-            this.status.completed
-            }<br>
-            <b>Dropped count</b> : ${
-            this.status.dropped
-            }<br>
-            <b>On hold count</b> : ${
-            this.status.onHold
-            }
-            """.trimIndent()
-        )
+internal fun Context.getFormattedAnimeTitlesString(titles: AnimeByIDResponse.AlternativeTitles?): Spanned {
+    if (titles == null) {
+        return getString(R.string.n_a).toSpanned()
     }
+    val synonyms = titles.synonyms?.joinToString().ifNullOrBlank { getString(R.string.n_a) }
+    val englishTitle = titles.en.ifNullOrBlank { getString(R.string.n_a) }
+    val japaneseTitle = titles.ja.ifNullOrBlank { getString(R.string.n_a) }
+    val html = getString(R.string.alternate_titles_html, englishTitle, japaneseTitle, synonyms)
+    return HtmlCompat.fromHtml(html, HtmlCompat.FROM_HTML_MODE_COMPACT)
+}
+
+internal fun Context.getFormattedMangaTitlesString(titles: MangaByIDResponse.AlternativeTitles?): Spanned {
+    if (titles == null) {
+        return getString(R.string.n_a).toSpanned()
+    }
+    val synonyms = titles.synonyms?.joinToString().ifNullOrBlank { getString(R.string.n_a) }
+    val englishTitle = titles.en.ifNullOrBlank { getString(R.string.n_a) }
+    val japaneseTitle = titles.ja.ifNullOrBlank { getString(R.string.n_a) }
+    val html = getString(R.string.alternate_titles_html, englishTitle, japaneseTitle, synonyms)
+    return HtmlCompat.fromHtml(html, HtmlCompat.FROM_HTML_MODE_COMPACT)
+}
+
+internal fun Context.getAnimeStats(stats: AnimeByIDResponse.Statistics?): Spanned {
+    if (stats == null) {
+        return getString(R.string.n_a).toSpanned()
+    }
+    val html = getString(
+        R.string.anime_stats_html,
+        stats.numListUsers.toLong(),
+        stats.status.watching.toLong(),
+        stats.status.planToWatch.toLong(),
+        stats.status.completed.toLong(),
+        stats.status.dropped.toLong(),
+        stats.status.onHold.toLong()
+    )
+    return HtmlCompat.fromHtml(html, HtmlCompat.FROM_HTML_MODE_COMPACT)
+}
+
+internal fun Context.getMangaStats(numListUsers: Int?, numScoredUsers: Int?): Spanned {
+    val listUsers = numListUsers?.toString() ?: getString(R.string.n_a)
+    val scoredUsers = numScoredUsers?.toString() ?: getString(R.string.n_a)
+    val html = getString(
+        R.string.manga_stats_html,
+        listUsers,
+        scoredUsers
+    )
+    return HtmlCompat.fromHtml(html, HtmlCompat.FROM_HTML_MODE_COMPACT)
 }
 
 @ExperimentalTime
-internal fun Int?.getEpisodeLengthFromSeconds(): String {
-    try {
-        if (this == null || this <= 0) {
-            return "N/A per ep"
+internal fun Context.getEpisodeLengthFromSeconds(seconds: Int?): String {
+    runCatching {
+        if (seconds == null || seconds <= 0) {
+            return getString(R.string.anime_episode_length_n_a)
         }
-        val duration = Duration.seconds(this.toLong())
+        val duration = Duration.seconds(seconds.toLong())
         val hours = duration.inWholeHours.toInt()
-        val minutes = duration.minus(Duration.Companion.hours(hours)).inWholeMinutes
-        return if (hours <= 0) "${minutes}m per ep" else "${hours}h ${minutes}m per ep"
-    } catch (e: Exception) {
-        e.printStackTrace()
-        return "N/A per ep"
+        val minutes = duration.minus(Duration.hours(hours)).inWholeMinutes
+        return if (hours <= 0) getString(
+            R.string.anime_episode_length_mins,
+            minutes
+        ) else getString(
+            R.string.anime_episode_length_hours,
+            hours,
+            minutes
+        )
+    }.getOrElse {
+        it.printStackTrace()
+        return getString(R.string.anime_episode_length_n_a)
     }
 }
 
 @ExperimentalTime
-internal fun Int.getAiringTimeFormatted(): String {
-    try {
-        if (this <= 0) {
-            return "0h 0m 0s"
+internal fun Context.getAiringTimeFormatted(nextEp: GetNextAiringAnimeEpisodeQuery.NextAiringEpisode): String {
+    val timeFromNow = runCatching {
+        if (nextEp.timeUntilAiring <= 0) {
+            return@runCatching getString(R.string.anime_next_episode_airing_n_a)
         }
-        var currentDuration = Duration.seconds(this.toLong())
+        var currentDuration = Duration.seconds(nextEp.timeUntilAiring.toLong())
         val days = currentDuration.inWholeDays.toInt()
         currentDuration = currentDuration.minus(Duration.days(days))
         val hours = currentDuration.inWholeHours.toInt()
         currentDuration = currentDuration.minus(Duration.hours(hours))
         val minutes = currentDuration.inWholeMinutes.toInt()
-        return if (days <= 0 && hours <= 0) {
-            "${minutes}m"
+        if (days <= 0 && hours <= 0) {
+            getString(R.string.anime_next_episode_airing_minutes, minutes)
         } else if (days <= 0) {
-            "${hours}h ${minutes}m"
+            getString(R.string.anime_next_episode_airing_hours, hours, minutes)
         } else {
-            "${days}d ${hours}h ${minutes}m"
+            getString(R.string.anime_next_episode_airing_days, days, hours, minutes)
         }
-    } catch (e: Exception) {
-        e.printStackTrace()
-        return "0h 0m 0s"
+    }.getOrElse {
+        it.printStackTrace()
+        getString(R.string.anime_next_episode_airing_n_a)
     }
+    return buildString {
+        append(getString(R.string.anime_next_episode_prefix))
+        append(nextEp.episode)
+        append(getString(R.string.anime_next_episode_suffix))
+        append(timeFromNow)
+    }
+}
+
+internal fun Context.showNoActionOkDialog(@StringRes title: Int, content: CharSequence?) {
+    MaterialAlertDialogBuilder(this)
+        .setTitle(title)
+        .setMessage(
+            content.ifNullOrBlank { getString(R.string.n_a) }
+        ).setPositiveButton(R.string.ok) { dialog, _ ->
+            dialog.dismiss()
+        }.show()
 }

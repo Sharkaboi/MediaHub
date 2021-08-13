@@ -2,8 +2,7 @@ package com.sharkaboi.mediahub.modules.manga_details.repository
 
 import com.haroldadmin.cnradapter.NetworkResponse
 import com.sharkaboi.mediahub.common.extensions.emptyString
-import com.sharkaboi.mediahub.common.extensions.ifNullOrBlank
-import com.sharkaboi.mediahub.data.api.ApiConstants
+import com.sharkaboi.mediahub.data.api.constants.ApiConstants
 import com.sharkaboi.mediahub.data.api.models.manga.MangaByIDResponse
 import com.sharkaboi.mediahub.data.api.retrofit.MangaService
 import com.sharkaboi.mediahub.data.api.retrofit.UserMangaService
@@ -29,7 +28,7 @@ class MangaDetailsRepositoryImpl(
                     return@withContext MHTaskState(
                         isSuccess = false,
                         data = null,
-                        error = MHError("Log in has expired, Log in again.", null)
+                        error = MHError.LoginExpiredError
                     )
                 } else {
                     val result = mangaService.getMangaByIdAsync(
@@ -50,10 +49,8 @@ class MangaDetailsRepositoryImpl(
                             return@withContext MHTaskState(
                                 isSuccess = false,
                                 data = null,
-                                error = MHError(
-                                    result.error.message.ifNullOrBlank { "Error with network" },
-                                    null
-                                )
+                                error = result.error.message?.let { MHError(it) }
+                                    ?: MHError.NetworkError
                             )
                         }
                         is NetworkResponse.ServerError -> {
@@ -61,10 +58,8 @@ class MangaDetailsRepositoryImpl(
                             return@withContext MHTaskState(
                                 isSuccess = false,
                                 data = null,
-                                error = MHError(
-                                    result.body?.message.ifNullOrBlank { "Error with status code : ${result.code}" },
-                                    null
-                                )
+                                error = result.body?.message?.let { MHError(it) }
+                                    ?: MHError.apiErrorWithCode(result.code)
                             )
                         }
                         is NetworkResponse.UnknownError -> {
@@ -72,10 +67,8 @@ class MangaDetailsRepositoryImpl(
                             return@withContext MHTaskState(
                                 isSuccess = false,
                                 data = null,
-                                error = MHError(
-                                    result.error.message.ifNullOrBlank { "Error with parsing" },
-                                    null
-                                )
+                                error = result.error.message?.let { MHError(it) }
+                                    ?: MHError.ParsingError
                             )
                         }
                     }
@@ -86,7 +79,7 @@ class MangaDetailsRepositoryImpl(
                 return@withContext MHTaskState(
                     isSuccess = false,
                     data = null,
-                    error = MHError(e.message.ifNullOrBlank { "Unknown Error" }, e)
+                    error = e.message?.let { MHError(it) } ?: MHError.UnknownError
                 )
             }
         }
@@ -101,7 +94,7 @@ class MangaDetailsRepositoryImpl(
                     return@withContext MHTaskState(
                         isSuccess = false,
                         data = null,
-                        error = MHError("Log in has expired, Log in again.", null)
+                        error = MHError.LoginExpiredError
                     )
                 } else {
                     val result = userMangaService.updateMangaStatusAsync(
@@ -126,10 +119,8 @@ class MangaDetailsRepositoryImpl(
                             return@withContext MHTaskState(
                                 isSuccess = false,
                                 data = null,
-                                error = MHError(
-                                    result.error.message.ifNullOrBlank { "Error with network" },
-                                    null
-                                )
+                                error = result.error.message?.let { MHError(it) }
+                                    ?: MHError.NetworkError
                             )
                         }
                         is NetworkResponse.ServerError -> {
@@ -137,10 +128,8 @@ class MangaDetailsRepositoryImpl(
                             return@withContext MHTaskState(
                                 isSuccess = false,
                                 data = null,
-                                error = MHError(
-                                    result.body?.message.ifNullOrBlank { "Error with status code : ${result.code}" },
-                                    null
-                                )
+                                error = result.body?.message?.let { MHError(it) }
+                                    ?: MHError.apiErrorWithCode(result.code)
                             )
                         }
                         is NetworkResponse.UnknownError -> {
@@ -148,10 +137,8 @@ class MangaDetailsRepositoryImpl(
                             return@withContext MHTaskState(
                                 isSuccess = false,
                                 data = null,
-                                error = MHError(
-                                    result.error.message.ifNullOrBlank { "Error with parsing" },
-                                    null
-                                )
+                                error = result.error.message?.let { MHError(it) }
+                                    ?: MHError.ParsingError
                             )
                         }
                     }
@@ -162,7 +149,7 @@ class MangaDetailsRepositoryImpl(
                 return@withContext MHTaskState(
                     isSuccess = false,
                     data = null,
-                    error = MHError(e.message.ifNullOrBlank { "Unknown Error" }, e)
+                    error = e.message?.let { MHError(it) } ?: MHError.UnknownError
                 )
             }
         }
@@ -175,7 +162,7 @@ class MangaDetailsRepositoryImpl(
                     return@withContext MHTaskState(
                         isSuccess = false,
                         data = null,
-                        error = MHError("Log in has expired, Log in again.", null)
+                        error = MHError.LoginExpiredError
                     )
                 } else {
                     val result = userMangaService.deleteMangaFromListAsync(
@@ -196,10 +183,8 @@ class MangaDetailsRepositoryImpl(
                             return@withContext MHTaskState(
                                 isSuccess = false,
                                 data = null,
-                                error = MHError(
-                                    result.error.message.ifNullOrBlank { "Error with network" },
-                                    null
-                                )
+                                error = result.error.message?.let { MHError(it) }
+                                    ?: MHError.NetworkError
                             )
                         }
                         is NetworkResponse.ServerError -> {
@@ -208,18 +193,14 @@ class MangaDetailsRepositoryImpl(
                                 return@withContext MHTaskState(
                                     isSuccess = false,
                                     data = null,
-                                    error = MHError(
-                                        "Manga isn't in your list", null
-                                    )
+                                    error = MHError.MangaNotFoundError
                                 )
                             }
                             return@withContext MHTaskState(
                                 isSuccess = false,
                                 data = null,
-                                error = MHError(
-                                    result.body?.message.ifNullOrBlank { "Error with status code : ${result.code}" },
-                                    null
-                                )
+                                error = result.body?.message?.let { MHError(it) }
+                                    ?: MHError.apiErrorWithCode(result.code)
                             )
                         }
                         is NetworkResponse.UnknownError -> {
@@ -227,10 +208,8 @@ class MangaDetailsRepositoryImpl(
                             return@withContext MHTaskState(
                                 isSuccess = false,
                                 data = null,
-                                error = MHError(
-                                    result.error.message.ifNullOrBlank { "Error with parsing" },
-                                    null
-                                )
+                                error = result.error.message?.let { MHError(it) }
+                                    ?: MHError.ParsingError
                             )
                         }
                     }
@@ -241,7 +220,7 @@ class MangaDetailsRepositoryImpl(
                 return@withContext MHTaskState(
                     isSuccess = false,
                     data = null,
-                    error = MHError(e.message.ifNullOrBlank { "Unknown Error" }, e)
+                    error = e.message?.let { MHError(it) } ?: MHError.UnknownError
                 )
             }
         }

@@ -1,5 +1,8 @@
 package com.sharkaboi.mediahub.data.api.enums
 
+import android.content.Context
+import com.sharkaboi.mediahub.R
+
 @Suppress("EnumEntryName")
 enum class AnimeRankingType {
     all, // Top Anime Series
@@ -12,17 +15,17 @@ enum class AnimeRankingType {
     bypopularity, // Top Anime by Popularity
     favorite; // Top Favorited Anime
 
-    fun getAnimeRanking(): String {
+    fun getAnimeRanking(context: Context): String {
         return when (this) {
-            all -> "All"
-            airing -> "Airing"
-            upcoming -> "Upcoming"
-            tv -> "TV"
-            ova -> "OVA"
-            movie -> "Movie"
-            special -> "Specials"
-            bypopularity -> "By popularity"
-            favorite -> "In your list"
+            all -> context.getString(R.string.anime_ranking_all)
+            airing -> context.getString(R.string.anime_ranking_airing)
+            upcoming -> context.getString(R.string.anime_ranking_upcoming)
+            tv -> context.getString(R.string.anime_ranking_tv)
+            ova -> context.getString(R.string.anime_ranking_ova)
+            movie -> context.getString(R.string.anime_ranking_movie)
+            special -> context.getString(R.string.anime_ranking_specials)
+            bypopularity -> context.getString(R.string.anime_ranking_by_popularity)
+            favorite -> context.getString(R.string.anime_ranking_in_your_list)
         }
     }
 }

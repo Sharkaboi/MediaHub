@@ -12,23 +12,23 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import coil.load
-import coil.transform.RoundedCornersTransformation
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.google.android.material.chip.Chip
 import com.google.android.material.color.MaterialColors
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.shape.ShapeAppearanceModel
+import com.sharkaboi.mediahub.BottomNavGraphDirections
 import com.sharkaboi.mediahub.R
-import com.sharkaboi.mediahub.common.constants.MALExternalLinks
+import com.sharkaboi.mediahub.common.constants.UIConstants
+import com.sharkaboi.mediahub.common.constants.UIConstants.setMediaHubChipStyle
 import com.sharkaboi.mediahub.common.extensions.*
 import com.sharkaboi.mediahub.common.util.MPAndroidChartValueFormatter
 import com.sharkaboi.mediahub.common.util.openShareChooser
 import com.sharkaboi.mediahub.common.util.openUrl
+import com.sharkaboi.mediahub.data.api.constants.MALExternalLinks
 import com.sharkaboi.mediahub.data.api.models.user.UserDetailsResponse
 import com.sharkaboi.mediahub.databinding.FragmentProfileBinding
-import com.sharkaboi.mediahub.modules.anime_details.ui.AnimeDetailsFragmentDirections
 import com.sharkaboi.mediahub.modules.profile.vm.ProfileStates
 import com.sharkaboi.mediahub.modules.profile.vm.ProfileViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -62,14 +62,13 @@ class ProfileFragment : Fragment() {
 
     private fun setListeners() {
         binding.apply {
-            profileContent.ivProfileImage.load(R.drawable.ic_profile_placeholder) {
-                crossfade(true)
-                transformations(RoundedCornersTransformation(10f))
-            }
+            profileContent.ivProfileImage.load(
+                drawableResId = R.drawable.ic_profile_placeholder,
+                builder = UIConstants.ProfileImageBuilder
+            )
             profileContent.chipGroupOptions.forEach {
                 if (it is Chip) {
-                    it.setEnsureMinTouchTargetSize(false)
-                    it.shapeAppearanceModel = ShapeAppearanceModel().withCornerSize(8f)
+                    it.setMediaHubChipStyle()
                 }
             }
             profileContent.ibSettings.setOnClickListener(showSettings)
@@ -95,158 +94,169 @@ class ProfileFragment : Fragment() {
     }
 
     private fun setData(userDetailsResponse: UserDetailsResponse) {
-        binding.apply {
-            profileContent.ibCollapseDetails.setOnClickListener(toggleDetailsCard)
-            toggleDetailsCard.onClick(null)
-            profileContent.apply {
-                ivProfileImage.load(userDetailsResponse.profilePicUrl) {
-                    crossfade(true)
-                    transformations(RoundedCornersTransformation(10f))
-                    placeholder(R.drawable.ic_profile_placeholder)
-                    error(R.drawable.ic_profile_placeholder)
-                    fallback(R.drawable.ic_profile_placeholder)
-                }
-                ivProfileImage.setOnClickListener {
-                    val action =
-                        AnimeDetailsFragmentDirections.openImages(arrayOf(userDetailsResponse.profilePicUrl))
-                    navController.navigate(action)
-                }
-                tvName.text = userDetailsResponse.name
-                ibShare.setOnClickListener {
-                    showShareDialog(userDetailsResponse.name)
-                }
-                profileDetailsCardContent.apply {
-                    tvBirthDay.text =
-                        userDetailsResponse.birthday?.tryParseDateTime()?.formatDateDMY()
-                        ?: getString(R.string.n_a)
-                    tvGender.text =
-                        userDetailsResponse.gender?.capitalizeFirst()
-                        ?: getString(R.string.n_a)
-                    tvJoinedAt.text =
-                        userDetailsResponse.joinedAt.tryParseDateTime()?.formatDateDMY()
-                        ?: getString(R.string.n_a)
-                    tvLocation.text =
-                        userDetailsResponse.location?.ifBlank { getString(R.string.n_a) }
-                        ?: getString(R.string.n_a)
-                    tvTimeZone.text = userDetailsResponse.timeZone ?: getString(R.string.n_a)
-                    tvSupporter.text =
-                        if (userDetailsResponse.isSupporter == null || !userDetailsResponse.isSupporter) {
-                            "No"
-                        } else {
-                            "Yes"
-                        }
-                }
-                if (userDetailsResponse.animeStatistics == null) {
-                    tvStatsEmptyHint.isVisible = true
-                } else {
-                    profileStatsContent.root.isVisible = true
-                    profileStatsContent.apply {
-                        tvEpisodes.text =
-                            ("${userDetailsResponse.animeStatistics.numEpisodes.toInt()} episodes")
-                        tvDaysWatched.text =
-                            ("${userDetailsResponse.animeStatistics.numDaysCompleted.toInt()} days")
-                        tvReWatchCount.text =
-                            ("Re-watched ${userDetailsResponse.animeStatistics.numTimesReWatched.toInt()} times")
-                        tvMeanScore.text =
-                            userDetailsResponse.animeStatistics.meanScore.roundOfString()
-                        pieItemCounts.apply {
-                            val pieChart = this
-                            val entries = listOf(
-                                PieEntry(
-                                    userDetailsResponse.animeStatistics.numItemsCompleted.toFloat(),
-                                    "Completed"
-                                ),
-                                PieEntry(
-                                    userDetailsResponse.animeStatistics.numItemsOnHold.toFloat(),
-                                    "On Hold"
-                                ),
-                                PieEntry(
-                                    userDetailsResponse.animeStatistics.numItemsDropped.toFloat(),
-                                    "Dropped"
-                                ),
-                                PieEntry(
-                                    userDetailsResponse.animeStatistics.numItemsWatching.toFloat(),
-                                    "Watching"
-                                ),
-                                PieEntry(
-                                    userDetailsResponse.animeStatistics.numItemsPlanToWatch.toFloat(),
-                                    "Planned"
-                                )
-                            )
-                            if (entries.count { it.value == 0f } != entries.count()) {
-                                val pieData = PieData(
-                                    PieDataSet(entries, "").apply {
-                                        colors = listOf(
-                                            "#2ecc71".parseRGB(),
-                                            "#ffa500".parseRGB(),
-                                            "#e74c3c".parseRGB(),
-                                            "#3498db".parseRGB(),
-                                            "#5634eb".parseRGB(),
-                                        )
-                                        valueTextSize = 14f
-                                        valueTextColor = Color.WHITE
-                                        valueFormatter = MPAndroidChartValueFormatter()
-                                    }
-                                )
-                                data = pieData
-                                setTouchEnabled(false)
-                                setDrawEntryLabels(false)
-                                setNoDataTextColor("#ba68c8".parseRGB())
-                                val themeColor =
-                                    MaterialColors.getColor(pieChart, R.attr.colorOnSurface)
-                                legend.textColor = themeColor
-                                setHoleColor(Color.TRANSPARENT)
-                                description.text = ""
-                                description.isEnabled = false
-                                animateY(1500)
-                                invalidate()
-                            }
-                        }
-                    }
-                }
-                btnBlogs.setOnClickListener {
-                    openUrl(MALExternalLinks.getBlogsLink(userDetailsResponse.name))
-                }
-                btnClubs.setOnClickListener {
-                    openUrl(MALExternalLinks.getClubsLink(userDetailsResponse.name))
-                }
-                btnForumTopics.setOnClickListener {
-                    openUrl(MALExternalLinks.getForumTopicsLink(userDetailsResponse.name))
-                }
-                btnFriends.setOnClickListener {
-                    openUrl(MALExternalLinks.getFriendsLink(userDetailsResponse.name))
-                }
-                btnHistory.setOnClickListener {
-                    openUrl(MALExternalLinks.getHistoryLink(userDetailsResponse.name))
-                }
-                btnRecommendations.setOnClickListener {
-                    openUrl(MALExternalLinks.getRecommendationsLink(userDetailsResponse.name))
-                }
-                btnReviews.setOnClickListener {
-                    openUrl(MALExternalLinks.getReviewsLink(userDetailsResponse.name))
-                }
+        setUpBannerSection(userDetailsResponse)
+        setUserDetailsSection(userDetailsResponse)
+        setUserStatsSection(userDetailsResponse)
+        setOtherDetailsSection(userDetailsResponse.name)
+        binding.profileContent.ibCollapseDetails.setOnClickListener(toggleDetailsCard)
+        toggleDetailsCard.onClick(null)
+    }
+
+    private fun setOtherDetailsSection(name: String) = binding.profileContent.apply {
+        btnBlogs.setOnClickListener {
+            openUrl(MALExternalLinks.getBlogsLink(name))
+        }
+        btnClubs.setOnClickListener {
+            openUrl(MALExternalLinks.getClubsLink(name))
+        }
+        btnForumTopics.setOnClickListener {
+            openUrl(MALExternalLinks.getForumTopicsLink(name))
+        }
+        btnFriends.setOnClickListener {
+            openUrl(MALExternalLinks.getFriendsLink(name))
+        }
+        btnHistory.setOnClickListener {
+            openUrl(MALExternalLinks.getHistoryLink(name))
+        }
+        btnRecommendations.setOnClickListener {
+            openUrl(MALExternalLinks.getRecommendationsLink(name))
+        }
+        btnReviews.setOnClickListener {
+            openUrl(MALExternalLinks.getReviewsLink(name))
+        }
+    }
+
+    private fun setUserStatsSection(userDetailsResponse: UserDetailsResponse) {
+        if (userDetailsResponse.animeStatistics == null) {
+            binding.profileContent.tvStatsEmptyHint.isVisible = true
+        } else {
+            binding.profileContent.profileStatsContent.root.isVisible = true
+            binding.profileContent.profileStatsContent.apply {
+                tvEpisodes.text =
+                    context?.getEpisodesOfAnimeFullString(userDetailsResponse.animeStatistics.numEpisodes)
+                tvDaysWatched.text =
+                    context?.getDaysCountString(userDetailsResponse.animeStatistics.numDaysCompleted.toLong())
+                tvReWatchCount.text = context?.resources?.getQuantityString(
+                    R.plurals.re_watch_times,
+                    userDetailsResponse.animeStatistics.numTimesReWatched.toInt(),
+                    userDetailsResponse.animeStatistics.numTimesReWatched.toLong()
+                )
+                tvMeanScore.text =
+                    userDetailsResponse.animeStatistics.meanScore.toString()
+                setupPieChart(userDetailsResponse.animeStatistics)
             }
         }
     }
 
+    private fun setupPieChart(animeStatistics: UserDetailsResponse.AnimeStatistics) {
+        val pieChart = binding.profileContent.profileStatsContent.pieItemCounts
+        val entries = listOf(
+            PieEntry(
+                animeStatistics.numItemsCompleted.toFloat(),
+                getString(R.string.anime_status_completed)
+            ),
+            PieEntry(
+                animeStatistics.numItemsOnHold.toFloat(),
+                getString(R.string.anime_status_on_hold)
+            ),
+            PieEntry(
+                animeStatistics.numItemsDropped.toFloat(),
+                getString(R.string.anime_status_dropped)
+            ),
+            PieEntry(
+                animeStatistics.numItemsWatching.toFloat(),
+                getString(R.string.anime_status_watching)
+            ),
+            PieEntry(
+                animeStatistics.numItemsPlanToWatch.toFloat(),
+                getString(R.string.anime_status_planned)
+            )
+        )
+        if (entries.count { it.value == 0f } != entries.count()) {
+            val pieDataSet = PieDataSet(entries, String.emptyString)
+            pieDataSet.colors = listOf(
+                "#2ecc71".parseRGB(),
+                "#ffa500".parseRGB(),
+                "#e74c3c".parseRGB(),
+                "#3498db".parseRGB(),
+                "#5634eb".parseRGB(),
+            )
+            pieDataSet.valueTextSize = 14f
+            pieDataSet.valueTextColor = Color.WHITE
+            pieDataSet.valueFormatter = MPAndroidChartValueFormatter()
+            pieChart.data = PieData(pieDataSet)
+            pieChart.setTouchEnabled(false)
+            pieChart.setDrawEntryLabels(false)
+            pieChart.setNoDataTextColor("#ba68c8".parseRGB())
+            pieChart.legend.textColor = MaterialColors.getColor(pieChart, R.attr.colorOnSurface)
+            pieChart.setHoleColor(Color.TRANSPARENT)
+            pieChart.description.text = String.emptyString
+            pieChart.description.isEnabled = false
+            pieChart.animateY(1500)
+            pieChart.invalidate()
+        }
+    }
+
+    private fun setUserDetailsSection(userDetailsResponse: UserDetailsResponse) =
+        binding.profileContent.profileDetailsCardContent.apply {
+            tvBirthDay.text =
+                userDetailsResponse.birthday?.tryParseDateTime()?.formatDateDMY()
+                ?: getString(R.string.n_a)
+            tvGender.text =
+                userDetailsResponse.gender?.capitalizeFirst()
+                ?: getString(R.string.n_a)
+            tvJoinedAt.text =
+                userDetailsResponse.joinedAt.tryParseDateTime()?.formatDateDMY()
+                ?: getString(R.string.n_a)
+            tvLocation.text =
+                userDetailsResponse.location.ifNullOrBlank { getString(R.string.n_a) }
+            tvTimeZone.text = userDetailsResponse.timeZone ?: getString(R.string.n_a)
+            tvSupporter.text =
+                if (userDetailsResponse.isSupporter == null || !userDetailsResponse.isSupporter) {
+                    getString(R.string.no)
+                } else {
+                    getString(R.string.yes)
+                }
+        }
+
+    private fun setUpBannerSection(userDetailsResponse: UserDetailsResponse) =
+        binding.profileContent.apply {
+            ivProfileImage.load(
+                uri = userDetailsResponse.profilePicUrl,
+                builder = UIConstants.ProfileImageBuilder
+            )
+            ivProfileImage.setOnClickListener {
+                val action =
+                    BottomNavGraphDirections.openImageSlider(arrayOf(userDetailsResponse.profilePicUrl))
+                navController.navigate(action)
+            }
+            tvName.text = userDetailsResponse.name
+            ibShare.setOnClickListener {
+                showShareDialog(userDetailsResponse.name)
+            }
+        }
+
     private fun showShareDialog(name: String) {
-        val items = arrayOf("MAL profile", "Anime list", "Manga list")
+        val items = arrayOf(
+            getString(R.string.share_mal_profile),
+            getString(R.string.share_anime_list),
+            getString(R.string.share_manga_list)
+        )
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Share your")
+            .setTitle(R.string.share_your_dialog_hint)
             .setItems(items) { dialog, which ->
                 onShareClick(name, which)
                 dialog.dismiss()
-            }
-            .show()
+            }.show()
     }
 
     private fun onShareClick(name: String, which: Int) {
         val url = when (which) {
-            0 -> "https://myanimelist.net/profile/$name"
-            1 -> "https://myanimelist.net/animelist/$name"
-            else -> "https://myanimelist.net/mangalist/$name"
+            0 -> MALExternalLinks.getProfileLink(name)
+            1 -> MALExternalLinks.getUserAnimeListLink(name)
+            else -> MALExternalLinks.getUserMangaListLink(name)
         }
-        openShareChooser(url, "Share your MAL link to")
+        openShareChooser(url, getString(R.string.share_your_hint))
     }
 
     private val showSettings = View.OnClickListener {
@@ -268,15 +278,9 @@ class ProfileFragment : Fragment() {
     }
 
     private val rotateCloseArrow by lazy {
-        AnimationUtils.loadAnimation(
-            context,
-            R.anim.rotate_open_anim
-        )
+        AnimationUtils.loadAnimation(context, R.anim.rotate_open_anim)
     }
     private val rotateOpenArrow by lazy {
-        AnimationUtils.loadAnimation(
-            context,
-            R.anim.rotate_close_anim
-        )
+        AnimationUtils.loadAnimation(context, R.anim.rotate_close_anim)
     }
 }

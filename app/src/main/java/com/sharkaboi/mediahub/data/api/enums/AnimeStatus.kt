@@ -1,5 +1,8 @@
 package com.sharkaboi.mediahub.data.api.enums
 
+import android.content.Context
+import com.sharkaboi.mediahub.R
+
 @Suppress("EnumEntryName")
 enum class AnimeStatus {
     watching,
@@ -9,14 +12,14 @@ enum class AnimeStatus {
     dropped,
     all;
 
-    fun getFormattedString(): String {
+    fun getFormattedString(context: Context): String {
         return when (this) {
-            watching -> "Watching"
-            plan_to_watch -> "Planned"
-            completed -> "Completed"
-            on_hold -> "On hold"
-            dropped -> "Dropped"
-            all -> "All"
+            watching -> context.getString(R.string.anime_status_watching)
+            plan_to_watch -> context.getString(R.string.anime_status_planned)
+            completed -> context.getString(R.string.anime_status_completed)
+            on_hold -> context.getString(R.string.anime_status_on_hold)
+            dropped -> context.getString(R.string.anime_status_dropped)
+            all -> context.getString(R.string.anime_status_all)
         }
     }
 
@@ -27,11 +30,11 @@ enum class AnimeStatus {
 
 fun String.animeStatusFromString(): AnimeStatus? {
     return when (this) {
-        "watching" -> AnimeStatus.watching
-        "plan_to_watch" -> AnimeStatus.plan_to_watch
-        "completed" -> AnimeStatus.completed
-        "on_hold" -> AnimeStatus.on_hold
-        "dropped" -> AnimeStatus.dropped
+        AnimeStatus.watching.name -> AnimeStatus.watching
+        AnimeStatus.plan_to_watch.name -> AnimeStatus.plan_to_watch
+        AnimeStatus.completed.name -> AnimeStatus.completed
+        AnimeStatus.on_hold.name -> AnimeStatus.on_hold
+        AnimeStatus.dropped.name -> AnimeStatus.dropped
         else -> null // AnimeStatus.all
     }
 }

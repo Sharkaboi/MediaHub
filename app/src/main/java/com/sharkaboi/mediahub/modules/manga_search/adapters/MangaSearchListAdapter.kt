@@ -7,9 +7,8 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import coil.transform.RoundedCornersTransformation
-import com.sharkaboi.mediahub.R
-import com.sharkaboi.mediahub.common.extensions.roundOfString
+import com.sharkaboi.mediahub.common.constants.UIConstants
+import com.sharkaboi.mediahub.common.extensions.getRatingStringWithRating
 import com.sharkaboi.mediahub.data.api.models.manga.MangaSearchResponse
 import com.sharkaboi.mediahub.databinding.MangaListItemBinding
 
@@ -24,17 +23,14 @@ class MangaSearchListAdapter(
         fun bind(item: MangaSearchResponse.Data?) {
             item?.let {
                 mangaListItemBinding.apply {
-                    ivMangaBanner.load(it.node.mainPicture?.large ?: it.node.mainPicture?.medium) {
-                        crossfade(true)
-                        placeholder(R.drawable.ic_manga_placeholder)
-                        error(R.drawable.ic_manga_placeholder)
-                        fallback(R.drawable.ic_manga_placeholder)
-                        transformations(RoundedCornersTransformation(topLeft = 8f, topRight = 8f))
-                    }
+                    ivMangaBanner.load(
+                        uri = it.node.mainPicture?.large ?: it.node.mainPicture?.medium,
+                        builder = UIConstants.MangaImageBuilder
+                    )
                     tvMangaName.text = it.node.title
                     tvChapsRead.isVisible = false
                     tvVolumesRead.isVisible = false
-                    tvScore.text = ("★ ${it.node.meanScore?.roundOfString() ?: "0"}")
+                    tvScore.text = tvScore.context.getRatingStringWithRating(it.node.meanScore)
                     root.setOnClickListener {
                         onItemClick(item.node.id)
                     }

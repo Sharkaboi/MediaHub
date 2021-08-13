@@ -35,7 +35,6 @@
                 android:id="@+id/tvScore"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/default_score_value"
                 android:textColor="@color/white"
                 tools:text="★ 10" />
         </com.google.android.material.card.MaterialCardView>
@@ -71,7 +70,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="4dp"
             android:layout_marginTop="4dp"
-            android:text="@string/episode_count_default"
+            android:text="@string/episode_count_default_hint"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/tvChapsRead"
@@ -85,7 +84,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="4dp"
             android:layout_marginTop="4dp"
-            android:text="@string/episode_count_default"
+            android:text="@string/episode_count_default_hint"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
