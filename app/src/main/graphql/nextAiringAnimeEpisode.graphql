@@ -2,13 +2,9 @@ query GetNextAiringAnimeEpisode(
   $idMal: Int!
 ) {
     Media(idMal: $idMal, type: ANIME) {
-      id
-      idMal
       nextAiringEpisode {
-        id
         episode
         timeUntilAiring
-        airingAt
       }
     }
 }
