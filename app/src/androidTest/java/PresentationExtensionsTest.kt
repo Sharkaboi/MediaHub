@@ -514,9 +514,7 @@ class PresentationExtensionsTest {
     fun getAiringTimeFormattedWith0TimeReturnsValidString() {
         val time = GetNextAiringAnimeEpisodeQuery.NextAiringEpisode(
             timeUntilAiring = 0,
-            airingAt = 0,
-            episode = 7,
-            id = 0
+            episode = 7
         )
         val expectedString = "Episode 7 airs in 0h 0m 0s"
         val resultString = context.getAiringTimeFormatted(time)
@@ -528,9 +526,7 @@ class PresentationExtensionsTest {
     fun getAiringTimeFormattedWithMinutesTimeReturnsValidString() {
         val time = GetNextAiringAnimeEpisodeQuery.NextAiringEpisode(
             timeUntilAiring = 30 * 60,
-            airingAt = 0,
-            episode = 7,
-            id = 0
+            episode = 7
         )
         val expectedString = "Episode 7 airs in 30m"
         val resultString = context.getAiringTimeFormatted(time)
@@ -542,9 +538,7 @@ class PresentationExtensionsTest {
     fun getAiringTimeFormattedWithHoursTimeReturnsValidString() {
         val time = GetNextAiringAnimeEpisodeQuery.NextAiringEpisode(
             timeUntilAiring = 90 * 60,
-            airingAt = 0,
-            episode = 7,
-            id = 0
+            episode = 7
         )
         val expectedString = "Episode 7 airs in 1h 30m"
         val resultString = context.getAiringTimeFormatted(time)
@@ -556,9 +550,7 @@ class PresentationExtensionsTest {
     fun getAiringTimeFormattedWithDaysTimeReturnsValidString() {
         val time = GetNextAiringAnimeEpisodeQuery.NextAiringEpisode(
             timeUntilAiring = 90 * 24 * 60 * 60,
-            airingAt = 0,
-            episode = 7,
-            id = 0
+            episode = 7
         )
         val expectedString = "Episode 7 airs in 90d 0h 0m"
         val resultString = context.getAiringTimeFormatted(time)
