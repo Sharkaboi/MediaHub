@@ -89,7 +89,7 @@ jobs:
         with:
           api-level: ${{ matrix.api-level }}
           arch: x86
-          targert: default
+          target: default
           disable-animations: true
           force-avd-creation: false
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -no-snapshot-save
