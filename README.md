@@ -1,5 +1,5 @@
 <p align="center">
-    <img align="center" src="./assets/mediahub-banner.png" /><br>
+    <img align="center" style="width:100%;" src="./assets/mediahub-banner.png" /><br>
     <b><h1 align="center">MediaHub</h1></b>
 </p>
 <p align="center">
@@ -23,6 +23,10 @@
     </a><br>
     A simple, easy to use MyAnimeList client alternative. Uses the <a href="https://myanimelist.net/apiconfig/references/api/v2">MAL Api</a> & <a href="https://anilist.gitbook.io/anilist-apiv2-docs/">Anilist Api</a>. 
 </p>
+
+## Screenshots
+
+![](assets/showcase.png)
 
 ## Uses
 
@@ -53,28 +57,6 @@
 ## Releases
 
 * Check out the latest releases [here](https://github.com/Sharkaboi/MediaHub/releases)
-
-## Screenshots
-
-Anime            |  Manga
-:-------------------------:|:-------------------------:
-![](assets/screenshots/anime.png)  |  ![](assets/screenshots/manga.png)
-Anime details            |   Manga details
-![](assets/screenshots/anime_details.png)  |  ![](assets/screenshots/manga_details.png)
-Anime details            |   Manga details
-![](assets/screenshots/anime_details2.png)  |  ![](assets/screenshots/manga_details2.png)
-Anime ranking           |  Manga ranking
-![](assets/screenshots/anime_ranking.png)  |  ![](assets/screenshots/manga_ranking.png)
-Anime search            |  Manga search
-![](assets/screenshots/anime_search.png)  |  ![](assets/screenshots/manga_search.png)
-Discover           |  Anime suggestions
-![](assets/screenshots/discover.png)  |  ![](assets/screenshots/anime_suggestions.png)
-Anime seasonals           |  Profile
-![](assets/screenshots/anime_seasonal.png)  |  ![](assets/screenshots/profile.png)
-Profile           |  Share
-![](assets/screenshots/profile2.png)  |  ![](assets/screenshots/share.png)
-Settings           |  Update
-![](assets/screenshots/settings.png)  |  ![](assets/screenshots/update.png)
 
 ## Build instructions
 
