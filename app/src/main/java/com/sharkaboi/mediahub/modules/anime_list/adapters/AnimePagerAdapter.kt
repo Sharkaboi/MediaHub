@@ -12,6 +12,6 @@ class AnimePagerAdapter(fm: FragmentManager, lifecycle: Lifecycle) :
     override fun getItemCount(): Int = AnimeStatus.values().count()
 
     override fun createFragment(position: Int): Fragment {
-        return AnimeListByStatusFragment.newInstance(AnimeStatus.values()[position])
+        return AnimeListByStatusFragment()
     }
 }

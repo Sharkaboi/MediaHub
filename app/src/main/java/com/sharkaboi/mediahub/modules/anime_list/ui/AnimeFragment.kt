@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.google.android.material.behavior.HideBottomViewOnScrollBehavior
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -14,14 +15,17 @@ import com.sharkaboi.mediahub.R
 import com.sharkaboi.mediahub.data.api.enums.AnimeStatus
 import com.sharkaboi.mediahub.databinding.FragmentAnimeBinding
 import com.sharkaboi.mediahub.modules.anime_list.adapters.AnimePagerAdapter
+import com.sharkaboi.mediahub.modules.anime_list.vm.AnimeViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class AnimeFragment : Fragment() {
-
     private lateinit var vpAnimeAdapter: AnimePagerAdapter
     private var _binding: FragmentAnimeBinding? = null
     private val binding get() = _binding!!
     private lateinit var onTabChanged: TabLayout.OnTabSelectedListener
     private lateinit var onPageChanged: OnPageChangeCallback
+    private val animeViewModel by activityViewModels<AnimeViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -77,6 +81,7 @@ class AnimeFragment : Fragment() {
         }
         onPageChanged = object : OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
+                animeViewModel.setAnimeStatus(AnimeStatus.values()[position])
                 binding.animeTabLayout.apply {
                     selectTab(getTabAt(position))
                 }

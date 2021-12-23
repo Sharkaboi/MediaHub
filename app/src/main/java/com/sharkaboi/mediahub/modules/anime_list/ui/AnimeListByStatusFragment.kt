@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
@@ -16,26 +16,23 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.sharkaboi.mediahub.BottomNavGraphDirections
 import com.sharkaboi.mediahub.R
 import com.sharkaboi.mediahub.common.constants.UIConstants
+import com.sharkaboi.mediahub.common.extensions.observe
 import com.sharkaboi.mediahub.common.extensions.showToast
-import com.sharkaboi.mediahub.data.api.enums.AnimeStatus
 import com.sharkaboi.mediahub.data.api.enums.UserAnimeSortType
 import com.sharkaboi.mediahub.databinding.FragmentAnimeListByStatusBinding
 import com.sharkaboi.mediahub.modules.anime_list.adapters.AnimeListAdapter
 import com.sharkaboi.mediahub.modules.anime_list.adapters.AnimeLoadStateAdapter
 import com.sharkaboi.mediahub.modules.anime_list.vm.AnimeViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class AnimeListByStatusFragment : Fragment() {
     private var _binding: FragmentAnimeListByStatusBinding? = null
     private val binding get() = _binding!!
-    private val animeViewModel by viewModels<AnimeViewModel>()
+    private val animeViewModel by activityViewModels<AnimeViewModel>()
     private lateinit var animeListAdapter: AnimeListAdapter
     private val navController by lazy { findNavController() }
-    private var resultsJob: Job? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,8 +44,6 @@ class AnimeListByStatusFragment : Fragment() {
     }
 
     override fun onDestroyView() {
-        resultsJob?.cancel()
-        resultsJob = null
         binding.rvAnimeByStatus.adapter = null
         _binding = null
         super.onDestroyView()
@@ -56,22 +51,13 @@ class AnimeListByStatusFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initStatus()
         setUpRecyclerView()
-        setObservers()
         setListeners()
-    }
-
-    private fun initStatus() {
-        val status = arguments?.getString(ANIME_STATUS_KEY)?.let { status ->
-            AnimeStatus.valueOf(status)
-        } ?: AnimeStatus.all
-        animeViewModel.setAnimeStatus(status)
     }
 
     override fun onResume() {
         super.onResume()
-        getAnimeList()
+        animeViewModel.refresh()
     }
 
     private fun setUpRecyclerView() {
@@ -88,27 +74,25 @@ class AnimeListByStatusFragment : Fragment() {
         }
     }
 
-    private fun setObservers() {
-        getAnimeList()
-        lifecycleScope.launch {
-            animeListAdapter.addLoadStateListener { loadStates ->
-                if (loadStates.source.refresh is LoadState.Error) {
-                    showToast((loadStates.source.refresh as LoadState.Error).error.message)
-                }
-                binding.progressBar.isShowing = loadStates.refresh is LoadState.Loading
-                binding.tvEmptyHint.isVisible =
-                    loadStates.refresh is LoadState.NotLoading && animeListAdapter.itemCount == 0
+    private fun setListeners() {
+        animeListAdapter.addLoadStateListener { loadStates ->
+            if (loadStates.source.refresh is LoadState.Error) {
+                showToast((loadStates.source.refresh as LoadState.Error).error.message)
             }
+            binding.progressBar.isShowing = loadStates.refresh is LoadState.Loading
+            binding.tvEmptyHint.isVisible =
+                loadStates.refresh is LoadState.NotLoading && animeListAdapter.itemCount == 0
         }
         binding.swipeRefresh.setOnRefreshListener {
-            getAnimeList()
+            animeViewModel.refresh()
             binding.swipeRefresh.isRefreshing = false
         }
-    }
-
-    private fun setListeners() {
         binding.ibFilter.setOnClickListener {
             openSortMenu()
+        }
+        observe(animeViewModel.animeList) { pagingData ->
+            lifecycleScope.launch { animeListAdapter.submitData(pagingData) }
+            scrollRecyclerView()
         }
     }
 
@@ -119,33 +103,9 @@ class AnimeListByStatusFragment : Fragment() {
             .setTitle(R.string.sort_anime_by_hint)
             .setSingleChoiceItems(singleItems, checkedItem) { dialog, which ->
                 animeViewModel.setSortType(UserAnimeSortType.values()[which])
-                getAnimeList()
                 dialog.dismiss()
-            }
-            .show()
-    }
-
-    private fun getAnimeList() {
-        resultsJob?.cancel()
-        resultsJob = lifecycleScope.launch {
-            animeViewModel.getAnimeList().collectLatest { pagingData ->
-                animeListAdapter.submitData(pagingData)
-                scrollRecyclerView()
-            }
-        }
+            }.show()
     }
 
     fun scrollRecyclerView() = binding.rvAnimeByStatus.smoothScrollToPosition(0)
-
-    companion object {
-        private const val ANIME_STATUS_KEY = "status"
-
-        @JvmStatic
-        fun newInstance(status: AnimeStatus) =
-            AnimeListByStatusFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ANIME_STATUS_KEY, status.name)
-                }
-            }
-    }
 }
