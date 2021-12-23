@@ -19,14 +19,13 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.sharkaboi.mediahub.BottomNavGraphDirections
 import com.sharkaboi.mediahub.R
 import com.sharkaboi.mediahub.common.extensions.debounce
+import com.sharkaboi.mediahub.common.extensions.observe
 import com.sharkaboi.mediahub.common.extensions.showToast
 import com.sharkaboi.mediahub.databinding.FragmentAnimeSearchBinding
 import com.sharkaboi.mediahub.modules.anime_search.adapters.AnimeSearchListAdapter
 import com.sharkaboi.mediahub.modules.anime_search.adapters.AnimeSearchLoadStateAdapter
 import com.sharkaboi.mediahub.modules.anime_search.vm.AnimeSearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -36,7 +35,6 @@ class AnimeSearchFragment : Fragment() {
     private lateinit var animeSearchListAdapter: AnimeSearchListAdapter
     private val animeSearchViewModel by viewModels<AnimeSearchViewModel>()
     private val navController by lazy { findNavController() }
-    private var searchJob: Job? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,8 +46,6 @@ class AnimeSearchFragment : Fragment() {
     }
 
     override fun onDestroyView() {
-        searchJob?.cancel()
-        searchJob = null
         binding.rvSearchResults.adapter = null
         _binding = null
         super.onDestroyView()
@@ -76,17 +72,15 @@ class AnimeSearchFragment : Fragment() {
     }
 
     private fun setObservers() {
-        lifecycleScope.launch {
-            animeSearchListAdapter.addLoadStateListener { loadStates ->
-                if (loadStates.source.refresh is LoadState.Error) {
-                    showToast((loadStates.source.refresh as LoadState.Error).error.message)
-                }
-                binding.progress.isShowing = loadStates.refresh is LoadState.Loading
-                binding.searchEmptyView.root.isVisible =
-                    loadStates.refresh is LoadState.NotLoading && animeSearchListAdapter.itemCount == 0
-                binding.searchEmptyView.tvHint.text =
-                    getString(R.string.anime_search_no_result_hint)
+        animeSearchListAdapter.addLoadStateListener { loadStates ->
+            if (loadStates.source.refresh is LoadState.Error) {
+                showToast((loadStates.source.refresh as LoadState.Error).error.message)
             }
+            binding.progress.isShowing = loadStates.refresh is LoadState.Loading
+            binding.searchEmptyView.root.isVisible =
+                loadStates.refresh is LoadState.NotLoading && animeSearchListAdapter.itemCount == 0
+            binding.searchEmptyView.tvHint.text =
+                getString(R.string.anime_search_no_result_hint)
         }
         val debounce = debounce<CharSequence>(scope = lifecycleScope) {
             searchAnime(it)
@@ -94,26 +88,22 @@ class AnimeSearchFragment : Fragment() {
         binding.svSearch.doOnTextChanged { query, _, _, _ ->
             debounce(query)
         }
+        observe(animeSearchViewModel.pagedSearchResult) { pagingData ->
+            lifecycleScope.launch { animeSearchListAdapter.submitData(pagingData) }
+            binding.rvSearchResults.scrollToPosition(0)
+        }
     }
 
     private fun searchAnime(query: CharSequence?) {
-        searchJob?.cancel()
-        searchJob = lifecycleScope.launch {
-            query?.toString()?.let {
-                if (it.trim().length < 3) {
-                    binding.searchEmptyView.root.isVisible = true
-                    binding.searchEmptyView.tvHint.text = getString(R.string.anime_search_hint)
-                    animeSearchListAdapter.submitData(PagingData.empty())
-                    return@launch
-                }
-                hideKeyboard()
-                animeSearchViewModel.getAnime(it.trim())
-                    .collectLatest { pagingData ->
-                        animeSearchListAdapter.submitData(pagingData)
-                        binding.rvSearchResults.scrollToPosition(0)
-                    }
-            }
+        val trimmedText = query?.toString()?.trim() ?: return
+        if (trimmedText.length < 3) {
+            binding.searchEmptyView.root.isVisible = true
+            binding.searchEmptyView.tvHint.text = getString(R.string.anime_search_hint)
+            lifecycleScope.launch { animeSearchListAdapter.submitData(PagingData.empty()) }
+            return
         }
+        hideKeyboard()
+        animeSearchViewModel.getAnime(trimmedText)
     }
 
     private fun hideKeyboard() {
