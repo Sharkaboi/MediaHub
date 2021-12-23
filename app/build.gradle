@@ -39,6 +39,8 @@ android {
     }
     kotlinOptions {
         jvmTarget = '11'
+        freeCompilerArgs += "-Xopt-in=kotlin.time.ExperimentalTime"
+        freeCompilerArgs += "-Xopt-in=kotlin.ExperimentalStdlibApi"
     }
 
     buildFeatures {
