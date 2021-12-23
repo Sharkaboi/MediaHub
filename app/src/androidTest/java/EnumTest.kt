@@ -92,7 +92,7 @@ class EnumTest {
             AnimeRankingType.favorite to "In your list",
         )
         inputToExpectedMap.forEach { (input, expectedString) ->
-            Assert.assertEquals(input.getAnimeRanking(context), expectedString)
+            Assert.assertEquals(input.getFormattedString(context), expectedString)
         }
     }
 

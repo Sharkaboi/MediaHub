@@ -83,7 +83,7 @@ class AnimeRankingFragment : Fragment() {
         AnimeRankingType.values().forEach { rankingType ->
             binding.rankTypeChipGroup.addView(
                 Chip(context).apply {
-                    text = rankingType.getAnimeRanking(context)
+                    text = rankingType.getFormattedString(context)
                     setMediaHubChipStyle()
                     isCheckable = true
                     isChecked = rankingType == animeRankingViewModel.selectedRankingType
