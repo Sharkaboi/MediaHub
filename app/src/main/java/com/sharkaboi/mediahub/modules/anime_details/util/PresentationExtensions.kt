@@ -1,5 +1,6 @@
 package com.sharkaboi.mediahub.modules.anime_details.util
 
+import GetNextAiringAnimeEpisodeQuery
 import android.content.Context
 import android.text.Spanned
 import androidx.core.text.HtmlCompat
@@ -12,6 +13,8 @@ import com.sharkaboi.mediahub.common.util.DateUtils
 import com.sharkaboi.mediahub.data.api.models.anime.AnimeByIDResponse
 import java.time.format.DateTimeFormatter
 import kotlin.time.Duration
+import kotlin.time.Duration.Companion.days
+import kotlin.time.Duration.Companion.hours
 
 internal fun Context.getEpisodesOfAnimeString(episodes: Int): String {
     return resources.getQuantityString(
@@ -109,9 +112,9 @@ internal fun Context.getAiringTimeFormatted(nextEp: GetNextAiringAnimeEpisodeQue
         }
         var currentDuration = Duration.seconds(nextEp.timeUntilAiring.toLong())
         val days = currentDuration.inWholeDays.toInt()
-        currentDuration = currentDuration.minus(Duration.days(days))
+        currentDuration = currentDuration.minus(days.days)
         val hours = currentDuration.inWholeHours.toInt()
-        currentDuration = currentDuration.minus(Duration.hours(hours))
+        currentDuration = currentDuration.minus(hours.hours)
         val minutes = currentDuration.inWholeMinutes.toInt()
         if (days <= 0 && hours <= 0) {
             getString(R.string.anime_next_episode_airing_minutes, minutes)
