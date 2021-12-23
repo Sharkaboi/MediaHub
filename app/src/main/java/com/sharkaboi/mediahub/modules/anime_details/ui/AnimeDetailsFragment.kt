@@ -15,7 +15,6 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
@@ -49,7 +48,6 @@ class AnimeDetailsFragment : Fragment() {
     private var _binding: FragmentAnimeDetailsBinding? = null
     private val binding get() = _binding!!
     private val navController by lazy { findNavController() }
-    private val args: AnimeDetailsFragmentArgs by navArgs()
     private val animeDetailsViewModel by viewModels<AnimeDetailsViewModel>()
 
     override fun onCreateView(
@@ -78,8 +76,7 @@ class AnimeDetailsFragment : Fragment() {
     }
 
     private val handleSwipeRefresh = {
-        animeDetailsViewModel.getAnimeDetails(args.animeId)
-        animeDetailsViewModel.getNextEpisodeDetails(args.animeId)
+        animeDetailsViewModel.refreshDetails()
         binding.swipeRefresh.isRefreshing = false
     }
 
@@ -92,7 +89,6 @@ class AnimeDetailsFragment : Fragment() {
     private val handleAnimeDetailsStateUpdate = { state: AnimeDetailsState ->
         binding.progressBar.isShowing = state is AnimeDetailsState.Loading
         when (state) {
-            is AnimeDetailsState.Idle -> animeDetailsViewModel.getAnimeDetails(args.animeId)
             is AnimeDetailsState.FetchSuccess -> setData(state.animeByIDResponse)
             is AnimeDetailsState.AnimeDetailsFailure -> showToast(state.message)
             else -> Unit
@@ -105,7 +101,6 @@ class AnimeDetailsFragment : Fragment() {
         binding.nextEpisodeDetails.root.isGone =
             state is NextEpisodeDetailsState.NextEpisodeDetailsFailure
         when (state) {
-            is NextEpisodeDetailsState.Idle -> animeDetailsViewModel.getNextEpisodeDetails(args.animeId)
             is NextEpisodeDetailsState.FetchSuccess -> setNextEpisodeData(state.nextAiringEpisode)
             else -> Unit
         }

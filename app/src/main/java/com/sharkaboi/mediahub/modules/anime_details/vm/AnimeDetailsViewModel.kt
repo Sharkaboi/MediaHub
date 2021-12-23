@@ -1,9 +1,6 @@
 package com.sharkaboi.mediahub.modules.anime_details.vm
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.sharkaboi.mediahub.data.api.enums.AnimeStatus
 import com.sharkaboi.mediahub.data.api.enums.animeStatusFromString
 import com.sharkaboi.mediahub.data.wrappers.MHError
@@ -17,9 +14,11 @@ import javax.inject.Inject
 @HiltViewModel
 class AnimeDetailsViewModel
 @Inject constructor(
-    private val animeDetailsRepository: AnimeDetailsRepository
+    private val animeDetailsRepository: AnimeDetailsRepository,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
+    private val animeId = savedStateHandle.get<Int>("animeId") ?: 0
     private val _animeDetailState = MutableLiveData<AnimeDetailsState>().getDefault()
     val animeDetailState: LiveData<AnimeDetailsState> = _animeDetailState
     private var _animeDetailsUpdate: MutableLiveData<AnimeDetailsUpdateClass> =
@@ -29,7 +28,12 @@ class AnimeDetailsViewModel
         MutableLiveData<NextEpisodeDetailsState>().getDefault()
     val nextEpisodeDetails: LiveData<NextEpisodeDetailsState> = _nextEpisodeDetails
 
-    fun getAnimeDetails(animeId: Int) {
+    init {
+        getAnimeDetails(animeId)
+        getNextEpisodeDetails(animeId)
+    }
+
+    private fun getAnimeDetails(animeId: Int) {
         viewModelScope.launch {
             _animeDetailState.setLoading()
             val result = animeDetailsRepository.getAnimeById(animeId)
@@ -51,7 +55,7 @@ class AnimeDetailsViewModel
         }
     }
 
-    fun getNextEpisodeDetails(animeId: Int) {
+    private fun getNextEpisodeDetails(animeId: Int) {
         viewModelScope.launch {
             _nextEpisodeDetails.setLoading()
             val result = animeDetailsRepository.getNextAiringEpisodeById(animeId)
@@ -79,9 +83,9 @@ class AnimeDetailsViewModel
         _animeDetailsUpdate.apply {
             if (this.value?.animeStatus == null ||
                 (
-                    this.value?.animeStatus != AnimeStatus.watching &&
-                        this.value?.animeStatus != AnimeStatus.completed
-                    )
+                        this.value?.animeStatus != AnimeStatus.watching &&
+                                this.value?.animeStatus != AnimeStatus.completed
+                        )
             ) {
                 value = this.value?.copy(animeStatus = AnimeStatus.watching)
             }
@@ -101,9 +105,9 @@ class AnimeDetailsViewModel
         _animeDetailsUpdate.apply {
             if (this.value?.animeStatus == null ||
                 (
-                    this.value?.animeStatus != AnimeStatus.watching &&
-                        this.value?.animeStatus != AnimeStatus.completed
-                    )
+                        this.value?.animeStatus != AnimeStatus.watching &&
+                                this.value?.animeStatus != AnimeStatus.completed
+                        )
             ) {
                 value = this.value?.copy(animeStatus = AnimeStatus.watching)
             }
@@ -124,9 +128,9 @@ class AnimeDetailsViewModel
         _animeDetailsUpdate.apply {
             if (this.value?.animeStatus == null ||
                 (
-                    this.value?.animeStatus != AnimeStatus.watching &&
-                        this.value?.animeStatus != AnimeStatus.completed
-                    )
+                        this.value?.animeStatus != AnimeStatus.watching &&
+                                this.value?.animeStatus != AnimeStatus.completed
+                        )
             ) {
                 value = this.value?.copy(animeStatus = AnimeStatus.watching)
             }
@@ -147,9 +151,9 @@ class AnimeDetailsViewModel
         _animeDetailsUpdate.apply {
             if (this.value?.animeStatus == null ||
                 (
-                    this.value?.animeStatus != AnimeStatus.watching &&
-                        this.value?.animeStatus != AnimeStatus.completed
-                    )
+                        this.value?.animeStatus != AnimeStatus.watching &&
+                                this.value?.animeStatus != AnimeStatus.completed
+                        )
             ) {
                 value = this.value?.copy(animeStatus = AnimeStatus.watching)
             }
@@ -183,7 +187,7 @@ class AnimeDetailsViewModel
                     numWatchedEps = it.numWatchedEpisode
                 )
                 if (result.isSuccess) {
-                    getAnimeDetails(animeId)
+                    refreshDetails()
                 } else {
                     _animeDetailState.setFailure(result.error.errorMessage)
                 }
@@ -198,10 +202,15 @@ class AnimeDetailsViewModel
             _animeDetailState.setLoading()
             val result = animeDetailsRepository.removeAnimeFromList(animeId = animeId)
             if (result.isSuccess) {
-                getAnimeDetails(animeId)
+                refreshDetails()
             } else {
                 _animeDetailState.setFailure(result.error.errorMessage)
             }
         }
+    }
+
+    fun refreshDetails() {
+        getAnimeDetails(animeId)
+        getNextEpisodeDetails(animeId)
     }
 }
