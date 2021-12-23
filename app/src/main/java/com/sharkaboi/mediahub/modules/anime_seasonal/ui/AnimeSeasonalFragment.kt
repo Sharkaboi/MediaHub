@@ -67,14 +67,7 @@ class AnimeSeasonalFragment : Fragment() {
     private fun initSeason() {
         val season = args.season.getAnimeSeason()
         animeSeasonalViewModel.setAnimeSeason(
-            if (season == null || args.year == 0) {
-                AnimeSeasonWrapper.currentSeason()
-            } else {
-                AnimeSeasonWrapper(
-                    animeSeason = season,
-                    year = args.year
-                )
-            }
+            AnimeSeasonWrapper.parseFrom(season, args.year)
         )
     }
 
