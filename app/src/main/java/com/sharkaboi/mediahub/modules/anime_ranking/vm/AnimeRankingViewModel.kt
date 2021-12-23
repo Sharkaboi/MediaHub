@@ -8,7 +8,7 @@ import com.sharkaboi.mediahub.data.api.models.anime.AnimeRankingResponse
 import com.sharkaboi.mediahub.modules.anime_ranking.repository.AnimeRankingRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.lastOrNull
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -38,7 +38,7 @@ class AnimeRankingViewModel
             animeRankingRepository
                 .getAnimeRanking(_rankingType)
                 .cachedIn(viewModelScope)
-        _result.value = newResult.lastOrNull()
+        _result.value = newResult.firstOrNull()
     }
 
     fun setRankingType(animeRankingType: AnimeRankingType) {
