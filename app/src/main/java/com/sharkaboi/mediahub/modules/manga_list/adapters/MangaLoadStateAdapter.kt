@@ -2,9 +2,11 @@ package com.sharkaboi.mediahub.modules.manga_list.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.paging.LoadState
 import androidx.paging.LoadStateAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.sharkaboi.mediahub.common.extensions.showToast
 import com.sharkaboi.mediahub.databinding.LoadStateItemBinding
 
 class MangaLoadStateAdapter : LoadStateAdapter<MangaLoadStateAdapter.LoadStateViewHolder>() {

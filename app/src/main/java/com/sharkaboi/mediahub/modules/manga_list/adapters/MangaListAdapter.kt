@@ -5,7 +5,10 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.sharkaboi.mediahub.common.constants.UIConstants
+import com.sharkaboi.mediahub.common.extensions.getProgressStringWith
+import com.sharkaboi.mediahub.common.extensions.getRatingStringWithRating
 import com.sharkaboi.mediahub.data.api.models.usermanga.UserMangaListResponse
 import com.sharkaboi.mediahub.databinding.MangaListItemBinding
 
