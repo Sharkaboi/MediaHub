@@ -9,8 +9,8 @@ import com.sharkaboi.mediahub.data.api.enums.AnimeRankingType
 import com.sharkaboi.mediahub.data.api.models.anime.AnimeRankingResponse
 import com.sharkaboi.mediahub.data.api.retrofit.AnimeService
 import com.sharkaboi.mediahub.data.datastore.DataStoreRepository
-import com.sharkaboi.mediahub.modules.anime_ranking.data.AnimeRankingDataSource
 import com.sharkaboi.mediahub.data.sharedpref.SharedPreferencesKeys
+import com.sharkaboi.mediahub.modules.anime_ranking.data.AnimeRankingDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
 import timber.log.Timber
