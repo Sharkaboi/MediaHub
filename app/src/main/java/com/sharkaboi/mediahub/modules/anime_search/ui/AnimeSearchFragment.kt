@@ -100,7 +100,7 @@ class AnimeSearchFragment : Fragment() {
         searchJob?.cancel()
         searchJob = lifecycleScope.launch {
             query?.toString()?.let {
-                if (it.length < 3) {
+                if (it.trim().length < 3) {
                     binding.searchEmptyView.root.isVisible = true
                     binding.searchEmptyView.tvHint.text = getString(R.string.anime_search_hint)
                     animeSearchListAdapter.submitData(PagingData.empty())
