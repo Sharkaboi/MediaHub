@@ -2,7 +2,6 @@ package com.sharkaboi.mediahub.modules.anime_details.vm
 
 import androidx.lifecycle.*
 import com.sharkaboi.mediahub.data.api.enums.AnimeStatus
-import com.sharkaboi.mediahub.data.api.enums.animeStatusFromString
 import com.sharkaboi.mediahub.data.wrappers.MHError
 import com.sharkaboi.mediahub.modules.anime_details.repository.AnimeDetailsRepository
 import com.sharkaboi.mediahub.modules.anime_details.util.AnimeDetailsUpdateClass
@@ -41,7 +40,7 @@ class AnimeDetailsViewModel
                 result.data?.let {
                     Timber.d("getAnimeDetails: ${result.data}")
                     _animeDetailsUpdate.value = AnimeDetailsUpdateClass(
-                        animeStatus = it.myListStatus?.status?.animeStatusFromString(),
+                        animeStatus = AnimeStatus.parse(it.myListStatus?.status),
                         animeId = it.id,
                         score = it.myListStatus?.score,
                         numWatchedEpisode = it.myListStatus?.numEpisodesWatched,

@@ -1,10 +1,7 @@
 package com.sharkaboi.mediahub.enum_tests
 
 import com.sharkaboi.mediahub.data.api.enums.AnimeStatus
-import com.sharkaboi.mediahub.data.api.enums.animeStatusFromString
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertNull
-import org.junit.Assert.assertTrue
+import org.junit.Assert.*
 import org.junit.Test
 
 class AnimeStatusTest {
@@ -13,14 +10,14 @@ class AnimeStatusTest {
     fun `Calling animeStatusFromString on valid string returns expected Anime status`() {
         val testString = "plan_to_watch"
         val expectedAnimeStatus = AnimeStatus.plan_to_watch
-        val result = testString.animeStatusFromString()
+        val result = AnimeStatus.parse(testString)
         assertTrue(expectedAnimeStatus == result)
     }
 
     @Test
     fun `Calling animeStatusFromString on invalid string returns null`() {
         val testString = "invalid string"
-        val result = testString.animeStatusFromString()
+        val result = AnimeStatus.parse(testString)
         assertNull(result)
     }
 
