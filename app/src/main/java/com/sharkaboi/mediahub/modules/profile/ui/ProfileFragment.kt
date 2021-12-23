@@ -23,13 +23,14 @@ import com.sharkaboi.mediahub.R
 import com.sharkaboi.mediahub.common.constants.UIConstants
 import com.sharkaboi.mediahub.common.constants.UIConstants.setMediaHubChipStyle
 import com.sharkaboi.mediahub.common.extensions.*
-import com.sharkaboi.mediahub.modules.profile.util.MPAndroidChartValueFormatter
 import com.sharkaboi.mediahub.common.util.openShareChooser
 import com.sharkaboi.mediahub.common.util.openUrl
 import com.sharkaboi.mediahub.data.api.constants.MALExternalLinks
 import com.sharkaboi.mediahub.data.api.models.user.UserDetailsResponse
 import com.sharkaboi.mediahub.databinding.FragmentProfileBinding
-import com.sharkaboi.mediahub.modules.profile.util.*
+import com.sharkaboi.mediahub.modules.profile.util.MPAndroidChartValueFormatter
+import com.sharkaboi.mediahub.modules.profile.util.getDaysCountString
+import com.sharkaboi.mediahub.modules.profile.util.getEpisodesOfAnimeFullString
 import com.sharkaboi.mediahub.modules.profile.vm.ProfileStates
 import com.sharkaboi.mediahub.modules.profile.vm.ProfileViewModel
 import dagger.hilt.android.AndroidEntryPoint
