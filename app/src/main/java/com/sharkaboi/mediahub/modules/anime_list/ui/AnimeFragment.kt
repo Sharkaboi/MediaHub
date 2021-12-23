@@ -82,7 +82,7 @@ class AnimeFragment : Fragment() {
                 }
             }
         }
-        binding.animeTabLayout.addOnTabSelectedListener(onTabChanged)
         binding.vpAnime.registerOnPageChangeCallback(onPageChanged)
+        binding.animeTabLayout.addOnTabSelectedListener(onTabChanged)
     }
 }
