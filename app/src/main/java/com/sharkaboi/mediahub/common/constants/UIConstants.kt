@@ -18,8 +18,7 @@ object UIConstants {
         fallback(R.drawable.ic_anime_placeholder)
         transformations(
             RoundedCornersTransformation(
-                topLeft = AnimeAndMangaImageCornerRadius,
-                topRight = AnimeAndMangaImageCornerRadius
+                radius = AnimeAndMangaImageCornerRadius
             )
         )
     }
@@ -30,8 +29,7 @@ object UIConstants {
         fallback(R.drawable.ic_manga_placeholder)
         transformations(
             RoundedCornersTransformation(
-                topLeft = AnimeAndMangaImageCornerRadius,
-                topRight = AnimeAndMangaImageCornerRadius
+                radius = AnimeAndMangaImageCornerRadius
             )
         )
     }
