@@ -38,7 +38,6 @@ import com.sharkaboi.mediahub.databinding.FragmentAnimeDetailsBinding
 import com.sharkaboi.mediahub.modules.anime_details.adapters.RecommendedAnimeAdapter
 import com.sharkaboi.mediahub.modules.anime_details.adapters.RelatedAnimeAdapter
 import com.sharkaboi.mediahub.modules.anime_details.adapters.RelatedMangaAdapter
-import com.sharkaboi.mediahub.modules.anime_details.util.AnimeDetailsUpdateClass
 import com.sharkaboi.mediahub.modules.anime_details.util.*
 import com.sharkaboi.mediahub.modules.anime_details.vm.AnimeDetailsState
 import com.sharkaboi.mediahub.modules.anime_details.vm.AnimeDetailsViewModel
@@ -344,10 +343,10 @@ class AnimeDetailsFragment : Fragment() {
         setupGenresChipGroup(animeByIDResponse.genres)
     }
 
-    private fun setupGenresChipGroup(genres: List<AnimeByIDResponse.Genre>) {
+    private fun setupGenresChipGroup(genres: List<AnimeByIDResponse.Genre>?) {
         val chipGroup = binding.otherDetails.genresChipGroup
         chipGroup.removeAllViews()
-        if (genres.isEmpty()) {
+        if (genres.isNullOrEmpty()) {
             val naChip = Chip(context)
             naChip.setMediaHubChipStyle()
             naChip.text = getString(R.string.n_a)

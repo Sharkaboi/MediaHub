@@ -285,10 +285,10 @@ class MangaDetailsFragment : Fragment() {
         setupGenresChipGroup(mangaByIDResponse.genres)
     }
 
-    private fun setupGenresChipGroup(genres: List<MangaByIDResponse.Genre>) {
+    private fun setupGenresChipGroup(genres: List<MangaByIDResponse.Genre>?) {
         val chipGroup = binding.otherDetails.genresChipGroup
         chipGroup.removeAllViews()
-        if (genres.isEmpty()) {
+        if (genres.isNullOrEmpty()) {
             val naChip = Chip(context)
             naChip.setMediaHubChipStyle()
             naChip.text = getString(R.string.n_a)

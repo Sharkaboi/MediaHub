@@ -20,7 +20,7 @@ data class AnimeByIDResponse(
     @Json(name = "end_date")
     val endDate: String?,
     @Json(name = "genres")
-    val genres: List<Genre>,
+    val genres: List<Genre>?,
     @Json(name = "id")
     val id: Int,
     @Json(name = "main_picture")
