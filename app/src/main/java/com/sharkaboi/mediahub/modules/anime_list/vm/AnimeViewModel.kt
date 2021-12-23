@@ -9,7 +9,7 @@ import com.sharkaboi.mediahub.data.api.models.useranime.UserAnimeListResponse
 import com.sharkaboi.mediahub.modules.anime_list.repository.AnimeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.lastOrNull
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -48,7 +48,7 @@ class AnimeViewModel
                 animeStatus = currentChosenAnimeStatus,
                 animeSortType = currentChosenSortType
             ).cachedIn(viewModelScope)
-        _animeList.value = newResult.firstOrNull()
+        _animeList.value = newResult.lastOrNull()
     }
 
     fun setSortType(userAnimeSortType: UserAnimeSortType) {
