@@ -16,18 +16,21 @@ class AnimeDetailsViewModel
     private val animeDetailsRepository: AnimeDetailsRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-
     private val animeId = savedStateHandle.get<Int>("animeId") ?: 0
+
     private val _animeDetailState = MutableLiveData<AnimeDetailsState>().getDefault()
     val animeDetailState: LiveData<AnimeDetailsState> = _animeDetailState
+
     private var _animeDetailsUpdate: MutableLiveData<AnimeDetailsUpdateClass> =
         MutableLiveData<AnimeDetailsUpdateClass>()
     val animeDetailsUpdate: LiveData<AnimeDetailsUpdateClass> = _animeDetailsUpdate
+
     private var _nextEpisodeDetails: MutableLiveData<NextEpisodeDetailsState> =
         MutableLiveData<NextEpisodeDetailsState>().getDefault()
     val nextEpisodeDetails: LiveData<NextEpisodeDetailsState> = _nextEpisodeDetails
 
     init {
+        Timber.d("Saved state anime id $animeId")
         getAnimeDetails(animeId)
         getNextEpisodeDetails(animeId)
     }
