@@ -35,7 +35,7 @@ import com.sharkaboi.mediahub.databinding.FragmentMangaDetailsBinding
 import com.sharkaboi.mediahub.modules.manga_details.adapters.RecommendedMangaAdapter
 import com.sharkaboi.mediahub.modules.manga_details.adapters.RelatedAnimeAdapter
 import com.sharkaboi.mediahub.modules.manga_details.adapters.RelatedMangaAdapter
-import com.sharkaboi.mediahub.modules.manga_details.util.MangaDetailsUpdateClass
+import com.sharkaboi.mediahub.modules.manga_details.util.*
 import com.sharkaboi.mediahub.modules.manga_details.vm.MangaDetailsState
 import com.sharkaboi.mediahub.modules.manga_details.vm.MangaDetailsViewModel
 import dagger.hilt.android.AndroidEntryPoint

@@ -9,7 +9,7 @@ import com.sharkaboi.mediahub.data.api.enums.AnimeSeason
 import com.sharkaboi.mediahub.data.api.models.anime.AnimeSeasonalResponse
 import com.sharkaboi.mediahub.data.api.retrofit.AnimeService
 import com.sharkaboi.mediahub.data.datastore.DataStoreRepository
-import com.sharkaboi.mediahub.data.paging.AnimeSeasonalDataSource
+import com.sharkaboi.mediahub.modules.anime_seasonal.data.AnimeSeasonalDataSource
 import com.sharkaboi.mediahub.data.sharedpref.SharedPreferencesKeys
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull

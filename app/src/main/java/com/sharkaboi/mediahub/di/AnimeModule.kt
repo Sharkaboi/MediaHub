@@ -3,8 +3,8 @@ package com.sharkaboi.mediahub.di
 import android.content.SharedPreferences
 import com.sharkaboi.mediahub.data.api.retrofit.UserAnimeService
 import com.sharkaboi.mediahub.data.datastore.DataStoreRepository
-import com.sharkaboi.mediahub.modules.anime.repository.AnimeRepository
-import com.sharkaboi.mediahub.modules.anime.repository.AnimeRepositoryImpl
+import com.sharkaboi.mediahub.modules.anime_list.repository.AnimeRepository
+import com.sharkaboi.mediahub.modules.anime_list.repository.AnimeRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

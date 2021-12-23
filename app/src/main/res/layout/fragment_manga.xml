@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".modules.manga.ui.MangaFragment">
+    tools:context=".modules.manga_list.ui.MangaFragment">
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/mangaTabLayout"

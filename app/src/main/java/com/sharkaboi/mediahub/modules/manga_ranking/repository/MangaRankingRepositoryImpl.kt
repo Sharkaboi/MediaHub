@@ -9,7 +9,7 @@ import com.sharkaboi.mediahub.data.api.enums.MangaRankingType
 import com.sharkaboi.mediahub.data.api.models.manga.MangaRankingResponse
 import com.sharkaboi.mediahub.data.api.retrofit.MangaService
 import com.sharkaboi.mediahub.data.datastore.DataStoreRepository
-import com.sharkaboi.mediahub.data.paging.MangaRankingDataSource
+import com.sharkaboi.mediahub.modules.manga_ranking.data.MangaRankingDataSource
 import com.sharkaboi.mediahub.data.sharedpref.SharedPreferencesKeys
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull

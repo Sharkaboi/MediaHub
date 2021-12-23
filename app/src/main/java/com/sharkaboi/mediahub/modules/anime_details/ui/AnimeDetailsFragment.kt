@@ -39,14 +39,13 @@ import com.sharkaboi.mediahub.modules.anime_details.adapters.RecommendedAnimeAda
 import com.sharkaboi.mediahub.modules.anime_details.adapters.RelatedAnimeAdapter
 import com.sharkaboi.mediahub.modules.anime_details.adapters.RelatedMangaAdapter
 import com.sharkaboi.mediahub.modules.anime_details.util.AnimeDetailsUpdateClass
+import com.sharkaboi.mediahub.modules.anime_details.util.*
 import com.sharkaboi.mediahub.modules.anime_details.vm.AnimeDetailsState
 import com.sharkaboi.mediahub.modules.anime_details.vm.AnimeDetailsViewModel
 import com.sharkaboi.mediahub.modules.anime_details.vm.NextEpisodeDetailsState
 import dagger.hilt.android.AndroidEntryPoint
-import kotlin.time.ExperimentalTime
 
 @AndroidEntryPoint
-@ExperimentalTime
 class AnimeDetailsFragment : Fragment() {
     private var _binding: FragmentAnimeDetailsBinding? = null
     private val binding get() = _binding!!

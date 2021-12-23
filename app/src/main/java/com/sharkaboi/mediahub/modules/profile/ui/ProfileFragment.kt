@@ -29,6 +29,7 @@ import com.sharkaboi.mediahub.common.util.openUrl
 import com.sharkaboi.mediahub.data.api.constants.MALExternalLinks
 import com.sharkaboi.mediahub.data.api.models.user.UserDetailsResponse
 import com.sharkaboi.mediahub.databinding.FragmentProfileBinding
+import com.sharkaboi.mediahub.modules.profile.util.*
 import com.sharkaboi.mediahub.modules.profile.vm.ProfileStates
 import com.sharkaboi.mediahub.modules.profile.vm.ProfileViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -201,13 +202,13 @@ class ProfileFragment : Fragment() {
         binding.profileContent.profileDetailsCardContent.apply {
             tvBirthDay.text =
                 userDetailsResponse.birthday?.tryParseDateTime()?.formatDateDMY()
-                ?: getString(R.string.n_a)
+                    ?: getString(R.string.n_a)
             tvGender.text =
                 userDetailsResponse.gender?.capitalizeFirst()
-                ?: getString(R.string.n_a)
+                    ?: getString(R.string.n_a)
             tvJoinedAt.text =
                 userDetailsResponse.joinedAt.tryParseDateTime()?.formatDateDMY()
-                ?: getString(R.string.n_a)
+                    ?: getString(R.string.n_a)
             tvLocation.text =
                 userDetailsResponse.location.ifNullOrBlank { getString(R.string.n_a) }
             tvTimeZone.text = userDetailsResponse.timeZone ?: getString(R.string.n_a)

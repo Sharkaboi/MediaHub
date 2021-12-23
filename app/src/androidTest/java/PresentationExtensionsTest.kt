@@ -3,9 +3,11 @@ import androidx.test.platform.app.InstrumentationRegistry
 import com.sharkaboi.mediahub.common.extensions.*
 import com.sharkaboi.mediahub.data.api.models.anime.AnimeByIDResponse
 import com.sharkaboi.mediahub.data.api.models.manga.MangaByIDResponse
+import com.sharkaboi.mediahub.modules.anime_details.util.*
+import com.sharkaboi.mediahub.modules.manga_details.util.*
+import com.sharkaboi.mediahub.modules.profile.util.*
 import org.junit.Assert
 import org.junit.Test
-import kotlin.time.ExperimentalTime
 
 class PresentationExtensionsTest {
 
@@ -464,7 +466,7 @@ class PresentationExtensionsTest {
         Assert.assertFalse(resultString.contains("N/A"))
     }
 
-    @ExperimentalTime
+
     @Test
     fun getEpisodeLengthFromSecondsWithNullSecondsReturnsValidString() {
         val seconds = null
@@ -473,7 +475,7 @@ class PresentationExtensionsTest {
         Assert.assertEquals(expectedString, resultString)
     }
 
-    @ExperimentalTime
+
     @Test
     fun getEpisodeLengthFromSecondsWith0SecondsReturnsValidString() {
         val seconds = 0
@@ -482,7 +484,7 @@ class PresentationExtensionsTest {
         Assert.assertEquals(expectedString, resultString)
     }
 
-    @ExperimentalTime
+
     @Test
     fun getEpisodeLengthFromSecondsWithNegativeSecondsReturnsValidString() {
         val seconds = -1
@@ -491,7 +493,7 @@ class PresentationExtensionsTest {
         Assert.assertEquals(expectedString, resultString)
     }
 
-    @ExperimentalTime
+
     @Test
     fun getEpisodeLengthFromSecondsWithValidHourSecondsReturnsValidString() {
         val seconds = 90 * 60
@@ -500,7 +502,7 @@ class PresentationExtensionsTest {
         Assert.assertEquals(expectedString, resultString)
     }
 
-    @ExperimentalTime
+
     @Test
     fun getEpisodeLengthFromSecondsWithValidMinutesSecondsReturnsValidString() {
         val seconds = 30 * 60
@@ -509,7 +511,7 @@ class PresentationExtensionsTest {
         Assert.assertEquals(expectedString, resultString)
     }
 
-    @ExperimentalTime
+
     @Test
     fun getAiringTimeFormattedWith0TimeReturnsValidString() {
         val time = GetNextAiringAnimeEpisodeQuery.NextAiringEpisode(
@@ -521,7 +523,7 @@ class PresentationExtensionsTest {
         Assert.assertEquals(expectedString, resultString)
     }
 
-    @ExperimentalTime
+
     @Test
     fun getAiringTimeFormattedWithMinutesTimeReturnsValidString() {
         val time = GetNextAiringAnimeEpisodeQuery.NextAiringEpisode(
@@ -533,7 +535,7 @@ class PresentationExtensionsTest {
         Assert.assertEquals(expectedString, resultString)
     }
 
-    @ExperimentalTime
+
     @Test
     fun getAiringTimeFormattedWithHoursTimeReturnsValidString() {
         val time = GetNextAiringAnimeEpisodeQuery.NextAiringEpisode(
@@ -545,7 +547,7 @@ class PresentationExtensionsTest {
         Assert.assertEquals(expectedString, resultString)
     }
 
-    @ExperimentalTime
+
     @Test
     fun getAiringTimeFormattedWithDaysTimeReturnsValidString() {
         val time = GetNextAiringAnimeEpisodeQuery.NextAiringEpisode(

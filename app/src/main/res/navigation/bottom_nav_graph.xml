@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/anime_item"
-        android:name="com.sharkaboi.mediahub.modules.anime.ui.AnimeFragment"
+        android:name="com.sharkaboi.mediahub.modules.anime_list.ui.AnimeFragment"
         android:label="Anime"
         tools:layout="@layout/fragment_anime">
         <action
@@ -20,7 +20,7 @@
     </fragment>
     <fragment
         android:id="@+id/manga_item"
-        android:name="com.sharkaboi.mediahub.modules.manga.ui.MangaFragment"
+        android:name="com.sharkaboi.mediahub.modules.manga_list.ui.MangaFragment"
         android:label="Manga"
         tools:layout="@layout/fragment_manga">
         <action
