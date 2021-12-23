@@ -65,16 +65,7 @@ class AnimeRankingFragment : Fragment() {
 
     private fun initRanking() {
         animeRankingViewModel.setRankingType(
-            if (args.animeRankingType == null) {
-                AnimeRankingType.all
-            } else {
-                runCatching {
-                    AnimeRankingType.valueOf(
-                        args.animeRankingType?.lowercase()
-                            ?: AnimeRankingType.all.name
-                    )
-                }.getOrElse { AnimeRankingType.all }
-            }
+            AnimeRankingType.getAnimeRankingFromString(args.animeRankingType)
         )
     }
 

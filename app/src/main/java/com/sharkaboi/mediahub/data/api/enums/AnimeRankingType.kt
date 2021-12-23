@@ -28,4 +28,13 @@ enum class AnimeRankingType {
             favorite -> context.getString(R.string.anime_ranking_in_your_list)
         }
     }
+
+    companion object {
+        fun getAnimeRankingFromString(ranking: String?): AnimeRankingType {
+            return when (ranking) {
+                null -> all
+                else -> runCatching { valueOf(ranking.lowercase()) }.getOrElse { all }
+            }
+        }
+    }
 }
