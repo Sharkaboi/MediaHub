@@ -107,7 +107,7 @@ class AnimeDetailsViewModel
             ) {
                 value = this.value?.copy(animeStatus = AnimeStatus.watching)
             }
-            val res = value?.numWatchedEpisode?.plus(1) ?: 0
+            val res = value?.numWatchedEpisode?.plus(1) ?: 1
             value = if (value?.totalEps != 0 && res >= value?.totalEps ?: 0) {
                 value?.copy(
                     numWatchedEpisode = value?.totalEps,
@@ -130,7 +130,7 @@ class AnimeDetailsViewModel
             ) {
                 value = this.value?.copy(animeStatus = AnimeStatus.watching)
             }
-            val res = value?.numWatchedEpisode?.plus(5) ?: 0
+            val res = value?.numWatchedEpisode?.plus(5) ?: 5
             value = if (value?.totalEps != 0 && res >= value?.totalEps ?: 0) {
                 value?.copy(
                     numWatchedEpisode = value?.totalEps,
@@ -153,7 +153,7 @@ class AnimeDetailsViewModel
             ) {
                 value = this.value?.copy(animeStatus = AnimeStatus.watching)
             }
-            val res = value?.numWatchedEpisode?.plus(10) ?: 0
+            val res = value?.numWatchedEpisode?.plus(10) ?: 10
             value = if (value?.totalEps != 0 && res >= value?.totalEps ?: 0) {
                 value?.copy(
                     numWatchedEpisode = value?.totalEps,
