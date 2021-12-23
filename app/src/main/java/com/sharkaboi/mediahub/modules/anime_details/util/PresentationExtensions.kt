@@ -12,9 +12,9 @@ import com.sharkaboi.mediahub.common.extensions.replaceUnderScoreWithWhiteSpace
 import com.sharkaboi.mediahub.common.util.DateUtils
 import com.sharkaboi.mediahub.data.api.models.anime.AnimeByIDResponse
 import java.time.format.DateTimeFormatter
-import kotlin.time.Duration
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
+import kotlin.time.Duration.Companion.seconds
 
 internal fun Context.getEpisodesOfAnimeString(episodes: Int): String {
     return resources.getQuantityString(
@@ -88,9 +88,9 @@ internal fun Context.getEpisodeLengthFromSeconds(seconds: Int?): String {
         if (seconds == null || seconds <= 0) {
             return getString(R.string.anime_episode_length_n_a)
         }
-        val duration = Duration.seconds(seconds.toLong())
+        val duration = seconds.seconds
         val hours = duration.inWholeHours.toInt()
-        val minutes = duration.minus(Duration.hours(hours)).inWholeMinutes
+        val minutes = duration.minus(hours.hours).inWholeMinutes
         return if (hours <= 0) getString(
             R.string.anime_episode_length_mins,
             minutes
@@ -110,7 +110,7 @@ internal fun Context.getAiringTimeFormatted(nextEp: GetNextAiringAnimeEpisodeQue
         if (nextEp.timeUntilAiring <= 0) {
             return@runCatching getString(R.string.anime_next_episode_airing_n_a)
         }
-        var currentDuration = Duration.seconds(nextEp.timeUntilAiring.toLong())
+        var currentDuration = nextEp.timeUntilAiring.seconds
         val days = currentDuration.inWholeDays.toInt()
         currentDuration = currentDuration.minus(days.days)
         val hours = currentDuration.inWholeHours.toInt()
