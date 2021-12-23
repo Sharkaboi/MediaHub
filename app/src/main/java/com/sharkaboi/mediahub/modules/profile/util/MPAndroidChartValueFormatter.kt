@@ -1,4 +1,4 @@
-package com.sharkaboi.mediahub.common.util
+package com.sharkaboi.mediahub.modules.profile.util
 
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.sharkaboi.mediahub.common.extensions.emptyString

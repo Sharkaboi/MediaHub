@@ -8,7 +8,7 @@ import com.sharkaboi.mediahub.R
 import com.sharkaboi.mediahub.common.extensions.capitalizeFirst
 import com.sharkaboi.mediahub.common.extensions.ifNullOrBlank
 import com.sharkaboi.mediahub.common.extensions.replaceUnderScoreWithWhiteSpace
-import com.sharkaboi.mediahub.common.util.getLocalDateFromDayAndTime
+import com.sharkaboi.mediahub.common.util.DateUtils
 import com.sharkaboi.mediahub.data.api.models.anime.AnimeByIDResponse
 import java.time.format.DateTimeFormatter
 import kotlin.time.Duration
@@ -43,7 +43,8 @@ internal fun Context.getAnimeBroadcastTime(broadcast: AnimeByIDResponse.Broadcas
         } else if (broadcast.startTime == null) {
             return getString(R.string.anime_broadcast_on_day, broadcast.dayOfTheWeek)
         }
-        val localTime = getLocalDateFromDayAndTime(broadcast.dayOfTheWeek, broadcast.startTime)
+        val localTime =
+            DateUtils.getLocalDateFromDayAndTime(broadcast.dayOfTheWeek, broadcast.startTime)
         return localTime?.format(DateTimeFormatter.ofPattern("EEEE h:mm a zzzz"))
             ?: getString(R.string.n_a)
     }.getOrElse {
