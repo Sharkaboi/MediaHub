@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.DefaultItemAnimator
@@ -47,6 +48,7 @@ class AnimeSearchFragment : Fragment() {
     }
 
     override fun onDestroyView() {
+        animeSearchListAdapter.removeLoadStateListener(loadStateListener)
         binding.rvSearchResults.adapter = null
         _binding = null
         super.onDestroyView()
@@ -72,8 +74,7 @@ class AnimeSearchFragment : Fragment() {
         }
     }
 
-    private fun setObservers() {
-        animeSearchListAdapter.addLoadStateListener { loadStates ->
+    private val loadStateListener = { loadStates: CombinedLoadStates ->
             if (loadStates.source.refresh is LoadState.Error) {
                 showToast((loadStates.source.refresh as LoadState.Error).error.message)
             }
@@ -83,6 +84,9 @@ class AnimeSearchFragment : Fragment() {
             binding.searchEmptyView.tvHint.text =
                 getString(R.string.anime_search_no_result_hint)
         }
+
+    private fun setObservers() {
+        animeSearchListAdapter.addLoadStateListener(loadStateListener)
         val debounce = debounce<CharSequence>(scope = lifecycleScope) {
             searchAnime(it)
         }

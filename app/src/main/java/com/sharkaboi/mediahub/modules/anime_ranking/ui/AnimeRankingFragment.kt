@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
@@ -43,6 +44,7 @@ class AnimeRankingFragment : Fragment() {
     }
 
     override fun onDestroyView() {
+        animeRankingDetailedAdapter.removeLoadStateListener(loadStateListener)
         binding.rvAnimeRanking.adapter = null
         _binding = null
         super.onDestroyView()
@@ -87,8 +89,7 @@ class AnimeRankingFragment : Fragment() {
         }
     }
 
-    private fun setObservers() {
-        animeRankingDetailedAdapter.addLoadStateListener { loadStates ->
+    private val loadStateListener = { loadStates: CombinedLoadStates ->
             if (loadStates.source.refresh is LoadState.Error) {
                 showToast((loadStates.source.refresh as LoadState.Error).error.message)
             }
@@ -96,6 +97,9 @@ class AnimeRankingFragment : Fragment() {
             binding.tvEmptyHint.isVisible =
                 loadStates.refresh is LoadState.NotLoading && animeRankingDetailedAdapter.itemCount == 0
         }
+
+    private fun setObservers() {
+        animeRankingDetailedAdapter.addLoadStateListener(loadStateListener)
         observe(animeRankingViewModel.result) { pagingData ->
             lifecycleScope.launch { animeRankingDetailedAdapter.submitData(pagingData) }
             binding.rvAnimeRanking.smoothScrollToPosition(0)

@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.DefaultItemAnimator
@@ -49,6 +50,7 @@ class MangaSearchFragment : Fragment() {
     }
 
     override fun onDestroyView() {
+        mangaSearchListAdapter.removeLoadStateListener(loadStateListener)
         searchJob?.cancel()
         searchJob = null
         binding.rvSearchResults.adapter = null
@@ -77,19 +79,19 @@ class MangaSearchFragment : Fragment() {
         }
     }
 
-    private fun setObservers() {
-        lifecycleScope.launch {
-            mangaSearchListAdapter.addLoadStateListener { loadStates ->
-                if (loadStates.source.refresh is LoadState.Error) {
-                    showToast((loadStates.source.refresh as LoadState.Error).error.message)
-                }
-                binding.progress.isShowing = loadStates.refresh is LoadState.Loading
-                binding.searchEmptyView.root.isVisible =
-                    loadStates.refresh is LoadState.NotLoading && mangaSearchListAdapter.itemCount == 0
-                binding.searchEmptyView.tvHint.text =
-                    getString(R.string.manga_search_no_result_hint)
+    private val loadStateListener = { loadStates: CombinedLoadStates ->
+            if (loadStates.source.refresh is LoadState.Error) {
+                showToast((loadStates.source.refresh as LoadState.Error).error.message)
             }
+            binding.progress.isShowing = loadStates.refresh is LoadState.Loading
+            binding.searchEmptyView.root.isVisible =
+                loadStates.refresh is LoadState.NotLoading && mangaSearchListAdapter.itemCount == 0
+            binding.searchEmptyView.tvHint.text =
+                getString(R.string.manga_search_no_result_hint)
         }
+
+    private fun setObservers() {
+        mangaSearchListAdapter.addLoadStateListener(loadStateListener)
         val debounce = debounce<CharSequence>(scope = lifecycleScope) {
             searchAnime(it)
         }

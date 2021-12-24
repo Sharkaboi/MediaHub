@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
@@ -44,6 +45,7 @@ class AnimeSeasonalFragment : Fragment() {
     }
 
     override fun onDestroyView() {
+        animeSeasonalAdapter.removeLoadStateListener(loadStateListener)
         binding.rvAnimeSeasonal.adapter = null
         _binding = null
         super.onDestroyView()
@@ -86,15 +88,17 @@ class AnimeSeasonalFragment : Fragment() {
         }
     }
 
-    private fun setObservers() {
-        animeSeasonalAdapter.addLoadStateListener { loadStates ->
-            if (loadStates.source.refresh is LoadState.Error) {
-                showToast((loadStates.source.refresh as LoadState.Error).error.message)
-            }
-            binding.progressBar.isShowing = loadStates.refresh is LoadState.Loading
-            binding.tvEmptyHint.isVisible =
-                loadStates.refresh is LoadState.NotLoading && animeSeasonalAdapter.itemCount == 0
+    private val loadStateListener get() =  { loadStates:CombinedLoadStates ->
+        if (loadStates.source.refresh is LoadState.Error) {
+            showToast((loadStates.source.refresh as LoadState.Error).error.message)
         }
+        binding.progressBar.isShowing = loadStates.refresh is LoadState.Loading
+        binding.tvEmptyHint.isVisible =
+            loadStates.refresh is LoadState.NotLoading && animeSeasonalAdapter.itemCount == 0
+    }
+
+    private fun setObservers() {
+        animeSeasonalAdapter.addLoadStateListener(loadStateListener)
         observe(animeSeasonalViewModel.result) { pagingData ->
             setSeasonText()
             lifecycleScope.launch { animeSeasonalAdapter.submitData(pagingData) }

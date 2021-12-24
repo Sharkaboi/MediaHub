@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
@@ -44,6 +45,7 @@ class AnimeListByStatusFragment : Fragment() {
     }
 
     override fun onDestroyView() {
+        animeListAdapter.removeLoadStateListener(loadStateListener)
         binding.rvAnimeByStatus.adapter = null
         _binding = null
         super.onDestroyView()
@@ -74,8 +76,7 @@ class AnimeListByStatusFragment : Fragment() {
         }
     }
 
-    private fun setListeners() {
-        animeListAdapter.addLoadStateListener { loadStates ->
+    private val loadStateListener = { loadStates: CombinedLoadStates ->
             if (loadStates.source.refresh is LoadState.Error) {
                 showToast((loadStates.source.refresh as LoadState.Error).error.message)
             }
@@ -83,6 +84,9 @@ class AnimeListByStatusFragment : Fragment() {
             binding.tvEmptyHint.isVisible =
                 loadStates.refresh is LoadState.NotLoading && animeListAdapter.itemCount == 0
         }
+
+    private fun setListeners() {
+        animeListAdapter.addLoadStateListener(loadStateListener)
         binding.swipeRefresh.setOnRefreshListener {
             animeViewModel.refresh()
             binding.swipeRefresh.isRefreshing = false

@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
@@ -48,8 +49,7 @@ class MangaRankingFragment : Fragment() {
     }
 
     override fun onDestroyView() {
-        resultsJob?.cancel()
-        resultsJob = null
+        mangaRankingDetailedAdapter.removeLoadStateListener(loadStateListener)
         binding.rvMangaRanking.adapter = null
         _binding = null
         super.onDestroyView()
@@ -102,18 +102,17 @@ class MangaRankingFragment : Fragment() {
         }
     }
 
-    private fun setObservers() {
-        lifecycleScope.launch {
-            mangaRankingDetailedAdapter.addLoadStateListener { loadStates ->
-                if (loadStates.source.refresh is LoadState.Error) {
-                    showToast((loadStates.source.refresh as LoadState.Error).error.message)
-                }
-                binding.progressBar.isShowing = loadStates.refresh is LoadState.Loading
-                binding.tvEmptyHint.isVisible =
-                    loadStates.refresh is LoadState.NotLoading && mangaRankingDetailedAdapter.itemCount == 0
+    private val loadStateListener = { loadStates: CombinedLoadStates ->
+            if (loadStates.source.refresh is LoadState.Error) {
+                showToast((loadStates.source.refresh as LoadState.Error).error.message)
             }
+            binding.progressBar.isShowing = loadStates.refresh is LoadState.Loading
+            binding.tvEmptyHint.isVisible =
+                loadStates.refresh is LoadState.NotLoading && mangaRankingDetailedAdapter.itemCount == 0
         }
-    }
+
+    private fun setObservers() {
+        mangaRankingDetailedAdapter.addLoadStateListener(loadStateListener)
 
     private fun getMangaRankingList() {
         resultsJob?.cancel()

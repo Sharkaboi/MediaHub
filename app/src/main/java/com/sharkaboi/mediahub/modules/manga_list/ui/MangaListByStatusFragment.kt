@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
@@ -48,6 +49,7 @@ class MangaListByStatusFragment : Fragment() {
     }
 
     override fun onDestroyView() {
+        mangaListAdapter.removeLoadStateListener(loadStateListener)
         resultsJob?.cancel()
         resultsJob = null
         binding.rvMangaByStatus.adapter = null
@@ -89,19 +91,21 @@ class MangaListByStatusFragment : Fragment() {
         }
     }
 
+    private val loadStateListener = { loadStates: CombinedLoadStates ->
+            if (loadStates.source.refresh is LoadState.Error) {
+                val errorMessage = (loadStates.source.refresh as LoadState.Error).error.message
+                Timber.d("setObservers: $errorMessage")
+                showToast(errorMessage)
+            }
+            binding.progressBar.isShowing = loadStates.refresh is LoadState.Loading
+            binding.tvEmptyHint.isVisible =
+                loadStates.refresh is LoadState.NotLoading && mangaListAdapter.itemCount == 0
+        }
+
     private fun setObservers() {
         getMangaList()
         lifecycleScope.launch {
-            mangaListAdapter.addLoadStateListener { loadStates ->
-                if (loadStates.source.refresh is LoadState.Error) {
-                    val errorMessage = (loadStates.source.refresh as LoadState.Error).error.message
-                    Timber.d("setObservers: $errorMessage")
-                    showToast(errorMessage)
-                }
-                binding.progressBar.isShowing = loadStates.refresh is LoadState.Loading
-                binding.tvEmptyHint.isVisible =
-                    loadStates.refresh is LoadState.NotLoading && mangaListAdapter.itemCount == 0
-            }
+            mangaListAdapter.addLoadStateListener(loadStateListener)
         }
         binding.swipeRefresh.setOnRefreshListener {
             getMangaList()
