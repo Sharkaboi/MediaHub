@@ -17,5 +17,14 @@ enum class UserMangaSortType {
             context.getString(R.string.user_manga_sort_by_alphabetical),
             context.getString(R.string.user_manga_sort_by_newest)
         )
+
+        fun parse(string: String?): UserMangaSortType? {
+            if (string == null) {
+                return null
+            }
+            return runCatching {
+                valueOf(string)
+            }.getOrNull()
+        }
     }
 }

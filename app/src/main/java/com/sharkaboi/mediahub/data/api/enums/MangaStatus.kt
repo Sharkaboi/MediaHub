@@ -25,16 +25,14 @@ enum class MangaStatus {
 
     companion object {
         val malStatuses = values().filter { it != all }
-    }
-}
 
-fun String.mangaStatusFromString(): MangaStatus? {
-    return when (this) {
-        MangaStatus.reading.name -> MangaStatus.reading
-        MangaStatus.plan_to_read.name -> MangaStatus.plan_to_read
-        MangaStatus.completed.name -> MangaStatus.completed
-        MangaStatus.on_hold.name -> MangaStatus.on_hold
-        MangaStatus.dropped.name -> MangaStatus.dropped
-        else -> null // MangaStatus.all
+        fun parse(string: String?): MangaStatus? {
+            if (string == null) {
+                return null
+            }
+            return runCatching {
+                valueOf(string)
+            }.getOrNull()
+        }
     }
 }

@@ -6,7 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.Fragment
-import androidx.viewpager2.widget.ViewPager2
+import androidx.fragment.app.activityViewModels
+import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.google.android.material.behavior.HideBottomViewOnScrollBehavior
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
@@ -14,14 +15,17 @@ import com.sharkaboi.mediahub.R
 import com.sharkaboi.mediahub.data.api.enums.MangaStatus
 import com.sharkaboi.mediahub.databinding.FragmentMangaBinding
 import com.sharkaboi.mediahub.modules.manga_list.adapters.MangaPagerAdapter
+import com.sharkaboi.mediahub.modules.manga_list.vm.MangaViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MangaFragment : Fragment() {
-
     private lateinit var vpMangaAdapter: MangaPagerAdapter
     private var _binding: FragmentMangaBinding? = null
     private val binding get() = _binding!!
     private lateinit var onTabChanged: TabLayout.OnTabSelectedListener
-    private lateinit var onPageChanged: ViewPager2.OnPageChangeCallback
+    private lateinit var onPageChanged: OnPageChangeCallback
+    private val mangaViewModel by activityViewModels<MangaViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -74,14 +78,15 @@ class MangaFragment : Fragment() {
                 }
             }
         }
-        onPageChanged = object : ViewPager2.OnPageChangeCallback() {
+        onPageChanged = object : OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
+                mangaViewModel.setMangaStatus(MangaStatus.values()[position])
                 binding.mangaTabLayout.apply {
                     selectTab(getTabAt(position))
                 }
             }
         }
-        binding.mangaTabLayout.addOnTabSelectedListener(onTabChanged)
         binding.vpManga.registerOnPageChangeCallback(onPageChanged)
+        binding.mangaTabLayout.addOnTabSelectedListener(onTabChanged)
     }
 }

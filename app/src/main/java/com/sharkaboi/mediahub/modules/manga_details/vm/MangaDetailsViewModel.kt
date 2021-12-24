@@ -2,7 +2,6 @@ package com.sharkaboi.mediahub.modules.manga_details.vm
 
 import androidx.lifecycle.*
 import com.sharkaboi.mediahub.data.api.enums.MangaStatus
-import com.sharkaboi.mediahub.data.api.enums.mangaStatusFromString
 import com.sharkaboi.mediahub.data.wrappers.MHError
 import com.sharkaboi.mediahub.modules.manga_details.repository.MangaDetailsRepository
 import com.sharkaboi.mediahub.modules.manga_details.util.MangaDetailsUpdateClass
@@ -38,7 +37,7 @@ class MangaDetailsViewModel
             if (result.isSuccess) {
                 result.data?.let {
                     _mangaDetailsUpdate.value = MangaDetailsUpdateClass(
-                        mangaStatus = it.myListStatus?.status?.mangaStatusFromString(),
+                        mangaStatus = MangaStatus.parse(it.myListStatus?.status),
                         mangaId = it.id,
                         score = it.myListStatus?.score,
                         numReadChapters = it.myListStatus?.numChaptersRead,
