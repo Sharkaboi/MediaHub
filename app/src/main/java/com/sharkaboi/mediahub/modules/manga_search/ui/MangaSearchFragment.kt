@@ -21,14 +21,13 @@ import com.sharkaboi.mediahub.BottomNavGraphDirections
 import com.sharkaboi.mediahub.R
 import com.sharkaboi.mediahub.common.constants.UIConstants
 import com.sharkaboi.mediahub.common.extensions.debounce
+import com.sharkaboi.mediahub.common.extensions.observe
 import com.sharkaboi.mediahub.common.extensions.showToast
 import com.sharkaboi.mediahub.databinding.FragmentMangaSearchBinding
 import com.sharkaboi.mediahub.modules.manga_search.adapters.MangaSearchListAdapter
 import com.sharkaboi.mediahub.modules.manga_search.adapters.MangaSearchLoadStateAdapter
 import com.sharkaboi.mediahub.modules.manga_search.vm.MangaSearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -38,7 +37,6 @@ class MangaSearchFragment : Fragment() {
     private lateinit var mangaSearchListAdapter: MangaSearchListAdapter
     private val mangaSearchViewModel by viewModels<MangaSearchViewModel>()
     private val navController by lazy { findNavController() }
-    private var searchJob: Job? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,8 +49,6 @@ class MangaSearchFragment : Fragment() {
 
     override fun onDestroyView() {
         mangaSearchListAdapter.removeLoadStateListener(loadStateListener)
-        searchJob?.cancel()
-        searchJob = null
         binding.rvSearchResults.adapter = null
         _binding = null
         super.onDestroyView()
@@ -80,15 +76,15 @@ class MangaSearchFragment : Fragment() {
     }
 
     private val loadStateListener = { loadStates: CombinedLoadStates ->
-            if (loadStates.source.refresh is LoadState.Error) {
-                showToast((loadStates.source.refresh as LoadState.Error).error.message)
-            }
-            binding.progress.isShowing = loadStates.refresh is LoadState.Loading
-            binding.searchEmptyView.root.isVisible =
-                loadStates.refresh is LoadState.NotLoading && mangaSearchListAdapter.itemCount == 0
-            binding.searchEmptyView.tvHint.text =
-                getString(R.string.manga_search_no_result_hint)
+        if (loadStates.source.refresh is LoadState.Error) {
+            showToast((loadStates.source.refresh as LoadState.Error).error.message)
         }
+        binding.progress.isShowing = loadStates.refresh is LoadState.Loading
+        binding.searchEmptyView.root.isVisible =
+            loadStates.refresh is LoadState.NotLoading && mangaSearchListAdapter.itemCount == 0
+        binding.searchEmptyView.tvHint.text =
+            getString(R.string.manga_search_no_result_hint)
+    }
 
     private fun setObservers() {
         mangaSearchListAdapter.addLoadStateListener(loadStateListener)
@@ -98,26 +94,22 @@ class MangaSearchFragment : Fragment() {
         binding.svSearch.doOnTextChanged { query, _, _, _ ->
             debounce(query)
         }
+        observe(mangaSearchViewModel.pagedSearchResult) { pagingData ->
+            lifecycleScope.launch { mangaSearchListAdapter.submitData(pagingData) }
+            binding.rvSearchResults.scrollToPosition(0)
+        }
     }
 
     private fun searchAnime(query: CharSequence?) {
-        searchJob?.cancel()
-        searchJob = lifecycleScope.launch {
-            query?.toString()?.let {
-                if (it.length < 3) {
-                    binding.searchEmptyView.root.isVisible = true
-                    binding.searchEmptyView.tvHint.text = getString(R.string.manga_search_hint)
-                    mangaSearchListAdapter.submitData(PagingData.empty())
-                    return@launch
-                }
-                hideKeyboard()
-                mangaSearchViewModel.getManga(it.trim())
-                    .collectLatest { pagingData ->
-                        mangaSearchListAdapter.submitData(pagingData)
-                        binding.rvSearchResults.scrollToPosition(0)
-                    }
-            }
+        val trimmedText = query?.toString()?.trim() ?: return
+        if (trimmedText.length < 3) {
+            binding.searchEmptyView.root.isVisible = true
+            binding.searchEmptyView.tvHint.text = getString(R.string.manga_search_hint)
+            lifecycleScope.launch { mangaSearchListAdapter.submitData(PagingData.empty()) }
+            return
         }
+        hideKeyboard()
+        mangaSearchViewModel.getManga(trimmedText)
     }
 
     private fun hideKeyboard() {
