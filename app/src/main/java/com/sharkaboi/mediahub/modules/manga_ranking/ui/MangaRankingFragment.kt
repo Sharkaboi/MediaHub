@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.chip.Chip
 import com.sharkaboi.mediahub.BottomNavGraphDirections
+import com.sharkaboi.mediahub.common.constants.UIConstants
 import com.sharkaboi.mediahub.common.constants.UIConstants.setMediaHubChipStyle
 import com.sharkaboi.mediahub.common.extensions.showToast
 import com.sharkaboi.mediahub.data.api.enums.MangaRankingType
@@ -93,7 +94,7 @@ class MangaRankingFragment : Fragment() {
                 val action = BottomNavGraphDirections.openMangaById(mangaId)
                 navController.navigate(action)
             }
-            layoutManager = GridLayoutManager(context, 3)
+            layoutManager = GridLayoutManager(context, UIConstants.AnimeAndMangaGridSpanCount)
             itemAnimator = DefaultItemAnimator()
             adapter = mangaRankingDetailedAdapter.withLoadStateFooter(
                 footer = MangaRankingLoadStateAdapter()

@@ -13,6 +13,8 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import com.sharkaboi.mediahub.BottomNavGraphDirections
+import com.sharkaboi.mediahub.common.constants.UIConstants.AnimeAndMangaGridSpanCount
+import com.sharkaboi.mediahub.common.extensions.observe
 import com.sharkaboi.mediahub.common.extensions.showToast
 import com.sharkaboi.mediahub.databinding.FragmentAnimeSuggestionsBinding
 import com.sharkaboi.mediahub.modules.anime_suggestions.adapters.AnimeSuggestionsAdapter
@@ -58,7 +60,7 @@ class AnimeSuggestionsFragment : Fragment() {
                 val action = BottomNavGraphDirections.openAnimeById(animeId)
                 navController.navigate(action)
             }
-            layoutManager = GridLayoutManager(context, 3)
+            layoutManager = GridLayoutManager(context, AnimeAndMangaGridSpanCount)
             itemAnimator = DefaultItemAnimator()
             adapter = animeSuggestionsAdapter.withLoadStateFooter(
                 footer = AnimeSuggestionsLoadStateAdapter()

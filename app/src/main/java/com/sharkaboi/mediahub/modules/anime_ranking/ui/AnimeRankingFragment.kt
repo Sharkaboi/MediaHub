@@ -13,6 +13,7 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.chip.Chip
+import com.sharkaboi.mediahub.common.constants.UIConstants
 import com.sharkaboi.mediahub.common.constants.UIConstants.setMediaHubChipStyle
 import com.sharkaboi.mediahub.common.extensions.observe
 import com.sharkaboi.mediahub.common.extensions.showToast
@@ -78,7 +79,7 @@ class AnimeRankingFragment : Fragment() {
                 val action = AnimeRankingFragmentDirections.openAnimeById(animeId)
                 navController.navigate(action)
             }
-            layoutManager = GridLayoutManager(context, 3)
+            layoutManager = GridLayoutManager(context, UIConstants.AnimeAndMangaGridSpanCount)
             itemAnimator = DefaultItemAnimator()
             adapter = animeRankingDetailedAdapter.withLoadStateFooter(
                 footer = AnimeRankingLoadStateAdapter()

@@ -14,6 +14,7 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.GridLayoutManager
 import com.sharkaboi.mediahub.BottomNavGraphDirections
+import com.sharkaboi.mediahub.common.constants.UIConstants
 import com.sharkaboi.mediahub.common.extensions.capitalizeFirst
 import com.sharkaboi.mediahub.common.extensions.observe
 import com.sharkaboi.mediahub.common.extensions.showToast
@@ -77,7 +78,7 @@ class AnimeSeasonalFragment : Fragment() {
                 val action = BottomNavGraphDirections.openAnimeById(animeId)
                 navController.navigate(action)
             }
-            layoutManager = GridLayoutManager(context, 3)
+            layoutManager = GridLayoutManager(context, UIConstants.AnimeAndMangaGridSpanCount)
             itemAnimator = DefaultItemAnimator()
             adapter = animeSeasonalAdapter.withLoadStateFooter(
                 footer = AnimeSeasonalLoadStateAdapter()
