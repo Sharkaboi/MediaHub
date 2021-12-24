@@ -53,7 +53,7 @@
         android:id="@+id/searchEmptyView"
         layout="@layout/anime_search_empty"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginBottom="54dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
