@@ -13,7 +13,6 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
@@ -45,7 +44,6 @@ class MangaDetailsFragment : Fragment() {
     private var _binding: FragmentMangaDetailsBinding? = null
     private val binding get() = _binding!!
     private val navController by lazy { findNavController() }
-    private val args: MangaDetailsFragmentArgs by navArgs()
     private val mangaDetailsViewModel by viewModels<MangaDetailsViewModel>()
 
     override fun onCreateView(
@@ -74,7 +72,7 @@ class MangaDetailsFragment : Fragment() {
     }
 
     private val handleSwipeRefresh = {
-        mangaDetailsViewModel.getMangaDetails(args.mangaId)
+        mangaDetailsViewModel.refreshDetails()
         binding.swipeRefresh.isRefreshing = false
     }
 
@@ -86,7 +84,6 @@ class MangaDetailsFragment : Fragment() {
     private val handleMangaDetailsUpdate = { state: MangaDetailsState ->
         binding.progressBar.isShowing = state is MangaDetailsState.Loading
         when (state) {
-            is MangaDetailsState.Idle -> mangaDetailsViewModel.getMangaDetails(args.mangaId)
             is MangaDetailsState.FetchSuccess -> setData(state.mangaByIDResponse)
             is MangaDetailsState.MangaDetailsFailure -> showToast(state.message)
             else -> Unit
@@ -97,7 +94,7 @@ class MangaDetailsFragment : Fragment() {
         binding.mangaDetailsUserListCard.apply {
             btnStatus.text =
                 state.mangaStatus?.getFormattedString(requireContext())
-                ?: getString(R.string.not_added)
+                    ?: getString(R.string.not_added)
             btnScore.text = getString(R.string.media_rating_template, state.score ?: 0)
             btnCountVolumes.text =
                 context?.getProgressStringWith(state.numReadVolumes, state.totalVolumes)
@@ -339,10 +336,10 @@ class MangaDetailsFragment : Fragment() {
         }
         tvStartDate.text =
             mangaByIDResponse.startDate?.tryParseDate()?.formatDateDMY()
-            ?: getString(R.string.n_a)
+                ?: getString(R.string.n_a)
         tvEndDate.text =
             mangaByIDResponse.endDate?.tryParseDate()?.formatDateDMY()
-            ?: getString(R.string.n_a)
+                ?: getString(R.string.n_a)
         tvMeanScore.text = mangaByIDResponse.mean?.toString() ?: getString(R.string.n_a)
         tvRank.text = mangaByIDResponse.rank?.toString() ?: getString(R.string.n_a)
         tvPopularityRank.text = mangaByIDResponse.popularity?.toString() ?: getString(R.string.n_a)
