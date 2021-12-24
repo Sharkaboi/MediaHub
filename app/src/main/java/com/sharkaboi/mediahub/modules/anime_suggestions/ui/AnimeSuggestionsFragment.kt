@@ -21,7 +21,6 @@ import com.sharkaboi.mediahub.modules.anime_suggestions.adapters.AnimeSuggestion
 import com.sharkaboi.mediahub.modules.anime_suggestions.adapters.AnimeSuggestionsLoadStateAdapter
 import com.sharkaboi.mediahub.modules.anime_suggestions.vm.AnimeSuggestionsViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -69,21 +68,16 @@ class AnimeSuggestionsFragment : Fragment() {
     }
 
     private fun setObservers() {
-        lifecycleScope.launch {
-            animeSuggestionsAdapter.addLoadStateListener { loadStates ->
-                if (loadStates.source.refresh is LoadState.Error) {
-                    showToast((loadStates.source.refresh as LoadState.Error).error.message)
-                }
-                binding.progressBar.isShowing = loadStates.refresh is LoadState.Loading
-                binding.tvEmptyHint.isVisible =
-                    loadStates.refresh is LoadState.NotLoading && animeSuggestionsAdapter.itemCount == 0
+        animeSuggestionsAdapter.addLoadStateListener { loadStates ->
+            if (loadStates.source.refresh is LoadState.Error) {
+                showToast((loadStates.source.refresh as LoadState.Error).error.message)
             }
+            binding.progressBar.isShowing = loadStates.refresh is LoadState.Loading
+            binding.tvEmptyHint.isVisible =
+                loadStates.refresh is LoadState.NotLoading && animeSuggestionsAdapter.itemCount == 0
         }
-        lifecycleScope.launch {
-            animeSuggestionsViewModel.getAnimeSuggestions()
-                .collectLatest { pagingData ->
-                    animeSuggestionsAdapter.submitData(pagingData)
-                }
+        observe(animeSuggestionsViewModel.result) { pagingData ->
+            lifecycleScope.launch { animeSuggestionsAdapter.submitData(pagingData) }
         }
     }
 }
