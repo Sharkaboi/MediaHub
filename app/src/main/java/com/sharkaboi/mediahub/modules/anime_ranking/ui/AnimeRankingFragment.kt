@@ -61,17 +61,15 @@ class AnimeRankingFragment : Fragment() {
     private fun setupFilterChips() {
         binding.rankTypeChipGroup.removeAllViews()
         AnimeRankingType.values().forEach { rankingType ->
-            binding.rankTypeChipGroup.addView(
-                Chip(context).apply {
-                    text = rankingType.getFormattedString(context)
-                    setMediaHubChipStyle()
-                    isCheckable = true
-                    isChecked = rankingType == animeRankingViewModel.rankingType
-                    setOnClickListener {
-                        animeRankingViewModel.setRankingType(rankingType)
-                    }
-                }
-            )
+            val rankChip = Chip(context)
+            rankChip.text = rankingType.getFormattedString(rankChip.context)
+            rankChip.setMediaHubChipStyle()
+            rankChip.isCheckable = true
+            rankChip.isChecked = rankingType == animeRankingViewModel.rankingType
+            rankChip.setOnClickListener {
+                animeRankingViewModel.setRankingType(rankingType)
+            }
+            binding.rankTypeChipGroup.addView(rankChip)
         }
     }
 
@@ -90,13 +88,13 @@ class AnimeRankingFragment : Fragment() {
     }
 
     private val loadStateListener = { loadStates: CombinedLoadStates ->
-            if (loadStates.source.refresh is LoadState.Error) {
-                showToast((loadStates.source.refresh as LoadState.Error).error.message)
-            }
-            binding.progressBar.isShowing = loadStates.refresh is LoadState.Loading
-            binding.tvEmptyHint.isVisible =
-                loadStates.refresh is LoadState.NotLoading && animeRankingDetailedAdapter.itemCount == 0
+        if (loadStates.source.refresh is LoadState.Error) {
+            showToast((loadStates.source.refresh as LoadState.Error).error.message)
         }
+        binding.progressBar.isShowing = loadStates.refresh is LoadState.Loading
+        binding.tvEmptyHint.isVisible =
+            loadStates.refresh is LoadState.NotLoading && animeRankingDetailedAdapter.itemCount == 0
+    }
 
     private fun setObservers() {
         animeRankingDetailedAdapter.addLoadStateListener(loadStateListener)

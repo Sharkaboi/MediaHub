@@ -19,7 +19,7 @@ class AnimeRankingViewModel
     private val animeRankingRepository: AnimeRankingRepository,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-    private var selectedRankingType: String? = savedStateHandle.get(ANIME_RANKING_KEY)
+    private val selectedRankingType: String? = savedStateHandle.get(ANIME_RANKING_KEY)
 
     private var _rankingType: AnimeRankingType =
         AnimeRankingType.getAnimeRankingFromString(selectedRankingType)
