@@ -32,11 +32,13 @@ android {
                     'proguard-rules.pro'
         }
     }
+
     compileOptions {
         coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
     }
+
     kotlinOptions {
         jvmTarget = '11'
         freeCompilerArgs += "-Xopt-in=kotlin.time.ExperimentalTime"
@@ -50,6 +52,12 @@ android {
     secrets {
         propertiesFileName 'secrets.properties'
         defaultPropertiesFileName = 'secrets.defaults.properties'
+    }
+
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
     }
 }
 
@@ -100,6 +108,8 @@ dependencies {
     //testing
     debugImplementation "com.squareup.leakcanary:leakcanary-android:$leak_version"
     testImplementation "junit:junit:$junit_version"
+    testImplementation "androidx.test:core-ktx:$core_text_ktx_version"
+    testImplementation "org.robolectric:robolectric:$robolectric_version"
     androidTestImplementation "androidx.test.ext:junit:$junit_ext_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$expresso_version"
 }

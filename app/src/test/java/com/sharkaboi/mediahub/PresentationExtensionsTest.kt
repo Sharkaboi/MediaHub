@@ -1,17 +1,31 @@
+package com.sharkaboi.mediahub
+
+import GetNextAiringAnimeEpisodeQuery
 import androidx.core.text.toSpanned
-import androidx.test.platform.app.InstrumentationRegistry
-import com.sharkaboi.mediahub.common.extensions.*
+import androidx.test.core.app.ApplicationProvider
+import com.sharkaboi.mediahub.common.extensions.getMediaTypeStringWith
+import com.sharkaboi.mediahub.common.extensions.getProgressStringWith
+import com.sharkaboi.mediahub.common.extensions.getRatingStringWithRating
 import com.sharkaboi.mediahub.data.api.models.anime.AnimeByIDResponse
 import com.sharkaboi.mediahub.data.api.models.manga.MangaByIDResponse
 import com.sharkaboi.mediahub.modules.anime_details.util.*
-import com.sharkaboi.mediahub.modules.manga_details.util.*
-import com.sharkaboi.mediahub.modules.profile.util.*
+import com.sharkaboi.mediahub.modules.manga_details.util.getChaptersOfMangaString
+import com.sharkaboi.mediahub.modules.manga_details.util.getFormattedMangaTitlesString
+import com.sharkaboi.mediahub.modules.manga_details.util.getMangaStats
+import com.sharkaboi.mediahub.modules.manga_details.util.getVolumesOfMangaString
+import com.sharkaboi.mediahub.modules.profile.util.getDaysCountString
+import com.sharkaboi.mediahub.modules.profile.util.getEpisodesOfAnimeFullString
 import org.junit.Assert
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 
+@RunWith(RobolectricTestRunner::class)
+@Config(sdk = [30])
 class PresentationExtensionsTest {
 
-    private val context = InstrumentationRegistry.getInstrumentation().targetContext
+    private val context = ApplicationProvider.getApplicationContext<MediaHub>()
 
     @Test
     fun getProgressStringWithNullProgressAndNullTotalReturnsValidString() {

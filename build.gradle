@@ -33,6 +33,8 @@ buildscript {
         timber_version = '5.0.1'
         leak_version = '2.7'
         junit_version = '4.13.2'
+        core_text_ktx_version = '1.4.0'
+        robolectric_version = '4.6'
         junit_ext_version = '1.1.3'
         expresso_version = '3.4.0'
     }

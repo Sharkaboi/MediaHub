@@ -1,12 +1,19 @@
-import androidx.test.platform.app.InstrumentationRegistry
+package com.sharkaboi.mediahub
+
+import androidx.test.core.app.ApplicationProvider
 import com.sharkaboi.mediahub.data.api.enums.*
 import com.sharkaboi.mediahub.data.api.enums.AnimeRating.getAnimeRating
 import org.junit.Assert
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 
+@RunWith(RobolectricTestRunner::class)
+@Config(sdk = [30])
 class EnumTest {
 
-    private val context = InstrumentationRegistry.getInstrumentation().targetContext
+    private val context = ApplicationProvider.getApplicationContext<MediaHub>()
 
     @Test
     fun formattedStringOfAnimeMustContainSameElementsAsEnumValues() {
