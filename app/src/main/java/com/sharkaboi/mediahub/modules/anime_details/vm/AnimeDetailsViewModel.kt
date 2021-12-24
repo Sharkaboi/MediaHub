@@ -16,7 +16,7 @@ class AnimeDetailsViewModel
     private val animeDetailsRepository: AnimeDetailsRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-    private val animeId = savedStateHandle.get<Int>("animeId") ?: 0
+    private val animeId = savedStateHandle.get<Int>(ANIME_ID_KEY) ?: 0
 
     private val _animeDetailState = MutableLiveData<AnimeDetailsState>().getDefault()
     val animeDetailState: LiveData<AnimeDetailsState> = _animeDetailState
@@ -214,5 +214,9 @@ class AnimeDetailsViewModel
     fun refreshDetails() {
         getAnimeDetails(animeId)
         getNextEpisodeDetails(animeId)
+    }
+
+    companion object {
+        private const val ANIME_ID_KEY = "animeId"
     }
 }
