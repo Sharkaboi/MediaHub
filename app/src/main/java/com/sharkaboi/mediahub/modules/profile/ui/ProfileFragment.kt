@@ -81,9 +81,6 @@ class ProfileFragment : Fragment() {
         observe(profileViewModel.uiState) { uiState ->
             binding.progressBar.isShowing = uiState is ProfileStates.Loading
             when (uiState) {
-                is ProfileStates.Idle -> {
-                    profileViewModel.getUserDetails()
-                }
                 is ProfileStates.FetchSuccess -> {
                     setData(uiState.userDetailsResponse)
                 }

@@ -16,12 +16,15 @@ class ProfileViewModel
 @Inject constructor(
     private val profileRepository: ProfileRepository
 ) : ViewModel() {
-
     private val _uiState: MutableLiveData<ProfileStates> =
         MutableLiveData<ProfileStates>().getDefault()
     val uiState: LiveData<ProfileStates> = _uiState
 
-    fun getUserDetails() {
+    init {
+        getUserDetails()
+    }
+
+    private fun getUserDetails() {
         viewModelScope.launch {
             _uiState.setLoading()
             val result: MHTaskState<UserDetailsResponse> = profileRepository.getUserDetails()
