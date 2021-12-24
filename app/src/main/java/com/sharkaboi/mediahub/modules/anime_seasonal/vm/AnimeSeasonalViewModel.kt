@@ -1,7 +1,6 @@
 package com.sharkaboi.mediahub.modules.anime_seasonal.vm
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.sharkaboi.mediahub.data.api.enums.getAnimeSeason
@@ -10,39 +9,56 @@ import com.sharkaboi.mediahub.modules.anime_seasonal.repository.AnimeSeasonalRep
 import com.sharkaboi.mediahub.modules.anime_seasonal.util.AnimeSeasonWrapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
-import java.time.LocalDate
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class AnimeSeasonalViewModel
 @Inject constructor(
-    private val animeSeasonalRepository: AnimeSeasonalRepository
+    private val animeSeasonalRepository: AnimeSeasonalRepository,
+    private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-    private var _pagedResult: Flow<PagingData<AnimeSeasonalResponse.Data>>? = null
-    private var _animeSeasonWrapper = AnimeSeasonWrapper(
-        animeSeason = LocalDate.now().getAnimeSeason(),
-        year = LocalDate.now().year
-    )
-    val animeSeasonWrapper get() = _animeSeasonWrapper
 
-    suspend fun getAnimeOfSeason(): Flow<PagingData<AnimeSeasonalResponse.Data>> {
-        val newResult: Flow<PagingData<AnimeSeasonalResponse.Data>> =
-            animeSeasonalRepository
-                .getAnimeSeasonal(_animeSeasonWrapper.animeSeason, _animeSeasonWrapper.year)
-                .cachedIn(viewModelScope)
-        _pagedResult = newResult
-        return newResult
+    private val selectedSeason =
+        savedStateHandle.get<String>(ANIME_SELECTED_SEASON).getAnimeSeason()
+    private val selectedYear = savedStateHandle.get<Int>(ANIME_SELECTED_YEAR)
+
+    private var _animeSeason: AnimeSeasonWrapper =
+        AnimeSeasonWrapper.parseFrom(selectedSeason, selectedYear)
+            ?: AnimeSeasonWrapper.currentSeason()
+    val animeSeason: AnimeSeasonWrapper get() = _animeSeason
+
+    private var _result = MutableLiveData<PagingData<AnimeSeasonalResponse.Data>>()
+    val result: LiveData<PagingData<AnimeSeasonalResponse.Data>> = _result
+
+    init {
+        Timber.d("Saved state for anime season $selectedSeason")
+        Timber.d("Saved state for anime season year $selectedYear")
+        getAnimeOfSeason()
     }
 
-    fun setAnimeSeason(animeSeasonWrapper: AnimeSeasonWrapper) {
-        _animeSeasonWrapper = animeSeasonWrapper
+    private fun getAnimeOfSeason() = viewModelScope.launch {
+        val newResult: Flow<PagingData<AnimeSeasonalResponse.Data>> =
+            animeSeasonalRepository
+                .getAnimeSeasonal(animeSeason.animeSeason, animeSeason.year)
+                .cachedIn(viewModelScope)
+        _result.value = newResult.firstOrNull()
     }
 
     fun previousSeason() {
-        _animeSeasonWrapper = _animeSeasonWrapper.prev()
+        _animeSeason = _animeSeason.prev()
+        getAnimeOfSeason()
     }
 
     fun nextSeason() {
-        _animeSeasonWrapper = _animeSeasonWrapper.next()
+        _animeSeason = _animeSeason.next()
+        getAnimeOfSeason()
+    }
+
+    companion object {
+        private const val ANIME_SELECTED_SEASON = "season"
+        private const val ANIME_SELECTED_YEAR = "year"
     }
 }
