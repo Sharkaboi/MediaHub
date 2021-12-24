@@ -18,8 +18,8 @@ class AnimeSearchViewModel
     private val animeSearchRepository: AnimeSearchRepository,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-
     private val searchedQuery = savedStateHandle.get<String>(SEARCH_QUERY_KEY)
+
     private val _pagedSearchResult = MutableLiveData<PagingData<AnimeSearchResponse.Data>>()
     val pagedSearchResult: LiveData<PagingData<AnimeSearchResponse.Data>> = _pagedSearchResult
 
