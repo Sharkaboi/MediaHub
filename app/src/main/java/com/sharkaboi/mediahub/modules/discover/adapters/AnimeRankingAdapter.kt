@@ -10,7 +10,7 @@ import coil.load
 import com.sharkaboi.mediahub.common.constants.UIConstants
 import com.sharkaboi.mediahub.common.extensions.getRatingStringWithRating
 import com.sharkaboi.mediahub.data.api.models.anime.AnimeRankingResponse
-import com.sharkaboi.mediahub.databinding.AnimeListItemBinding
+import com.sharkaboi.mediahub.databinding.AnimeListItemHorizontalBinding
 
 class AnimeRankingAdapter(private val onClick: (Int) -> Unit) :
     RecyclerView.Adapter<AnimeRankingAdapter.AnimeRankingViewHolder>() {
@@ -34,10 +34,14 @@ class AnimeRankingAdapter(private val onClick: (Int) -> Unit) :
 
     private val listDiffer = AsyncListDiffer(this, diffUtilItemCallback)
 
-    private lateinit var binding: AnimeListItemBinding
+    private lateinit var binding: AnimeListItemHorizontalBinding
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AnimeRankingViewHolder {
-        binding = AnimeListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        binding = AnimeListItemHorizontalBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
         return AnimeRankingViewHolder(binding, onClick)
     }
 
@@ -52,7 +56,7 @@ class AnimeRankingAdapter(private val onClick: (Int) -> Unit) :
     }
 
     class AnimeRankingViewHolder(
-        private val binding: AnimeListItemBinding,
+        private val binding: AnimeListItemHorizontalBinding,
         private val onClick: (Int) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
@@ -66,7 +70,7 @@ class AnimeRankingAdapter(private val onClick: (Int) -> Unit) :
                 binding.tvScore.context.getRatingStringWithRating(item.node.meanScore)
             binding.ivAnimeBanner.load(
                 uri = item.node.mainPicture?.large ?: item.node.mainPicture?.medium,
-                builder = UIConstants.AnimeImageBuilder
+                builder = UIConstants.TopRoundedAnimeImageBuilder
             )
         }
     }

@@ -9,9 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.core.view.forEach
-import androidx.core.view.isGone
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -393,7 +390,7 @@ class AnimeDetailsFragment : Fragment() {
     private fun setupAnimeImagePreview(animeByIDResponse: AnimeByIDResponse) {
         binding.ivAnimeMainPicture.load(
             uri = animeByIDResponse.mainPicture?.large ?: animeByIDResponse.mainPicture?.medium,
-            builder = UIConstants.AnimeImageBuilder
+            builder = UIConstants.AllRoundedAnimeImageBuilder
         )
         binding.ivAnimeMainPicture.setOnClickListener {
             openImagesViewPager(animeByIDResponse.pictures)

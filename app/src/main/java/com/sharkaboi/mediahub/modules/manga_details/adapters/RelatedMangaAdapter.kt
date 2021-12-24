@@ -66,7 +66,7 @@ class RelatedMangaAdapter(private val onClick: (Int) -> Unit) :
             binding.tvVolumesRead.isVisible = false
             binding.ivMangaBanner.load(
                 uri = item.node.mainPicture?.large ?: item.node.mainPicture?.medium,
-                builder = UIConstants.MangaImageBuilder
+                builder = UIConstants.TopRoundedMangaImageBuilder
             )
         }
     }

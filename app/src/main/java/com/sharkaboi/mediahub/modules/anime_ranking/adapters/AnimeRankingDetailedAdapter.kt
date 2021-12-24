@@ -25,7 +25,7 @@ class AnimeRankingDetailedAdapter(
                 animeListItemBinding.apply {
                     ivAnimeBanner.load(
                         uri = it.node.mainPicture?.large ?: it.node.mainPicture?.medium,
-                        builder = UIConstants.AnimeImageBuilder
+                        builder = UIConstants.TopRoundedAnimeImageBuilder
                     )
                     tvAnimeName.text = it.node.title
                     tvEpisodesWatched.text = tvEpisodesWatched.context.getString(

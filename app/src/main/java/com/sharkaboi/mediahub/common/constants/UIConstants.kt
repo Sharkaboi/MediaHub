@@ -12,7 +12,20 @@ object UIConstants {
     private const val ProfileImageCornerRadius = 10f
     private val ChipShapeAppearanceModel = ShapeAppearanceModel().withCornerSize(8f)
 
-    val AnimeImageBuilder: ImageRequest.Builder.() -> Unit = {
+    val TopRoundedAnimeImageBuilder: ImageRequest.Builder.() -> Unit = {
+        crossfade(true)
+        placeholder(R.drawable.ic_anime_placeholder)
+        error(R.drawable.ic_anime_placeholder)
+        fallback(R.drawable.ic_anime_placeholder)
+        transformations(
+            RoundedCornersTransformation(
+                topLeft = AnimeAndMangaImageCornerRadius,
+                topRight = AnimeAndMangaImageCornerRadius
+            )
+        )
+    }
+
+    val AllRoundedAnimeImageBuilder: ImageRequest.Builder.() -> Unit = {
         crossfade(true)
         placeholder(R.drawable.ic_anime_placeholder)
         error(R.drawable.ic_anime_placeholder)
@@ -24,7 +37,20 @@ object UIConstants {
         )
     }
 
-    val MangaImageBuilder: ImageRequest.Builder.() -> Unit = {
+    val TopRoundedMangaImageBuilder: ImageRequest.Builder.() -> Unit = {
+        crossfade(true)
+        placeholder(R.drawable.ic_manga_placeholder)
+        error(R.drawable.ic_manga_placeholder)
+        fallback(R.drawable.ic_manga_placeholder)
+        transformations(
+            RoundedCornersTransformation(
+                topLeft = AnimeAndMangaImageCornerRadius,
+                topRight = AnimeAndMangaImageCornerRadius
+            )
+        )
+    }
+
+    val AllRoundedMangaImageBuilder: ImageRequest.Builder.() -> Unit = {
         crossfade(true)
         placeholder(R.drawable.ic_manga_placeholder)
         error(R.drawable.ic_manga_placeholder)

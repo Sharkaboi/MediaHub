@@ -25,7 +25,7 @@ class MangaSearchListAdapter(
                 mangaListItemBinding.apply {
                     ivMangaBanner.load(
                         uri = it.node.mainPicture?.large ?: it.node.mainPicture?.medium,
-                        builder = UIConstants.MangaImageBuilder
+                        builder = UIConstants.TopRoundedMangaImageBuilder
                     )
                     tvMangaName.text = it.node.title
                     tvChapsRead.isVisible = false

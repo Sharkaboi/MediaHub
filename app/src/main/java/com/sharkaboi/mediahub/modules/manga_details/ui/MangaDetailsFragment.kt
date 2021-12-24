@@ -8,8 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.core.view.forEach
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -376,7 +374,7 @@ class MangaDetailsFragment : Fragment() {
     private fun setupMangaImagePreview(mangaByIDResponse: MangaByIDResponse) = binding.apply {
         ivMangaMainPicture.load(
             uri = mangaByIDResponse.mainPicture?.large ?: mangaByIDResponse.mainPicture?.medium,
-            builder = UIConstants.MangaImageBuilder
+            builder = UIConstants.AllRoundedMangaImageBuilder
         )
         ivMangaMainPicture.setOnClickListener {
             openImagesViewPager(mangaByIDResponse.pictures)
