@@ -33,6 +33,7 @@
         android:src="@drawable/ic_search"
         android:tooltipText="@string/search"
         app:backgroundTint="@color/colorPrimary"
+        app:fabSize="normal"
         app:layout_anchor="@id/bottomNav"
         app:layout_anchorGravity="end"
         app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
