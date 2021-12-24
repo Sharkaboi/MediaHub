@@ -77,13 +77,13 @@ class AnimeListByStatusFragment : Fragment() {
     }
 
     private val loadStateListener = { loadStates: CombinedLoadStates ->
-            if (loadStates.source.refresh is LoadState.Error) {
-                showToast((loadStates.source.refresh as LoadState.Error).error.message)
-            }
-            binding.progressBar.isShowing = loadStates.refresh is LoadState.Loading
-            binding.tvEmptyHint.isVisible =
-                loadStates.refresh is LoadState.NotLoading && animeListAdapter.itemCount == 0
+        if (loadStates.source.refresh is LoadState.Error) {
+            showToast((loadStates.source.refresh as LoadState.Error).error.message)
         }
+        binding.progressBar.isShowing = loadStates.refresh is LoadState.Loading
+        binding.tvEmptyHint.isVisible =
+            loadStates.refresh is LoadState.NotLoading && animeListAdapter.itemCount == 0
+    }
 
     private fun setListeners() {
         animeListAdapter.addLoadStateListener(loadStateListener)

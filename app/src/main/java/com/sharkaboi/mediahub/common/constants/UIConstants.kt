@@ -11,6 +11,7 @@ object UIConstants {
     private const val AnimeAndMangaImageCornerRadius = 8f
     private const val ProfileImageCornerRadius = 10f
     private val ChipShapeAppearanceModel = ShapeAppearanceModel().withCornerSize(8f)
+
     val AnimeImageBuilder: ImageRequest.Builder.() -> Unit = {
         crossfade(true)
         placeholder(R.drawable.ic_anime_placeholder)
@@ -22,6 +23,7 @@ object UIConstants {
             )
         )
     }
+
     val MangaImageBuilder: ImageRequest.Builder.() -> Unit = {
         crossfade(true)
         placeholder(R.drawable.ic_manga_placeholder)
@@ -33,6 +35,7 @@ object UIConstants {
             )
         )
     }
+
     val ProfileImageBuilder: ImageRequest.Builder.() -> Unit = {
         crossfade(true)
         placeholder(R.drawable.ic_profile_placeholder)

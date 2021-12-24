@@ -75,15 +75,15 @@ class AnimeSearchFragment : Fragment() {
     }
 
     private val loadStateListener = { loadStates: CombinedLoadStates ->
-            if (loadStates.source.refresh is LoadState.Error) {
-                showToast((loadStates.source.refresh as LoadState.Error).error.message)
-            }
-            binding.progress.isShowing = loadStates.refresh is LoadState.Loading
-            binding.searchEmptyView.root.isVisible =
-                loadStates.refresh is LoadState.NotLoading && animeSearchListAdapter.itemCount == 0
-            binding.searchEmptyView.tvHint.text =
-                getString(R.string.anime_search_no_result_hint)
+        if (loadStates.source.refresh is LoadState.Error) {
+            showToast((loadStates.source.refresh as LoadState.Error).error.message)
         }
+        binding.progress.isShowing = loadStates.refresh is LoadState.Loading
+        binding.searchEmptyView.root.isVisible =
+            loadStates.refresh is LoadState.NotLoading && animeSearchListAdapter.itemCount == 0
+        binding.searchEmptyView.tvHint.text =
+            getString(R.string.anime_search_no_result_hint)
+    }
 
     private fun setObservers() {
         animeSearchListAdapter.addLoadStateListener(loadStateListener)

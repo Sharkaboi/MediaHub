@@ -88,14 +88,15 @@ class AnimeSeasonalFragment : Fragment() {
         }
     }
 
-    private val loadStateListener get() =  { loadStates:CombinedLoadStates ->
-        if (loadStates.source.refresh is LoadState.Error) {
-            showToast((loadStates.source.refresh as LoadState.Error).error.message)
+    private val loadStateListener
+        get() = { loadStates: CombinedLoadStates ->
+            if (loadStates.source.refresh is LoadState.Error) {
+                showToast((loadStates.source.refresh as LoadState.Error).error.message)
+            }
+            binding.progressBar.isShowing = loadStates.refresh is LoadState.Loading
+            binding.tvEmptyHint.isVisible =
+                loadStates.refresh is LoadState.NotLoading && animeSeasonalAdapter.itemCount == 0
         }
-        binding.progressBar.isShowing = loadStates.refresh is LoadState.Loading
-        binding.tvEmptyHint.isVisible =
-            loadStates.refresh is LoadState.NotLoading && animeSeasonalAdapter.itemCount == 0
-    }
 
     private fun setObservers() {
         animeSeasonalAdapter.addLoadStateListener(loadStateListener)

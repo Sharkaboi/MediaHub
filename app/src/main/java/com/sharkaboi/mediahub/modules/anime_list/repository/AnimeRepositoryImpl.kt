@@ -10,8 +10,8 @@ import com.sharkaboi.mediahub.data.api.enums.UserAnimeSortType
 import com.sharkaboi.mediahub.data.api.models.useranime.UserAnimeListResponse
 import com.sharkaboi.mediahub.data.api.retrofit.UserAnimeService
 import com.sharkaboi.mediahub.data.datastore.DataStoreRepository
-import com.sharkaboi.mediahub.modules.anime_list.data.UserAnimeListDataSource
 import com.sharkaboi.mediahub.data.sharedpref.SharedPreferencesKeys
+import com.sharkaboi.mediahub.modules.anime_list.data.UserAnimeListDataSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull

@@ -18,7 +18,7 @@ import javax.inject.Inject
 class AnimeSeasonalViewModel
 @Inject constructor(
     private val animeSeasonalRepository: AnimeSeasonalRepository,
-    private val savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     private val selectedSeason =
