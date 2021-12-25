@@ -46,7 +46,7 @@
             android:contentDescription="@string/anime"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_anime_placeholder"
-            app:layout_constraintDimensionRatio="1:1.25"
+            app:layout_constraintDimensionRatio="3:4"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"

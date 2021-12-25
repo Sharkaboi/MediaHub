@@ -36,7 +36,8 @@
                 android:id="@+id/tvScore"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                tools:text="★ 10" />
         </com.google.android.material.card.MaterialCardView>
 
         <ImageView
@@ -46,9 +47,8 @@
             android:contentDescription="@string/anime"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_anime_placeholder"
-            app:layout_constraintDimensionRatio="1:1.25"
+            app:layout_constraintDimensionRatio="3:4"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.sharkaboi.mediahub.common.constants.UIConstants
 import com.sharkaboi.mediahub.data.api.models.manga.MangaByIDResponse
-import com.sharkaboi.mediahub.databinding.AnimeListItemBinding
+import com.sharkaboi.mediahub.databinding.AnimeListItemHorizontalBinding
 
 class RelatedAnimeAdapter(private val onClick: (Int) -> Unit) :
     RecyclerView.Adapter<RelatedAnimeAdapter.RelatedAnimeViewHolder>() {
@@ -33,10 +33,14 @@ class RelatedAnimeAdapter(private val onClick: (Int) -> Unit) :
 
     private val listDiffer = AsyncListDiffer(this, diffUtilItemCallback)
 
-    private lateinit var binding: AnimeListItemBinding
+    private lateinit var binding: AnimeListItemHorizontalBinding
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RelatedAnimeViewHolder {
-        binding = AnimeListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        binding = AnimeListItemHorizontalBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
         return RelatedAnimeViewHolder(binding, onClick)
     }
 
@@ -51,7 +55,7 @@ class RelatedAnimeAdapter(private val onClick: (Int) -> Unit) :
     }
 
     class RelatedAnimeViewHolder(
-        private val binding: AnimeListItemBinding,
+        private val binding: AnimeListItemHorizontalBinding,
         private val onClick: (Int) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
