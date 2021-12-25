@@ -11,11 +11,10 @@ enum class MangaNsfwRating {
 }
 
 internal fun Context.getMangaNsfwRating(rating: String?): String {
-    return when {
-        rating == null -> getString(R.string.n_a)
-        rating.trim() == MangaNsfwRating.white.name -> getString(R.string.manga_nsfw_rating_white)
-        rating.trim() == MangaNsfwRating.gray.name -> getString(R.string.manga_nsfw_rating_gray)
-        rating.trim() == MangaNsfwRating.black.name -> getString(R.string.manga_nsfw_rating_black)
+    return when (rating?.trim()) {
+        MangaNsfwRating.white.name -> getString(R.string.manga_nsfw_rating_white)
+        MangaNsfwRating.gray.name -> getString(R.string.manga_nsfw_rating_gray)
+        MangaNsfwRating.black.name -> getString(R.string.manga_nsfw_rating_black)
         else -> getString(R.string.n_a)
     }
 }

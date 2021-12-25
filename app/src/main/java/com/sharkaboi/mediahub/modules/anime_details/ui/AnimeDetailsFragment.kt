@@ -9,6 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.view.forEach
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -104,7 +107,7 @@ class AnimeDetailsFragment : Fragment() {
     }
 
     private val handleListStatusUpdate = { state: AnimeDetailsUpdateClass ->
-        binding.animeDetailsUserListCard.apply {
+        binding.animeDetailsUserListCard.run {
             btnStatus.text =
                 state.animeStatus?.getFormattedString(requireContext())
                     ?: getString(R.string.not_added)
@@ -114,7 +117,7 @@ class AnimeDetailsFragment : Fragment() {
                 openScoreDialog(state.score)
             }
             btnStatus.setOnClickListener {
-                openStatusDialog(state.animeStatus?.name, state.animeId)
+                openStatusDialog()
             }
             btnCount.setOnClickListener {
                 openAnimeWatchedCountDialog(
@@ -123,14 +126,12 @@ class AnimeDetailsFragment : Fragment() {
                 )
             }
         }
-        Unit
     }
 
     private fun setNextEpisodeData(nextAiringEpisodeDetails: GetNextAiringAnimeEpisodeQuery.Media) {
         val nextEp = nextAiringEpisodeDetails.nextAiringEpisode
-        if (nextEp == null) {
-            binding.nextEpisodeDetails.root.isGone = true
-        } else {
+        binding.nextEpisodeDetails.root.isGone = nextEp == null
+        if (nextEp != null) {
             binding.nextEpisodeDetails.tvNextEpisodeDetails.text =
                 context?.getAiringTimeFormatted(nextEp)
         }
@@ -148,15 +149,15 @@ class AnimeDetailsFragment : Fragment() {
     }
 
     private fun setupAnimeUserListStatusCard(animeByIDResponse: AnimeByIDResponse) =
-        binding.animeDetailsUserListCard.apply {
+        binding.animeDetailsUserListCard.run {
             btnPlus1.setOnClickListener {
-                animeDetailsViewModel.add1ToWatchedEps()
+                animeDetailsViewModel.addToWatchedEps(1)
             }
             btnPlus5.setOnClickListener {
-                animeDetailsViewModel.add5ToWatchedEps()
+                animeDetailsViewModel.addToWatchedEps(5)
             }
             btnPlus10.setOnClickListener {
-                animeDetailsViewModel.add10ToWatchedEps()
+                animeDetailsViewModel.addToWatchedEps(10)
             }
             btnCount.setOnClickListener {
                 openAnimeWatchedCountDialog(
@@ -168,10 +169,10 @@ class AnimeDetailsFragment : Fragment() {
                 openScoreDialog(animeByIDResponse.myListStatus?.score)
             }
             btnStatus.setOnClickListener {
-                openStatusDialog(animeByIDResponse.myListStatus?.status, animeByIDResponse.id)
+                openStatusDialog()
             }
             btnConfirm.setOnClickListener {
-                animeDetailsViewModel.submitStatusUpdate(animeByIDResponse.id)
+                animeDetailsViewModel.submitStatusUpdate()
             }
         }
 
@@ -228,7 +229,7 @@ class AnimeDetailsFragment : Fragment() {
     }
 
     private fun setupAnimeOtherDetailsButtons(animeByIDResponse: AnimeByIDResponse) =
-        binding.apply {
+        binding.run {
             otherDetails.btnBackground.setOnClickListener {
                 openBackgroundDialog(animeByIDResponse.background)
             }
@@ -343,16 +344,17 @@ class AnimeDetailsFragment : Fragment() {
             naChip.setMediaHubChipStyle()
             naChip.text = getString(R.string.n_a)
             chipGroup.addView(naChip)
-        } else {
-            genres.forEach { genre ->
-                val genreChip = Chip(context)
-                genreChip.setMediaHubChipStyle()
-                genreChip.text = genre.name
-                genreChip.setOnClickListener {
-                    openUrl(MALExternalLinks.getAnimeGenresLink(genre))
-                }
-                chipGroup.addView(genreChip)
+            return
+        }
+
+        genres.forEach { genre ->
+            val genreChip = Chip(context)
+            genreChip.setMediaHubChipStyle()
+            genreChip.text = genre.name
+            genreChip.setOnClickListener {
+                openUrl(MALExternalLinks.getAnimeGenresLink(genre))
             }
+            chipGroup.addView(genreChip)
         }
     }
 
@@ -403,19 +405,20 @@ class AnimeDetailsFragment : Fragment() {
             val textView = TextView(context)
             textView.text = getString(R.string.n_a)
             binding.studiosChipGroup.addView(textView)
-        } else {
-            studios.forEach { studio ->
-                val textView = TextView(context)
-                textView.setTextColor(
-                    ContextCompat.getColor(textView.context, R.color.colorPrimary)
-                )
-                textView.setTypeface(null, Typeface.BOLD)
-                textView.text = studio.name.plus(" ")
-                textView.setOnClickListener {
-                    openUrl(MALExternalLinks.getAnimeProducerPageLink(studio))
-                }
-                binding.studiosChipGroup.addView(textView)
+            return
+        }
+
+        studios.forEach { studio ->
+            val textView = TextView(context)
+            textView.setTextColor(
+                ContextCompat.getColor(textView.context, R.color.colorPrimary)
+            )
+            textView.setTypeface(null, Typeface.BOLD)
+            textView.text = studio.name.plus(" ")
+            textView.setOnClickListener {
+                openUrl(MALExternalLinks.getAnimeProducerPageLink(studio))
             }
+            binding.studiosChipGroup.addView(textView)
         }
     }
 
@@ -432,10 +435,12 @@ class AnimeDetailsFragment : Fragment() {
     private fun showFullSynopsisDialog(synopsis: String?) =
         requireContext().showNoActionOkDialog(R.string.synopsis, synopsis)
 
-    private fun openStatusDialog(status: String?, animeId: Int) {
+    private fun openStatusDialog() {
         val singleItems = arrayOf(getString(R.string.not_added)) + AnimeStatus.malStatuses.map {
             it.getFormattedString(requireContext())
         }
+        val status = animeDetailsViewModel.animeDetailsUpdate.value?.animeStatus?.name
+        // Add 1 of offset "Not Added" status, Default to 0 to default to "Not Added"
         val checkedItem =
             status?.let { AnimeStatus.malStatuses.indexOfFirst { it.name == status } + 1 } ?: 0
         MaterialAlertDialogBuilder(requireContext())
@@ -443,12 +448,11 @@ class AnimeDetailsFragment : Fragment() {
             .setSingleChoiceItems(singleItems, checkedItem) { dialog, which ->
                 when (which) {
                     checkedItem -> Unit
-                    0 -> animeDetailsViewModel.removeFromList(animeId)
+                    0 -> animeDetailsViewModel.removeFromList()
                     else -> animeDetailsViewModel.setStatus(AnimeStatus.malStatuses[which - 1])
                 }
                 dialog.dismiss()
-            }
-            .show()
+            }.show()
     }
 
     private fun openScoreDialog(score: Int?) {

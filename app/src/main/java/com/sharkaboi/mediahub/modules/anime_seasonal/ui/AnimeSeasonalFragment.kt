@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.DefaultItemAnimator
@@ -33,7 +32,6 @@ class AnimeSeasonalFragment : Fragment() {
     private val navController by lazy { findNavController() }
     private lateinit var animeSeasonalAdapter: AnimeSeasonalAdapter
     private val animeSeasonalViewModel by viewModels<AnimeSeasonalViewModel>()
-    private val args: AnimeSeasonalFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,

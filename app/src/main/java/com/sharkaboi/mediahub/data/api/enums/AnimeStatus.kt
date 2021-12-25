@@ -24,6 +24,7 @@ enum class AnimeStatus {
     }
 
     companion object {
+        // All status doesn't actually exist in the api
         val malStatuses = values().filter { it != all }
 
         fun parse(string: String?): AnimeStatus? {

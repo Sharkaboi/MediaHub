@@ -25,11 +25,10 @@ internal fun Context.getEpisodesOfAnimeString(episodes: Int): String {
 }
 
 internal fun Context.getAnimeSeasonString(season: String?, year: Int?): String {
-    return if (season == null || year == null) {
-        getString(R.string.anime_season_unknown_template, getString(R.string.n_a))
-    } else {
-        getString(R.string.anime_season_template, season.capitalizeFirst(), year)
+    if (season == null || year == null) {
+        return getString(R.string.anime_season_unknown_template, getString(R.string.n_a))
     }
+    return getString(R.string.anime_season_template, season.capitalizeFirst(), year)
 }
 
 internal fun Context.getAnimeOriginalSourceString(source: String?): String {
@@ -43,9 +42,12 @@ internal fun Context.getAnimeBroadcastTime(broadcast: AnimeByIDResponse.Broadcas
     runCatching {
         if (broadcast == null) {
             return getString(R.string.n_a)
-        } else if (broadcast.startTime == null) {
+        }
+
+        if (broadcast.startTime == null) {
             return getString(R.string.anime_broadcast_on_day, broadcast.dayOfTheWeek)
         }
+
         val localTime =
             DateUtils.getLocalDateFromDayAndTime(broadcast.dayOfTheWeek, broadcast.startTime)
         return localTime?.format(DateTimeFormatter.ofPattern("EEEE h:mm a zzzz"))

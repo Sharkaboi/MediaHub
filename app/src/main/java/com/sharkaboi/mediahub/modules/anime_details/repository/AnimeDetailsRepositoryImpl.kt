@@ -5,7 +5,7 @@ import com.apollographql.apollo.ApolloClient
 import com.apollographql.apollo.coroutines.await
 import com.apollographql.apollo.exception.ApolloException
 import com.haroldadmin.cnradapter.NetworkResponse
-import com.sharkaboi.mediahub.common.extensions.emptyString
+import com.sharkaboi.mediahub.common.extensions.getCatching
 import com.sharkaboi.mediahub.data.api.constants.ApiConstants
 import com.sharkaboi.mediahub.data.api.models.anime.AnimeByIDResponse
 import com.sharkaboi.mediahub.data.api.retrofit.AnimeService
@@ -25,241 +25,200 @@ class AnimeDetailsRepositoryImpl(
     private val dataStoreRepository: DataStoreRepository
 ) : AnimeDetailsRepository {
 
-    override suspend fun getAnimeById(animeId: Int): MHTaskState<AnimeByIDResponse> =
-        withContext(Dispatchers.IO) {
-            try {
-                val accessToken: String? = dataStoreRepository.accessTokenFlow.firstOrNull()
-                if (accessToken == null) {
-                    return@withContext MHTaskState(
-                        isSuccess = false,
-                        data = null,
-                        error = MHError.LoginExpiredError
-                    )
-                } else {
-                    val result = animeService.getAnimeByIdAsync(
-                        authHeader = ApiConstants.BEARER_SEPARATOR + accessToken,
-                        animeId = animeId
-                    ).await()
-                    when (result) {
-                        is NetworkResponse.Success -> {
-                            Timber.d(result.body.toString())
-                            return@withContext MHTaskState(
-                                isSuccess = true,
-                                data = result.body,
-                                error = MHError.EmptyError
-                            )
-                        }
-                        is NetworkResponse.NetworkError -> {
-                            Timber.d(result.error.message ?: String.emptyString)
-                            return@withContext MHTaskState(
-                                isSuccess = false,
-                                data = null,
-                                error = result.error.message?.let { MHError(it) }
-                                    ?: MHError.NetworkError
-                            )
-                        }
-                        is NetworkResponse.ServerError -> {
-                            Timber.d(result.body.toString())
-                            return@withContext MHTaskState(
-                                isSuccess = false,
-                                data = null,
-                                error = result.body?.message?.let { MHError(it) }
-                                    ?: MHError.apiErrorWithCode(result.code)
-                            )
-                        }
-                        is NetworkResponse.UnknownError -> {
-                            Timber.d(result.error.message ?: String.emptyString)
-                            return@withContext MHTaskState(
-                                isSuccess = false,
-                                data = null,
-                                error = result.error.message?.let { MHError(it) }
-                                    ?: MHError.ParsingError
-                            )
-                        }
-                    }
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-                Timber.d(e.message ?: String.emptyString)
-                return@withContext MHTaskState(
-                    isSuccess = false,
-                    data = null,
-                    error = e.message?.let { MHError(it) } ?: MHError.UnknownError
-                )
-            }
-        }
+    override suspend fun getAnimeById(
+        animeId: Int
+    ): MHTaskState<AnimeByIDResponse> = getCatching {
+        val accessToken: String = dataStoreRepository.accessTokenFlow.firstOrNull()
+            ?: return@getCatching MHTaskState(
+                isSuccess = false,
+                data = null,
+                error = MHError.LoginExpiredError
+            )
 
-    override suspend fun getNextAiringEpisodeById(animeId: Int): MHTaskState<GetNextAiringAnimeEpisodeQuery.Media> =
-        withContext(Dispatchers.IO) {
-            val response = try {
-                apolloClient.query(GetNextAiringAnimeEpisodeQuery(idMal = animeId)).await()
-            } catch (e: ApolloException) {
-                return@withContext MHTaskState(
-                    isSuccess = false,
-                    data = null,
-                    error = e.message?.let { MHError(it) } ?: MHError.ProtocolError
-                )
-            }
+        val result = animeService.getAnimeByIdAsync(
+            authHeader = ApiConstants.BEARER_SEPARATOR + accessToken,
+            animeId = animeId
+        ).await()
+        Timber.d(result.toString())
 
-            val mediaDetails = response.data?.media
-            if (mediaDetails == null || response.hasErrors()) {
-                val errorMessage = response.errors?.first()?.message
-                return@withContext MHTaskState(
-                    isSuccess = false,
-                    data = null,
-                    error = errorMessage?.let { MHError(it) } ?: MHError.ApplicationError
-                )
-            } else {
-                return@withContext MHTaskState(
+        return@getCatching when (result) {
+            is NetworkResponse.Success -> {
+                MHTaskState(
                     isSuccess = true,
-                    data = mediaDetails,
+                    data = result.body,
                     error = MHError.EmptyError
                 )
             }
+            is NetworkResponse.NetworkError -> {
+                MHTaskState(
+                    isSuccess = false,
+                    data = null,
+                    error = MHError.getError(result.error.message, MHError.NetworkError)
+                )
+            }
+            is NetworkResponse.ServerError -> {
+                MHTaskState(
+                    isSuccess = false,
+                    data = null,
+                    error = MHError.getError(
+                        result.body?.message,
+                        MHError.apiErrorWithCode(result.code)
+                    )
+                )
+            }
+            is NetworkResponse.UnknownError -> {
+                MHTaskState(
+                    isSuccess = false,
+                    data = null,
+                    error = MHError.getError(result.error.message, MHError.ParsingError)
+                )
+            }
         }
+    }
+
+    override suspend fun getNextAiringEpisodeById(
+        animeId: Int
+    ): MHTaskState<GetNextAiringAnimeEpisodeQuery.Media> = getCatching {
+        val response = try {
+            apolloClient.query(GetNextAiringAnimeEpisodeQuery(idMal = animeId)).await()
+        } catch (e: ApolloException) {
+            return@getCatching MHTaskState(
+                isSuccess = false,
+                data = null,
+                error = MHError.getError(e.message, MHError.ProtocolError)
+            )
+        }
+
+        val mediaDetails = response.data?.media
+        if (mediaDetails == null || response.hasErrors()) {
+            val errorMessage = response.errors?.first()?.message
+            return@getCatching MHTaskState(
+                isSuccess = false,
+                data = null,
+                error = MHError.getError(errorMessage, MHError.ApplicationError)
+            )
+        }
+
+        return@getCatching MHTaskState(
+            isSuccess = true,
+            data = mediaDetails,
+            error = MHError.EmptyError
+        )
+    }
 
     override suspend fun updateAnimeStatus(
         animeId: Int,
         animeStatus: String?,
         score: Int?,
         numWatchedEps: Int?
-    ): MHTaskState<Unit> =
-        withContext(Dispatchers.IO) {
-            try {
-                val accessToken: String? = dataStoreRepository.accessTokenFlow.firstOrNull()
-                if (accessToken == null) {
-                    return@withContext MHTaskState(
-                        isSuccess = false,
-                        data = null,
-                        error = MHError.LoginExpiredError
-                    )
-                } else {
-                    val result = userAnimeService.updateAnimeStatusAsync(
-                        authHeader = ApiConstants.BEARER_SEPARATOR + accessToken,
-                        animeId = animeId,
-                        animeStatus = animeStatus,
-                        score = score,
-                        numWatchedEps = numWatchedEps
-                    ).await()
-                    when (result) {
-                        is NetworkResponse.Success -> {
-                            Timber.d(result.body.toString())
-                            return@withContext MHTaskState(
-                                isSuccess = true,
-                                data = Unit,
-                                error = MHError.EmptyError
-                            )
-                        }
-                        is NetworkResponse.NetworkError -> {
-                            Timber.d(result.error.message ?: String.emptyString)
-                            return@withContext MHTaskState(
-                                isSuccess = false,
-                                data = null,
-                                error = result.error.message?.let { MHError(it) }
-                                    ?: MHError.NetworkError
-                            )
-                        }
-                        is NetworkResponse.ServerError -> {
-                            Timber.d(result.body.toString())
-                            return@withContext MHTaskState(
-                                isSuccess = false,
-                                data = null,
-                                error = result.body?.message?.let { MHError(it) }
-                                    ?: MHError.apiErrorWithCode(result.code)
-                            )
-                        }
-                        is NetworkResponse.UnknownError -> {
-                            Timber.d(result.error.message ?: String.emptyString)
-                            return@withContext MHTaskState(
-                                isSuccess = false,
-                                data = null,
-                                error = result.error.message?.let { MHError(it) }
-                                    ?: MHError.ParsingError
-                            )
-                        }
-                    }
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-                Timber.d(e.message ?: String.emptyString)
-                return@withContext MHTaskState(
+    ): MHTaskState<Unit> = getCatching {
+        val accessToken: String = dataStoreRepository.accessTokenFlow.firstOrNull()
+            ?: return@getCatching MHTaskState(
+                isSuccess = false,
+                data = null,
+                error = MHError.LoginExpiredError
+            )
+
+        val result = userAnimeService.updateAnimeStatusAsync(
+            authHeader = ApiConstants.BEARER_SEPARATOR + accessToken,
+            animeId = animeId,
+            animeStatus = animeStatus,
+            score = score,
+            numWatchedEps = numWatchedEps
+        ).await()
+        Timber.d(result.toString())
+
+        return@getCatching when (result) {
+            is NetworkResponse.Success -> {
+                MHTaskState(
+                    isSuccess = true,
+                    data = Unit,
+                    error = MHError.EmptyError
+                )
+            }
+            is NetworkResponse.NetworkError -> {
+                return@getCatching MHTaskState(
                     isSuccess = false,
                     data = null,
-                    error = e.message?.let { MHError(it) } ?: MHError.UnknownError
+                    error = MHError.getError(result.error.message, MHError.NetworkError)
+                )
+            }
+            is NetworkResponse.ServerError -> {
+                return@getCatching MHTaskState(
+                    isSuccess = false,
+                    data = null,
+                    error = MHError.getError(
+                        result.body?.message,
+                        MHError.apiErrorWithCode(result.code)
+                    )
+                )
+            }
+            is NetworkResponse.UnknownError -> {
+                return@getCatching MHTaskState(
+                    isSuccess = false,
+                    data = null,
+                    error = MHError.getError(result.error.message, MHError.ParsingError)
                 )
             }
         }
+    }
 
     override suspend fun removeAnimeFromList(
         animeId: Int
     ): MHTaskState<Unit> =
-        withContext(Dispatchers.IO) {
-            try {
-                val accessToken: String? = dataStoreRepository.accessTokenFlow.firstOrNull()
-                if (accessToken == null) {
-                    return@withContext MHTaskState(
-                        isSuccess = false,
-                        data = null,
-                        error = MHError.LoginExpiredError
-                    )
-                } else {
-                    val result = userAnimeService.deleteAnimeFromListAsync(
-                        authHeader = ApiConstants.BEARER_SEPARATOR + accessToken,
-                        animeId = animeId
-                    ).await()
-                    when (result) {
-                        is NetworkResponse.Success -> {
-                            Timber.d(result.body.toString())
-                            return@withContext MHTaskState(
-                                isSuccess = true,
-                                data = Unit,
-                                error = MHError.EmptyError
-                            )
-                        }
-                        is NetworkResponse.NetworkError -> {
-                            Timber.d(result.error.message ?: String.emptyString)
-                            return@withContext MHTaskState(
-                                isSuccess = false,
-                                data = null,
-                                error = result.error.message?.let { MHError(it) }
-                                    ?: MHError.NetworkError
-                            )
-                        }
-                        is NetworkResponse.ServerError -> {
-                            Timber.d(result.body.toString())
-                            if (result.code == 404) {
-                                return@withContext MHTaskState(
-                                    isSuccess = false,
-                                    data = null,
-                                    error = MHError.AnimeNotFoundError
-                                )
-                            }
-                            return@withContext MHTaskState(
-                                isSuccess = false,
-                                data = null,
-                                error = result.body?.message?.let { MHError(it) }
-                                    ?: MHError.apiErrorWithCode(result.code)
-                            )
-                        }
-                        is NetworkResponse.UnknownError -> {
-                            Timber.d(result.error.message ?: String.emptyString)
-                            return@withContext MHTaskState(
-                                isSuccess = false,
-                                data = null,
-                                error = result.error.message?.let { MHError(it) }
-                                    ?: MHError.ParsingError
-                            )
-                        }
-                    }
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-                Timber.d(e.message ?: String.emptyString)
-                return@withContext MHTaskState(
+        getCatching {
+            val accessToken: String = dataStoreRepository.accessTokenFlow.firstOrNull()
+                ?: return@getCatching MHTaskState(
                     isSuccess = false,
                     data = null,
-                    error = e.message?.let { MHError(it) } ?: MHError.UnknownError
+                    error = MHError.LoginExpiredError
                 )
+
+            val result = userAnimeService.deleteAnimeFromListAsync(
+                authHeader = ApiConstants.BEARER_SEPARATOR + accessToken,
+                animeId = animeId
+            ).await()
+            Timber.d(result.toString())
+
+            return@getCatching when (result) {
+                is NetworkResponse.Success -> {
+                    MHTaskState(
+                        isSuccess = true,
+                        data = Unit,
+                        error = MHError.EmptyError
+                    )
+                }
+                is NetworkResponse.NetworkError -> {
+                    MHTaskState(
+                        isSuccess = false,
+                        data = null,
+                        error = MHError.getError(result.error.message, MHError.NetworkError)
+                    )
+                }
+                is NetworkResponse.ServerError -> {
+                    if (result.code == 404) {
+                        MHTaskState(
+                            isSuccess = false,
+                            data = null,
+                            error = MHError.AnimeNotFoundError
+                        )
+                    }
+                    MHTaskState(
+                        isSuccess = false,
+                        data = null,
+                        error = MHError.getError(
+                            result.body?.message,
+                            MHError.apiErrorWithCode(result.code)
+                        )
+                    )
+                }
+                is NetworkResponse.UnknownError -> {
+                    MHTaskState(
+                        isSuccess = false,
+                        data = null,
+                        error = MHError.getError(result.error.message, MHError.ParsingError)
+                    )
+                }
             }
         }
 }
