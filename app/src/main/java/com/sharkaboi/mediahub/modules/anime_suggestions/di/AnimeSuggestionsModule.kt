@@ -1,4 +1,4 @@
-package com.sharkaboi.mediahub.di
+package com.sharkaboi.mediahub.modules.anime_suggestions.di
 
 import android.content.SharedPreferences
 import com.sharkaboi.mediahub.data.api.retrofit.AnimeService

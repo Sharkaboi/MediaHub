@@ -1,4 +1,4 @@
-package com.sharkaboi.mediahub.common.views.image_slider
+package com.sharkaboi.mediahub.modules.image_slider
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager

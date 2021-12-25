@@ -11,7 +11,6 @@ import com.sharkaboi.mediahub.data.datastore.DataStoreRepository
 import com.sharkaboi.mediahub.data.datastore.DataStoreRepositoryImpl
 import com.sharkaboi.mediahub.data.datastore.dataStore
 import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,11 +20,12 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import javax.inject.Qualifier
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
-object DataModule {
+object AppModule {
 
     @Provides
     @Singleton
@@ -44,22 +44,24 @@ object DataModule {
 
     @Provides
     @Singleton
-    fun getRetrofitBuilder(okHttpClient: OkHttpClient): Retrofit =
+    fun getMoshi(): Moshi = Moshi.Builder().build()
+
+    @Provides
+    @Singleton
+    @MALRetrofitClient
+    fun getRetrofitBuilder(okHttpClient: OkHttpClient, moshi: Moshi): Retrofit =
         Retrofit.Builder()
             .baseUrl("https://api.myanimelist.net/v2/")
             .addCallAdapterFactory(NetworkResponseAdapterFactory())
             .addConverterFactory(
-                MoshiConverterFactory.create(
-                    Moshi.Builder()
-                        .addLast(KotlinJsonAdapterFactory())
-                        .build()
-                )
+                MoshiConverterFactory.create(moshi)
             )
             .client(okHttpClient)
             .build()
 
     @Provides
     @Singleton
+    @AniListApolloClient
     fun getApolloClient(okHttpClient: OkHttpClient): ApolloClient =
         ApolloClient.builder()
             .serverUrl("https://graphql.anilist.co")
@@ -78,31 +80,39 @@ object DataModule {
 
     @Provides
     @Singleton
-    fun getAuthService(retrofit: Retrofit): AuthService =
+    fun getAuthService(@AniListApolloClient retrofit: Retrofit): AuthService =
         retrofit.create(AuthService::class.java)
 
     @Provides
     @Singleton
-    fun getAnimeService(retrofit: Retrofit): AnimeService =
+    fun getAnimeService(@AniListApolloClient retrofit: Retrofit): AnimeService =
         retrofit.create(AnimeService::class.java)
 
     @Provides
     @Singleton
-    fun getMangaService(retrofit: Retrofit): MangaService =
+    fun getMangaService(@AniListApolloClient retrofit: Retrofit): MangaService =
         retrofit.create(MangaService::class.java)
 
     @Provides
     @Singleton
-    fun getUserAnimeService(retrofit: Retrofit): UserAnimeService =
+    fun getUserAnimeService(@AniListApolloClient retrofit: Retrofit): UserAnimeService =
         retrofit.create(UserAnimeService::class.java)
 
     @Provides
     @Singleton
-    fun getUserMangaService(retrofit: Retrofit): UserMangaService =
+    fun getUserMangaService(@AniListApolloClient retrofit: Retrofit): UserMangaService =
         retrofit.create(UserMangaService::class.java)
 
     @Provides
     @Singleton
-    fun getUserService(retrofit: Retrofit): UserService =
+    fun getUserService(@AniListApolloClient retrofit: Retrofit): UserService =
         retrofit.create(UserService::class.java)
 }
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class MALRetrofitClient
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class AniListApolloClient

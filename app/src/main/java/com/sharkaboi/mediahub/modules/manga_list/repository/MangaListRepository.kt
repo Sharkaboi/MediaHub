@@ -6,7 +6,7 @@ import com.sharkaboi.mediahub.data.api.enums.UserMangaSortType
 import com.sharkaboi.mediahub.data.api.models.usermanga.UserMangaListResponse
 import kotlinx.coroutines.flow.Flow
 
-interface MangaRepository {
+interface MangaListRepository {
 
     suspend fun getMangaListFlow(
         mangaStatus: MangaStatus,

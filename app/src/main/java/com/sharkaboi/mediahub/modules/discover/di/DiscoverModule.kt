@@ -1,10 +1,10 @@
-package com.sharkaboi.mediahub.di
+package com.sharkaboi.mediahub.modules.discover.di
 
 import android.content.SharedPreferences
-import com.sharkaboi.mediahub.data.api.retrofit.UserMangaService
+import com.sharkaboi.mediahub.data.api.retrofit.AnimeService
 import com.sharkaboi.mediahub.data.datastore.DataStoreRepository
-import com.sharkaboi.mediahub.modules.manga_list.repository.MangaRepository
-import com.sharkaboi.mediahub.modules.manga_list.repository.MangaRepositoryImpl
+import com.sharkaboi.mediahub.modules.discover.repository.DiscoverRepository
+import com.sharkaboi.mediahub.modules.discover.repository.DiscoverRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -13,14 +13,14 @@ import dagger.hilt.android.scopes.ActivityRetainedScoped
 
 @InstallIn(ActivityRetainedComponent::class)
 @Module
-object MangaModule {
+object DiscoverModule {
 
     @Provides
     @ActivityRetainedScoped
-    fun getMangaRepository(
-        userMangaService: UserMangaService,
+    fun getDiscoverRepository(
+        animeService: AnimeService,
         dataStoreRepository: DataStoreRepository,
         sharedPreferences: SharedPreferences
-    ): MangaRepository =
-        MangaRepositoryImpl(userMangaService, dataStoreRepository, sharedPreferences)
+    ): DiscoverRepository =
+        DiscoverRepositoryImpl(animeService, dataStoreRepository, sharedPreferences)
 }

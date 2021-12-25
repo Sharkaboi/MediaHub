@@ -6,7 +6,7 @@ import androidx.paging.cachedIn
 import com.sharkaboi.mediahub.data.api.enums.MangaStatus
 import com.sharkaboi.mediahub.data.api.enums.UserMangaSortType
 import com.sharkaboi.mediahub.data.api.models.usermanga.UserMangaListResponse
-import com.sharkaboi.mediahub.modules.manga_list.repository.MangaRepository
+import com.sharkaboi.mediahub.modules.manga_list.repository.MangaListRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
@@ -17,7 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MangaViewModel
 @Inject constructor(
-    private val mangaRepository: MangaRepository,
+    private val mangaListRepository: MangaListRepository,
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     private val savedMangaStatus = savedStateHandle.get<String>(CHOSEN_MANGA_STATUS_KEY)
@@ -44,7 +44,7 @@ class MangaViewModel
             _mangaList.value = PagingData.empty()
         }
         val newResult: Flow<PagingData<UserMangaListResponse.Data>> =
-            mangaRepository.getMangaListFlow(
+            mangaListRepository.getMangaListFlow(
                 mangaStatus = currentChosenMangaStatus,
                 mangaSortType = currentChosenSortType
             ).cachedIn(viewModelScope)

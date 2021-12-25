@@ -127,7 +127,7 @@
 
     <dialog
         android:id="@+id/imageSliderFragment"
-        android:name="com.sharkaboi.mediahub.common.views.image_slider.ImageSliderFragment"
+        android:name="com.sharkaboi.mediahub.modules.image_slider.ImageSliderFragment"
         android:label="ImageSlider">
         <argument
             android:name="imagesList"

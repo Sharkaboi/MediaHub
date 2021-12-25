@@ -18,11 +18,11 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 
-class AnimeRepositoryImpl(
+class AnimeListRepositoryImpl(
     private val userAnimeService: UserAnimeService,
     private val dataStoreRepository: DataStoreRepository,
     private val sharedPreferences: SharedPreferences
-) : AnimeRepository {
+) : AnimeListRepository {
 
     override suspend fun getAnimeListFlow(
         animeStatus: AnimeStatus,

@@ -1,4 +1,4 @@
-package com.sharkaboi.mediahub.common.views.image_slider
+package com.sharkaboi.mediahub.modules.image_slider
 
 import android.os.Bundle
 import android.view.LayoutInflater

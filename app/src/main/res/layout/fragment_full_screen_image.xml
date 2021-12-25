@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".common.views.image_slider.FullScreenImageFragment">
+    tools:context=".modules.image_slider.FullScreenImageFragment">
 
     <ImageView
         android:id="@+id/ivImage"

@@ -6,7 +6,7 @@ import com.sharkaboi.mediahub.data.api.enums.UserAnimeSortType
 import com.sharkaboi.mediahub.data.api.models.useranime.UserAnimeListResponse
 import kotlinx.coroutines.flow.Flow
 
-interface AnimeRepository {
+interface AnimeListRepository {
 
     suspend fun getAnimeListFlow(
         animeStatus: AnimeStatus,

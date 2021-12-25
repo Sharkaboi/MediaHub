@@ -16,11 +16,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
 import timber.log.Timber
 
-class MangaRepositoryImpl(
+class MangaListRepositoryImpl(
     private val userMangaService: UserMangaService,
     private val dataStoreRepository: DataStoreRepository,
     private val sharedPreferences: SharedPreferences
-) : MangaRepository {
+) : MangaListRepository {
 
     override suspend fun getMangaListFlow(
         mangaStatus: MangaStatus,

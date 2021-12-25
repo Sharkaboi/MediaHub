@@ -1,9 +1,9 @@
-package com.sharkaboi.mediahub.di
+package com.sharkaboi.mediahub.modules.splash.di
 
 import com.sharkaboi.mediahub.data.api.retrofit.AuthService
 import com.sharkaboi.mediahub.data.datastore.DataStoreRepository
-import com.sharkaboi.mediahub.modules.auth.repository.OAuthRepository
-import com.sharkaboi.mediahub.modules.auth.repository.OAuthRepositoryImpl
+import com.sharkaboi.mediahub.modules.splash.repository.SplashRepository
+import com.sharkaboi.mediahub.modules.splash.repository.SplashRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -12,13 +12,13 @@ import dagger.hilt.android.scopes.ActivityRetainedScoped
 
 @InstallIn(ActivityRetainedComponent::class)
 @Module
-object AuthModule {
+object SplashModule {
 
     @Provides
     @ActivityRetainedScoped
-    fun getOAuthRepository(
+    fun getSplashRepository(
         authService: AuthService,
         dataStoreRepository: DataStoreRepository
-    ): OAuthRepository =
-        OAuthRepositoryImpl(authService, dataStoreRepository)
+    ): SplashRepository =
+        SplashRepositoryImpl(dataStoreRepository, authService)
 }

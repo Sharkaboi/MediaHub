@@ -1,4 +1,4 @@
-package com.sharkaboi.mediahub.di
+package com.sharkaboi.mediahub.modules.manga_details.di
 
 import com.sharkaboi.mediahub.data.api.retrofit.MangaService
 import com.sharkaboi.mediahub.data.api.retrofit.UserMangaService

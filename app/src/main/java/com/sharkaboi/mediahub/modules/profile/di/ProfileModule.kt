@@ -1,4 +1,4 @@
-package com.sharkaboi.mediahub.di
+package com.sharkaboi.mediahub.modules.profile.di
 
 import com.sharkaboi.mediahub.data.api.retrofit.UserService
 import com.sharkaboi.mediahub.data.datastore.DataStoreRepository

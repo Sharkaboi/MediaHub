@@ -1,10 +1,10 @@
-package com.sharkaboi.mediahub.di
+package com.sharkaboi.mediahub.modules.anime_search.di
 
 import android.content.SharedPreferences
 import com.sharkaboi.mediahub.data.api.retrofit.AnimeService
 import com.sharkaboi.mediahub.data.datastore.DataStoreRepository
-import com.sharkaboi.mediahub.modules.anime_seasonal.repository.AnimeSeasonalRepository
-import com.sharkaboi.mediahub.modules.anime_seasonal.repository.AnimeSeasonalRepositoryImpl
+import com.sharkaboi.mediahub.modules.anime_search.repository.AnimeSearchRepository
+import com.sharkaboi.mediahub.modules.anime_search.repository.AnimeSearchRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -13,14 +13,14 @@ import dagger.hilt.android.scopes.ActivityRetainedScoped
 
 @InstallIn(ActivityRetainedComponent::class)
 @Module
-object AnimeSeasonalModule {
+object AnimeSearchModule {
 
     @Provides
     @ActivityRetainedScoped
-    fun getAnimeSeasonalRepository(
+    fun getAnimeSearchRepository(
         animeService: AnimeService,
         dataStoreRepository: DataStoreRepository,
         sharedPreferences: SharedPreferences
-    ): AnimeSeasonalRepository =
-        AnimeSeasonalRepositoryImpl(animeService, dataStoreRepository, sharedPreferences)
+    ): AnimeSearchRepository =
+        AnimeSearchRepositoryImpl(animeService, dataStoreRepository, sharedPreferences)
 }

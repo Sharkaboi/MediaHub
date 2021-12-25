@@ -1,4 +1,4 @@
-package com.sharkaboi.mediahub.common.views
+package com.sharkaboi.mediahub.modules.settings.ui
 
 import android.content.Context
 import android.util.AttributeSet

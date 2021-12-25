@@ -1,4 +1,4 @@
-package com.sharkaboi.mediahub.di
+package com.sharkaboi.mediahub.modules.settings.di
 
 import com.sharkaboi.mediahub.data.datastore.DataStoreRepository
 import com.sharkaboi.mediahub.modules.settings.repository.SettingsRepository

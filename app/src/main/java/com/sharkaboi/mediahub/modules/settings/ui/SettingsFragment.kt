@@ -21,7 +21,6 @@ import com.sharkaboi.mediahub.common.extensions.observe
 import com.sharkaboi.mediahub.common.extensions.showNoActionOkDialog
 import com.sharkaboi.mediahub.common.extensions.showToast
 import com.sharkaboi.mediahub.common.util.openUrl
-import com.sharkaboi.mediahub.common.views.MaterialToolBarPreference
 import com.sharkaboi.mediahub.data.sharedpref.SharedPreferencesKeys
 import com.sharkaboi.mediahub.modules.auth.ui.OAuthActivity
 import com.sharkaboi.mediahub.modules.settings.vm.SettingsStates
