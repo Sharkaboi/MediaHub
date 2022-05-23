@@ -391,7 +391,7 @@ class AnimeDetailsFragment : Fragment() {
 
     private fun setupAnimeImagePreview(animeByIDResponse: AnimeByIDResponse) {
         binding.ivAnimeMainPicture.load(
-            uri = animeByIDResponse.mainPicture?.large ?: animeByIDResponse.mainPicture?.medium,
+            animeByIDResponse.mainPicture?.large ?: animeByIDResponse.mainPicture?.medium,
             builder = UIConstants.AllRoundedAnimeImageBuilder
         )
         binding.ivAnimeMainPicture.setOnClickListener {

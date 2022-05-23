@@ -375,7 +375,7 @@ class MangaDetailsFragment : Fragment() {
 
     private fun setupMangaImagePreview(mangaByIDResponse: MangaByIDResponse) = binding.apply {
         ivMangaMainPicture.load(
-            uri = mangaByIDResponse.mainPicture?.large ?: mangaByIDResponse.mainPicture?.medium,
+            mangaByIDResponse.mainPicture?.large ?: mangaByIDResponse.mainPicture?.medium,
             builder = UIConstants.AllRoundedMangaImageBuilder
         )
         ivMangaMainPicture.setOnClickListener {

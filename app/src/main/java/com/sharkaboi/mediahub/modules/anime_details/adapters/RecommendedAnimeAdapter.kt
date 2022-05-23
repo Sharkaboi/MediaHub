@@ -74,7 +74,7 @@ class RecommendedAnimeAdapter(private val onClick: (Int) -> Unit) :
                     item.numRecommendations
                 )
             binding.ivAnimeBanner.load(
-                uri = item.node.mainPicture?.large ?: item.node.mainPicture?.medium,
+                item.node.mainPicture?.large ?: item.node.mainPicture?.medium,
                 builder = UIConstants.TopRoundedAnimeImageBuilder
             )
         }

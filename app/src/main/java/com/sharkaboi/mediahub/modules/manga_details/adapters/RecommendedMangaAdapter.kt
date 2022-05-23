@@ -75,7 +75,7 @@ class RecommendedMangaAdapter(private val onClick: (Int) -> Unit) :
                 )
             binding.cardRating.isGone = true
             binding.ivMangaBanner.load(
-                uri = item.node.mainPicture?.large ?: item.node.mainPicture?.medium,
+                item.node.mainPicture?.large ?: item.node.mainPicture?.medium,
                 builder = UIConstants.TopRoundedMangaImageBuilder
             )
         }

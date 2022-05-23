@@ -67,7 +67,7 @@ class RelatedAnimeAdapter(private val onClick: (Int) -> Unit) :
             binding.tvEpisodesWatched.text = item.relationTypeFormatted
             binding.cardRating.isGone = true
             binding.ivAnimeBanner.load(
-                uri = item.node.mainPicture?.large ?: item.node.mainPicture?.medium,
+                item.node.mainPicture?.large ?: item.node.mainPicture?.medium,
                 builder = UIConstants.TopRoundedAnimeImageBuilder
             )
         }

@@ -25,7 +25,7 @@ class MangaRankingDetailedAdapter(
             item?.let {
                 mangaListItemBinding.apply {
                     ivMangaBanner.load(
-                        uri = it.node.mainPicture?.large ?: it.node.mainPicture?.medium,
+                        it.node.mainPicture?.large ?: it.node.mainPicture?.medium,
                         builder = UIConstants.TopRoundedMangaImageBuilder
                     )
                     tvMangaName.text = it.node.title

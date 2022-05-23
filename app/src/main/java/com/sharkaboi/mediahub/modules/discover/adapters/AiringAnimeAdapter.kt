@@ -69,7 +69,7 @@ class AiringAnimeAdapter(private val onClick: (Int) -> Unit) :
             binding.tvScore.text =
                 binding.tvScore.context.getRatingStringWithRating(item.node.meanScore)
             binding.ivAnimeBanner.load(
-                uri = item.node.mainPicture?.large ?: item.node.mainPicture?.medium,
+                item.node.mainPicture?.large ?: item.node.mainPicture?.medium,
                 builder = UIConstants.TopRoundedAnimeImageBuilder
             )
         }

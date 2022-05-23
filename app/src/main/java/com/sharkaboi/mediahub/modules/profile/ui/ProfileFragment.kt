@@ -65,7 +65,7 @@ class ProfileFragment : Fragment() {
     private fun setListeners() {
         binding.apply {
             profileContent.ivProfileImage.load(
-                drawableResId = R.drawable.ic_profile_placeholder,
+                R.drawable.ic_profile_placeholder,
                 builder = UIConstants.ProfileImageBuilder
             )
             profileContent.chipGroupOptions.forEach {
@@ -221,7 +221,7 @@ class ProfileFragment : Fragment() {
     private fun setUpBannerSection(userDetailsResponse: UserDetailsResponse) =
         binding.profileContent.apply {
             ivProfileImage.load(
-                uri = userDetailsResponse.profilePicUrl,
+                userDetailsResponse.profilePicUrl,
                 builder = UIConstants.ProfileImageBuilder
             )
             ivProfileImage.setOnClickListener {
