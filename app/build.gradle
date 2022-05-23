@@ -78,7 +78,7 @@ dependencies {
     //retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.okhttp3:logging-interceptor:$logging_version"
-    //apollo grahql client
+    //apollo graphql client
     implementation "com.apollographql.apollo:apollo-runtime:$apollo_version"
     implementation "com.apollographql.apollo:apollo-coroutines-support:$apollo_version"
     //network util
@@ -92,6 +92,11 @@ dependencies {
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
     //datastore
     implementation "androidx.datastore:datastore-preferences:$datastore_version"
+    //room
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+    testImplementation "androidx.room:room-testing:$room_version"
+    implementation "androidx.room:room-paging:$room_version"
     //coil
     implementation "io.coil-kt:coil:$coil_version"
     //paging
@@ -105,6 +110,8 @@ dependencies {
     implementation "com.google.android.gms:play-services-oss-licenses:$oss_version"
     implementation "com.github.javiersantos:AppUpdater:$appupdater_version"
     implementation "com.jakewharton.timber:timber:$timber_version"
+    implementation "ch.acra:acra-mail:$acra_version"
+    implementation "ch.acra:acra-dialog:$acra_version"
     //testing
     debugImplementation "com.squareup.leakcanary:leakcanary-android:$leak_version"
     testImplementation "junit:junit:$junit_version"
