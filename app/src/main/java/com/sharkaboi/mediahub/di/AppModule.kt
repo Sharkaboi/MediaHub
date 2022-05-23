@@ -20,7 +20,6 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import javax.inject.Qualifier
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -48,7 +47,6 @@ object AppModule {
 
     @Provides
     @Singleton
-    @MALRetrofitClient
     fun getRetrofitBuilder(okHttpClient: OkHttpClient, moshi: Moshi): Retrofit =
         Retrofit.Builder()
             .baseUrl("https://api.myanimelist.net/v2/")
@@ -61,7 +59,6 @@ object AppModule {
 
     @Provides
     @Singleton
-    @AniListApolloClient
     fun getApolloClient(okHttpClient: OkHttpClient): ApolloClient =
         ApolloClient.builder()
             .serverUrl("https://graphql.anilist.co")
@@ -80,39 +77,31 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun getAuthService(@AniListApolloClient retrofit: Retrofit): AuthService =
+    fun getAuthService(retrofit: Retrofit): AuthService =
         retrofit.create(AuthService::class.java)
 
     @Provides
     @Singleton
-    fun getAnimeService(@AniListApolloClient retrofit: Retrofit): AnimeService =
+    fun getAnimeService(retrofit: Retrofit): AnimeService =
         retrofit.create(AnimeService::class.java)
 
     @Provides
     @Singleton
-    fun getMangaService(@AniListApolloClient retrofit: Retrofit): MangaService =
+    fun getMangaService(retrofit: Retrofit): MangaService =
         retrofit.create(MangaService::class.java)
 
     @Provides
     @Singleton
-    fun getUserAnimeService(@AniListApolloClient retrofit: Retrofit): UserAnimeService =
+    fun getUserAnimeService(retrofit: Retrofit): UserAnimeService =
         retrofit.create(UserAnimeService::class.java)
 
     @Provides
     @Singleton
-    fun getUserMangaService(@AniListApolloClient retrofit: Retrofit): UserMangaService =
+    fun getUserMangaService(retrofit: Retrofit): UserMangaService =
         retrofit.create(UserMangaService::class.java)
 
     @Provides
     @Singleton
-    fun getUserService(@AniListApolloClient retrofit: Retrofit): UserService =
+    fun getUserService(retrofit: Retrofit): UserService =
         retrofit.create(UserService::class.java)
 }
-
-@Qualifier
-@Retention(AnnotationRetention.BINARY)
-annotation class MALRetrofitClient
-
-@Qualifier
-@Retention(AnnotationRetention.BINARY)
-annotation class AniListApolloClient
