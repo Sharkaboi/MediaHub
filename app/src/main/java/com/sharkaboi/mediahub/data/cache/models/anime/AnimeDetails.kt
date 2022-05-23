@@ -1,0 +1,53 @@
+package com.sharkaboi.mediahub.data.cache.models.anime
+
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity
+data class AnimeDetails(
+    @PrimaryKey val animeId: Int,
+    val title: String,
+    val alternativeTitleEn: String?,
+    val alternativeTitleJa: String?,
+    val alternativeTitleSynonyms: String?,
+    val episodeDuration: Int?,
+    val animeDetailsBackground: String?,
+    val broadcastDayOfTheWeek: String?,
+    val broadcastStartTime: String?,
+    val createdAt: String,
+    val endDate: String?,
+//    val genres: List<AnimeByIDResponse.Genre>?,
+    val pictureL: String?,
+    val pictureM: String?,
+    val mean: Double?,
+    val mediaType: String,
+    val isReWatching: Boolean?,
+    val numEpisodesWatched: Int?,
+    val personalScore: Int?,
+    val watchingStatus: String?,
+    val personalUpdatedAt: String?,
+    val nsfw: String?,
+    val numEpisodes: Int,
+    val numScoringUsers: Int,
+//    val pictures: List<AnimeByIDResponse.Picture>,
+    val popularity: Int,
+    val rank: Int?,
+    val rating: String?,
+//    val recommendations: List<AnimeByIDResponse.Recommendation>,
+//    val relatedAnime: List<AnimeByIDResponse.RelatedAnime>,
+//    val relatedManga: List<AnimeByIDResponse.RelatedManga>,
+    val source: String?,
+    val startDate: String?,
+    val startSeasonString: String?,
+    val startSeasonYear: Int?,
+    val numListUsersTotal: Int?,
+    val numListUsersCompleted: Int?,
+    val numListUsersDropped: Int?,
+    val numListUsersOnHold: Int?,
+    val numListUsersPlanToWatch: Int?,
+    val numListUsersWatching: Int?,
+    val airingStatus: String,
+//    val studios: List<AnimeByIDResponse.Studio>,
+    val synopsis: String?,
+    val updatedAt: String
+)

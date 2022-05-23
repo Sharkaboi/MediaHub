@@ -10,19 +10,20 @@ import com.sharkaboi.mediahub.data.api.constants.ApiConstants
 import com.sharkaboi.mediahub.data.api.models.anime.AnimeByIDResponse
 import com.sharkaboi.mediahub.data.api.retrofit.AnimeService
 import com.sharkaboi.mediahub.data.api.retrofit.UserAnimeService
+import com.sharkaboi.mediahub.data.cache.models.mappers.AnimeMapper
+import com.sharkaboi.mediahub.data.cache.services.AnimeDao
 import com.sharkaboi.mediahub.data.datastore.DataStoreRepository
 import com.sharkaboi.mediahub.data.wrappers.MHError
 import com.sharkaboi.mediahub.data.wrappers.MHTaskState
-import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.firstOrNull
 import timber.log.Timber
-import java.util.*
 
 class AnimeDetailsRepositoryImpl(
     private val animeService: AnimeService,
     private val userAnimeService: UserAnimeService,
     private val apolloClient: ApolloClient,
-    private val dataStoreRepository: DataStoreRepository
+    private val dataStoreRepository: DataStoreRepository,
+    private val animeCacheService: AnimeDao
 ) : AnimeDetailsRepository {
 
     override suspend fun getAnimeById(
@@ -43,6 +44,7 @@ class AnimeDetailsRepositoryImpl(
 
         return@getCatching when (result) {
             is NetworkResponse.Success -> {
+                animeCacheService.upsertAnime(AnimeMapper.toCacheModel(result.body))
                 MHTaskState(
                     isSuccess = true,
                     data = result.body,

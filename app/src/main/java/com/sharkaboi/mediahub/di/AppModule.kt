@@ -3,10 +3,13 @@ package com.sharkaboi.mediahub.di
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
+import androidx.room.Room
 import com.apollographql.apollo.ApolloClient
 import com.haroldadmin.cnradapter.NetworkResponseAdapterFactory
 import com.sharkaboi.mediahub.BuildConfig
 import com.sharkaboi.mediahub.data.api.retrofit.*
+import com.sharkaboi.mediahub.data.cache.MediaHubDb
+import com.sharkaboi.mediahub.data.cache.services.AnimeDao
 import com.sharkaboi.mediahub.data.datastore.DataStoreRepository
 import com.sharkaboi.mediahub.data.datastore.DataStoreRepositoryImpl
 import com.sharkaboi.mediahub.data.datastore.dataStore
@@ -104,4 +107,17 @@ object AppModule {
     @Singleton
     fun getUserService(retrofit: Retrofit): UserService =
         retrofit.create(UserService::class.java)
+
+    @Provides
+    @Singleton
+    fun getMediaHubDb(@ApplicationContext context: Context): MediaHubDb =
+        Room.databaseBuilder(
+            context,
+            MediaHubDb::class.java, "mediahub-db"
+        ).build()
+
+    @Provides
+    @Singleton
+    fun getAnimeCacheService(mediaHubDb: MediaHubDb): AnimeDao =
+        mediaHubDb.getAnimeDao()
 }
