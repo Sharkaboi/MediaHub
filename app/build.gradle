@@ -110,8 +110,6 @@ dependencies {
     implementation "com.google.android.gms:play-services-oss-licenses:$oss_version"
     implementation "com.github.javiersantos:AppUpdater:$appupdater_version"
     implementation "com.jakewharton.timber:timber:$timber_version"
-    implementation "ch.acra:acra-mail:$acra_version"
-    implementation "ch.acra:acra-dialog:$acra_version"
     //testing
     debugImplementation "com.squareup.leakcanary:leakcanary-android:$leak_version"
     testImplementation "junit:junit:$junit_version"
