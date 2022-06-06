@@ -1,7 +1,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     ext {
-        kotlin_version = '1.6.10'
+        kotlin_version = '1.6.21'
         hilt_version = '2.42'
         paging_version = '3.1.1'
         nav_version = '2.4.2'
@@ -10,7 +10,7 @@ buildscript {
         oss_version = '17.0.0'
         secrets_version = '2.0.1'
         ktlint_version = '10.1.0'
-        apollo_version = '2.5.11'
+        apollo_version = '3.3.0'
         core_version = '1.7.0'
         appcompat_version = '1.4.1'
         mdc_version = '1.6.0'
@@ -53,7 +53,7 @@ buildscript {
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
         classpath "com.google.android.gms:oss-licenses-plugin:$oss_plugin_version"
-        classpath "com.apollographql.apollo:apollo-gradle-plugin:$apollo_version"
+        classpath "com.apollographql.apollo3:apollo-gradle-plugin:$apollo_version"
         classpath "org.jlleitschuh.gradle:ktlint-gradle:$ktlint_version"
         classpath "com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin:$secrets_version"
     }

@@ -1,10 +1,9 @@
 package com.sharkaboi.mediahub.modules.anime_details.repository
 
-import GetNextAiringAnimeEpisodeQuery
-import com.apollographql.apollo.ApolloClient
-import com.apollographql.apollo.coroutines.await
-import com.apollographql.apollo.exception.ApolloException
+import com.apollographql.apollo3.ApolloClient
+import com.apollographql.apollo3.exception.ApolloException
 import com.haroldadmin.cnradapter.NetworkResponse
+import com.sharkaboi.GetNextAiringAnimeEpisodeQuery
 import com.sharkaboi.mediahub.common.extensions.getCatching
 import com.sharkaboi.mediahub.data.api.constants.ApiConstants
 import com.sharkaboi.mediahub.data.api.models.anime.AnimeByIDResponse
@@ -13,10 +12,8 @@ import com.sharkaboi.mediahub.data.api.retrofit.UserAnimeService
 import com.sharkaboi.mediahub.data.datastore.DataStoreRepository
 import com.sharkaboi.mediahub.data.wrappers.MHError
 import com.sharkaboi.mediahub.data.wrappers.MHTaskState
-import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.firstOrNull
 import timber.log.Timber
-import java.util.*
 
 class AnimeDetailsRepositoryImpl(
     private val animeService: AnimeService,
@@ -80,7 +77,7 @@ class AnimeDetailsRepositoryImpl(
         animeId: Int
     ): MHTaskState<GetNextAiringAnimeEpisodeQuery.Media> = getCatching {
         val response = try {
-            apolloClient.query(GetNextAiringAnimeEpisodeQuery(idMal = animeId)).await()
+            apolloClient.query(GetNextAiringAnimeEpisodeQuery(idMal = animeId)).execute()
         } catch (e: ApolloException) {
             return@getCatching MHTaskState(
                 isSuccess = false,

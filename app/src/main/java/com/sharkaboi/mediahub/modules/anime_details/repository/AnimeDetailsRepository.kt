@@ -1,6 +1,6 @@
 package com.sharkaboi.mediahub.modules.anime_details.repository
 
-import GetNextAiringAnimeEpisodeQuery
+import com.sharkaboi.GetNextAiringAnimeEpisodeQuery
 import com.sharkaboi.mediahub.data.api.models.anime.AnimeByIDResponse
 import com.sharkaboi.mediahub.data.wrappers.MHTaskState
 

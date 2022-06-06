@@ -1,10 +1,10 @@
 package com.sharkaboi.mediahub.modules.anime_details.util
 
-import GetNextAiringAnimeEpisodeQuery
 import android.content.Context
 import android.text.Spanned
 import androidx.core.text.HtmlCompat
 import androidx.core.text.toSpanned
+import com.sharkaboi.GetNextAiringAnimeEpisodeQuery
 import com.sharkaboi.mediahub.R
 import com.sharkaboi.mediahub.common.extensions.capitalizeFirst
 import com.sharkaboi.mediahub.common.extensions.ifNullOrBlank

@@ -1,7 +1,7 @@
 package com.sharkaboi.mediahub.modules.anime_details.vm
 
-import GetNextAiringAnimeEpisodeQuery
 import androidx.lifecycle.MutableLiveData
+import com.sharkaboi.GetNextAiringAnimeEpisodeQuery
 
 sealed class NextEpisodeDetailsState {
     object Idle : NextEpisodeDetailsState()
