@@ -13,8 +13,8 @@
         <action
             android:id="@+id/openAnimeSearch"
             app:destination="@id/animeSearchFragment"
-            app:enterAnim="@anim/fade_in"
-            app:exitAnim="@anim/fade_out"
+            app:enterAnim="@null"
+            app:exitAnim="@null"
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/fade_out" />
     </fragment>
@@ -26,8 +26,8 @@
         <action
             android:id="@+id/openMangaSearch"
             app:destination="@id/mangaSearchFragment"
-            app:enterAnim="@anim/fade_in"
-            app:exitAnim="@anim/fade_out"
+            app:enterAnim="@null"
+            app:exitAnim="@null"
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/fade_out" />
     </fragment>

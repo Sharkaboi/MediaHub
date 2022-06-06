@@ -4,14 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.coordinatorlayout.widget.CoordinatorLayout
+import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.AnimationUtils
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
-import com.google.android.material.behavior.HideBottomViewOnScrollBehavior
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.tabs.TabLayout
 import com.sharkaboi.mediahub.R
+import com.sharkaboi.mediahub.common.extensions.startAnim
 import com.sharkaboi.mediahub.data.api.enums.MangaStatus
 import com.sharkaboi.mediahub.databinding.FragmentMangaBinding
 import com.sharkaboi.mediahub.modules.manga_list.adapters.MangaPagerAdapter
@@ -26,6 +29,12 @@ class MangaFragment : Fragment() {
     private lateinit var onTabChanged: TabLayout.OnTabSelectedListener
     private lateinit var onPageChanged: OnPageChangeCallback
     private val mangaViewModel by activityViewModels<MangaViewModel>()
+    private val navController by lazy { findNavController() }
+    private val anim by lazy {
+        AnimationUtils.loadAnimation(requireContext(), R.anim.fab_explode).apply {
+            interpolator = AccelerateDecelerateInterpolator()
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -66,14 +75,6 @@ class MangaFragment : Fragment() {
                 childFragmentManager.findFragmentByTag("f${tab?.position ?: 0}")?.let {
                     if (it is MangaListByStatusFragment) {
                         it.scrollRecyclerView()
-                        activity?.findViewById<BottomNavigationView>(R.id.bottomNav)
-                            ?.let { bottomNav ->
-                                val layoutParams =
-                                    bottomNav.layoutParams as CoordinatorLayout.LayoutParams?
-                                val bottomViewNavigationBehavior =
-                                    layoutParams?.behavior as HideBottomViewOnScrollBehavior?
-                                bottomViewNavigationBehavior?.slideUp(bottomNav)
-                            }
                     }
                 }
             }
@@ -88,5 +89,14 @@ class MangaFragment : Fragment() {
         }
         binding.vpManga.registerOnPageChangeCallback(onPageChanged)
         binding.mangaTabLayout.addOnTabSelectedListener(onTabChanged)
+        binding.fabSearch.setOnClickListener {
+            binding.fabSearch.isVisible = false
+            binding.circleAnimeView.isVisible = true
+            binding.circleAnimeView.startAnim(anim, onEnd = {
+                binding.circleAnimeView.isInvisible = true
+                navController.navigate(R.id.openMangaSearch)
+                binding.fabSearch.isVisible = true
+            })
+        }
     }
 }
