@@ -19,8 +19,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
 import com.google.android.material.chip.Chip
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.sharkaboi.GetNextAiringAnimeEpisodeQuery
 import com.sharkaboi.mediahub.BottomNavGraphDirections
+import com.sharkaboi.mediahub.GetNextAiringAnimeEpisodeQuery
 import com.sharkaboi.mediahub.R
 import com.sharkaboi.mediahub.common.constants.UIConstants
 import com.sharkaboi.mediahub.common.constants.UIConstants.setMediaHubChipStyle

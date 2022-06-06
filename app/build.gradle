@@ -118,7 +118,8 @@ dependencies {
 }
 
 apollo {
-    packageName.set("com.sharkaboi")
+    packageName.set("com.sharkaboi.mediahub")
+    srcDir("src/main/graphql")
 }
 
 ktlint {

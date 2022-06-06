@@ -3,7 +3,7 @@ package com.sharkaboi.mediahub.modules.anime_details.repository
 import com.apollographql.apollo3.ApolloClient
 import com.apollographql.apollo3.exception.ApolloException
 import com.haroldadmin.cnradapter.NetworkResponse
-import com.sharkaboi.GetNextAiringAnimeEpisodeQuery
+import com.sharkaboi.mediahub.GetNextAiringAnimeEpisodeQuery
 import com.sharkaboi.mediahub.common.extensions.getCatching
 import com.sharkaboi.mediahub.data.api.constants.ApiConstants
 import com.sharkaboi.mediahub.data.api.models.anime.AnimeByIDResponse
