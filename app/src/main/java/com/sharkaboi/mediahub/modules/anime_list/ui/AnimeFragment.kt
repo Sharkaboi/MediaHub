@@ -93,11 +93,14 @@ class AnimeFragment : Fragment() {
         binding.fabSearch.setOnClickListener {
             binding.fabSearch.isVisible = false
             binding.circleAnimeView.isVisible = true
-            binding.circleAnimeView.startAnim(anim, onEnd = {
-                binding.circleAnimeView.isInvisible = true
-                navController.navigate(R.id.openAnimeSearch)
-                binding.fabSearch.isVisible = true
-            })
+            binding.circleAnimeView.startAnim(
+                anim,
+                onEnd = {
+                    binding.circleAnimeView.isInvisible = true
+                    navController.navigate(R.id.openAnimeSearch)
+                    binding.fabSearch.isVisible = true
+                }
+            )
         }
     }
 }
