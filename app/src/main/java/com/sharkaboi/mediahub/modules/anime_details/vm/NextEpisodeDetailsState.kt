@@ -6,8 +6,9 @@ import com.sharkaboi.GetNextAiringAnimeEpisodeQuery
 sealed class NextEpisodeDetailsState {
     object Idle : NextEpisodeDetailsState()
     object Loading : NextEpisodeDetailsState()
-    data class FetchSuccess(val nextAiringEpisode: GetNextAiringAnimeEpisodeQuery.Media) :
-        NextEpisodeDetailsState()
+    data class FetchSuccess(
+        val nextAiringEpisode: GetNextAiringAnimeEpisodeQuery.ReturnedMedia
+    ) : NextEpisodeDetailsState()
 
     data class NextEpisodeDetailsFailure(val message: String) : NextEpisodeDetailsState()
 }
@@ -20,10 +21,11 @@ fun MutableLiveData<NextEpisodeDetailsState>.getDefault() = this.apply {
     value = NextEpisodeDetailsState.Idle
 }
 
-fun MutableLiveData<NextEpisodeDetailsState>.setFetchSuccess(nextAiringEpisode: GetNextAiringAnimeEpisodeQuery.Media) =
-    this.apply {
-        value = NextEpisodeDetailsState.FetchSuccess(nextAiringEpisode)
-    }
+fun MutableLiveData<NextEpisodeDetailsState>.setFetchSuccess(
+    nextAiringEpisode: GetNextAiringAnimeEpisodeQuery.ReturnedMedia
+) = this.apply {
+    value = NextEpisodeDetailsState.FetchSuccess(nextAiringEpisode)
+}
 
 fun MutableLiveData<NextEpisodeDetailsState>.setFailure(message: String) = this.apply {
     value = NextEpisodeDetailsState.NextEpisodeDetailsFailure(message)

@@ -8,7 +8,7 @@ interface AnimeDetailsRepository {
 
     suspend fun getAnimeById(animeId: Int): MHTaskState<AnimeByIDResponse>
 
-    suspend fun getNextAiringEpisodeById(animeId: Int): MHTaskState<GetNextAiringAnimeEpisodeQuery.Media>
+    suspend fun getNextAiringEpisodeById(animeId: Int): MHTaskState<GetNextAiringAnimeEpisodeQuery.ReturnedMedia>
 
     suspend fun updateAnimeStatus(
         animeId: Int,

@@ -75,7 +75,7 @@ class AnimeDetailsRepositoryImpl(
 
     override suspend fun getNextAiringEpisodeById(
         animeId: Int
-    ): MHTaskState<GetNextAiringAnimeEpisodeQuery.Media> = getCatching {
+    ): MHTaskState<GetNextAiringAnimeEpisodeQuery.ReturnedMedia> = getCatching {
         val response = try {
             apolloClient.query(GetNextAiringAnimeEpisodeQuery(idMal = animeId)).execute()
         } catch (e: ApolloException) {
@@ -86,7 +86,7 @@ class AnimeDetailsRepositoryImpl(
             )
         }
 
-        val mediaDetails = response.data?.media
+        val mediaDetails = response.data?.returnedMedia
         if (mediaDetails == null || response.hasErrors()) {
             val errorMessage = response.errors?.first()?.message
             return@getCatching MHTaskState(

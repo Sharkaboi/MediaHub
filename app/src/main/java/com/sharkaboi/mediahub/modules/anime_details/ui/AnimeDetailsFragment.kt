@@ -128,7 +128,7 @@ class AnimeDetailsFragment : Fragment() {
         }
     }
 
-    private fun setNextEpisodeData(nextAiringEpisodeDetails: GetNextAiringAnimeEpisodeQuery.Media) {
+    private fun setNextEpisodeData(nextAiringEpisodeDetails: GetNextAiringAnimeEpisodeQuery.ReturnedMedia) {
         val nextEp = nextAiringEpisodeDetails.nextAiringEpisode
         binding.nextEpisodeDetails.root.isGone = nextEp == null
         if (nextEp != null) {
