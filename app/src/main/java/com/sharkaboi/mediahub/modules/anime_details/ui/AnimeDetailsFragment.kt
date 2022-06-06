@@ -111,7 +111,7 @@ class AnimeDetailsFragment : Fragment() {
         binding.animeDetailsUserListCard.run {
             btnStatus.text =
                 state.animeStatus?.getFormattedString(requireContext())
-                    ?: getString(R.string.not_added)
+                ?: getString(R.string.not_added)
             btnScore.text = getString(R.string.media_rating_template, state.score ?: 0)
             btnCount.text = context?.getProgressStringWith(state.numWatchedEpisode, state.totalEps)
             btnScore.setOnClickListener {
@@ -367,10 +367,10 @@ class AnimeDetailsFragment : Fragment() {
         }
         tvStartDate.text =
             animeByIDResponse.startDate?.tryParseDate()?.formatDateDMY()
-                ?: getString(R.string.n_a)
+            ?: getString(R.string.n_a)
         tvEndDate.text =
             animeByIDResponse.endDate?.tryParseDate()?.formatDateDMY()
-                ?: getString(R.string.n_a)
+            ?: getString(R.string.n_a)
         tvMeanScore.text = animeByIDResponse.mean?.toString() ?: getString(R.string.n_a)
         tvRank.text = animeByIDResponse.rank?.toString() ?: getString(R.string.n_a)
         tvPopularityRank.text = animeByIDResponse.popularity.toString()

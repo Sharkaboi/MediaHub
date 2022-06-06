@@ -45,4 +45,3 @@ internal fun Context.getMangaStats(numListUsers: Int?, numScoredUsers: Int?): Sp
     )
     return HtmlCompat.fromHtml(html, HtmlCompat.FROM_HTML_MODE_COMPACT)
 }
-

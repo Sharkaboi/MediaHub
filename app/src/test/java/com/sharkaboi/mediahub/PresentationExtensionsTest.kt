@@ -1,6 +1,5 @@
 package com.sharkaboi.mediahub
 
-import GetNextAiringAnimeEpisodeQuery
 import androidx.core.text.toSpanned
 import androidx.test.core.app.ApplicationProvider
 import com.sharkaboi.mediahub.common.extensions.getMediaTypeStringWith
@@ -480,7 +479,6 @@ class PresentationExtensionsTest {
         Assert.assertFalse(resultString.contains("N/A"))
     }
 
-
     @Test
     fun getEpisodeLengthFromSecondsWithNullSecondsReturnsValidString() {
         val seconds = null
@@ -488,7 +486,6 @@ class PresentationExtensionsTest {
         val resultString = context.getEpisodeLengthFromSeconds(seconds)
         Assert.assertEquals(expectedString, resultString)
     }
-
 
     @Test
     fun getEpisodeLengthFromSecondsWith0SecondsReturnsValidString() {
@@ -498,7 +495,6 @@ class PresentationExtensionsTest {
         Assert.assertEquals(expectedString, resultString)
     }
 
-
     @Test
     fun getEpisodeLengthFromSecondsWithNegativeSecondsReturnsValidString() {
         val seconds = -1
@@ -506,7 +502,6 @@ class PresentationExtensionsTest {
         val resultString = context.getEpisodeLengthFromSeconds(seconds)
         Assert.assertEquals(expectedString, resultString)
     }
-
 
     @Test
     fun getEpisodeLengthFromSecondsWithValidHourSecondsReturnsValidString() {
@@ -516,7 +511,6 @@ class PresentationExtensionsTest {
         Assert.assertEquals(expectedString, resultString)
     }
 
-
     @Test
     fun getEpisodeLengthFromSecondsWithValidMinutesSecondsReturnsValidString() {
         val seconds = 30 * 60
@@ -524,7 +518,6 @@ class PresentationExtensionsTest {
         val resultString = context.getEpisodeLengthFromSeconds(seconds)
         Assert.assertEquals(expectedString, resultString)
     }
-
 
     @Test
     fun getAiringTimeFormattedWith0TimeReturnsValidString() {
@@ -537,7 +530,6 @@ class PresentationExtensionsTest {
         Assert.assertEquals(expectedString, resultString)
     }
 
-
     @Test
     fun getAiringTimeFormattedWithMinutesTimeReturnsValidString() {
         val time = GetNextAiringAnimeEpisodeQuery.NextAiringEpisode(
@@ -549,7 +541,6 @@ class PresentationExtensionsTest {
         Assert.assertEquals(expectedString, resultString)
     }
 
-
     @Test
     fun getAiringTimeFormattedWithHoursTimeReturnsValidString() {
         val time = GetNextAiringAnimeEpisodeQuery.NextAiringEpisode(
@@ -560,7 +551,6 @@ class PresentationExtensionsTest {
         val resultString = context.getAiringTimeFormatted(time)
         Assert.assertEquals(expectedString, resultString)
     }
-
 
     @Test
     fun getAiringTimeFormattedWithDaysTimeReturnsValidString() {

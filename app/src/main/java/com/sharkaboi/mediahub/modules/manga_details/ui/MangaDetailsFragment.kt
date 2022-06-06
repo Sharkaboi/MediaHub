@@ -95,7 +95,7 @@ class MangaDetailsFragment : Fragment() {
         binding.mangaDetailsUserListCard.apply {
             btnStatus.text =
                 state.mangaStatus?.getFormattedString(requireContext())
-                    ?: getString(R.string.not_added)
+                ?: getString(R.string.not_added)
             btnScore.text = getString(R.string.media_rating_template, state.score ?: 0)
             btnCountVolumes.text =
                 context?.getProgressStringWith(state.numReadVolumes, state.totalVolumes)
@@ -337,10 +337,10 @@ class MangaDetailsFragment : Fragment() {
         }
         tvStartDate.text =
             mangaByIDResponse.startDate?.tryParseDate()?.formatDateDMY()
-                ?: getString(R.string.n_a)
+            ?: getString(R.string.n_a)
         tvEndDate.text =
             mangaByIDResponse.endDate?.tryParseDate()?.formatDateDMY()
-                ?: getString(R.string.n_a)
+            ?: getString(R.string.n_a)
         tvMeanScore.text = mangaByIDResponse.mean?.toString() ?: getString(R.string.n_a)
         tvRank.text = mangaByIDResponse.rank?.toString() ?: getString(R.string.n_a)
         tvPopularityRank.text = mangaByIDResponse.popularity?.toString() ?: getString(R.string.n_a)

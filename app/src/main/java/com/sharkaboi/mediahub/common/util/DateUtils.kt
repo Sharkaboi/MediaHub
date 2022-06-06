@@ -26,4 +26,3 @@ object DateUtils {
         return japanTime.withZoneSameInstant(localTimeZone)
     }
 }
-

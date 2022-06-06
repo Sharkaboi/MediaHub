@@ -136,6 +136,3 @@ internal fun Context.getAiringTimeFormatted(nextEp: GetNextAiringAnimeEpisodeQue
         append(timeFromNow)
     }
 }
-
-
-

@@ -18,7 +18,7 @@ interface AuthService {
             state: String,
             codeChallenge: String
         ) = "$AUTH_BASE_URL/oauth2/authorize?response_type=code" +
-                "&client_id=$clientId&state=$state&code_challenge=$codeChallenge"
+            "&client_id=$clientId&state=$state&code_challenge=$codeChallenge"
     }
 
     @POST("$AUTH_BASE_URL/oauth2/token")

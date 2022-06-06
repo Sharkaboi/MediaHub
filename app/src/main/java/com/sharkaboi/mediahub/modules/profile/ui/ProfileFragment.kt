@@ -200,13 +200,13 @@ class ProfileFragment : Fragment() {
         binding.profileContent.profileDetailsCardContent.apply {
             tvBirthDay.text =
                 userDetailsResponse.birthday?.tryParseDateTime()?.formatDateDMY()
-                    ?: getString(R.string.n_a)
+                ?: getString(R.string.n_a)
             tvGender.text =
                 userDetailsResponse.gender?.capitalizeFirst()
-                    ?: getString(R.string.n_a)
+                ?: getString(R.string.n_a)
             tvJoinedAt.text =
                 userDetailsResponse.joinedAt.tryParseDateTime()?.formatDateDMY()
-                    ?: getString(R.string.n_a)
+                ?: getString(R.string.n_a)
             tvLocation.text =
                 userDetailsResponse.location.ifNullOrBlank { getString(R.string.n_a) }
             tvTimeZone.text = userDetailsResponse.timeZone ?: getString(R.string.n_a)
