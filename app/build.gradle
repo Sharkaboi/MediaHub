@@ -123,5 +123,8 @@ apollo {
 }
 
 ktlint {
-    disabledRules.set(["no-wildcard-imports"])
+    disabledRules.set([
+            "no-wildcard-imports",
+            "final-newline"
+    ])
 }
