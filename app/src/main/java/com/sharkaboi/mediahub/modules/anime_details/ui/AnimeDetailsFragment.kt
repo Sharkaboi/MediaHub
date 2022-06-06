@@ -25,6 +25,7 @@ import com.sharkaboi.mediahub.R
 import com.sharkaboi.mediahub.common.constants.UIConstants
 import com.sharkaboi.mediahub.common.constants.UIConstants.setMediaHubChipStyle
 import com.sharkaboi.mediahub.common.extensions.*
+import com.sharkaboi.mediahub.common.util.openShareChooser
 import com.sharkaboi.mediahub.common.util.openUrl
 import com.sharkaboi.mediahub.data.api.constants.MALExternalLinks
 import com.sharkaboi.mediahub.data.api.enums.AnimeRating.getAnimeRating
@@ -374,6 +375,9 @@ class AnimeDetailsFragment : Fragment() {
         tvRank.text = animeByIDResponse.rank?.toString() ?: getString(R.string.n_a)
         tvPopularityRank.text = animeByIDResponse.popularity.toString()
         setupStudiosChipGroup(animeByIDResponse.studios)
+        ibShare.setOnClickListener {
+            openShareChooser(MALExternalLinks.getAnimeLink(animeByIDResponse))
+        }
     }
 
     private fun setupRatingsChipGroup(animeByIDResponse: AnimeByIDResponse) {

@@ -23,6 +23,7 @@ import com.sharkaboi.mediahub.R
 import com.sharkaboi.mediahub.common.constants.UIConstants
 import com.sharkaboi.mediahub.common.constants.UIConstants.setMediaHubChipStyle
 import com.sharkaboi.mediahub.common.extensions.*
+import com.sharkaboi.mediahub.common.util.openShareChooser
 import com.sharkaboi.mediahub.common.util.openUrl
 import com.sharkaboi.mediahub.data.api.constants.MALExternalLinks
 import com.sharkaboi.mediahub.data.api.enums.MangaStatus
@@ -344,6 +345,9 @@ class MangaDetailsFragment : Fragment() {
         tvRank.text = mangaByIDResponse.rank?.toString() ?: getString(R.string.n_a)
         tvPopularityRank.text = mangaByIDResponse.popularity?.toString() ?: getString(R.string.n_a)
         setupAuthorsChipGroup(mangaByIDResponse.authors)
+        ibShare.setOnClickListener {
+            openShareChooser(MALExternalLinks.getMangaLink(mangaByIDResponse))
+        }
     }
 
     private fun setupAuthorsChipGroup(authors: List<MangaByIDResponse.Author>) {
