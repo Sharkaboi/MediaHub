@@ -12,7 +12,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.DefaultItemAnimator
-import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.sharkaboi.mediahub.BottomNavGraphDirections
 import com.sharkaboi.mediahub.R
@@ -68,7 +67,7 @@ class AnimeListByStatusFragment : Fragment() {
                 val action = BottomNavGraphDirections.openAnimeById(animeId)
                 navController.navigate(action)
             }
-            layoutManager = GridLayoutManager(context, UIConstants.AnimeAndMangaGridSpanCount)
+            layoutManager = UIConstants.getGridLayoutManager(context)
             itemAnimator = DefaultItemAnimator()
             adapter = animeListAdapter.withLoadStateFooter(
                 footer = AnimeLoadStateAdapter()

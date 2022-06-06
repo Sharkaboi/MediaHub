@@ -1,5 +1,7 @@
 package com.sharkaboi.mediahub.common.constants
 
+import android.content.Context
+import androidx.recyclerview.widget.GridLayoutManager
 import coil.request.ImageRequest
 import coil.transform.RoundedCornersTransformation
 import com.google.android.material.chip.Chip
@@ -7,7 +9,6 @@ import com.google.android.material.shape.ShapeAppearanceModel
 import com.sharkaboi.mediahub.R
 
 object UIConstants {
-    const val AnimeAndMangaGridSpanCount = 3
     private const val AnimeAndMangaImageCornerRadius = 8f
     private const val ProfileImageCornerRadius = 10f
     private val ChipShapeAppearanceModel = ShapeAppearanceModel().withCornerSize(8f)
@@ -75,5 +76,12 @@ object UIConstants {
             setEnsureMinTouchTargetSize(false)
             shapeAppearanceModel = ChipShapeAppearanceModel
         }
+    }
+
+    fun getGridLayoutManager(context: Context): GridLayoutManager {
+        return GridLayoutManager(
+            context,
+            context.resources.getInteger(R.integer.list_grid_span_count)
+        )
     }
 }

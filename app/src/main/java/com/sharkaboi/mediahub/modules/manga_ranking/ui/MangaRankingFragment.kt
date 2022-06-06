@@ -12,7 +12,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.DefaultItemAnimator
-import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.chip.Chip
 import com.sharkaboi.mediahub.BottomNavGraphDirections
 import com.sharkaboi.mediahub.common.constants.UIConstants
@@ -80,7 +79,7 @@ class MangaRankingFragment : Fragment() {
                 val action = BottomNavGraphDirections.openMangaById(mangaId)
                 navController.navigate(action)
             }
-            layoutManager = GridLayoutManager(context, UIConstants.AnimeAndMangaGridSpanCount)
+            layoutManager = UIConstants.getGridLayoutManager(context)
             itemAnimator = DefaultItemAnimator()
             adapter = mangaRankingDetailedAdapter.withLoadStateFooter(
                 footer = MangaRankingLoadStateAdapter()

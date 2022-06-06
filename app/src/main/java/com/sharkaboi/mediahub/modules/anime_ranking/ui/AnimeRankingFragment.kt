@@ -12,7 +12,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.DefaultItemAnimator
-import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.chip.Chip
 import com.sharkaboi.mediahub.common.constants.UIConstants
 import com.sharkaboi.mediahub.common.constants.UIConstants.setMediaHubChipStyle
@@ -79,7 +78,7 @@ class AnimeRankingFragment : Fragment() {
                 val action = AnimeRankingFragmentDirections.openAnimeById(animeId)
                 navController.navigate(action)
             }
-            layoutManager = GridLayoutManager(context, UIConstants.AnimeAndMangaGridSpanCount)
+            layoutManager = UIConstants.getGridLayoutManager(context)
             itemAnimator = DefaultItemAnimator()
             adapter = animeRankingDetailedAdapter.withLoadStateFooter(
                 footer = AnimeRankingLoadStateAdapter()

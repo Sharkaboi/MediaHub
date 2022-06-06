@@ -16,7 +16,6 @@ import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.DefaultItemAnimator
-import androidx.recyclerview.widget.GridLayoutManager
 import com.sharkaboi.mediahub.BottomNavGraphDirections
 import com.sharkaboi.mediahub.R
 import com.sharkaboi.mediahub.common.constants.UIConstants
@@ -66,7 +65,7 @@ class MangaSearchFragment : Fragment() {
                 val action = BottomNavGraphDirections.openMangaById(mangaId)
                 navController.navigate(action)
             }
-            layoutManager = GridLayoutManager(context, UIConstants.AnimeAndMangaGridSpanCount)
+            layoutManager = UIConstants.getGridLayoutManager(context)
             setHasFixedSize(true)
             itemAnimator = DefaultItemAnimator()
             adapter = mangaSearchListAdapter.withLoadStateFooter(
