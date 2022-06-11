@@ -2,7 +2,6 @@ package com.sharkaboi.mediahub.modules.splash.repository
 
 import com.haroldadmin.cnradapter.NetworkResponse
 import com.sharkaboi.mediahub.BuildConfig
-import com.sharkaboi.mediahub.common.extensions.emptyString
 import com.sharkaboi.mediahub.data.api.retrofit.AuthService
 import com.sharkaboi.mediahub.data.datastore.DataStoreRepository
 import kotlinx.coroutines.Dispatchers
@@ -21,35 +20,22 @@ class SplashRepositoryImpl(
     override val refreshTokenFlow: Flow<String> = dataStoreRepository.refreshTokenFlow
 
     override suspend fun refreshToken(): Boolean = withContext(Dispatchers.IO) {
-        val refreshToken: String? = refreshTokenFlow.firstOrNull()
-        if (refreshToken == null) {
-            return@withContext false
-        } else {
-            val response = authService.refreshTokenAsync(
-                refreshToken = refreshToken,
-                clientId = BuildConfig.clientId
-            ).await()
-            when (response) {
-                is NetworkResponse.Success -> {
-                    Timber.d(response.body.toString())
-                    dataStoreRepository.setAccessToken(response.body.accessToken)
-                    dataStoreRepository.setExpireIn()
-                    dataStoreRepository.setRefreshToken(response.body.refreshToken)
-                    return@withContext true
-                }
-                is NetworkResponse.ServerError -> {
-                    Timber.d(response.body.toString())
-                    return@withContext false
-                }
-                is NetworkResponse.NetworkError -> {
-                    Timber.d(response.error.message ?: String.emptyString)
-                    return@withContext false
-                }
-                is NetworkResponse.UnknownError -> {
-                    Timber.d(response.error.message ?: String.emptyString)
-                    return@withContext false
-                }
+        val refreshToken: String = refreshTokenFlow.firstOrNull() ?: return@withContext false
+
+        val response = authService.refreshTokenAsync(
+            refreshToken = refreshToken,
+            clientId = BuildConfig.clientId
+        ).await()
+
+        Timber.d(response.toString())
+        return@withContext when (response) {
+            is NetworkResponse.Success -> {
+                dataStoreRepository.setAccessToken(response.body.accessToken)
+                dataStoreRepository.setExpireIn()
+                dataStoreRepository.setRefreshToken(response.body.refreshToken)
+                true
             }
+            else -> false
         }
     }
 }
