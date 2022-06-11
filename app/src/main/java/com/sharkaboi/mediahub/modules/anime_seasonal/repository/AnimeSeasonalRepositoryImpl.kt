@@ -13,7 +13,6 @@ import com.sharkaboi.mediahub.data.sharedpref.SharedPreferencesKeys
 import com.sharkaboi.mediahub.modules.anime_seasonal.data.AnimeSeasonalDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
-import timber.log.Timber
 
 class AnimeSeasonalRepositoryImpl(
     private val animeService: AnimeService,

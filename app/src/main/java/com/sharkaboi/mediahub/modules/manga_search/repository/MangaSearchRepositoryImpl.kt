@@ -12,7 +12,6 @@ import com.sharkaboi.mediahub.data.sharedpref.SharedPreferencesKeys
 import com.sharkaboi.mediahub.modules.manga_search.data.MangaSearchDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
-import timber.log.Timber
 
 class MangaSearchRepositoryImpl(
     private val mangaService: MangaService,
