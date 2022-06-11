@@ -3,6 +3,7 @@ package com.sharkaboi.mediahub.modules.anime_details.repository
 import com.sharkaboi.mediahub.GetNextAiringAnimeEpisodeQuery
 import com.sharkaboi.mediahub.data.api.models.anime.AnimeByIDResponse
 import com.sharkaboi.mediahub.data.wrappers.MHTaskState
+import com.sharkaboi.mediahub.modules.anime_details.util.AnimeDetailsUpdateClass
 
 interface AnimeDetailsRepository {
 
@@ -11,10 +12,7 @@ interface AnimeDetailsRepository {
     suspend fun getNextAiringEpisodeById(animeId: Int): MHTaskState<GetNextAiringAnimeEpisodeQuery.ReturnedMedia>
 
     suspend fun updateAnimeStatus(
-        animeId: Int,
-        animeStatus: String?,
-        score: Int?,
-        numWatchedEps: Int?
+        animeDetailsUpdateClass: AnimeDetailsUpdateClass
     ): MHTaskState<Unit>
 
     suspend fun removeAnimeFromList(animeId: Int): MHTaskState<Unit>

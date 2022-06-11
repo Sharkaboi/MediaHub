@@ -12,6 +12,7 @@ import com.sharkaboi.mediahub.data.api.retrofit.UserAnimeService
 import com.sharkaboi.mediahub.data.datastore.DataStoreRepository
 import com.sharkaboi.mediahub.data.wrappers.MHError
 import com.sharkaboi.mediahub.data.wrappers.MHTaskState
+import com.sharkaboi.mediahub.modules.anime_details.util.AnimeDetailsUpdateClass
 import kotlinx.coroutines.flow.firstOrNull
 import timber.log.Timber
 
@@ -104,10 +105,7 @@ class AnimeDetailsRepositoryImpl(
     }
 
     override suspend fun updateAnimeStatus(
-        animeId: Int,
-        animeStatus: String?,
-        score: Int?,
-        numWatchedEps: Int?
+        animeDetailsUpdateClass: AnimeDetailsUpdateClass
     ): MHTaskState<Unit> = getCatching {
         val accessToken: String = dataStoreRepository.accessTokenFlow.firstOrNull()
             ?: return@getCatching MHTaskState(
@@ -118,10 +116,10 @@ class AnimeDetailsRepositoryImpl(
 
         val result = userAnimeService.updateAnimeStatusAsync(
             authHeader = ApiConstants.BEARER_SEPARATOR + accessToken,
-            animeId = animeId,
-            animeStatus = animeStatus,
-            score = score,
-            numWatchedEps = numWatchedEps
+            animeId = animeDetailsUpdateClass.animeId,
+            animeStatus = animeDetailsUpdateClass.animeStatus?.name,
+            score = animeDetailsUpdateClass.score,
+            numWatchedEps = animeDetailsUpdateClass.numWatchedEpisode
         ).await()
         Timber.d(result.toString())
 
@@ -134,14 +132,14 @@ class AnimeDetailsRepositoryImpl(
                 )
             }
             is NetworkResponse.NetworkError -> {
-                return@getCatching MHTaskState(
+                MHTaskState(
                     isSuccess = false,
                     data = null,
                     error = MHError.getError(result.error.message, MHError.NetworkError)
                 )
             }
             is NetworkResponse.ServerError -> {
-                return@getCatching MHTaskState(
+                MHTaskState(
                     isSuccess = false,
                     data = null,
                     error = MHError.getError(
@@ -193,20 +191,18 @@ class AnimeDetailsRepositoryImpl(
                     )
                 }
                 is NetworkResponse.ServerError -> {
-                    if (result.code == 404) {
-                        MHTaskState(
-                            isSuccess = false,
-                            data = null,
-                            error = MHError.AnimeNotFoundError
+                    val error = if (result.code == 404) {
+                        MHError.AnimeNotFoundError
+                    } else {
+                        MHError.getError(
+                            result.body?.message,
+                            MHError.apiErrorWithCode(result.code)
                         )
                     }
                     MHTaskState(
                         isSuccess = false,
                         data = null,
-                        error = MHError.getError(
-                            result.body?.message,
-                            MHError.apiErrorWithCode(result.code)
-                        )
+                        error = error
                     )
                 }
                 is NetworkResponse.UnknownError -> {

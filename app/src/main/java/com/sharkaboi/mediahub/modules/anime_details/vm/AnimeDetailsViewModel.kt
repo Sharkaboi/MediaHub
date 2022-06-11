@@ -43,7 +43,7 @@ class AnimeDetailsViewModel
             return@launch
         }
 
-        Timber.d("getAnimeDetails: $result.data")
+        Timber.d("getAnimeDetails: ${result.data}")
         _animeDetailsUpdate.value = AnimeDetailsUpdateClass(
             animeStatus = AnimeStatus.parse(result.data.myListStatus?.status),
             animeId = result.data.id,
@@ -105,12 +105,7 @@ class AnimeDetailsViewModel
             return@launch
         }
 
-        val result = animeDetailsRepository.updateAnimeStatus(
-            animeId = details.animeId,
-            animeStatus = details.animeStatus?.name,
-            score = details.score,
-            numWatchedEps = details.numWatchedEpisode
-        )
+        val result = animeDetailsRepository.updateAnimeStatus(details)
 
         if (!result.isSuccess) {
             _animeDetailState.setFailure(result.error.errorMessage)
