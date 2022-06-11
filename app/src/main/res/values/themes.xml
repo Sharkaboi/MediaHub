@@ -10,12 +10,12 @@
         <item name="colorSecondaryVariant">@color/colorAccent</item>
         <item name="colorOnSecondary">@color/white</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?colorOnPrimary</item>
+        <item name="android:statusBarColor">?colorOnPrimary</item>
         <item name="android:windowLightStatusBar">true</item>
     </style>
 
     <style name="Theme.MediaHub.Auth" parent="Theme.MediaHub">
-        <item name="android:statusBarColor" tools:targetApi="l">@color/black</item>
+        <item name="android:statusBarColor">@color/black</item>
         <item name="android:windowLightStatusBar">false</item>
     </style>
 
@@ -29,12 +29,12 @@
         <item name="colorSecondaryVariant">@color/colorAccent</item>
         <item name="colorOnSecondary">@color/white</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?colorOnPrimary</item>
+        <item name="android:statusBarColor">?colorOnPrimary</item>
         <item name="android:windowLightStatusBar">true</item>
     </style>
 
     <style name="splashStyle" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="android:statusBarColor" tools:targetApi="l">@color/colorPrimary</item>
+        <item name="android:statusBarColor">@color/colorPrimary</item>
         <item name="android:fitsSystemWindows">true</item>
         <item name="android:windowBackground">@drawable/splash_screen</item>
     </style>

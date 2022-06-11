@@ -29,7 +29,7 @@ class ProfileViewModel
             _uiState.setLoading()
             val result: MHTaskState<UserDetailsResponse> = profileRepository.getUserDetails()
             if (result.isSuccess) {
-                _uiState.setFetchSuccess(result.data!!)
+                _uiState.setFetchSuccess(result.data)
             } else {
                 _uiState.setProfileFailure(result.error.errorMessage)
             }

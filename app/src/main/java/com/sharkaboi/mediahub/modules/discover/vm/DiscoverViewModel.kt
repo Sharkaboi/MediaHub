@@ -47,19 +47,19 @@ class DiscoverViewModel
         if (animeRecommendationsResult.isSuccess.not()) {
             _uiState.setFailure(animeRecommendationsResult.error.errorMessage)
         } else {
-            _animeSuggestions.value = animeRecommendationsResult.data?.data
+            _animeSuggestions.value = animeRecommendationsResult.data.data
         }
 
         if (animeRankingsResult.isSuccess.not()) {
             _uiState.setFailure(animeRankingsResult.error.errorMessage)
         } else {
-            _animeRankings.value = animeRankingsResult.data?.data
+            _animeRankings.value = animeRankingsResult.data.data
         }
 
         if (animeSeasonalsResult.isSuccess.not()) {
             _uiState.setFailure(animeSeasonalsResult.error.errorMessage)
         } else {
-            _animeOfCurrentSeason.value = animeSeasonalsResult.data?.data
+            _animeOfCurrentSeason.value = animeSeasonalsResult.data.data
         }
 
         _uiState.setIdle()
