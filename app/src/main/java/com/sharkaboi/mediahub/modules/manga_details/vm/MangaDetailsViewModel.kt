@@ -4,7 +4,7 @@ import androidx.lifecycle.*
 import com.sharkaboi.mediahub.data.api.enums.MangaStatus
 import com.sharkaboi.mediahub.data.wrappers.MHError
 import com.sharkaboi.mediahub.modules.manga_details.repository.MangaDetailsRepository
-import com.sharkaboi.mediahub.modules.manga_details.util.MangaDetailsUpdateClass
+import com.sharkaboi.mediahub.modules.manga_details.util.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -30,101 +30,95 @@ class MangaDetailsViewModel
         getMangaDetails(mangaId)
     }
 
-    private fun getMangaDetails(mangaId: Int) {
-        viewModelScope.launch {
-            _uiState.setLoading()
-            val result = mangaDetailsRepository.getMangaById(mangaId)
-            if (result.isSuccess) {
-                result.data?.let {
-                    _mangaDetailsUpdate.value = MangaDetailsUpdateClass(
-                        mangaStatus = MangaStatus.parse(it.myListStatus?.status),
-                        mangaId = it.id,
-                        score = it.myListStatus?.score,
-                        numReadChapters = it.myListStatus?.numChaptersRead,
-                        numReadVolumes = it.myListStatus?.numVolumesRead,
-                        totalVolumes = it.numVolumes,
-                        totalChapters = it.numChapters
-                    )
-                    _uiState.setFetchSuccess(result.data)
-                }
-            } else {
-                _uiState.setFailure(result.error.errorMessage)
-            }
+    private fun getMangaDetails(mangaId: Int) = viewModelScope.launch {
+        _uiState.setLoading()
+        val result = mangaDetailsRepository.getMangaById(mangaId)
+        if (!result.isSuccess) {
+            _uiState.setFailure(result.error.errorMessage)
+            return@launch
         }
+
+        Timber.d("getMangaDetails: ${result.data}")
+        _mangaDetailsUpdate.value = MangaDetailsUpdateClass(
+            mangaStatus = MangaStatus.parse(result.data.myListStatus?.status),
+            mangaId = result.data.id,
+            score = result.data.myListStatus?.score,
+            numReadChapters = result.data.myListStatus?.numChaptersRead,
+            numReadVolumes = result.data.myListStatus?.numVolumesRead,
+            totalVolumes = result.data.numVolumes,
+            totalChapters = result.data.numChapters
+        )
+        _uiState.setFetchSuccess(result.data)
     }
 
     fun setStatus(mangaStatus: MangaStatus) {
-        _mangaDetailsUpdate.apply {
-            value = value?.copy(mangaStatus = mangaStatus)
-            if (mangaStatus == MangaStatus.completed) {
-                value = value?.copy(
-                    numReadVolumes = value?.totalVolumes,
-                    numReadChapters = value?.totalChapters
-                )
-            }
+        _mangaDetailsUpdate.setStatus(mangaStatus)
+
+        if (mangaStatus == MangaStatus.completed) {
+            _mangaDetailsUpdate.setReadAsTotal()
         }
     }
 
-    fun setReadChapterCount(numReadChapter: Int) {
-        _mangaDetailsUpdate.apply {
-            if (this.value?.mangaStatus == null ||
-                (
-                    this.value?.mangaStatus != MangaStatus.reading &&
-                        this.value?.mangaStatus != MangaStatus.completed
-                    )
-            ) {
-                value = this.value?.copy(mangaStatus = MangaStatus.reading)
-            }
-            value = value?.copy(numReadChapters = numReadChapter)
+    fun setReadChapterCount(numReadChapters: Int) {
+        if (_mangaDetailsUpdate.isNotOfStatus(MangaStatus.reading, MangaStatus.completed)) {
+            _mangaDetailsUpdate.setStatus(MangaStatus.reading)
         }
+
+        if (_mangaDetailsUpdate.isMoreOrEqualToTotalChaps(numReadChapters)) {
+            _mangaDetailsUpdate.setReadAsTotalChaps()
+            _mangaDetailsUpdate.setStatus(MangaStatus.completed)
+            return
+        }
+
+        _mangaDetailsUpdate.setReadChapters(numReadChapters)
     }
 
-    fun setReadVolumeCount(numReadVolume: Int) {
-        _mangaDetailsUpdate.apply {
-            if (this.value?.mangaStatus == null ||
-                (
-                    this.value?.mangaStatus != MangaStatus.reading &&
-                        this.value?.mangaStatus != MangaStatus.completed
-                    )
-            ) {
-                value = this.value?.copy(mangaStatus = MangaStatus.reading)
-            }
-            value = value?.copy(numReadVolumes = numReadVolume)
+    fun setReadVolumeCount(numReadVolumes: Int) {
+        if (_mangaDetailsUpdate.isNotOfStatus(MangaStatus.reading, MangaStatus.completed)) {
+            _mangaDetailsUpdate.setStatus(MangaStatus.reading)
         }
+
+        if (_mangaDetailsUpdate.isMoreOrEqualToTotalVols(numReadVolumes)) {
+            _mangaDetailsUpdate.setReadAsTotalVols()
+            _mangaDetailsUpdate.setStatus(MangaStatus.completed)
+            return
+        }
+
+        _mangaDetailsUpdate.setReadVolumes(numReadVolumes)
     }
 
     fun setScore(score: Int) {
-        _mangaDetailsUpdate.apply {
-            value = value?.copy(score = score)
-        }
+        _mangaDetailsUpdate.setScore(score)
     }
 
-    fun submitStatusUpdate(mangaId: Int) {
-        viewModelScope.launch {
-            _uiState.setLoading()
-            _mangaDetailsUpdate.value?.let {
-                val result = mangaDetailsRepository.updateMangaStatus(it)
-                if (result.isSuccess) {
-                    refreshDetails()
-                } else {
-                    _uiState.setFailure(result.error.errorMessage)
-                }
-            } ?: run {
-                _uiState.setFailure(MHError.InvalidStateError.errorMessage)
-            }
+    fun submitStatusUpdate() = viewModelScope.launch {
+        _uiState.setLoading()
+        val details = _mangaDetailsUpdate.value
+        if (details == null) {
+            _uiState.setFailure(MHError.InvalidStateError.errorMessage)
+            return@launch
         }
+
+        val result = mangaDetailsRepository.updateMangaStatus(details)
+
+        if (!result.isSuccess) {
+            _uiState.setFailure(result.error.errorMessage)
+            return@launch
+        }
+
+        refreshDetails()
     }
 
-    fun removeFromList(mangaId: Int) {
-        viewModelScope.launch {
-            _uiState.setLoading()
-            val result = mangaDetailsRepository.removeMangaFromList(mangaId = mangaId)
-            if (result.isSuccess) {
-                refreshDetails()
-            } else {
-                _uiState.setFailure(result.error.errorMessage)
-            }
+    fun removeFromList() = viewModelScope.launch {
+        val id = mangaDetailsUpdate.value?.mangaId ?: return@launch
+        _uiState.setLoading()
+        val result = mangaDetailsRepository.removeMangaFromList(mangaId = id)
+        if (!result.isSuccess) {
+            _uiState.setFailure(result.error.errorMessage)
+            return@launch
         }
+
+        refreshDetails()
     }
 
     fun refreshDetails() {

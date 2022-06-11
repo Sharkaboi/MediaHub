@@ -95,7 +95,7 @@ class MangaDetailsFragment : Fragment() {
         binding.mangaDetailsUserListCard.apply {
             btnStatus.text =
                 state.mangaStatus?.getFormattedString(requireContext())
-                ?: getString(R.string.not_added)
+                    ?: getString(R.string.not_added)
             btnScore.text = getString(R.string.media_rating_template, state.score ?: 0)
             btnCountVolumes.text =
                 context?.getProgressStringWith(state.numReadVolumes, state.totalVolumes)
@@ -105,7 +105,7 @@ class MangaDetailsFragment : Fragment() {
                 openScoreDialog(state.score)
             }
             btnStatus.setOnClickListener {
-                openStatusDialog(state.mangaStatus?.name, state.mangaId)
+                openStatusDialog(state.mangaStatus?.name)
             }
             btnCountVolumes.setOnClickListener {
                 openMangaVolumeCountDialog(
@@ -310,7 +310,7 @@ class MangaDetailsFragment : Fragment() {
                 openScoreDialog(mangaByIDResponse.myListStatus?.score)
             }
             btnStatus.setOnClickListener {
-                openStatusDialog(mangaByIDResponse.myListStatus?.status, mangaByIDResponse.id)
+                openStatusDialog(mangaByIDResponse.myListStatus?.status)
             }
             btnCountVolumes.setOnClickListener {
                 openMangaVolumeCountDialog(
@@ -325,7 +325,7 @@ class MangaDetailsFragment : Fragment() {
                 )
             }
             btnConfirm.setOnClickListener {
-                mangaDetailsViewModel.submitStatusUpdate(mangaByIDResponse.id)
+                mangaDetailsViewModel.submitStatusUpdate()
             }
         }
 
@@ -337,10 +337,10 @@ class MangaDetailsFragment : Fragment() {
         }
         tvStartDate.text =
             mangaByIDResponse.startDate?.tryParseDate()?.formatDateDMY()
-            ?: getString(R.string.n_a)
+                ?: getString(R.string.n_a)
         tvEndDate.text =
             mangaByIDResponse.endDate?.tryParseDate()?.formatDateDMY()
-            ?: getString(R.string.n_a)
+                ?: getString(R.string.n_a)
         tvMeanScore.text = mangaByIDResponse.mean?.toString() ?: getString(R.string.n_a)
         tvRank.text = mangaByIDResponse.rank?.toString() ?: getString(R.string.n_a)
         tvPopularityRank.text = mangaByIDResponse.popularity?.toString() ?: getString(R.string.n_a)
@@ -396,7 +396,7 @@ class MangaDetailsFragment : Fragment() {
     private fun showFullSynopsisDialog(synopsis: String) =
         requireContext().showNoActionOkDialog(R.string.synopsis, synopsis)
 
-    private fun openStatusDialog(status: String?, mangaId: Int) {
+    private fun openStatusDialog(status: String?) {
         val singleItems =
             arrayOf(getString(R.string.not_added)) + MangaStatus.malStatuses.map {
                 it.getFormattedString(requireContext())
@@ -408,7 +408,7 @@ class MangaDetailsFragment : Fragment() {
             .setSingleChoiceItems(singleItems, checkedItem) { dialog, which ->
                 when (which) {
                     checkedItem -> Unit
-                    0 -> mangaDetailsViewModel.removeFromList(mangaId)
+                    0 -> mangaDetailsViewModel.removeFromList()
                     else -> mangaDetailsViewModel.setStatus(MangaStatus.malStatuses[which - 1])
                 }
                 dialog.dismiss()
