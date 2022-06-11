@@ -90,11 +90,6 @@ dependencies {
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
     //datastore
     implementation "androidx.datastore:datastore-preferences:$datastore_version"
-    //room
-    implementation "androidx.room:room-runtime:$room_version"
-    kapt "androidx.room:room-compiler:$room_version"
-    testImplementation "androidx.room:room-testing:$room_version"
-    implementation "androidx.room:room-paging:$room_version"
     //coil
     implementation "io.coil-kt:coil:$coil_version"
     //paging
