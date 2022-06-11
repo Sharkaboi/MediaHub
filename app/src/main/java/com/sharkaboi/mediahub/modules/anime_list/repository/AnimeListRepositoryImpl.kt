@@ -14,7 +14,6 @@ import com.sharkaboi.mediahub.data.sharedpref.SharedPreferencesKeys
 import com.sharkaboi.mediahub.modules.anime_list.data.UserAnimeListDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
-import timber.log.Timber
 
 class AnimeListRepositoryImpl(
     private val userAnimeService: UserAnimeService,
@@ -28,7 +27,6 @@ class AnimeListRepositoryImpl(
     ): Flow<PagingData<UserAnimeListResponse.Data>> {
         val showNsfw = sharedPreferences.getBoolean(SharedPreferencesKeys.NSFW_OPTION, false)
         val accessToken: String? = dataStoreRepository.accessTokenFlow.firstOrNull()
-        Timber.d("accessToken: $accessToken")
         return Pager(
             config = PagingConfig(
                 pageSize = ApiConstants.API_PAGE_LIMIT,

@@ -27,6 +27,10 @@ class SplashViewModel
     val splashState: LiveData<SplashState> = _splashState
 
     init {
+        checkIfTokenExpired()
+    }
+
+    private fun checkIfTokenExpired() {
         _splashState.setLoading()
         viewModelScope.launch {
             val accessToken: String? = accessTokenFlow.firstOrNull()

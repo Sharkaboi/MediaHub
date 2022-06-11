@@ -24,7 +24,6 @@ class MangaRankingRepositoryImpl(
     override suspend fun getMangaRanking(mangaRankingType: MangaRankingType): Flow<PagingData<MangaRankingResponse.Data>> {
         val showNsfw = sharedPreferences.getBoolean(SharedPreferencesKeys.NSFW_OPTION, false)
         val accessToken: String? = dataStoreRepository.accessTokenFlow.firstOrNull()
-        Timber.d("accessToken: $accessToken")
         return Pager(
             config = PagingConfig(
                 pageSize = ApiConstants.API_PAGE_LIMIT,
