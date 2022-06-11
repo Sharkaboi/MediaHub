@@ -3,6 +3,7 @@ package com.sharkaboi.mediahub.data.api.enums
 import android.content.Context
 import com.sharkaboi.mediahub.R
 
+@Suppress("EnumEntryName")
 enum class AnimeNsfwRating {
     white,
     gray,

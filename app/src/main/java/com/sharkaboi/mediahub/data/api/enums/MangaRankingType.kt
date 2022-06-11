@@ -36,11 +36,11 @@ enum class MangaRankingType {
         private const val oneShotSlug = "one_shot"
         private const val doujinshiSlug = "doujinshi"
         fun getMangaRankingFromString(ranking: String?): MangaRankingType {
-            return when {
-                ranking == null -> all
-                ranking.lowercase() == lightNovelSlug -> lightnovels
-                ranking.lowercase() == oneShotSlug -> oneshots
-                ranking.lowercase() == doujinshiSlug -> doujin
+            return when (ranking?.lowercase()) {
+                null -> all
+                lightNovelSlug -> lightnovels
+                oneShotSlug -> oneshots
+                doujinshiSlug -> doujin
                 else -> runCatching { valueOf(ranking.lowercase()) }.getOrElse { all }
             }
         }

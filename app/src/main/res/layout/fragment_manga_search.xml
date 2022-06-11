@@ -24,7 +24,8 @@
             android:id="@+id/svSearch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:maxLines="1" />
+            android:maxLines="1"
+            android:singleLine="true" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -53,8 +54,7 @@
         android:id="@+id/searchEmptyView"
         layout="@layout/manga_search_empty"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="54dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -13,7 +13,6 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.load
@@ -24,6 +23,7 @@ import com.sharkaboi.mediahub.R
 import com.sharkaboi.mediahub.common.constants.UIConstants
 import com.sharkaboi.mediahub.common.constants.UIConstants.setMediaHubChipStyle
 import com.sharkaboi.mediahub.common.extensions.*
+import com.sharkaboi.mediahub.common.util.openShareChooser
 import com.sharkaboi.mediahub.common.util.openUrl
 import com.sharkaboi.mediahub.data.api.constants.MALExternalLinks
 import com.sharkaboi.mediahub.data.api.enums.MangaStatus
@@ -35,7 +35,7 @@ import com.sharkaboi.mediahub.databinding.FragmentMangaDetailsBinding
 import com.sharkaboi.mediahub.modules.manga_details.adapters.RecommendedMangaAdapter
 import com.sharkaboi.mediahub.modules.manga_details.adapters.RelatedAnimeAdapter
 import com.sharkaboi.mediahub.modules.manga_details.adapters.RelatedMangaAdapter
-import com.sharkaboi.mediahub.modules.manga_details.util.MangaDetailsUpdateClass
+import com.sharkaboi.mediahub.modules.manga_details.util.*
 import com.sharkaboi.mediahub.modules.manga_details.vm.MangaDetailsState
 import com.sharkaboi.mediahub.modules.manga_details.vm.MangaDetailsViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -45,7 +45,6 @@ class MangaDetailsFragment : Fragment() {
     private var _binding: FragmentMangaDetailsBinding? = null
     private val binding get() = _binding!!
     private val navController by lazy { findNavController() }
-    private val args: MangaDetailsFragmentArgs by navArgs()
     private val mangaDetailsViewModel by viewModels<MangaDetailsViewModel>()
 
     override fun onCreateView(
@@ -74,7 +73,7 @@ class MangaDetailsFragment : Fragment() {
     }
 
     private val handleSwipeRefresh = {
-        mangaDetailsViewModel.getMangaDetails(args.mangaId)
+        mangaDetailsViewModel.refreshDetails()
         binding.swipeRefresh.isRefreshing = false
     }
 
@@ -86,7 +85,6 @@ class MangaDetailsFragment : Fragment() {
     private val handleMangaDetailsUpdate = { state: MangaDetailsState ->
         binding.progressBar.isShowing = state is MangaDetailsState.Loading
         when (state) {
-            is MangaDetailsState.Idle -> mangaDetailsViewModel.getMangaDetails(args.mangaId)
             is MangaDetailsState.FetchSuccess -> setData(state.mangaByIDResponse)
             is MangaDetailsState.MangaDetailsFailure -> showToast(state.message)
             else -> Unit
@@ -107,7 +105,7 @@ class MangaDetailsFragment : Fragment() {
                 openScoreDialog(state.score)
             }
             btnStatus.setOnClickListener {
-                openStatusDialog(state.mangaStatus?.name, state.mangaId)
+                openStatusDialog(state.mangaStatus?.name)
             }
             btnCountVolumes.setOnClickListener {
                 openMangaVolumeCountDialog(
@@ -285,10 +283,10 @@ class MangaDetailsFragment : Fragment() {
         setupGenresChipGroup(mangaByIDResponse.genres)
     }
 
-    private fun setupGenresChipGroup(genres: List<MangaByIDResponse.Genre>) {
+    private fun setupGenresChipGroup(genres: List<MangaByIDResponse.Genre>?) {
         val chipGroup = binding.otherDetails.genresChipGroup
         chipGroup.removeAllViews()
-        if (genres.isEmpty()) {
+        if (genres.isNullOrEmpty()) {
             val naChip = Chip(context)
             naChip.setMediaHubChipStyle()
             naChip.text = getString(R.string.n_a)
@@ -312,7 +310,7 @@ class MangaDetailsFragment : Fragment() {
                 openScoreDialog(mangaByIDResponse.myListStatus?.score)
             }
             btnStatus.setOnClickListener {
-                openStatusDialog(mangaByIDResponse.myListStatus?.status, mangaByIDResponse.id)
+                openStatusDialog(mangaByIDResponse.myListStatus?.status)
             }
             btnCountVolumes.setOnClickListener {
                 openMangaVolumeCountDialog(
@@ -327,7 +325,7 @@ class MangaDetailsFragment : Fragment() {
                 )
             }
             btnConfirm.setOnClickListener {
-                mangaDetailsViewModel.submitStatusUpdate(mangaByIDResponse.id)
+                mangaDetailsViewModel.submitStatusUpdate()
             }
         }
 
@@ -347,6 +345,9 @@ class MangaDetailsFragment : Fragment() {
         tvRank.text = mangaByIDResponse.rank?.toString() ?: getString(R.string.n_a)
         tvPopularityRank.text = mangaByIDResponse.popularity?.toString() ?: getString(R.string.n_a)
         setupAuthorsChipGroup(mangaByIDResponse.authors)
+        ibShare.setOnClickListener {
+            openShareChooser(MALExternalLinks.getMangaLink(mangaByIDResponse))
+        }
     }
 
     private fun setupAuthorsChipGroup(authors: List<MangaByIDResponse.Author>) {
@@ -378,8 +379,8 @@ class MangaDetailsFragment : Fragment() {
 
     private fun setupMangaImagePreview(mangaByIDResponse: MangaByIDResponse) = binding.apply {
         ivMangaMainPicture.load(
-            uri = mangaByIDResponse.mainPicture?.large ?: mangaByIDResponse.mainPicture?.medium,
-            builder = UIConstants.MangaImageBuilder
+            mangaByIDResponse.mainPicture?.large ?: mangaByIDResponse.mainPicture?.medium,
+            builder = UIConstants.AllRoundedMangaImageBuilder
         )
         ivMangaMainPicture.setOnClickListener {
             openImagesViewPager(mangaByIDResponse.pictures)
@@ -395,7 +396,7 @@ class MangaDetailsFragment : Fragment() {
     private fun showFullSynopsisDialog(synopsis: String) =
         requireContext().showNoActionOkDialog(R.string.synopsis, synopsis)
 
-    private fun openStatusDialog(status: String?, mangaId: Int) {
+    private fun openStatusDialog(status: String?) {
         val singleItems =
             arrayOf(getString(R.string.not_added)) + MangaStatus.malStatuses.map {
                 it.getFormattedString(requireContext())
@@ -407,7 +408,7 @@ class MangaDetailsFragment : Fragment() {
             .setSingleChoiceItems(singleItems, checkedItem) { dialog, which ->
                 when (which) {
                     checkedItem -> Unit
-                    0 -> mangaDetailsViewModel.removeFromList(mangaId)
+                    0 -> mangaDetailsViewModel.removeFromList()
                     else -> mangaDetailsViewModel.setStatus(MangaStatus.malStatuses[which - 1])
                 }
                 dialog.dismiss()

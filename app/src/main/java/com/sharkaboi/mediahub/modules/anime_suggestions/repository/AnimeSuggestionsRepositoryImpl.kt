@@ -8,11 +8,10 @@ import com.sharkaboi.mediahub.data.api.constants.ApiConstants
 import com.sharkaboi.mediahub.data.api.models.anime.AnimeSuggestionsResponse
 import com.sharkaboi.mediahub.data.api.retrofit.AnimeService
 import com.sharkaboi.mediahub.data.datastore.DataStoreRepository
-import com.sharkaboi.mediahub.data.paging.AnimeSuggestionsDataSource
 import com.sharkaboi.mediahub.data.sharedpref.SharedPreferencesKeys
+import com.sharkaboi.mediahub.modules.anime_suggestions.data.AnimeSuggestionsDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
-import timber.log.Timber
 
 class AnimeSuggestionsRepositoryImpl(
     private val animeService: AnimeService,
@@ -23,7 +22,6 @@ class AnimeSuggestionsRepositoryImpl(
     override suspend fun getAnimeSuggestions(): Flow<PagingData<AnimeSuggestionsResponse.Data>> {
         val showNsfw = sharedPreferences.getBoolean(SharedPreferencesKeys.NSFW_OPTION, false)
         val accessToken: String? = dataStoreRepository.accessTokenFlow.firstOrNull()
-        Timber.d("accessToken: $accessToken")
         return Pager(
             config = PagingConfig(
                 pageSize = ApiConstants.API_PAGE_LIMIT,

@@ -15,7 +15,7 @@ enum class AnimeRankingType {
     bypopularity, // Top Anime by Popularity
     favorite; // Top Favorited Anime
 
-    fun getAnimeRanking(context: Context): String {
+    fun getFormattedString(context: Context): String {
         return when (this) {
             all -> context.getString(R.string.anime_ranking_all)
             airing -> context.getString(R.string.anime_ranking_airing)
@@ -26,6 +26,15 @@ enum class AnimeRankingType {
             special -> context.getString(R.string.anime_ranking_specials)
             bypopularity -> context.getString(R.string.anime_ranking_by_popularity)
             favorite -> context.getString(R.string.anime_ranking_in_your_list)
+        }
+    }
+
+    companion object {
+        fun getAnimeRankingFromString(ranking: String?): AnimeRankingType {
+            return when (ranking) {
+                null -> all
+                else -> runCatching { valueOf(ranking.lowercase()) }.getOrElse { all }
+            }
         }
     }
 }

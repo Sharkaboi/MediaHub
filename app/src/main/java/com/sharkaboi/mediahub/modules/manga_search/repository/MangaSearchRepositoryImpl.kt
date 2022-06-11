@@ -8,11 +8,10 @@ import com.sharkaboi.mediahub.data.api.constants.ApiConstants
 import com.sharkaboi.mediahub.data.api.models.manga.MangaSearchResponse
 import com.sharkaboi.mediahub.data.api.retrofit.MangaService
 import com.sharkaboi.mediahub.data.datastore.DataStoreRepository
-import com.sharkaboi.mediahub.data.paging.MangaSearchDataSource
 import com.sharkaboi.mediahub.data.sharedpref.SharedPreferencesKeys
+import com.sharkaboi.mediahub.modules.manga_search.data.MangaSearchDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
-import timber.log.Timber
 
 class MangaSearchRepositoryImpl(
     private val mangaService: MangaService,
@@ -23,7 +22,6 @@ class MangaSearchRepositoryImpl(
     override suspend fun getMangaByQuery(query: String): Flow<PagingData<MangaSearchResponse.Data>> {
         val showNsfw = sharedPreferences.getBoolean(SharedPreferencesKeys.NSFW_OPTION, false)
         val accessToken: String? = dataStoreRepository.accessTokenFlow.firstOrNull()
-        Timber.d("accessToken: $accessToken")
         return Pager(
             config = PagingConfig(
                 pageSize = ApiConstants.API_PAGE_LIMIT,

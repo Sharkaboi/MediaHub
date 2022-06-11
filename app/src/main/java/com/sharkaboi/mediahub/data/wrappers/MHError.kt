@@ -19,5 +19,8 @@ data class MHError(
         val AnimeNotFoundError = MHError("Anime isn't in your list")
         val MangaNotFoundError = MHError("Manga isn't in your list")
         fun apiErrorWithCode(code: Int) = MHError("Error with status code : $code")
+
+        fun getError(message: String?, error: MHError = UnknownError) =
+            message?.let { MHError(it) } ?: error
     }
 }

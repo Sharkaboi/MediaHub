@@ -40,5 +40,14 @@ data class AnimeSeasonWrapper(
                 year = now.year
             )
         }
+
+        fun parseFrom(season: AnimeSeason?, year: Int?): AnimeSeasonWrapper? {
+            return when {
+                season == null -> null
+                year == null -> null
+                year == 0 -> null
+                else -> AnimeSeasonWrapper(season, year)
+            }
+        }
     }
 }

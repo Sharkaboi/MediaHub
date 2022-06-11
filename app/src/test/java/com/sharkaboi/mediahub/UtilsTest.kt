@@ -1,6 +1,6 @@
 package com.sharkaboi.mediahub
 
-import com.sharkaboi.mediahub.common.util.getLocalDateFromDayAndTime
+import com.sharkaboi.mediahub.common.util.DateUtils
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.time.DayOfWeek
@@ -15,7 +15,7 @@ class UtilsTest {
         TimeZone.setDefault(TimeZone.getTimeZone("UTC"))
         val inputStartTime = "17:30"
         val inputDayOfWeek = "saturday"
-        val result = getLocalDateFromDayAndTime(inputDayOfWeek, inputStartTime)
+        val result = DateUtils.getLocalDateFromDayAndTime(inputDayOfWeek, inputStartTime)
         val expectedResult = ZonedDateTime.now().withHour(8).withMinute(30)
             .with(WeekFields.ISO.dayOfWeek(), DayOfWeek.SATURDAY.value.toLong())
             .withSecond(0).withNano(0)

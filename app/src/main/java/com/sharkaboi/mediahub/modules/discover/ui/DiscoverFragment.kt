@@ -22,7 +22,6 @@ import com.sharkaboi.mediahub.modules.discover.adapters.AiringAnimeAdapter
 import com.sharkaboi.mediahub.modules.discover.adapters.AnimeRankingAdapter
 import com.sharkaboi.mediahub.modules.discover.adapters.AnimeSuggestionsAdapter
 import com.sharkaboi.mediahub.modules.discover.adapters.LoadMoreAdapter
-import com.sharkaboi.mediahub.modules.discover.util.DiscoverAnimeListWrapper
 import com.sharkaboi.mediahub.modules.discover.vm.DiscoverState
 import com.sharkaboi.mediahub.modules.discover.vm.DiscoverViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -83,16 +82,18 @@ class DiscoverFragment : Fragment() {
             binding.progress.isVisible = uiState is DiscoverState.Loading
             when (uiState) {
                 is DiscoverState.AnimeDetailsFailure -> showToast(uiState.message)
-                is DiscoverState.AnimeDetailsSuccess -> setupRecyclerViews(uiState.data)
                 else -> Unit
             }
         }
-    }
-
-    private fun setupRecyclerViews(discoverAnimeListWrapper: DiscoverAnimeListWrapper) {
-        setupAnimeRecommendationsList(discoverAnimeListWrapper.animeSuggestions)
-        setupAnimeAiringList(discoverAnimeListWrapper.animeOfCurrentSeason)
-        setupAnimeRankingList(discoverAnimeListWrapper.animeRankings)
+        observe(discoverDetailsViewModel.animeOfCurrentSeason) {
+            setupAnimeAiringList(it)
+        }
+        observe(discoverDetailsViewModel.animeRankings) {
+            setupAnimeRankingList(it)
+        }
+        observe(discoverDetailsViewModel.animeSuggestions) {
+            setupAnimeRecommendationsList(it)
+        }
     }
 
     private fun setupAnimeRankingList(animeRankings: List<AnimeRankingResponse.Data>) {

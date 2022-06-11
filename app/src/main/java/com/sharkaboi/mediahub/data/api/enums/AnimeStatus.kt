@@ -24,17 +24,16 @@ enum class AnimeStatus {
     }
 
     companion object {
+        // All status doesn't actually exist in the api
         val malStatuses = values().filter { it != all }
-    }
-}
 
-fun String.animeStatusFromString(): AnimeStatus? {
-    return when (this) {
-        AnimeStatus.watching.name -> AnimeStatus.watching
-        AnimeStatus.plan_to_watch.name -> AnimeStatus.plan_to_watch
-        AnimeStatus.completed.name -> AnimeStatus.completed
-        AnimeStatus.on_hold.name -> AnimeStatus.on_hold
-        AnimeStatus.dropped.name -> AnimeStatus.dropped
-        else -> null // AnimeStatus.all
+        fun parse(string: String?): AnimeStatus? {
+            if (string == null) {
+                return null
+            }
+            return runCatching {
+                valueOf(string)
+            }.getOrNull()
+        }
     }
 }

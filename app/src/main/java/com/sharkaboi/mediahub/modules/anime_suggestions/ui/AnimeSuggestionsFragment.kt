@@ -9,17 +9,18 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.DefaultItemAnimator
-import androidx.recyclerview.widget.GridLayoutManager
 import com.sharkaboi.mediahub.BottomNavGraphDirections
+import com.sharkaboi.mediahub.common.constants.UIConstants
+import com.sharkaboi.mediahub.common.extensions.observe
 import com.sharkaboi.mediahub.common.extensions.showToast
 import com.sharkaboi.mediahub.databinding.FragmentAnimeSuggestionsBinding
 import com.sharkaboi.mediahub.modules.anime_suggestions.adapters.AnimeSuggestionsAdapter
 import com.sharkaboi.mediahub.modules.anime_suggestions.adapters.AnimeSuggestionsLoadStateAdapter
 import com.sharkaboi.mediahub.modules.anime_suggestions.vm.AnimeSuggestionsViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -40,6 +41,7 @@ class AnimeSuggestionsFragment : Fragment() {
     }
 
     override fun onDestroyView() {
+        animeSuggestionsAdapter.removeLoadStateListener(loadStateListener)
         binding.rvAnimeSuggestions.adapter = null
         _binding = null
         super.onDestroyView()
@@ -58,7 +60,7 @@ class AnimeSuggestionsFragment : Fragment() {
                 val action = BottomNavGraphDirections.openAnimeById(animeId)
                 navController.navigate(action)
             }
-            layoutManager = GridLayoutManager(context, 3)
+            layoutManager = UIConstants.getGridLayoutManager(context)
             itemAnimator = DefaultItemAnimator()
             adapter = animeSuggestionsAdapter.withLoadStateFooter(
                 footer = AnimeSuggestionsLoadStateAdapter()
@@ -66,22 +68,19 @@ class AnimeSuggestionsFragment : Fragment() {
         }
     }
 
-    private fun setObservers() {
-        lifecycleScope.launch {
-            animeSuggestionsAdapter.addLoadStateListener { loadStates ->
-                if (loadStates.source.refresh is LoadState.Error) {
-                    showToast((loadStates.source.refresh as LoadState.Error).error.message)
-                }
-                binding.progressBar.isShowing = loadStates.refresh is LoadState.Loading
-                binding.tvEmptyHint.isVisible =
-                    loadStates.refresh is LoadState.NotLoading && animeSuggestionsAdapter.itemCount == 0
-            }
+    private val loadStateListener = { loadStates: CombinedLoadStates ->
+        if (loadStates.source.refresh is LoadState.Error) {
+            showToast((loadStates.source.refresh as LoadState.Error).error.message)
         }
-        lifecycleScope.launch {
-            animeSuggestionsViewModel.getAnimeSuggestions()
-                .collectLatest { pagingData ->
-                    animeSuggestionsAdapter.submitData(pagingData)
-                }
+        binding.progressBar.isShowing = loadStates.refresh is LoadState.Loading
+        binding.tvEmptyHint.isVisible =
+            loadStates.refresh is LoadState.NotLoading && animeSuggestionsAdapter.itemCount == 0
+    }
+
+    private fun setObservers() {
+        animeSuggestionsAdapter.addLoadStateListener(loadStateListener)
+        observe(animeSuggestionsViewModel.result) { pagingData ->
+            lifecycleScope.launch { animeSuggestionsAdapter.submitData(pagingData) }
         }
     }
 }

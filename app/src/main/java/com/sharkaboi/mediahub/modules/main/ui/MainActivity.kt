@@ -2,18 +2,13 @@ package com.sharkaboi.mediahub.modules.main.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.animation.AccelerateDecelerateInterpolator
-import android.view.animation.AnimationUtils
 import androidx.activity.viewModels
-import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isVisible
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.sharkaboi.mediahub.R
 import com.sharkaboi.mediahub.common.extensions.observe
-import com.sharkaboi.mediahub.common.extensions.startAnim
 import com.sharkaboi.mediahub.common.util.forceLaunchInBrowser
 import com.sharkaboi.mediahub.data.api.constants.ApiConstants
 import com.sharkaboi.mediahub.databinding.ActivityMainBinding
@@ -28,11 +23,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
     private val mainViewModel by viewModels<MainViewModel>()
-    private val anim by lazy {
-        AnimationUtils.loadAnimation(this, R.anim.fab_explode).apply {
-            interpolator = AccelerateDecelerateInterpolator()
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,13 +57,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setListeners() {
-        setVisibilityAndListeners(binding.bottomNav.selectedItemId)
-        navController.addOnDestinationChangedListener { _, destination, _ ->
-            setVisibilityAndListeners(destination.id)
-        }
         binding.bottomNav.setOnItemReselectedListener {
             navController.popBackStack(it.itemId, false)
-            setVisibilityAndListeners(it.itemId)
         }
     }
 
@@ -82,26 +67,6 @@ class MainActivity : AppCompatActivity() {
             when (state) {
                 MainViewState.AuthTokenInValid -> redirectToOAuthFlow()
                 MainViewState.AuthTokenValid -> Unit
-            }
-        }
-    }
-
-    private fun setVisibilityAndListeners(@IdRes id: Int) {
-        val isAnimeItem =
-            id == R.id.anime_item && navController.currentDestination?.id == R.id.anime_item
-        val isMangaItem =
-            id == R.id.manga_item && navController.currentDestination?.id == R.id.manga_item
-        binding.fabSearch.isVisible = isAnimeItem || isMangaItem
-        binding.fabSearch.setOnClickListener {
-            binding.fabSearch.isVisible = false
-            binding.circleAnimeView.isVisible = true
-            binding.circleAnimeView.startAnim(anim) {
-                binding.fabSearch.isVisible = isAnimeItem || isMangaItem
-                when {
-                    isAnimeItem -> navController.navigate(R.id.openAnimeSearch)
-                    isMangaItem -> navController.navigate(R.id.openMangaSearch)
-                }
-                binding.circleAnimeView.isVisible = false
             }
         }
     }

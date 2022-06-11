@@ -7,27 +7,27 @@
 
     <fragment
         android:id="@+id/anime_item"
-        android:name="com.sharkaboi.mediahub.modules.anime.ui.AnimeFragment"
+        android:name="com.sharkaboi.mediahub.modules.anime_list.ui.AnimeFragment"
         android:label="Anime"
         tools:layout="@layout/fragment_anime">
         <action
             android:id="@+id/openAnimeSearch"
             app:destination="@id/animeSearchFragment"
-            app:enterAnim="@anim/fade_in"
-            app:exitAnim="@anim/fade_out"
+            app:enterAnim="@null"
+            app:exitAnim="@null"
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/fade_out" />
     </fragment>
     <fragment
         android:id="@+id/manga_item"
-        android:name="com.sharkaboi.mediahub.modules.manga.ui.MangaFragment"
+        android:name="com.sharkaboi.mediahub.modules.manga_list.ui.MangaFragment"
         android:label="Manga"
         tools:layout="@layout/fragment_manga">
         <action
             android:id="@+id/openMangaSearch"
             app:destination="@id/mangaSearchFragment"
-            app:enterAnim="@anim/fade_in"
-            app:exitAnim="@anim/fade_out"
+            app:enterAnim="@null"
+            app:exitAnim="@null"
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/fade_out" />
     </fragment>
@@ -127,7 +127,7 @@
 
     <dialog
         android:id="@+id/imageSliderFragment"
-        android:name="com.sharkaboi.mediahub.common.views.image_slider.ImageSliderFragment"
+        android:name="com.sharkaboi.mediahub.modules.image_slider.ImageSliderFragment"
         android:label="ImageSlider">
         <argument
             android:name="imagesList"

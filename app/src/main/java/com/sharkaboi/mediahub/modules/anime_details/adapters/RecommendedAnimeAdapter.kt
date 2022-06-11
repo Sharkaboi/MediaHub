@@ -10,7 +10,7 @@ import coil.load
 import com.sharkaboi.mediahub.R
 import com.sharkaboi.mediahub.common.constants.UIConstants
 import com.sharkaboi.mediahub.data.api.models.anime.AnimeByIDResponse
-import com.sharkaboi.mediahub.databinding.AnimeListItemBinding
+import com.sharkaboi.mediahub.databinding.AnimeListItemHorizontalBinding
 
 class RecommendedAnimeAdapter(private val onClick: (Int) -> Unit) :
     RecyclerView.Adapter<RecommendedAnimeAdapter.RecommendedAnimeViewHolder>() {
@@ -34,10 +34,12 @@ class RecommendedAnimeAdapter(private val onClick: (Int) -> Unit) :
 
     private val listDiffer = AsyncListDiffer(this, diffUtilItemCallback)
 
-    private lateinit var binding: AnimeListItemBinding
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecommendedAnimeViewHolder {
-        binding = AnimeListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = AnimeListItemHorizontalBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
         return RecommendedAnimeViewHolder(binding, onClick)
     }
 
@@ -52,9 +54,13 @@ class RecommendedAnimeAdapter(private val onClick: (Int) -> Unit) :
     }
 
     class RecommendedAnimeViewHolder(
-        private val binding: AnimeListItemBinding,
+        private val binding: AnimeListItemHorizontalBinding,
         private val onClick: (Int) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
+
+        init {
+            binding.cardRating.isGone = true
+        }
 
         fun bind(item: AnimeByIDResponse.Recommendation) {
             binding.root.setOnClickListener {
@@ -67,10 +73,9 @@ class RecommendedAnimeAdapter(private val onClick: (Int) -> Unit) :
                     item.numRecommendations,
                     item.numRecommendations
                 )
-            binding.cardRating.isGone = true
             binding.ivAnimeBanner.load(
-                uri = item.node.mainPicture?.large ?: item.node.mainPicture?.medium,
-                builder = UIConstants.AnimeImageBuilder
+                item.node.mainPicture?.large ?: item.node.mainPicture?.medium,
+                builder = UIConstants.TopRoundedAnimeImageBuilder
             )
         }
     }

@@ -49,6 +49,7 @@
 * [Settings preference](https://developer.android.com/reference/androidx/preference/package-summary)
 * [Coil](https://coil-kt.github.io/coil/)
 * [Timber](https://github.com/JakeWharton/timber)
+* [Robolectric](https://github.com/robolectric/robolectric)
 * [ktlint-gradle](https://github.com/jlleitschuh/ktlint-gradle)
 * [LeakCanary](https://square.github.io/leakcanary/)
 * [Google secrets gradle plugin](https://github.com/google/secrets-gradle-plugin)

@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.sharkaboi.mediahub.common.constants.UIConstants
 import com.sharkaboi.mediahub.data.api.models.anime.AnimeByIDResponse
-import com.sharkaboi.mediahub.databinding.MangaListItemBinding
+import com.sharkaboi.mediahub.databinding.MangaListItemHorizontalBinding
 
 class RelatedMangaAdapter(private val onClick: (Int) -> Unit) :
     RecyclerView.Adapter<RelatedMangaAdapter.RelatedMangaViewHolder>() {
@@ -33,10 +33,12 @@ class RelatedMangaAdapter(private val onClick: (Int) -> Unit) :
 
     private val listDiffer = AsyncListDiffer(this, diffUtilItemCallback)
 
-    private lateinit var binding: MangaListItemBinding
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RelatedMangaViewHolder {
-        binding = MangaListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = MangaListItemHorizontalBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
         return RelatedMangaViewHolder(binding, onClick)
     }
 
@@ -51,9 +53,13 @@ class RelatedMangaAdapter(private val onClick: (Int) -> Unit) :
     }
 
     class RelatedMangaViewHolder(
-        private val binding: MangaListItemBinding,
+        private val binding: MangaListItemHorizontalBinding,
         private val onClick: (Int) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
+
+        init {
+            binding.cardRating.isGone = true
+        }
 
         fun bind(item: AnimeByIDResponse.RelatedManga) {
             binding.root.setOnClickListener {
@@ -61,10 +67,9 @@ class RelatedMangaAdapter(private val onClick: (Int) -> Unit) :
             }
             binding.tvMangaName.text = item.node.title
             binding.tvChapsRead.text = item.relationTypeFormatted
-            binding.cardRating.isGone = true
             binding.ivMangaBanner.load(
-                uri = item.node.mainPicture?.large ?: item.node.mainPicture?.medium,
-                builder = UIConstants.MangaImageBuilder
+                item.node.mainPicture?.large ?: item.node.mainPicture?.medium,
+                builder = UIConstants.TopRoundedMangaImageBuilder
             )
         }
     }

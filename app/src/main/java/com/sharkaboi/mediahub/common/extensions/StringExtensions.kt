@@ -39,9 +39,12 @@ internal fun String.replaceUnderScoreWithWhiteSpace(): String {
 }
 
 internal fun String.capitalizeFirst(): String {
-    return this.lowercase().replaceFirstChar {
-        it.uppercase()
+    if (isBlank()) {
+        return this
     }
+
+    val firstChar = this.first().titlecaseChar()
+    return firstChar + this.substring(1).lowercase()
 }
 
 internal fun String.tryParseDate(): LocalDate? {

@@ -5,6 +5,10 @@ import com.sharkaboi.mediahub.data.api.models.anime.AnimeByIDResponse
 import com.sharkaboi.mediahub.data.api.models.manga.MangaByIDResponse
 
 object MALExternalLinks {
+    fun getAnimeLink(anime: AnimeByIDResponse): String {
+        return "https://myanimelist.net/anime/${anime.id}"
+    }
+
     fun getAnimeGenresLink(genre: AnimeByIDResponse.Genre): String {
         return "https://myanimelist.net/anime/genre" +
             "/${genre.id}/${genre.name.replaceWhiteSpaceWithUnderScore()}"
@@ -38,6 +42,10 @@ object MALExternalLinks {
     fun getAnimeProducerPageLink(studio: AnimeByIDResponse.Studio): String {
         return "https://myanimelist.net/anime/producer" +
             "/${studio.id}/${studio.name.replaceWhiteSpaceWithUnderScore()}"
+    }
+
+    fun getMangaLink(manga: MangaByIDResponse): String {
+        return "https://myanimelist.net/manga/${manga.id}"
     }
 
     fun getMangaAuthorPageLink(author: MangaByIDResponse.Author): String {

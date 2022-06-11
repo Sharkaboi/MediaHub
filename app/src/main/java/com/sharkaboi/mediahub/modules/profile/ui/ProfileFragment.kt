@@ -23,12 +23,14 @@ import com.sharkaboi.mediahub.R
 import com.sharkaboi.mediahub.common.constants.UIConstants
 import com.sharkaboi.mediahub.common.constants.UIConstants.setMediaHubChipStyle
 import com.sharkaboi.mediahub.common.extensions.*
-import com.sharkaboi.mediahub.common.util.MPAndroidChartValueFormatter
 import com.sharkaboi.mediahub.common.util.openShareChooser
 import com.sharkaboi.mediahub.common.util.openUrl
 import com.sharkaboi.mediahub.data.api.constants.MALExternalLinks
 import com.sharkaboi.mediahub.data.api.models.user.UserDetailsResponse
 import com.sharkaboi.mediahub.databinding.FragmentProfileBinding
+import com.sharkaboi.mediahub.modules.profile.util.MPAndroidChartValueFormatter
+import com.sharkaboi.mediahub.modules.profile.util.getDaysCountString
+import com.sharkaboi.mediahub.modules.profile.util.getEpisodesOfAnimeFullString
 import com.sharkaboi.mediahub.modules.profile.vm.ProfileStates
 import com.sharkaboi.mediahub.modules.profile.vm.ProfileViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -63,7 +65,7 @@ class ProfileFragment : Fragment() {
     private fun setListeners() {
         binding.apply {
             profileContent.ivProfileImage.load(
-                drawableResId = R.drawable.ic_profile_placeholder,
+                R.drawable.ic_profile_placeholder,
                 builder = UIConstants.ProfileImageBuilder
             )
             profileContent.chipGroupOptions.forEach {
@@ -79,9 +81,6 @@ class ProfileFragment : Fragment() {
         observe(profileViewModel.uiState) { uiState ->
             binding.progressBar.isShowing = uiState is ProfileStates.Loading
             when (uiState) {
-                is ProfileStates.Idle -> {
-                    profileViewModel.getUserDetails()
-                }
                 is ProfileStates.FetchSuccess -> {
                     setData(uiState.userDetailsResponse)
                 }
@@ -222,7 +221,7 @@ class ProfileFragment : Fragment() {
     private fun setUpBannerSection(userDetailsResponse: UserDetailsResponse) =
         binding.profileContent.apply {
             ivProfileImage.load(
-                uri = userDetailsResponse.profilePicUrl,
+                userDetailsResponse.profilePicUrl,
                 builder = UIConstants.ProfileImageBuilder
             )
             ivProfileImage.setOnClickListener {

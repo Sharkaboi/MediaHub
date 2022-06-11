@@ -1,0 +1,10 @@
+query GetNextAiringAnimeEpisode(
+  $idMal: Int!
+) {
+    returnedMedia : Media(idMal: $idMal, type: ANIME) {
+      nextAiringEpisode {
+        episode
+        timeUntilAiring
+      }
+    }
+}

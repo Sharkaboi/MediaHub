@@ -11,7 +11,7 @@ import coil.load
 import com.sharkaboi.mediahub.R
 import com.sharkaboi.mediahub.common.constants.UIConstants
 import com.sharkaboi.mediahub.data.api.models.manga.MangaByIDResponse
-import com.sharkaboi.mediahub.databinding.MangaListItemBinding
+import com.sharkaboi.mediahub.databinding.MangaListItemHorizontalBinding
 
 class RecommendedMangaAdapter(private val onClick: (Int) -> Unit) :
     RecyclerView.Adapter<RecommendedMangaAdapter.RecommendedMangaViewHolder>() {
@@ -35,10 +35,14 @@ class RecommendedMangaAdapter(private val onClick: (Int) -> Unit) :
 
     private val listDiffer = AsyncListDiffer(this, diffUtilItemCallback)
 
-    private lateinit var binding: MangaListItemBinding
+    private lateinit var binding: MangaListItemHorizontalBinding
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecommendedMangaViewHolder {
-        binding = MangaListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        binding = MangaListItemHorizontalBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
         return RecommendedMangaViewHolder(binding, onClick)
     }
 
@@ -53,7 +57,7 @@ class RecommendedMangaAdapter(private val onClick: (Int) -> Unit) :
     }
 
     class RecommendedMangaViewHolder(
-        private val binding: MangaListItemBinding,
+        private val binding: MangaListItemHorizontalBinding,
         private val onClick: (Int) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
@@ -71,8 +75,8 @@ class RecommendedMangaAdapter(private val onClick: (Int) -> Unit) :
                 )
             binding.cardRating.isGone = true
             binding.ivMangaBanner.load(
-                uri = item.node.mainPicture?.large ?: item.node.mainPicture?.medium,
-                builder = UIConstants.MangaImageBuilder
+                item.node.mainPicture?.large ?: item.node.mainPicture?.medium,
+                builder = UIConstants.TopRoundedMangaImageBuilder
             )
         }
     }
