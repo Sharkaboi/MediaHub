@@ -29,6 +29,6 @@ class AnimeSuggestionsViewModel
     private fun getAnimeSuggestions() = viewModelScope.launch {
         val newResult: Flow<PagingData<AnimeSuggestionsResponse.Data>> =
             animeSuggestionsRepository.getAnimeSuggestions().cachedIn(viewModelScope)
-        _result.value = newResult.firstOrNull()
+        _result.value = newResult.firstOrNull() ?: PagingData.empty()
     }
 }

@@ -36,7 +36,7 @@ class AnimeSearchViewModel
             animeSearchRepository.getAnimeByQuery(
                 query = query
             ).cachedIn(viewModelScope)
-        _pagedSearchResult.value = newResult.firstOrNull()
+        _pagedSearchResult.value = newResult.firstOrNull() ?: PagingData.empty()
     }
 
     companion object {

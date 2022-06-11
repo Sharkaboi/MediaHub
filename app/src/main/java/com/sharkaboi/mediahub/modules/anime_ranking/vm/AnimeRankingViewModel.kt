@@ -38,7 +38,7 @@ class AnimeRankingViewModel
             animeRankingRepository
                 .getAnimeRanking(_rankingType)
                 .cachedIn(viewModelScope)
-        _result.value = newResult.firstOrNull()
+        _result.value = newResult.firstOrNull() ?: PagingData.empty()
     }
 
     fun setRankingType(animeRankingType: AnimeRankingType) {

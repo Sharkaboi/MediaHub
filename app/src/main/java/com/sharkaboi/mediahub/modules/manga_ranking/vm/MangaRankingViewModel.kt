@@ -39,7 +39,7 @@ class MangaRankingViewModel
             mangaRankingRepository
                 .getMangaRanking(_rankingType)
                 .cachedIn(viewModelScope)
-        _result.value = newResult.firstOrNull()
+        _result.value = newResult.firstOrNull() ?: PagingData.empty()
     }
 
     fun setRankingType(mangaRankingType: MangaRankingType) {

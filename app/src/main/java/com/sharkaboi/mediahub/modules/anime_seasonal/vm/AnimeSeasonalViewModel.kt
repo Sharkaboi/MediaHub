@@ -44,7 +44,7 @@ class AnimeSeasonalViewModel
             animeSeasonalRepository
                 .getAnimeSeasonal(animeSeason.animeSeason, animeSeason.year)
                 .cachedIn(viewModelScope)
-        _result.value = newResult.firstOrNull()
+        _result.value = newResult.firstOrNull() ?: PagingData.empty()
     }
 
     fun previousSeason() {

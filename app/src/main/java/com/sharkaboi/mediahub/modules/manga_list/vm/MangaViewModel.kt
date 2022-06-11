@@ -48,7 +48,7 @@ class MangaViewModel
                 mangaStatus = currentChosenMangaStatus,
                 mangaSortType = currentChosenSortType
             ).cachedIn(viewModelScope)
-        _mangaList.value = newResult.firstOrNull()
+        _mangaList.value = newResult.firstOrNull() ?: PagingData.empty()
     }
 
     fun setMangaStatus(status: MangaStatus) {

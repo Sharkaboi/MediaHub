@@ -48,7 +48,7 @@ class AnimeViewModel
                 animeStatus = currentChosenAnimeStatus,
                 animeSortType = currentChosenSortType
             ).cachedIn(viewModelScope)
-        _animeList.value = newResult.firstOrNull()
+        _animeList.value = newResult.firstOrNull() ?: PagingData.empty()
     }
 
     fun setSortType(userAnimeSortType: UserAnimeSortType) {
