@@ -4,6 +4,7 @@ import android.graphics.Color
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.*
 
 internal inline var String.Companion.emptyString: String
     get() = ""
@@ -39,8 +40,8 @@ internal fun String.replaceUnderScoreWithWhiteSpace(): String {
 }
 
 internal fun String.capitalizeFirst(): String {
-    return this.lowercase().replaceFirstChar {
-        it.uppercase()
+    return this.replaceFirstChar {
+        if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
     }
 }
 
